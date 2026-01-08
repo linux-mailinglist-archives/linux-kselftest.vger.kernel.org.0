@@ -1,152 +1,126 @@
-Return-Path: <linux-kselftest+bounces-48501-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38BCAD04961
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E34A1D0455E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:25:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 310603467E63
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:52:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5D49432C02C5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF896497B01;
-	Thu,  8 Jan 2026 12:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB95647D952;
+	Thu,  8 Jan 2026 12:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hggHdqUf";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="P0EB5tUq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ja+7V8F1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07AA3B8D6E
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 12:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27F46466FEE
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 12:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767873912; cv=none; b=BGRZaoCURl13eJ5I9Bq5K0vuRdjyqTC6AZHDiK1z4iwPeIbu0ZtboiMZBKBIoswmpWN6plpN/AG3xO9BuqMnwFrzXi3OT2TEf9adYiqWhLt7ZfRH+lL1j9T6soP2mNYfs2yHIEwap+BGlfwy+HBdx/EquTu0vzPyJfIw4u1v9a8=
+	t=1767874752; cv=none; b=X9mw7HcYxdk42PzD1Z8HQLEzXbl6GfaeS/2NlTKm7b8qCWYeS9hlY/ffviCpnyJsrpAEAcI4dwpJK3xl+s3/7RY2dQqSs09ov1hJGv3i4Q2V4VRnq7EKEa3SOYGxI30/0QuHbuM+ocgQyxmftg/4DBO9/FUdwsBmmnBrnJ6O2fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767873912; c=relaxed/simple;
-	bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=OSG2w5gyAMYXfrU0nTb+tPUpuuIilWuHkSfc0UamW0NojHmRGhlv3vLcsYphAZqwi2K4gINSaFg+GMcqtvN0eok52rN5XIURVQGRyGnb65w+TEagJbwpOHJDkdqFaOk9UHWo2gRxa5/8VJe6w6k0Y0HOXfHHG8zg0YBW3DX/1EA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hggHdqUf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=P0EB5tUq; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767873906;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
-	b=hggHdqUfhOpfVf2+ddDxEWafFYAonVMZt55ZkKS+K+NWBwuRmoVAqyb56uItlm+e2dAtga
-	vsdrVhSimUqh99MhcpcSLGPomkfoaJQZcDV07ygDOEE7QRjXwVzuxLVkFo2nedNuVQQ4t1
-	mBnzXksN4AVH2SREEmIMa+cZ+Ml5X00=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-398-R3qR_uFFNQe013RuokXY0g-1; Thu, 08 Jan 2026 07:05:05 -0500
-X-MC-Unique: R3qR_uFFNQe013RuokXY0g-1
-X-Mimecast-MFC-AGG-ID: R3qR_uFFNQe013RuokXY0g_1767873904
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4779edba8f3so27105585e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 04:05:05 -0800 (PST)
+	s=arc-20240116; t=1767874752; c=relaxed/simple;
+	bh=XslR5Skl/tw/Xim8K72eczklMzvlOxARWwVTFZz2hyo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NBmnB37nKot+LeTE1kq3KTEaEX0xPUQwwWOmlNDsEXcBSfVH9pX1Fy6goHGbw0ClgeqFSoxIvwmrXyqHf9yKZei6AYFxITTIfg64FWb7gDueNCDZ4ubqx0Pl/ymmGGxv0szwuyRwRqL5+j8VG5LRkuKait3E38kCbW2qRtppNu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ja+7V8F1; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4f4a88e75a5so29180921cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 04:19:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767873904; x=1768478704; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
-        b=P0EB5tUq4gEPbQC8HFtAZIwPhtjivVywhg5mmDspsKEbQaSC/gQpJyyKK5wFGyWw2L
-         07vwoad/3AOiZ2lVzMvR1pO1Neja3nunwK4QhIrY5bACcofo+d9Eyxn2fmH8i0rHhtr2
-         +gN9vbo0QEtstBCtwY0IhqDmtogQGYds4puZcBDlzJKio7HOz6i6sZkjbKiuZb2cCn+L
-         IVqVsjsrelFzg4txGT8ePwrN3yjM12kkjuzGqDrAyuvN15oRPreHd1yctO+wzW9dZk2k
-         pF3behY8G/tY4QmNO+DLPOvJMkczbM3RChQmEVECJPx63iSzS1diTlQOkRMT4uhlOCJw
-         M2IQ==
+        d=google.com; s=20230601; t=1767874746; x=1768479546; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XslR5Skl/tw/Xim8K72eczklMzvlOxARWwVTFZz2hyo=;
+        b=ja+7V8F1ZwjWz5gIR9kXgeJQwqADgKnij+xGhHeSKOkbZ3j0fpqSXJgQwNFDUpSKHu
+         BLRlwmWb5dG1rM6Sz97lQd8qG1LLDpxMRxJYaMGnmPnlptG5NZpECNAIr9Tm3qHE5hyY
+         piUAzuG5yyotnME9cOrJQl6abmkEoDMJBDTvgWGMzgl/OE0W9gkeHApBotwro/H/ZKDs
+         yL/HIYAMRAuDuFSAmVl2ueileIkRxaFoPFTmU+Q9KvU6xmU7xtRbJRglFTI+LTVlwgjV
+         Jc3u+GQncx4lvYaL+FriQh4RoBG8qp0tuMoKbeqSCwslizSnn2sb1YoiVqWHZZy60zhk
+         JhwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767873904; x=1768478704;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
-        b=R7gimg58jCOGq8ZHTin6OMCYgX4GRER7OZ7txu7IFEZvCCg2qL9Gkos0Z8IjmmwsQc
-         kr2k/Xak5+fzMlWMomR0S0j4t7rkz/lI5T8fUniVjUSmf0nLd2JJKhfu7+8xUT5IdykH
-         50Zi/jWIOPbXTYxwNrEg9nzDvmSW86SvFqkO/ou+al221yGRSmSsjoTNsqfhOCEOrcr6
-         1T1KLy2taqIKWfFkYQQUEWabpL1+Q1uSt60nqwU3W6p6OIHfHhLLiWg/OHO3U+FovEir
-         3kXzXb30WJeVtIE7i3OcWXW0+S/UPC7BwQVPZZsNpZh9o6ig5jyqnltBoAkYyqtR9U0A
-         evvg==
-X-Forwarded-Encrypted: i=1; AJvYcCW8gHY4738M2uOZeer404omePJsWZ5FpBELvX3IvQVrE38eOfPPFQDPNwrSIQ+Cc8rHLX4P30gYcnMM3hOaPWI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg9mhOe8aDNW+EiVh61Fb3SRCoQaqjr2JBO4fassGCjNqP1Iu8
-	50hernsqYA1C7QXCBVjeQkhcPWy4PnRZ+C1SU0FV/8yrKh33TKcjuiH3tY/M+/uDfZqlUdLqm/n
-	CCTmoTSCtByGg+raEkeSuyAu55GJVhjvGpuX7YYK/5src+QDdavHC2tNfwBFPMcFTQc15fw==
-X-Gm-Gg: AY/fxX7MEXdic2Tp/C2p/pNB2bA+Ogfmxmnf6UeAf7fSLkhpWnz8pwrLGJBFkCBFjWZ
-	uo+VXdYEQUn5HR3HdyvgQUyKvLsTIq+LRqqecD5F/aVn5UEDuTQUEsMlzTIAmxHNqdlJxLgWR0Q
-	1Qv27ZTzuMpf7j8uiVONFs2ET39N+7rO7KzTH8xfXG+huOw25fPWClFd5Ai5F4NIqkekV1g2U+6
-	aWATqqMBbD36wLAcv1oXcgj4QdDp1ZTDOT9b0wNj+dK2CqBjxfCNlkf6E8numqCemSUFFCAp9In
-	B4P8hhdNmu2+gcHSh7Zv82Ir+IT3wdyz49x0CeRCNRiXbSoregB+iOB6pDqP4W+oxQhroQTWMDf
-	GFl/kP16ftyjBvg==
-X-Received: by 2002:a05:600c:4447:b0:477:3e0b:c0e3 with SMTP id 5b1f17b1804b1-47d84b3b8b9mr66671895e9.32.1767873903873;
-        Thu, 08 Jan 2026 04:05:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGyd3EobR8+CtqNLr1SJNq4aJtqIFnG4hdPC4+x+J4mPj7mFR2jjmxPx+hGX2qRU6Jn66CAIQ==
-X-Received: by 2002:a05:600c:4447:b0:477:3e0b:c0e3 with SMTP id 5b1f17b1804b1-47d84b3b8b9mr66671435e9.32.1767873903307;
-        Thu, 08 Jan 2026 04:05:03 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.149.145])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d8662ffaasm36179535e9.6.2026.01.08.04.05.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 04:05:02 -0800 (PST)
-Message-ID: <9d64dd7e-273b-4627-ba0c-a3c8aab2dcb1@redhat.com>
-Date: Thu, 8 Jan 2026 13:05:00 +0100
+        d=1e100.net; s=20230601; t=1767874746; x=1768479546;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XslR5Skl/tw/Xim8K72eczklMzvlOxARWwVTFZz2hyo=;
+        b=vGp0+cgBjycyKeKRbBMOQeItB2qG1HI4nEYjzHUssY50LH/ihVT0xhg0Lgk+h9FCz+
+         0yWfYAC9gJLku99+r4OVwdUZUWcU9ZhqQp++HoDzjUj+pz41PuzY+kwQHnh4qXGjTgYT
+         nnRItkRrjKMhDKWwGI6ie3h76HYUq83HkgrGU0VWUF4jlQh719tXfgjwPX5o6XvKa0RX
+         pFWdikBS05g/UFMnrPRkypObUal86e+tLObmps+fDPm9xCbmjRlUaPT2c7xR5VZ+iY35
+         WJZwBTPCd9780ttdHFH4z5rjMTNspwZN0SIGfSlMqp6XZIrrVKrLqjVCHgfxNtcmcmfg
+         4U8w==
+X-Forwarded-Encrypted: i=1; AJvYcCXDnhJZbu4qJev8k9+PwH2f2ASPAEC4tYd+fcAeH+cxYGiLVSXpLfvlu4yqL2PENUe0qiyGemtXStt5usxBrBw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaCXsSS9TX9YYTUnyxYcxO02ZSLXm33Tf6gKkVJF2c/CuXhc96
+	JlMbTAmvVLp1qQcN7FldPUg/V/GHktER+whvX+fmJaPiFGVMzOnRhEVUTZeF9u4uW9il0pE2pWr
+	BcWST4ZdtrxxKKTTFCx1WCM7nEGcDjbEUX4ThV3KN
+X-Gm-Gg: AY/fxX5Y2IRepANSi7xEUgQtf9Y4ggqHMtLmzKxHjaJsYB3xViA0kg74Aq9/OH+0xuP
+	TfGZ8TjdHCqefOoRIVe/f75eZP94S2TZ4uCt2Tgtk3E3VjI5swgECgnd3FOpkvl85SqhJJ7hakP
+	69wRl+ieClHum9P+oYGbzmr12SkRbK3YZBtYueJFVeOIc2YxeQELJq+ub+guWb+k7Fw66YeDJf4
+	7X/sNhX4r1JcLUnJ3/wN8uvLKZwD0jOkvzjnlX2WCBlz+T6Uo30iFzGELwFvO/QznaBhvyYltWw
+	guRq
+X-Google-Smtp-Source: AGHT+IE6CBzyCrx4IFVvz/0AqM39PV6mvwh7lOn07b9ckEerO+EpyGAL7TIuu+rk4c57j55fgOdIw95rlnzvDdfaED8=
+X-Received: by 2002:ac8:7f8c:0:b0:4e8:b2df:fe1f with SMTP id
+ d75a77b69052e-4ffb487f955mr83824451cf.28.1767874745665; Thu, 08 Jan 2026
+ 04:19:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
-To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>,
- "edumazet@google.com" <edumazet@google.com>,
- "parav@nvidia.com" <parav@nvidia.com>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
- "dsahern@kernel.org" <dsahern@kernel.org>,
- "kuniyu@google.com" <kuniyu@google.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "dave.taht@gmail.com" <dave.taht@gmail.com>,
- "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
- "stephen@networkplumber.org" <stephen@networkplumber.org>,
- "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
- "jiri@resnulli.us" <jiri@resnulli.us>,
- "davem@davemloft.net" <davem@davemloft.net>,
- "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
- "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
- "ast@fiberby.net" <ast@fiberby.net>,
- "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
- "shuah@kernel.org" <shuah@kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
- <ncardwell@google.com>,
- "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>,
- "g.white@cablelabs.com" <g.white@cablelabs.com>,
- "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
- "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
- cheshire <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
- "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
- Vidhi Goel <vidhi_goel@apple.com>
 References: <20260103131028.10708-1-chia-yu.chang@nokia-bell-labs.com>
- <56f6f3dd-14a8-44e9-a13d-eeb0a27d81d2@redhat.com>
- <PAXPR07MB798456B62DBAC92A9F5915DAA385A@PAXPR07MB7984.eurprd07.prod.outlook.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <PAXPR07MB798456B62DBAC92A9F5915DAA385A@PAXPR07MB7984.eurprd07.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <56f6f3dd-14a8-44e9-a13d-eeb0a27d81d2@redhat.com> <PAXPR07MB798456B62DBAC92A9F5915DAA385A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <9d64dd7e-273b-4627-ba0c-a3c8aab2dcb1@redhat.com>
+In-Reply-To: <9d64dd7e-273b-4627-ba0c-a3c8aab2dcb1@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 8 Jan 2026 13:18:54 +0100
+X-Gm-Features: AQt7F2pGmpHwQwLbaeD-dBc7rrFfr_O4l9u7b9jAwL-yY9Bn1sm999duNbFyyYY
+Message-ID: <CANn89iKRAs86PVNAGKMUgE49phgZ2zpZU99rRkJq=cc_kNYf=Q@mail.gmail.com>
+Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>, 
+	"parav@nvidia.com" <parav@nvidia.com>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>, 
+	"dsahern@kernel.org" <dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+	"dave.taht@gmail.com" <dave.taht@gmail.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>, 
+	"kuba@kernel.org" <kuba@kernel.org>, "stephen@networkplumber.org" <stephen@networkplumber.org>, 
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>, 
+	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>, 
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>, 
+	"ncardwell@google.com" <ncardwell@google.com>, 
+	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
+	"g.white@cablelabs.com" <g.white@cablelabs.com>, 
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, cheshire <cheshire@apple.com>, 
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, Vidhi Goel <vidhi_goel@apple.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/8/26 9:47 AM, Chia-Yu Chang (Nokia) wrote:
-> Regarding the packetdrill cases for AccECN, shall I can include in this patch series (v8) or is it suggested to submit them in a standalone series?
+On Thu, Jan 8, 2026 at 1:05=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> On 1/8/26 9:47 AM, Chia-Yu Chang (Nokia) wrote:
+> > Regarding the packetdrill cases for AccECN, shall I can include in this=
+ patch series (v8) or is it suggested to submit them in a standalone series=
+?
+>
+> IMHO can be in a separate series, mainly because this one is already
+> quite big.
+>
+> /P
+>
 
-IMHO can be in a separate series, mainly because this one is already
-quite big.
+If possible, please send a packetdrill series _before_ adding more code.
 
-/P
-
+I have been reluctant to review your changes, because there is no test.
 
