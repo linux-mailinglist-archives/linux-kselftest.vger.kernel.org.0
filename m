@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-48549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53EC0D0574C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 19:20:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 932E6D0587E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 19:29:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B9FA23010507
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 18:20:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4DE7530BF002
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 18:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A5E310645;
-	Thu,  8 Jan 2026 18:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FDC3168E3;
+	Thu,  8 Jan 2026 18:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l9tDBaeN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H6Ok2PmZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7189D30FC10
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 18:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBE8314B64
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 18:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767896454; cv=none; b=HMUm5BpqEOfdR3HnbvunpFDu5aynSwrjCCoDIhkWUT4wFYUBtXfYiWSGs0J0xv3sShOKpDZ47QVmqwe7kYVvuwT6biYB4d1TeW6IhESdrxG5fcdvgshGBsNptKYsBwoXLf0l19WhIf8QqU1i6Sn+BmvT7v2ur1vNWe1tm0MOJc4=
+	t=1767896691; cv=none; b=p7GRIKOAwQv3fZcDgEA+3WbsKOg30WXCdEajjdxrwCSSWN3ehr18evI073AwoVDJuoTh2x4wSABwuJtxOdW398yphTXvAXwiKuO5QYj2+qLQqH020LGmahwRh6l+wMH+yO9A44iWJECSbV6o7MS6YHERhEMeax9nVkEdDw8YLNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767896454; c=relaxed/simple;
-	bh=GzuqYe/6g3NXsycaPJ3wfrGJWIZ9Zq2hM7oJaoMdsKc=;
+	s=arc-20240116; t=1767896691; c=relaxed/simple;
+	bh=Yp1h0ShDtcp2z0mVyzIJRFEUAtO9kdhPaqPpEWqAtrM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gCLzUzvuVqE/1P6zr82fTsAi7QbRtZhu3LTDbSrlEBIGrurvPCuMRV0lNkPJm1XwpgCpHJiou9A69owt78JTfdQ83LJUZKtc87Xi0/ZBpvYC/FTp5SqahSM5udBZncpBi/5u5CYWf0/C0sPkfmpiBzMBNgJnJrZ6P308HXwT+S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l9tDBaeN; arc=none smtp.client-ip=209.85.167.54
+	 To:Cc:Content-Type; b=Fy2HmFZoC4P1JieR5fD2HTPuy0nF2QOmfrfaYiuyYGsuQI5Kxorbz0LUDJigubHfmSwYzhcLkfMqmgnwfGgZ7gcrc/SJf+lJyKbdshHjueWOp6rm5pYuUUMAFFRcMunnaWFK5eLBZRN3jgz7Tqg9uWT4xcOSTF7+Xgn89VFLI+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H6Ok2PmZ; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59431f57bf6so3877387e87.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 10:20:52 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59b6c13b68dso1789815e87.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 10:24:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767896451; x=1768501251; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767896688; x=1768501488; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qIWbnb8wuVC6CuULSZXd500nKi+vGu5lt07cRCcuv7s=;
-        b=l9tDBaeNp3+kLcEW9d+Kldiz02VwGoT24dhp+LJ0gXfy8BkIyYYExSmxwSGS/m3mRL
-         7wQvums+dk/OcEdVvNZjpLz84J/VFviM6EO7Khl6bl5aeGE4tX/X7mHzyahJA9kBJGMl
-         nlywFHjqG1Ts7YaIWh7YgpKAQjXtj5lutGG20naWUWacg/25D0UvUk/OqbaKSyp6BkPC
-         p2LkCiGHjc0EeBrVl9EDq/oRIG38q/boQsY8cq32Wi3Wc2pAOrcA+jm66qhjTMTmcc9F
-         hBjqwPMqC7V0QIXgIrj9zksRCVQsS7kSPnyH9o3XsnVw1+IFBHiywgFAnespzXwrONwO
-         z07Q==
+        bh=MEaeafC3oyzxJQrMc13kCHPb+WuLGIIxoGgEqXi6BFw=;
+        b=H6Ok2PmZ6u1oLSeNBgS9vKkOSl+qiUDrxXkdl9dfNSL/+GRXsK06ZLmBGZPUIdd3TG
+         hgNGulKbj8u6EosI8SumHD61OmlDJ6Zylb86rRaWj6JGkvPWB2n3EpKpm6GOVzA1a8+P
+         LEMFvhXh/ILGC4O6+mU4yJyx5uRtgs4A3hl2ZurDhnFDzBZ5zpzu9LRtIVx8fb0g3p4Z
+         9NByFEA5kehf/p2jQbdkAc4hAhy8m7T4C3BrPQLUqzs4SPaIvh8cPmiPpLUctd7l6Kqm
+         tLb71iFHezrfv5uC3NdoDKbgp9Qo1iU+5XGKhdYPYsYA/HRceWI6Qwd5A4TIm4/Ov+RP
+         KhSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767896451; x=1768501251;
+        d=1e100.net; s=20230601; t=1767896688; x=1768501488;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=qIWbnb8wuVC6CuULSZXd500nKi+vGu5lt07cRCcuv7s=;
-        b=oLGoZNQCe4BMbjxHO5Kr4/bOjgBCWnIj5hf0TLecvbGtIXLivx9CAicdx9bUbQpF8e
-         M1Bq+nYW7YHASODeY8oBzzxwMbEM1a6+M9u+BA0YWaan0kCFN7bIAu7xkZFdn7+SnATD
-         pwypuV3VRfR+1IHlrwbGHxcyy4E1fe6AeKDv1Ntac03Z4LqYsuC3WLL5J8w+oRZMGeRo
-         S7NL7kHN+6PRlswbzF4bnYmQxOhzOTvH+dJVjkf5wKsa5mtVu3KhCjfS6zEBwDAbyif0
-         ga0njpp8028PN+nFNhuTNzZAJbbUdkMhIrWCu9SgBSUhipdge337ksekc1jua93GceW2
-         lo5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXTOYo4UM2fpNiGZEt6QJGuwC4D5qafQN5AV31gP6nDH0fhxPfnZay2gS2n0pTm/2AjX09hhz6Yb54JxZqCyqk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbAi1U9utffKLYsTCh2U3tYpEjab/tRibARW7gVkjkVSOkxsg8
-	qILMVrM7Ri82j62Jg8CA258qrcXKkoFE6gPugd/vGd+k9D9TihsoGJfl3FcYmVXdNKbdL+MQyHQ
-	uq0HsBRkNy9z/RKwE7/SzO2oUkxSBaYDbUFkyqisY
-X-Gm-Gg: AY/fxX6H3GLaGzmySwr+z4j+J8+tR4oeVjnLX4oPofN4gfLU8f2iog2HmqasGz9z4bt
-	mRqEDACXCQ3YFsOt5ntYXrPbhvUz1ulFoOTY3vE/95CjFmvdTjyS3iDTTUgfveKX53qOYqgetB4
-	aSGPnxDPeaiB5Gm5ho+iSJIY5OIWM9nrgDdALVamX1LAunzU7+6YP26ACbFcdHXOkbceC3/i4tI
-	+O4Fnm4ahJe/A1nXvhBo+inSi3kHOeneC+e70koIEj6/OWfwqLQhTfARMkbWBveuBW5rvJ+
-X-Google-Smtp-Source: AGHT+IGlNr+3Kfg1ZZ1Rz3y9SDsVCFvv2d1eRF6oYKoBZYZUZix/Hoq5N+7xb5AEgTcbVMLSMIeLtGWM+CA8pDiBRA8=
-X-Received: by 2002:a05:6512:33ca:b0:59b:77f8:910a with SMTP id
- 2adb3069b0e04-59b77f89309mr957015e87.19.1767896450308; Thu, 08 Jan 2026
- 10:20:50 -0800 (PST)
+        bh=MEaeafC3oyzxJQrMc13kCHPb+WuLGIIxoGgEqXi6BFw=;
+        b=PTczQ7PNcGjtlbtZXb3wVa3GcfE4pkOFTWNaI6KaDvwussCW7SMHv3Q2qskMxRKIWG
+         z83pT03U0R8cf4+g7HUhqELMhi/1Uz54D7DqNaxOpifLk/tFzCO+eo08LBGNV58b8Ecv
+         xx8CZOhsZ6MkQhdPIPM48/MNzajeA6c2xiQO7Ue1D9Rr6x275C8nyZ7UIhQV/6pDZ+sw
+         LrKl3gTTUEbuwRFV2tJ3eDDNyWiI/odTinAvFjHqhwZg3eSwW7dPUS3cRikvP64O1Rsc
+         j7nGdCnVANTNkTsXcx2/lTvPftnb2Yl+ZIY0uG4cgRnfrjBGXFxpClkofxhcKcmprPwB
+         m0mw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLv42WLghVty4wEZbwbe6DmbpVEfUVG9j90cVZmJXqeDNK1kucW8zFOIbxyQ6/FZRtNt1sg9j/OPHf/Nvx1rE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjKebT83QVU8di8/HrsKtmUwEwgzH4Wh/CZRsTZxWAnOgrcV1U
+	Le4FR22YDR+viJp06j+jMvZNfIbYMeKAREcwbK9VOAARpvRgpEmJ490x3N5e5VCWwhPm/pHBb3L
+	32SHt8PVrS5Yur2NwM7Q+RzBOQf/fxijGyb0TZ4VK
+X-Gm-Gg: AY/fxX5DPAfILOixXpX8iK6PbW1QmxQx8FXi0NSV+dd1nS15tq3ckDo9GaM2RtWWZBw
+	yCtakNTRfoPOJNn9hyNbn6FuF6t2FLaVW60JZR9EKdAUq1qPjebv0YqKqVn8T1JtqDthd6ROMKJ
+	1k3f34X+Gbk4bMIAPEAq9vSa4ChqesLKyA8X7aN1tMoH7V1CGacTQqbeXCdWBIZoFBVUQTwGSXg
+	qkiA3/leyCiFapjR9xyk36AX8B9S488uiof5NNH++u6tYuqLXgELsAANaXVl3tVlZOvmcIQ
+X-Google-Smtp-Source: AGHT+IFtMz6GROOKtW9V1iTBDgix+z99mKh9kThC0ibIi//b6X45bMcaqCLXOawEVpN0roGzuqsJrJ3dGuOMoWOS/cA=
+X-Received: by 2002:a05:6512:3ba7:b0:595:9195:338f with SMTP id
+ 2adb3069b0e04-59b6eb6b29dmr2258176e87.23.1767896687563; Thu, 08 Jan 2026
+ 10:24:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,45 +74,73 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
- <aV7yIchrL3mzNyFO@google.com> <aV8mTHk/CUsyEEs1@devgpu015.cco6.facebook.com> <20260108084208.30edd533@shazbot.org>
-In-Reply-To: <20260108084208.30edd533@shazbot.org>
+ <aV7yIchrL3mzNyFO@google.com> <20260108005406.GA545276@ziepe.ca>
+ <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com> <20260108141044.GC545276@ziepe.ca>
+ <20260108084514.1d5e3ee3@shazbot.org>
+In-Reply-To: <20260108084514.1d5e3ee3@shazbot.org>
 From: David Matlack <dmatlack@google.com>
-Date: Thu, 8 Jan 2026 10:20:22 -0800
-X-Gm-Features: AQt7F2qKH486tR5MMOncEkjWyL_zCi9lKI_qFkK-DGaW8N_GezgP57tFurPCsY0
-Message-ID: <CALzav=ctJBKYsYQ47XMHDQ_whzF=XpcsN6B6GmGc9gy4-tPfzg@mail.gmail.com>
+Date: Thu, 8 Jan 2026 10:24:19 -0800
+X-Gm-Features: AQt7F2rl1aiP8y-Yssi9VxM__CrmPHsLRpNi7eWG5qSqXK_YQL01rHTPKU4a2KE
+Message-ID: <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
 Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
 To: Alex Williamson <alex@shazbot.org>
-Cc: Alex Mastro <amastro@fb.com>, Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Alex Mastro <amastro@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 8, 2026 at 7:42=E2=80=AFAM Alex Williamson <alex@shazbot.org> w=
+On Thu, Jan 8, 2026 at 7:45=E2=80=AFAM Alex Williamson <alex@shazbot.org> w=
 rote:
 >
-> On Wed, 7 Jan 2026 19:36:44 -0800
-> Alex Mastro <amastro@fb.com> wrote:
-> > On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:
-> > >
-> > > Speaking of, maybe we can add a test that creating writable IOMMU
-> > > mappings fails for read-only BARs?
-> >
-> > I think I'll have to look into this as a follow-on. I'm not sure how to=
- validate
-> > it yet without mocks or similar since I don't have such HW.
+> On Thu, 8 Jan 2026 10:10:44 -0400
+> Jason Gunthorpe <jgg@ziepe.ca> wrote:
 >
-> I think the read-only aspect would be in the mmap, not the BAR itself,
-> ie. can we create a read-write DMA mapping to a read-only mmap.
+> > On Wed, Jan 07, 2026 at 06:41:10PM -0800, Alex Mastro wrote:
+> > > On Wed, Jan 07, 2026 at 08:54:06PM -0400, Jason Gunthorpe wrote:
+> > > > On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:
+> > > > > On 2026-01-07 02:13 PM, Alex Mastro wrote:
+> > > > > > Test MMIO-backed DMA mappings by iommu_map()-ing mmap'ed BAR re=
+gions.
+> > > > >
+> > > > > Thanks for adding this!
+> > > > >
+> > > > > > Also update vfio_pci_bar_map() to align BAR mmaps for efficient=
+ huge
+> > > > > > page mappings.
+> > > > > >
+> > > > > > Only vfio_type1 variants are tested; iommufd variants can be ad=
+ded
+> > > > > > once kernel support lands.
+> > > > >
+> > > > > Are there plans to support mapping BARs via virtual address in io=
+mmufd?
+> > > > > I thought the plan was only to support via dma-bufs. Maybe Jason =
+can
+> > > > > confirm.
+> > > >
+> > > > Only dmabuf.
+> > >
+> > > Ack. I got confused. I had thought iommufd's vfio container compatibi=
+lity mode
+> > > was going to support this, but realized that doesn't make sense given=
+ past
+> > > discussions about the pitfalls of achieving these mappings the legacy=
+ way.
+> >
+> > Oh, I was thinking about a compatability only flow only in the type 1
+> > emulation that internally magically converts a VMA to a dmabuf, but I
+> > haven't written anything.. It is a bit tricky and the type 1 emulation
+> > has not been as popular as I expected??
+>
+> In part because of this gap, I'd guess.  Thanks,
 
-Good point. So it'd be better to have a test of that in
-vfio_dma_mapping_test. No need to use a BAR mapping.
+Lack of huge mappings in the IOMMU when using VFIO_TYPE1_IOMMU is
+another gap I'm aware of.
+vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap
+fails when IOMMUFD_VFIO_CONTAINER is enabled.
 
-> ROM BARs are the only BARs that are read-only, but they can share a
-> decoder with the standard BARs and therefore have a separate enable in
-> the BAR register itself.  Due to this, and their general usage, it's
-> never been necessary to allow mmap of the ROM BAR, therefore we cannot
-> actually DMA map the ROM BAR.  Thanks,
-
-Ahh, good to know, thanks for the context!
+Is the plan to address all the gaps so IOMMUFD_VFIO_CONTAINER can be
+made the default and the type1 code can be dropped from the upstream
+kernel?
 
