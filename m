@@ -1,138 +1,190 @@
-Return-Path: <linux-kselftest+bounces-48547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CC7AD0544C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 18:58:44 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0DC2D050A0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 18:36:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BFF0133B164C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 17:06:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 48C48304BBF4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 17:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 361962957B6;
-	Thu,  8 Jan 2026 17:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281D52F12CE;
+	Thu,  8 Jan 2026 17:22:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ksxPnNx8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GF+r+yu4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B9528D8E8
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 17:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038E929AAF7;
+	Thu,  8 Jan 2026 17:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767892013; cv=none; b=OHhYunw04/2h7Y8OnPP6+TPKMqWnH8AjUr1+/Sji+E7oNQIEUi7Zqjno5ggyBG+N+ORU+kIJoYfK3hsEHME4JQzX3Gvm7z4/IKUcJxiQ6HzkeJuD7LLG2FnlfulpZW34VuGkEFxv5xMtNcVUxM+jbJa0IURYwLbBv3lKJ4VxKzE=
+	t=1767892969; cv=none; b=HDk/Jzhp8+2I8nZmgjT1On2QzeO8LxgH3M5verQZCFv7Co1qsTFnkCNDeTiN7YASYdp6qY54LyfbZBkeXX8oCbCa2NziDxe8dwaba/2DCGiqayrM3h8Bk+igtS1wcpQ8O9+7fnupI4P4DSmELMhlboMDsIqJtbu6gQAY0Oa+JXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767892013; c=relaxed/simple;
-	bh=8MyYr+bj1OlCAmDWQAgiMxA/gIzJLt2qgYTntOWG2J0=;
+	s=arc-20240116; t=1767892969; c=relaxed/simple;
+	bh=3Sp0aOAyDH1k9247khgpfRzB4UdA8aNZBokql5zf+Bg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fe/r+V7FTLQ9ZVhxNrxAvOytHYlqQggBi+f4I25Bt3+khmOXuHu0D7fQ1DjDHJGoiJ7qg6McWOfhpcRVLKNLxnbfMC3YByCVRThB0r3hXNwNd3O6zWZfh6VUTNTT1lHzmxXuvZIsCu+FHreq5u1P6JNdI0dB8cE3ApZtG/Ukgjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ksxPnNx8; arc=none smtp.client-ip=74.125.224.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-64455a2a096so2941235d50.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 09:06:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767892010; x=1768496810; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=p6Wvz759GUewXYsc4miB5/+NI5xDR6MKrs+hh+WMf9o=;
-        b=ksxPnNx85zgOwrFUmOzzv5mAtG2stN+B5abvL3OBEObYK4oSi7LFtTyb8rg58ApaWm
-         JLoWOcC124klwGkya7LWtkr66Vxw2ockrrbty+aEekQhz3OfrrnZlDAoA+XvjIdcZGcd
-         /9Dze+hDJ1c7Mo79HZwvPMW3CRZBtiwu8kteX2bJgaQ1Kdva688DwNrsMHlnPW8bmcu8
-         9tidfQjaTQ2CdPNuREU8EGwFNLarng85MeVhSh+8ziL4GXaSq8C9jMpKS5bF2Q0gNF/R
-         wcnsmEyo2yGTjeZRBTJYM5iIiSWPGNsN/6Ozl9mErKG7SWc8fhFkLLs+/kBKoD0T4RwV
-         CSoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767892010; x=1768496810;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p6Wvz759GUewXYsc4miB5/+NI5xDR6MKrs+hh+WMf9o=;
-        b=sgSpqObcMI+70A4IFN5HnusELPSB09mv8U2g21bdFKYy9P913SWoB/nj8DsJgVFrhD
-         npClRwaUoT0odGdVnCBMhTPc+8RFS6jqR6E9bjXalUoMPJzeXBK9B7v7mE5nq3dZoUN5
-         U3pzADoKZLtOwikJiSyjLkOvNLdkj2Hz0qsPvkkvkTQ7duLDhftFZhjZInpyFJStG5sv
-         MVWlHfgmUPqc69Qjn/uA2QnwkrK+vViWLwrPOKyKXLzYF+Oy8ijY9yZYzPP+1N3/FEdk
-         Q2ZsNzU0/xxYYB8b5n3XOk8924wSIUHaI4mzTPSgD9MqFzqq+fKafM2ZxYWUmpdgWv8i
-         13Bw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHLDpXcO0ghjtho+q//niNMdWni0QSHxkJXWDF0JUOz7nAzMxzliz7pHs6jJc4w2c1sePgYhu5/OCQ+qw42eQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvaHZbuzhX0r9hKLwKnhrK5ObRqtrudB4RMPHpm9oSEABm+1OZ
-	du45au8qXRph6Lk/EQscuL+W5Va6+pVx78Tn4gqk9GHZ99SgUSo0uX2A
-X-Gm-Gg: AY/fxX68n01DeLS287VfUm4wpqmJjPoB7/tivHWMzs87ydYHoGCrWO/xWjqeTcW9Ijn
-	oXrwf0jEGY2A16Kqp8nYrKVT+7qJSi+6fTMmKYSIvAeUbgJZS9XiGyBhWG2acMBaPVl0anRNeR1
-	R5IehoZhswknmoWfs4/R0iZJjCSOTr03McaTrzSpGTyPW2wbmxdav5t69MOs4gWLHZC2Q1MZ7cx
-	UwxUL75ZJT8aKeMZ4LnUBnMYPfwkW6TQlikrnup1X+IUGutJP+c0Tu/v0PspnD3cLWPZujpoXJE
-	H8bgZ8yfxVARgcMivIf4+CWIEfEzM5PaNvm8m688oCh9NzsiQBIPPhk3OC9NLwBcHfvYfaGUuY9
-	Fm1x83e/Acj9/P7xMk2VGtoz1deYEToeOhvV3dSoZFHW9idnKF9powqM5eobz1TQHv4Vgs26EdZ
-	n4lHAfNtFIyaTn/z1ehQduDVGTWK+14Lkb/7Q=
-X-Google-Smtp-Source: AGHT+IG8IzgVV5p7db5tFvYhYnkmV4jr6FxdY8lS8LrHwrO87kVabF1WZz63vCE2N4XM2BF2d2+c7w==
-X-Received: by 2002:a05:690c:6188:b0:78e:1aa5:e98a with SMTP id 00721157ae682-790b57ff8ebmr143870847b3.37.1767892010150;
-        Thu, 08 Jan 2026 09:06:50 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:4c::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-790aa6dbb2esm31227117b3.50.2026.01.08.09.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 09:06:49 -0800 (PST)
-Date: Thu, 8 Jan 2026 09:06:48 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>, asml.silence@gmail.com,
-	matttbe@kernel.org, skhawaja@google.com,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v8 0/5] net: devmem: improve cpu cost of RX
- token management
-Message-ID: <aV/kKIMMr7FFOFnS@devvm11784.nha0.facebook.com>
-References: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
- <20260107193013.0984ab97@kernel.org>
- <aV80jCHD9PGaOr87@devvm11784.nha0.facebook.com>
- <20260108064200.7faf9735@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=JGqXsoIMAMDFIawkpz0uI07/VcDQUtpkvSmwp2xapvhk0NsB1z5t0ti2GygFEkTyMBYNUhZDQyhg88ifwNiAKXpnfKDO0LLlC4Tf1g4Dqrej9ifTq9dywAErdWJhwRfmdlr8m7t9Yn0WeGR/FoTT4mXXwleClLeN9UiV1bNaZfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GF+r+yu4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D6AC116C6;
+	Thu,  8 Jan 2026 17:22:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767892968;
+	bh=3Sp0aOAyDH1k9247khgpfRzB4UdA8aNZBokql5zf+Bg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GF+r+yu4AEqWVlTVbzuVwJFfmaojt98EgL6qtscfYmnHvy5OhBZkWoKDcSn5kyzcL
+	 DdIOSXWWIypIh6yKFE7QA7Yc4K51QkuY7hzr1NF8YDHd7pZxiyHQawX49InNE8jRgl
+	 NH/JUpdxTR3YneLGUfp0bdBvKBAow+Y2dnLx+f0QGAR2+c4Xtpvk3qQYzbmhc4xmmJ
+	 kPU0S9MCy2ptM/7otVffFPES/TBiXummZRWVqUM9vovnT5UVhOhmkf+DWGc1sBmrWz
+	 jHyt3bXRkG/2faF2HHca3yppks0Rum178oK+PfQ5KJO2uG1RWiVzxcB38ar0lIDaJi
+	 1OZBg1PndtpUQ==
+Date: Thu, 8 Jan 2026 18:22:45 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH -next 4/8] rcu/nocb: Add warning if no rcuog wake up
+ attempt happened during overload
+Message-ID: <aV_n5RqNbikyN90u@localhost.localdomain>
+References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
+ <20260101163417.1065705-5-joelagnelf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260108064200.7faf9735@kernel.org>
+In-Reply-To: <20260101163417.1065705-5-joelagnelf@nvidia.com>
 
-On Thu, Jan 08, 2026 at 06:42:00AM -0800, Jakub Kicinski wrote:
-> On Wed, 7 Jan 2026 20:37:32 -0800 Bobby Eshleman wrote:
-> > On Wed, Jan 07, 2026 at 07:30:13PM -0800, Jakub Kicinski wrote:
-> > > On Wed, 07 Jan 2026 16:57:34 -0800 Bobby Eshleman wrote:  
-> > > > This series improves the CPU cost of RX token management by adding an
-> > > > attribute to NETDEV_CMD_BIND_RX that configures sockets using the
-> > > > binding to avoid the xarray allocator and instead use a per-binding niov
-> > > > array and a uref field in niov.  
-> > > 
-> > > net/ipv4/tcp.c:2600:41: error: implicit declaration of function ‘net_devmem_dmabuf_binding_get’; did you mean ‘net_devmem_dmabuf_binding_put’? [-Wimplicit-function-declaration]
-> > >  2600 |                                         net_devmem_dmabuf_binding_get(binding);
-> > >       |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >       |                                         net_devmem_dmabuf_binding_put
-> > 
-> > I see that net_devmem_dmabuf_binding_get() is lacking a
-> > stub for CONFIG_NET_DEVMEM=n ...
-> > 
-> > Just curious how pw works... is this a randconfig catch? I ask because
-> > all of the build targets pass for this series (build_allmodconfig_warn,
-> > build_clang, etc.. locally and on patchwork.kernel.org), and if there is
-> > a config that pw uses that I'm missing in my local checks I'd like to
-> > add it.
+Le Thu, Jan 01, 2026 at 11:34:13AM -0500, Joel Fernandes a �crit :
+> To be sure we have no rcog wake ups that were lost, add a warning
+> to cover the case where the rdp is overloaded with callbacks but
+> no wake up was attempted.
 > 
-> kunit hit it on our end
+> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> ---
+>  kernel/rcu/tree.c      | 4 ++++
+>  kernel/rcu/tree.h      | 1 +
+>  kernel/rcu/tree_nocb.h | 6 +++++-
+>  3 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 293bbd9ac3f4..78c045a5ef03 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -3767,6 +3767,10 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
+>  		debug_rcu_head_unqueue(&rdp->barrier_head);
+>  		rcu_barrier_trace(TPS("IRQNQ"), -1, rcu_state.barrier_sequence);
+>  	}
+> +#ifdef CONFIG_RCU_NOCB_CPU
+> +	if (wake_nocb)
+> +		rdp->nocb_gp_wake_attempt = true;
+> +#endif
 
-Got it, thank you
+entrain only queues a callback if the list is non-empty. And if it's
+non-empty, rdp->nocb_gp_wake_attempt should be true already.
+
+>  	rcu_nocb_unlock(rdp);
+>  	if (wake_nocb)
+>  		wake_nocb_gp(rdp, false);
+> diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
+> index 653fb4ba5852..74bd6a2a2f84 100644
+> --- a/kernel/rcu/tree.h
+> +++ b/kernel/rcu/tree.h
+> @@ -257,6 +257,7 @@ struct rcu_data {
+>  	unsigned long nocb_gp_loops;	/* # passes through wait code. */
+>  	struct swait_queue_head nocb_gp_wq; /* For nocb kthreads to sleep on. */
+>  	bool nocb_cb_sleep;		/* Is the nocb CB thread asleep? */
+> +	bool nocb_gp_wake_attempt;	/* Was a rcuog wakeup attempted? */
+
+How about nocb_gp_handling ?
+
+>  	struct task_struct *nocb_cb_kthread;
+>  	struct list_head nocb_head_rdp; /*
+>  					 * Head of rcu_data list in wakeup chain,
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index daff2756cd90..7e9d465c8ab1 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -546,6 +546,7 @@ static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_alldone,
+>  	lazy_len = READ_ONCE(rdp->lazy_len);
+>  	if (was_alldone) {
+>  		rdp->qlen_last_fqs_check = len;
+> +		rdp->nocb_gp_wake_attempt = true;
+>  		rcu_nocb_unlock(rdp);
+>  		// Only lazy CBs in bypass list
+>  		if (lazy_len && bypass_len == lazy_len) {
+> @@ -563,7 +564,8 @@ static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_alldone,
+>  
+>  		return;
+>  	} else if (len > rdp->qlen_last_fqs_check + qhimark) {
+> -		/* ... or if many callbacks queued. */
+> +		/* Callback overload condition. */
+> +		WARN_ON_ONCE(!rdp->nocb_gp_wake_attempt);
+>  		rdp->qlen_last_fqs_check = len;
+>  		j = jiffies;
+>  		if (j != rdp->nocb_gp_adv_time &&
+> @@ -688,6 +690,7 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+>  		     bypass_ncbs > 2 * qhimark)) {
+>  			flush_bypass = true;
+>  		} else if (!bypass_ncbs && rcu_segcblist_empty(&rdp->cblist)) {
+> +			rdp->nocb_gp_wake_attempt = false;
+
+This is when nocb_cb_wait() is done with callbacks but nocb_gp_wait() is done
+with them sooner, when the grace period is done for all pending callbacks.
+
+Something like this would perhaps be more accurate:
+
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index e6cd56603cad..52010cbeaa76 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -746,6 +746,8 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+ 			needwait_gp = true;
+ 			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
+ 					    TPS("NeedWaitGP"));
++		} else if (!rcu_cblist_n_cbs(&rdp->nocb_bypass)) {
++			rdp->nocb_gp_wake_attempt = false;
+ 		}
+ 		if (rcu_segcblist_ready_cbs(&rdp->cblist)) {
+ 			needwake = rdp->nocb_cb_sleep;
+
+
+>  			rcu_nocb_unlock_irqrestore(rdp, flags);
+>  			continue; /* No callbacks here, try next. */
+>  		}
+> @@ -1254,6 +1257,7 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
+>  			continue;
+>  		}
+>  		rcu_nocb_try_flush_bypass(rdp, jiffies);
+> +		rdp->nocb_gp_wake_attempt = true;
+
+Same here, we should expect rdp->nocb_gp_wake_attempt to be already on since
+there are lazy callbacks. That's a good opportunity to test the related assertion
+though.
+
+Thanks.
+
+>  		rcu_nocb_unlock_irqrestore(rdp, flags);
+>  		wake_nocb_gp(rdp, false);
+>  		sc->nr_to_scan -= _count;
+> -- 
+> 2.34.1
+> 
+
+-- 
+Frederic Weisbecker
+SUSE Labs
 
