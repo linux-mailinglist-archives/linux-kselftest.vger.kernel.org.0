@@ -1,246 +1,307 @@
-Return-Path: <linux-kselftest+bounces-48554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31E54D05BA9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 20:05:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9AFCD05D85
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 20:30:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 48D09301C918
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 19:04:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8A62B302628D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 19:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BE44322B79;
-	Thu,  8 Jan 2026 19:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236A73002D6;
+	Thu,  8 Jan 2026 19:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EbK0dhYz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O2mY2EJM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B01320CB1
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 19:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DD416EB42;
+	Thu,  8 Jan 2026 19:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767899049; cv=none; b=dkPEoL5gjf8S33GQDabFm7OfBPboSBfmcj40/CA7veVsc0597ZP56amRDOoatkbUBN4uqV/5Zlrh4J6nKlavaTqy96Q1aV2lOUXNr9IZ2NC7EseUmfeGqjTBwljXEZLwncgHYye3BFDa9tFaw0pUBl8xSizWcSuM2zA5XEUwXVk=
+	t=1767900019; cv=none; b=c1GzZQzxx0TKAw+8xUp2Lwwm9jn+R6f8qlWn7B5N+fO8FbLbhuxzpBmeRDBQMXnp4YfxqXhGB2m1qY6N1gdVDynDsmSe0fXWsmxxoAun+iFTnoHRIb6ZTpiJPtyKoJXBs3KrqeZYG4OwCCMr34QFrMINN+MDxAqli+rlFQjIpfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767899049; c=relaxed/simple;
-	bh=S12pBgkM00sJgWSyCC4FkH4Wm/puv/dLWj/scQoC99g=;
+	s=arc-20240116; t=1767900019; c=relaxed/simple;
+	bh=FBaPQlSoTU5UHUYndbWv1nQt4mmWHgIdDAUljiKLbro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RVmtt6IvS5Hfh3XtiO30x0CjUm82uK2QeqY//saev/5doZW/K3D1aqQvIZtaSTdms+kinMr3smXsSI2Z8+MbLWJnV9vufnBkljT5DjfynIoXAae15+ZpMQbtIualDsTjLluofypiqE6dqvhS+zOH/J10LHF9gp1t5vVk+fd2hX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EbK0dhYz; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-430f57cd471so1860185f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 11:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1767899046; x=1768503846; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uZk8shAToyPHM8UaZssBAOmYkCAywr9xb/VP5NyVsRI=;
-        b=EbK0dhYzVojwnPPj08VHnVT19WhzhbWlWPfkl99lgasOaAOE35Gr2ivnr4OPSK/k4v
-         Wp5m/ddBsD3+g5RvY2zfV9QkTNYNkKxcpHT/ayK7R4AIgi+7DaOj22vvEfaNEGqJbVn5
-         TD1b2yZmQRp5Uru9Kheb/NwtS4BYcW/Mjaib4/o5oD8VED4W89AicSezlMhi8leaVHh8
-         0w2UV8CIWzVJilXtnbXiweq0jGuXNTfAVYnDr8RkYbUhN5zoaVpcuvhIpa36emfGWUU+
-         UjTzR52WyS0OYe9MN+cTLvAEBxwgDr2qDkNBXy6LDO/gcGI75GEl2J53z+Fzj0whd7fS
-         zFyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767899046; x=1768503846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uZk8shAToyPHM8UaZssBAOmYkCAywr9xb/VP5NyVsRI=;
-        b=T93XNr2ch/kt/9j1+2iFtcKzEuPGF23/8eGfabIP+04NGKl26v2vH/4jO5F+M83tIS
-         NorGf4FtiiHAwiUF5YJyDUZ9f9/yOVk1dZViRUSyIjKWZa/bDI8UPYeQ/AVshU5VwydH
-         uY2UtivTXkHl5ffQvEAk0VQuTjfe077iAGehhRs/8pixen4/9hIWTmejUsnZwmiUNEWT
-         /Lg+fR/uv45r0rYI2L1GJwlAYSU5+2I/nIyQzt8qzupj8dRy0Kd/gFGoOkHaSO/njfob
-         +sN3xhbU1vkVYyrNi77yYtcRlANqOV1WXAA8OncAqNz7swqrwbhJH/1NpdnzY4Al73Mq
-         uyGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDinbICWvXNoF8NvgJwilLB2YxnVn1ssxJ9TaffEN2mHC3/tb2Yq2Q2+oBwL0wrp/3uWIUpBXO+MBTwC8Ro4Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFosFRqcgFeFibE2UnqGk+I+lEKPgqyjz/r5e/MKfnIMyOVVyq
-	aY2IdV4xHM3YIzFIGmBMAMRViwID8GX8wEADCrAeW7z8JMEFde0bA+EZQxsanNQqwos=
-X-Gm-Gg: AY/fxX74Lh3i/FDFwfkgRoSf+3lq7FQ1j/ihgnxxJPOYqNz8nWAt7tdY7IcErKUoJgh
-	x3vym1Os+Fi6B/1bo6HSlK705vl0/DlFtOyG9f98JpfibZ5AciWhYZV5+7Tm3Y4EmUCy45nASsD
-	eDcBBmkHEJkm3UrjfpAGJjYlzMfVyc5OrzF4E3vVpMPePpOaMFXX2YCZluOk6B7TTpUvzDmyuCf
-	ipdNwh+Zs6ReGoMk9JoAgV4RYRBUqV3aLrqzHZSVqXx8AZ9KShvMVYkddrgpT44XkpAmGJWPF1V
-	hyxN5eP5Ia7/tMZQEaZC38+hXOLqYyV/OZZM2Kq7xvn7CzS0sPAIagydrzrl69K1pEsW0goLzSq
-	Ttgn1ajIfmcZ/XmzwJ0yaXtVo0tLn3mT95o98CZrwGMts3Ct/sgB9qR3LYzW80JradEms1jVmig
-	0ENf1f4i2vO1Q5TeNC8lKItNHFn1i+fpA=
-X-Google-Smtp-Source: AGHT+IE4b6xRdNURXAWWpyFhWm/3C4nzAZftETaWGTbobTlLIsQkJxHqXKOQjLz13Zvy5+0CZcW5yw==
-X-Received: by 2002:a05:6000:290b:b0:431:266:d150 with SMTP id ffacd0b85a97d-432c3761103mr10035954f8f.44.1767899045993;
-        Thu, 08 Jan 2026 11:04:05 -0800 (PST)
-Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5dfa46sm17922112f8f.27.2026.01.08.11.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 11:04:05 -0800 (PST)
-Date: Thu, 8 Jan 2026 20:04:04 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Sun Shaojie <sunshaojie@kylinos.cn>, Chen Ridong <chenridong@huaweicloud.com>
-Subject: Re: [cgroup/for-6.20 PATCH v2 4/4] cgroup/cpuset: Don't invalidate
- sibling partitions on cpuset.cpus conflict
-Message-ID: <chijw6gvtql74beputm3ue2zu2vmrwvtg5a2bn3wabgkqldq4d@obrdh4znejaw>
-References: <20260101191558.434446-1-longman@redhat.com>
- <20260101191558.434446-5-longman@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RUyVtqyEYTXxOb/zmEecsVAU1i27FTwbayUdK1eLHig/84+e01tYyAljJy5Wxjmndtr2m2L+lDL48qnQ68AgSlRLhRQe1GpShQ2Mi7+4SJWolDrea8cMF0pwfL3hkhfBo9X0HmNhcOhSHqPJFZKWnru9IUET381NetMDTf58dBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O2mY2EJM; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767900018; x=1799436018;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FBaPQlSoTU5UHUYndbWv1nQt4mmWHgIdDAUljiKLbro=;
+  b=O2mY2EJM8BABzGWqpu/7Mx60a3H3X1UMcfjO2X2l6147HNJztNdibzQG
+   i38wt+g8hFRlwP80XKDYwd3+CylS9GtGfHZApYwPInzd01iKUWPE7MRfP
+   IhrdKktwcCdq2pgkzKdNZ4vYmKJdmQoXgRtNJdOY8/9ju1grkzRUTbCp/
+   IXaCd1eHp+q/Fn8vcEweJaLRrDh9vNgHR3pBlIwhwUdnTelAX7YEhL2aE
+   b91T0kCG+NkO1LXNbegstUYIFRe3AduYI7FNew93p1p0aNZ3KWXZydnDF
+   8pwljU9LYL9obZGhnceOMpCTMj8QgHqNp23wQBwOj7BDeIdk5EViYW7Jx
+   g==;
+X-CSE-ConnectionGUID: lNCDdACnTT2K4Ylh86U1tQ==
+X-CSE-MsgGUID: h+uJI4oBR4qM/MJgSaCuJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11665"; a="86702597"
+X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
+   d="scan'208";a="86702597"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2026 11:20:16 -0800
+X-CSE-ConnectionGUID: JN1S6bCYR3WKLjz2HSm2wg==
+X-CSE-MsgGUID: WywU1gmIRreo/ZIK9+auZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,211,1763452800"; 
+   d="scan'208";a="203197976"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 08 Jan 2026 11:20:08 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vdvYC-00000000568-2Bfv;
+	Thu, 08 Jan 2026 19:20:04 +0000
+Date: Fri, 9 Jan 2026 03:19:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Mina Almasry <almasrymina@google.com>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>, asml.silence@gmail.com,
+	matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v8 3/5] net: devmem: implement autorelease token
+ management
+Message-ID: <202601090223.Ygqrrc5p-lkp@intel.com>
+References: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-3-92c968631496@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2ixtbe63ri56p3pp"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260101191558.434446-5-longman@redhat.com>
+In-Reply-To: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-3-92c968631496@meta.com>
+
+Hi Bobby,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem-refactor-sock_devmem_dontneed-for-autorelease-split/20260108-095740
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-3-92c968631496%40meta.com
+patch subject: [PATCH net-next v8 3/5] net: devmem: implement autorelease token management
+config: openrisc-defconfig (https://download.01.org/0day-ci/archive/20260109/202601090223.Ygqrrc5p-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260109/202601090223.Ygqrrc5p-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601090223.Ygqrrc5p-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   net/ipv4/tcp.c: In function 'tcp_recvmsg_dmabuf':
+>> net/ipv4/tcp.c:2600:41: error: implicit declaration of function 'net_devmem_dmabuf_binding_get'; did you mean 'net_devmem_dmabuf_binding_put'? [-Wimplicit-function-declaration]
+    2600 |                                         net_devmem_dmabuf_binding_get(binding);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                         net_devmem_dmabuf_binding_put
 
 
---2ixtbe63ri56p3pp
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [cgroup/for-6.20 PATCH v2 4/4] cgroup/cpuset: Don't invalidate
- sibling partitions on cpuset.cpus conflict
-MIME-Version: 1.0
+vim +2600 net/ipv4/tcp.c
 
-Hi.
+  2498	
+  2499	/* On error, returns the -errno. On success, returns number of bytes sent to the
+  2500	 * user. May not consume all of @remaining_len.
+  2501	 */
+  2502	static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+  2503				      unsigned int offset, struct msghdr *msg,
+  2504				      int remaining_len)
+  2505	{
+  2506		struct dmabuf_cmsg dmabuf_cmsg = { 0 };
+  2507		struct tcp_xa_pool tcp_xa_pool;
+  2508		unsigned int start;
+  2509		int i, copy, n;
+  2510		int sent = 0;
+  2511		int err = 0;
+  2512	
+  2513		tcp_xa_pool.max = 0;
+  2514		tcp_xa_pool.idx = 0;
+  2515		do {
+  2516			start = skb_headlen(skb);
+  2517	
+  2518			if (skb_frags_readable(skb)) {
+  2519				err = -ENODEV;
+  2520				goto out;
+  2521			}
+  2522	
+  2523			/* Copy header. */
+  2524			copy = start - offset;
+  2525			if (copy > 0) {
+  2526				copy = min(copy, remaining_len);
+  2527	
+  2528				n = copy_to_iter(skb->data + offset, copy,
+  2529						 &msg->msg_iter);
+  2530				if (n != copy) {
+  2531					err = -EFAULT;
+  2532					goto out;
+  2533				}
+  2534	
+  2535				offset += copy;
+  2536				remaining_len -= copy;
+  2537	
+  2538				/* First a dmabuf_cmsg for # bytes copied to user
+  2539				 * buffer.
+  2540				 */
+  2541				memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
+  2542				dmabuf_cmsg.frag_size = copy;
+  2543				err = put_cmsg_notrunc(msg, SOL_SOCKET,
+  2544						       SO_DEVMEM_LINEAR,
+  2545						       sizeof(dmabuf_cmsg),
+  2546						       &dmabuf_cmsg);
+  2547				if (err)
+  2548					goto out;
+  2549	
+  2550				sent += copy;
+  2551	
+  2552				if (remaining_len == 0)
+  2553					goto out;
+  2554			}
+  2555	
+  2556			/* after that, send information of dmabuf pages through a
+  2557			 * sequence of cmsg
+  2558			 */
+  2559			for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+  2560				struct net_devmem_dmabuf_binding *binding = NULL;
+  2561				skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+  2562				struct net_iov *niov;
+  2563				u64 frag_offset;
+  2564				int end;
+  2565	
+  2566				/* !skb_frags_readable() should indicate that ALL the
+  2567				 * frags in this skb are dmabuf net_iovs. We're checking
+  2568				 * for that flag above, but also check individual frags
+  2569				 * here. If the tcp stack is not setting
+  2570				 * skb_frags_readable() correctly, we still don't want
+  2571				 * to crash here.
+  2572				 */
+  2573				if (!skb_frag_net_iov(frag)) {
+  2574					net_err_ratelimited("Found non-dmabuf skb with net_iov");
+  2575					err = -ENODEV;
+  2576					goto out;
+  2577				}
+  2578	
+  2579				niov = skb_frag_net_iov(frag);
+  2580				if (!net_is_devmem_iov(niov)) {
+  2581					err = -ENODEV;
+  2582					goto out;
+  2583				}
+  2584	
+  2585				end = start + skb_frag_size(frag);
+  2586				copy = end - offset;
+  2587	
+  2588				if (copy > 0) {
+  2589					copy = min(copy, remaining_len);
+  2590	
+  2591					frag_offset = net_iov_virtual_addr(niov) +
+  2592						      skb_frag_off(frag) + offset -
+  2593						      start;
+  2594					dmabuf_cmsg.frag_offset = frag_offset;
+  2595					dmabuf_cmsg.frag_size = copy;
+  2596	
+  2597					binding = net_devmem_iov_binding(niov);
+  2598	
+  2599					if (!sk->sk_devmem_info.binding) {
+> 2600						net_devmem_dmabuf_binding_get(binding);
+  2601						sk->sk_devmem_info.binding = binding;
+  2602					}
+  2603	
+  2604					if (sk->sk_devmem_info.binding != binding) {
+  2605						err = -EFAULT;
+  2606						goto out;
+  2607					}
+  2608	
+  2609					if (static_branch_unlikely(&tcp_devmem_ar_key)) {
+  2610						err = tcp_xa_pool_refill(sk,
+  2611									 &tcp_xa_pool,
+  2612									 skb_shinfo(skb)->nr_frags - i);
+  2613						if (err)
+  2614							goto out;
+  2615	
+  2616						dmabuf_cmsg.frag_token =
+  2617							tcp_xa_pool.tokens[tcp_xa_pool.idx];
+  2618					} else {
+  2619						dmabuf_cmsg.frag_token =
+  2620							net_iov_virtual_addr(niov) >> PAGE_SHIFT;
+  2621					}
+  2622	
+  2623	
+  2624					/* Will perform the exchange later */
+  2625					dmabuf_cmsg.dmabuf_id = net_devmem_iov_binding_id(niov);
+  2626	
+  2627					offset += copy;
+  2628					remaining_len -= copy;
+  2629	
+  2630					err = put_cmsg_notrunc(msg, SOL_SOCKET,
+  2631							       SO_DEVMEM_DMABUF,
+  2632							       sizeof(dmabuf_cmsg),
+  2633							       &dmabuf_cmsg);
+  2634					if (err)
+  2635						goto out;
+  2636	
+  2637					tcp_xa_pool_inc_pp_ref_count(&tcp_xa_pool, frag);
+  2638	
+  2639					sent += copy;
+  2640	
+  2641					if (remaining_len == 0)
+  2642						goto out;
+  2643				}
+  2644				start = end;
+  2645			}
+  2646	
+  2647			tcp_xa_pool_commit(sk, &tcp_xa_pool);
+  2648			if (!remaining_len)
+  2649				goto out;
+  2650	
+  2651			/* if remaining_len is not satisfied yet, we need to go to the
+  2652			 * next frag in the frag_list to satisfy remaining_len.
+  2653			 */
+  2654			skb = skb_shinfo(skb)->frag_list ?: skb->next;
+  2655	
+  2656			offset = offset - start;
+  2657		} while (skb);
+  2658	
+  2659		if (remaining_len) {
+  2660			err = -EFAULT;
+  2661			goto out;
+  2662		}
+  2663	
+  2664	out:
+  2665		tcp_xa_pool_commit(sk, &tcp_xa_pool);
+  2666		if (!sent)
+  2667			sent = err;
+  2668	
+  2669		return sent;
+  2670	}
+  2671	
 
-On Thu, Jan 01, 2026 at 02:15:58PM -0500, Waiman Long <longman@redhat.com> =
-wrote:
-> Currently, when setting a cpuset's cpuset.cpus to a value that conflicts
-> with the cpuset.cpus/cpuset.cpus.exclusive of a sibling partition,
-> the sibling's partition state becomes invalid. This is overly harsh and
-> is probably not necessary.
->=20
-> The cpuset.cpus.exclusive control file, if set, will override the
-> cpuset.cpus of the same cpuset when creating a cpuset partition.
-> So cpuset.cpus has less priority than cpuset.cpus.exclusive in setting up
-> a partition.  However, it cannot override a conflicting cpuset.cpus file
-> in a sibling cpuset and the partition creation process will fail. This
-> is inconsistent.  That will also make using cpuset.cpus.exclusive less
-> valuable as a tool to set up cpuset partitions as the users have to
-> check if such a cpuset.cpus conflict exists or not.
->=20
-> Fix these problems by strictly adhering to the setting of the
-> following control files in descending order of priority when setting
-> up a partition.
->=20
->  1. cpuset.cpus.exclusive.effective of a valid partition
->  2. cpuset.cpus.exclusive
->  3. cpuset.cpus
-
-
->=20
-> So once a cpuset.cpus.exclusive is set without failure, it will
-> always be allowed to form a valid partition as long as at least one
-> CPU can be granted from its parent irrespective of the state of the
-> siblings' cpuset.cpus values. Of course, setting cpuset.cpus.exclusive
-> will fail if it conflicts with the cpuset.cpus.exclusive or the
-> cpuset.cpus.exclusive.effective value of a sibling.
-
-Concept question:=20
-When a/b/cpuset.cpus.exclusive =E2=8A=82 a/b/cpuset.cpus (proper subset)
-and a/b/cpuset.cpus.partition =3D=3D root, a/cpuset.cpus.partition =3D=3D r=
-oot
-(b is valid partition)
-should a/b/cpuset.cpus.exclusive.effective be equal to cpuset.cpus (as
-all of them happen to be exclusive) or "only" cpuset.cpus.exclusive?
-
-> Partition can still be created by setting only cpuset.cpus without
-> setting cpuset.cpus.exclusive. However, any conflicting CPUs in sibling's
-> cpuset.cpus.exclusive.effective and cpuset.cpus.exclusive values will
-> be removed from its cpuset.cpus.exclusive.effective as long as there
-> is still one or more CPUs left and can be granted from its parent. This
-> CPU stripping is currently done in rm_siblings_excl_cpus().
->=20
-> The new code will now try its best to enable the creation of new
-> partitions with only cpuset.cpus set without invalidating existing ones.
-
-OK. (After I re-learnt benefits of remote partitions or more precisely
-cpuset.cpus.effective.)
-
-> However it is not guaranteed that all the CPUs requested in cpuset.cpus
-> will be used in the new partition even when all these CPUs can be
-> granted from the parent.
->=20
-> This is similar to the fact that cpuset.cpus.effective may not be
-> able to include all the CPUs requested in cpuset.cpus. In this case,
-> the parent may not able to grant all the exclusive CPUs requested in
-> cpuset.cpus to cpuset.cpus.exclusive.effective if some of them have
-> already been granted to other partitions earlier.
->=20
-> With the creation of multiple sibling partitions by setting
-> only cpuset.cpus, this does have the side effect that their exact
-> cpuset.cpus.exclusive.effective settings will depend on the order of
-> partition creation if there are conflicts. Due to the exclusive nature
-> of the CPUs in a partition, it is not easy to make it fair other than
-> the old behavior of invalidating all the conflicting partitions.
->=20
-> For example,
->   # echo "0-2" > A1/cpuset.cpus
->   # echo "root" > A1/cpuset.cpus.partition
->   # echo A1/cpuset.cpus.partition
->   root
->   # echo A1/cpuset.cpus.exclusive.effective
->   0-2
->   # echo "2-4" > B1/cpuset.cpus
->   # echo "root" > B1/cpuset.cpus.partition
->   # echo B1/cpuset.cpus.partition
->   root
->   # echo B1/cpuset.cpus.exclusive.effective
->   3-4
->   # echo B1/cpuset.cpus.effective
->   3-4
->=20
-> For users who want to be sure that they can get most of the CPUs they
-> want,
-
-Slightly OT but I'd say that users want:
-a) confinement (some cpuset.cpus in leaves)
-b) isolation (cpuset.cpus.exclusive in leaves)
-c) hierarchical organization
-  - confinment generalizes OK
-  - children can only claim what parent allowed
-
-Conflicting exclusivity configs should be no users intention or a want :-p
-
-
-> cpuset.cpus.exclusive should be used instead if they can set
-> it successfully without failure. Setting cpuset.cpus.exclusive will
-> guarantee that sibling conflicts from then onward is no longer possible.
-
-I think the background idea of the paragraph (shift away from local to
-remote partitions, also mentioned the other day) could be somehow fitted
-into the Documentation/ hunks.
-
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admi=
-n-guide/cgroup-v2.rst
-> ...
-> @@ -2632,6 +2641,9 @@ Cpuset Interface Files
-> =20
->  	The root cgroup is always a partition root and its state cannot
->  	be changed.  All other non-root cgroups start out as "member".
-> +	Even though the "cpuset.cpus.exclusive*" control files are not
-> +	present in the root cgroup, they are implicitly the same as
-> +	"cpuset.cpus".
-
-Even "cpuset.cpus" have CFTYPE_NOT_ON_ROOT, so this formulation might be
-confusing. Maybe it's same as "cpuset.cpus.effective"?
-
-Thanks,
-Michal
-
---2ixtbe63ri56p3pp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaV//ohsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AjFcgD/befAIpWDsnrIRvSGMNh7
-2ZNzdia/UxMmNfbALez+7vQBAOiQ6u9XV7+K0KdPF27pphDL7Ro9/wghUgiQ+qBM
-f+kN
-=RCBX
------END PGP SIGNATURE-----
-
---2ixtbe63ri56p3pp--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
