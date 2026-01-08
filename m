@@ -1,93 +1,93 @@
-Return-Path: <linux-kselftest+bounces-48563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48564-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4C3DD06787
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 23:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 083DAD06793
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 23:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 60EE330213E8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 22:48:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AC8D13020C7F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 22:50:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57A3333451;
-	Thu,  8 Jan 2026 22:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D79D7331A4C;
+	Thu,  8 Jan 2026 22:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KP4G76vN"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EazdywGP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B2B32C94A
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 22:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7283382CB
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 22:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767912490; cv=pass; b=mXr1OKnbckHMiGyV06BJrLpkf8cvAEKNc+og1KfxC8SAF0rtWZEeKnav8bDcROxF/XRNhL6BQtFjZWaRK9CAch57JKcgnvVbFhqj+Q751OQMKACL4M9R/X/S8h1NWm6SIBHQ63mhF6C4UUz+VQLKPS/xN7y/EKm5Uh6e1LUMkkE=
+	t=1767912616; cv=pass; b=rVrYXLh3D5hjVgrKbfWVTrd4K8YzZzBms3Neu8n3DGmefih5Dk+DhxVCiHYwktsx7qjyQaFymeCIM13PceVgpcAaqalRUd1uScXUgxMq6E9J760sC/HeM1R7Zb7kaKT/zGJzmo6+pzEYpVpfLYrZqzLMjKCCBHz0EIpx71XxtjI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767912490; c=relaxed/simple;
-	bh=WV9pPdU0/t3bo7zpdI6NRHH4RIbqWrXSjDNktz3inOI=;
+	s=arc-20240116; t=1767912616; c=relaxed/simple;
+	bh=0Kg9b2/WsUIMEqmGuRHA5a4yLHhV5XKlV8sTuaMp9aM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qoK4Esa9bU+n4XByPV0u506dW18KAXTuGPwevDP3uK9HSKnEAwY4LYxHYSYDQOLm1X7LT4j9DrTqD1BoQbczkOC/XVKlwkjfVKsYHH+xlj5A2ub5L3wVCgBZtIIbyG8hI0Fdi8EbutWRO2doT1ycRQYBgjvyuIfz6GrVLuF/i9U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KP4G76vN; arc=pass smtp.client-ip=209.85.160.173
+	 To:Cc:Content-Type; b=C4gfD/nriEPx1/CDuePvHMmgzilVX7dgXZBer6RyHpEIldDzx0oczRrbz6S924ccqTEBdIwt2dCLpIE3Qzjh4LsFQRWP1yqQwOYKkP4KDihfutWBnztYwqsTwV9xrFL+iXmi7bfDGGRx+DO+x6dUpQHGDscPgB9ONlX4sOeYxpc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EazdywGP; arc=pass smtp.client-ip=209.85.160.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4edb8d6e98aso180931cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 14:48:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1767912488; cv=none;
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4edb8d6e98aso182071cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 14:50:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1767912613; cv=none;
         d=google.com; s=arc-20240605;
-        b=XKp5l3JqZV/CPuDKPOKSaAFvhoUDh7Z30CjiDSGX2IcOSNEVNELV4cW0guwtoSUSve
-         q3TsuRabX7+3T/Koq9n4iJS+Yy2HJY6r4R1St1ElJnd/yJTzIMVmOIKtXdEyEHk+rB4K
-         YwPpssdqeZhtsYuCJeksaBLTtBSzLcnX/wDxCFeQHM6ENY7chivYUTFONOPshTel40pL
-         /gRbo69fG2LCaIGydVcs2i+IEO5S7IB+2SNWd9NoajCRUMtPDGeguWg58ZmVO8DEIW7g
-         7SfMhbzydvcJEkS9Fc451rKYIhKk01fDyTmw+ScqpIcyWyLQ1LM22gunts0YegHsAj2f
-         eeEQ==
+        b=Vxs25s0s3NqFXr0zGRe55sQvVJKGn0XQUO614baowCE63aMtwzVAeQnczvTWY1BZkV
+         GA6dDJfDlYIrYcDA8+JeemOVcTD+3O6W93A1k3MA1lUg9AcQhU0H6LlN7GBIa+NRYoo9
+         ZQBTd0p4t3cK8eUN9h6A39JaRYauyDfHGUzZZYTszcAREvJ5Q5Ew00x4SpOcEUILA/gq
+         6A1G4OMkuWmEVpjrQ+3EwyKN3yZVhKDEhWPNMrmKYbZRMcoTPiXDmGQ2+c85L13AlwNI
+         z0gaZ/pr80gy7htltRJiSTCotOqtwd7/+fz7+d+WEu1A9+Hc0NXjjOjVlhuptpyIB8y2
+         rLZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=WV9pPdU0/t3bo7zpdI6NRHH4RIbqWrXSjDNktz3inOI=;
-        fh=c7itryeyIPdvL56HPSmL7t6sp3MGHJtZg+d3IdRtv7o=;
-        b=MS0809MGowQ4cCt7vVj7f7orH6691TvONcfyns3QGgkVyFvA/FE6daDJhaoH4uLDi+
-         OHfUbHx3MNRgmCVDFqsBF8ldenqpV7u4g7ZJhlFYJGLMwz9X/6K94AVw0VJGSzSCjrjQ
-         a3ngdz5JzAMC5pdRW4gyvDoT0SO0YkE+yGafMbp+fYFh9boiPsLw0OMRLowJuQotvVK3
-         v7tUlUritBCbB8TBgrCzz4+6sMN2afIM6K63qagrPxifbufgJabyfBplW8W64uuG/So6
-         fgxXzQ3goyPKEVxOLWzwI/gc83di+onl7tM7mIZQZ0pDWDkICnnH63aBvKulzwpwUsLv
-         I5Mw==;
+        bh=Wseu+RuUn8NgZwFWIiGhlQzFjB8QZcJo0bXjL+h71eo=;
+        fh=1E0jbn+ZFIJmOXpafAYbz0i7ctLLgxybXAQ+w9KnOfo=;
+        b=E8xmdNCqThRqL2PZE7YBDYmjhl6AkW/QYePdc5nkpQs2tdhDZZyx3YDe3IFJCKD4zQ
+         7l77Wo/gYXgfVRj7ZRF+vUUpM9RNP6d+uul1IjRahKbLhYQJ0Z4PaP3u1qlwhMZ0nsY5
+         oCvQT0qBzrINfwkheK3TO7SsNtJG9FdL/O3YSmTJ+KdekS0LvvZ0+p4Oq4ey3Qd9GJEz
+         E1iYp1hlPDFX8LNT3MNH7UcyCEkICfJ8Tz6UEkZIrSzsawkIBWppYZPBpxefsv/6EGQx
+         shTqjK+Ezyuln/xKm1LnvaqcOI1u+2bv9xuftjIfwyEqT3ECH4WRSs1qvA4Wm3tyBAGr
+         Nisw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767912488; x=1768517288; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767912613; x=1768517413; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WV9pPdU0/t3bo7zpdI6NRHH4RIbqWrXSjDNktz3inOI=;
-        b=KP4G76vNV8G2QJOzBZ3cs5ZC6bKRcr8+OPMKDkbNwQDkQxb+3lMTpACN3HVSNG9/Dv
-         FLkKWfMtfH2Ic+yEEMP8peZE8gI3EGYV7ESz4VWTYr9Qd5/ANShPi8YR1NnIvlGecadL
-         bSLz+SPPPu7zrn0o9Yg4WtX5DAxMce8uycGg32Vx6GMCx3ixgYBYzaZzYe2v1oRxVqZa
-         9muz9upsFMIDXxg40v9qkD6BeUUGgYCwvvkvJcRi4iMsIB1AAdggE29ylmJVaiZ3/Khe
-         87oC/F4AT3Qf4i4f6Pm945K4cbyH9cZo22WZNfrz8OMHRZ76yH+357zeIQHzuKABVaH4
-         VK7w==
+        bh=Wseu+RuUn8NgZwFWIiGhlQzFjB8QZcJo0bXjL+h71eo=;
+        b=EazdywGPZDCXH3Fx5TCKx8lRPKR1YFKi2rVdJxp5TFEc9FPXgCHy4+KFLFNwGHIJJs
+         MgHNdzGU30XBZ1gHL6jcB8RAcVWXfiGdoYbJDPT/CqaP2NI/yiTrIV1SNx0tyaZO4YXV
+         zvkYL3UjcM9Z9Qf10f2eJdWOWTVNoySi2LyTw7UCfjNZxlGwaKLj4LgUzShVswoDMInM
+         iDMUOmfSYe5ThtQoc6lXI5oOjrmKRbLm67kAwNWAZMg1esDPV1Al+Q0DnAb5EOEt7B1Z
+         n2z9uIEFnyRVShloZtvQXCgoTvhZt3foz20FPgvtnC4XkJyMcEA6USyg1aQv2WE8QqnS
+         bLpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767912488; x=1768517288;
+        d=1e100.net; s=20230601; t=1767912613; x=1768517413;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WV9pPdU0/t3bo7zpdI6NRHH4RIbqWrXSjDNktz3inOI=;
-        b=Nbpfzv6JTx9xoXTud3VoI3YucS8zYNYmWPI626Ydtmse4yz6SyVlQFPeBOkz9YZ9uF
-         fm5AW6Rxd5dbh//C7TTXIdLVa6rPsHAgCr+JJZiHbZd4klHjmfWnSPnMZnfdWQIpNTtT
-         o1h9A9r2Pq3K5jTWTBAtKS6UbgQxlPe8dHZpI64bCXt1UFutx4kFuW212KAEqHhG0FJ/
-         HfUQgO1vMFKbXeGHktToH3rANQtsM6Rj2pjRg/idQGQQKN9cYm0CXYYOOWFvn/DVRnN4
-         cHxP/ZG9C3ilywtOkbQYThdBQvmT4LtKLcOVUjCsRnlU+jX3K/GYpZzygXaGOih9anLk
-         Ky+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX/J5O/h8dQclHH6POeAp7iEKHkn7jvAk7yGalRUm7D84NzmTu/3JSnKXsaU2bgxewv0wawqt1CM0sMHO3DNMQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoVsapzG0/qsyfsawXhqyCovpTrtTDPelDLob4VdmSoOK1dh2f
-	mE8Tip89vYC6PjW0+ogD00xkg5d8k5/zNdJulFPaTj2yT18m8K81n4ezTPAId17qGU5y0UiujV6
-	R9DKix80fHNhqwJNFLOJVsdK5bwr1+XEP8EIhjsrY
-X-Gm-Gg: AY/fxX5A41e/tH86aFP0r4gUYFeApUYYRbU+zf02XutfpQV6Z99Ybiqn2E8FMSus+JK
-	0ZYwLZHPkYDTOacDJVdViQ04oo6H7Hc7Vfgm2/0mlr6RRt5pVW4OwjlTK+sh3fDMOHo+p4HS1g8
-	r+nQbUAz5TDJuM+4dDo90rHTwLoG2D/p2bqVzJ6ik87ZjO0NxuAGXRMawFxob6045Eg81cVi8A0
-	608B03hAmamGr7c9tbHzyczxC5ekmR/utxXGqi/+aPXiJW+m66yDGU8fcbPCiKyoXWkDJx1N9fC
-	cP4OO8gCUn7gxAilUrPMPup2zmVcAUt8Cr85Dzwiuy542rjTWJXhNGUIj0o=
-X-Received: by 2002:ac8:7dc8:0:b0:4f3:54eb:f26e with SMTP id
- d75a77b69052e-4ffcb1703famr1912391cf.1.1767912487896; Thu, 08 Jan 2026
- 14:48:07 -0800 (PST)
+        bh=Wseu+RuUn8NgZwFWIiGhlQzFjB8QZcJo0bXjL+h71eo=;
+        b=B6fVWuX/xaxYc3kK59/mD1e0YA8MLq1JsVlFf5bNeWoTSLUmM1599ikqHJRlWjaF4A
+         90UpDpShqXNwhA9sPizjuhipDthPLqcfhUNF0RpwXU5YwCFIToymfRuR+/E4pBy88ht3
+         Dn/9b41tIVEdfiZW32ebXfnPxDzVxraBJAEmfNL+ZiZ/7Q3FvT4HsaME6KU+48XL5eYY
+         zJxnBORqxQxDDFYuQP1UNjUwe16OdJ6H/LrSoQR5n0d9RVhnFMAfsPuh8+c3FJFIBd5U
+         WNVCWZ3BJG5o9yTXP2BDlSOQgyXfLRg2+db2IhWP6x31TkJRx6Seh4JFbLigV02HoWSg
+         j0Rg==
+X-Forwarded-Encrypted: i=1; AJvYcCUuRsoE0mCNoJnPU2WpKvmawXcOfUTqS5i6KVyLf0Q8OgYn24vrQzl3cloGnV9oynpGrwtPG4hE1YKBFjgWmZ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxY6B12i/lj+6tQ4KvRLalOgFEkClN2Z8IU8xVE4lr6xnURksz
+	hk5aUuIvXKkPCBJffG15PDTLTUEdTxK7GpqHv8mBg9lX+LktSEAtBICLYZjOMEKhSAtvTbWRwqc
+	zjFln7vGKrV7yNhrdQosz6wXXT/uWacTodCjpCc/X
+X-Gm-Gg: AY/fxX73xbScUax8R+npgGaftwjQvLr9nr4zUxxlyEeBEUgAXYIg/qyS5/YbiNA7gnX
+	OYxqmMraAiBjNYTfAWPqzKF51OuwXLztf13BJKdCNccwWBGrYOgcLgtP2BnLKdBiv5OuHVnTZqm
+	8s2yXAwCb/fp8ZkDTwDepQuaPB9xSJQ94SRyh3ekveEJkcOnCtWhNvRYsdLIMCkRW+VREdbNSlq
+	RqPIwv8mmrgtzjC5r5veyqu/u5Ku44bFORE/AsgyUR5LiZXJKhqEg3ARCr1dbvvyqH9heMOQ75O
+	FNUxi5Q7RiKeY+88MHCN/2WnPv5s+MBRLgC7DbTzupXJ4lq9zJMIhYARdq0=
+X-Received: by 2002:ac8:725a:0:b0:4ff:cb75:2a22 with SMTP id
+ d75a77b69052e-4ffcbd0a84emr528911cf.3.1767912612694; Thu, 08 Jan 2026
+ 14:50:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,12 +95,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260108155816.36001-1-chia-yu.chang@nokia-bell-labs.com>
- <20260108155816.36001-2-chia-yu.chang@nokia-bell-labs.com> <CADVnQykTJWJf7kjxWrdYMYaeamo20JDbd_SijTejLj1ES37j7Q@mail.gmail.com>
-In-Reply-To: <CADVnQykTJWJf7kjxWrdYMYaeamo20JDbd_SijTejLj1ES37j7Q@mail.gmail.com>
+ <20260108155816.36001-2-chia-yu.chang@nokia-bell-labs.com>
+ <CADVnQykTJWJf7kjxWrdYMYaeamo20JDbd_SijTejLj1ES37j7Q@mail.gmail.com> <CADVnQykyiM=qDoa_7zFhrZ4Q_D8FPN0_FhUn+k16cLHM9WBOCw@mail.gmail.com>
+In-Reply-To: <CADVnQykyiM=qDoa_7zFhrZ4Q_D8FPN0_FhUn+k16cLHM9WBOCw@mail.gmail.com>
 From: Neal Cardwell <ncardwell@google.com>
-Date: Thu, 8 Jan 2026 17:47:51 -0500
-X-Gm-Features: AQt7F2rHIoIx_fDko3yxcFPFIn-ukKfEKFlHAg0ugBLMmvSi3Dr6twPz-fvm6JM
-Message-ID: <CADVnQykyiM=qDoa_7zFhrZ4Q_D8FPN0_FhUn+k16cLHM9WBOCw@mail.gmail.com>
+Date: Thu, 8 Jan 2026 17:49:55 -0500
+X-Gm-Features: AQt7F2o6WroRcnLZsfsh5rQuai7Ltrdaj81MBXbeb_Nn4Vs-CAUHJkiKVn3RRPk
+Message-ID: <CADVnQymHK0y_ALJ6obg60j+oUgjgpA8daaazin9hzO+-O6oRdA@mail.gmail.com>
 Subject: Re: [PATCH net-next 1/1] selftests/net: Add packetdrill packetdrill cases
 To: chia-yu.chang@nokia-bell-labs.com
 Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com, 
@@ -118,27 +119,40 @@ Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 8, 2026 at 5:46=E2=80=AFPM Neal Cardwell <ncardwell@google.com>=
+On Thu, Jan 8, 2026 at 5:47=E2=80=AFPM Neal Cardwell <ncardwell@google.com>=
  wrote:
 >
-> On Thu, Jan 8, 2026 at 10:58=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.co=
+> On Thu, Jan 8, 2026 at 5:46=E2=80=AFPM Neal Cardwell <ncardwell@google.co=
 m> wrote:
 > >
-> > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> >
-> > Linux Accurate ECN test sets using ACE counters and AccECN options to
-> > cover several scenarios: Connection teardown, different ACK conditions,
-> > counter wrapping, SACK space grabbing, fallback schemes, negotiation
-> > retransmission/reorder/loss, AccECN option drop/loss, different
-> > handshake reflectors, data with marking, and different sysctl values.
-> >
-> > Co-developed-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> > Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> > Co-developed-by: Neal Cardwell <ncardwell@google.com>
-> > Signed-off-by: Neal Cardwell <ncardwell@google.com>
-> > ---
+> > On Thu, Jan 8, 2026 at 10:58=E2=80=AFAM <chia-yu.chang@nokia-bell-labs.=
+com> wrote:
+> > >
+> > > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> > >
+> > > Linux Accurate ECN test sets using ACE counters and AccECN options to
+> > > cover several scenarios: Connection teardown, different ACK condition=
+s,
+> > > counter wrapping, SACK space grabbing, fallback schemes, negotiation
+> > > retransmission/reorder/loss, AccECN option drop/loss, different
+> > > handshake reflectors, data with marking, and different sysctl values.
+> > >
+> > > Co-developed-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> > > Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
+> > > Co-developed-by: Neal Cardwell <ncardwell@google.com>
+> > > Signed-off-by: Neal Cardwell <ncardwell@google.com>
+> > > ---
+
+[apologies for the premature send due to accidental shift-of-focus...]
 
 A third note:
 
-(3)
+(3) the patch title seems to have a typo; it is currently:
+  selftests/net: Add packetdrill packetdrill cases
+
+I would suggest something like:
+  selftests/net: packetdrill: add TCP Accurate ECN cases
+
+Thanks!
+neal
 
