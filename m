@@ -1,137 +1,195 @@
-Return-Path: <linux-kselftest+bounces-48528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB591D04436
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:17:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E7BD0448D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:19:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F1D9D30F427C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:40:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BF583311784C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36DC3358DE;
-	Thu,  8 Jan 2026 15:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C98F331A4B;
+	Thu,  8 Jan 2026 15:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aRhkLWGi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TclmQzJ3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4750B331A5D;
-	Thu,  8 Jan 2026 15:20:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07201DE89A;
+	Thu,  8 Jan 2026 15:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767885652; cv=none; b=i5Eu9d++2cQ41N19FOHxg9XDhtx8+hhOaM9XKWzg+5HQmv+/KNnYP9qEVWErtmnuFQaB8DMxMmsfJfiwJ/5/qIUlBMYztkR8hZM1cQ/0OxiSZDctor9xVG2KE0zijf4nx467kfPdqYVBQrknJ2NeU35xXio1HQ3WwxWtZZvfPVM=
+	t=1767885929; cv=none; b=ggwxy4/Z0c2s+WqFUoOqMvRy5uJWSksfgBZWVS8bFRqQCd12r5fo3uzHbNLYc43CZ9KUneZjIA6XqvE7OM5iXXmwzuAgjChUYKK/yczKKL3GViliLBj4JaYwHtQu/urxHgatsEtCuTAwHexZmizqHiUoDBsApO1t0qxQ00ldXKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767885652; c=relaxed/simple;
-	bh=kj9/L1h9QFZS6wMHhPgh4NTq4aVPlZfDQzmk8AYQgVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JWLeOdpxYRzBEkY0fTSeK3xCsnsYNvV/Xxco2Zwh4nizKt15iMeSNqkuxpxpLNyZ8GgdcmhUKWXXG7fw01WTIPyCMYJGXR1ZuTEMZh+D66nwnoTaMTxivrdhMuX033/6UQofawY7lBSz1xf1kD5C/FbaKtpvn6UQjA6T+v8fx18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aRhkLWGi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8BEC116C6;
-	Thu,  8 Jan 2026 15:20:49 +0000 (UTC)
+	s=arc-20240116; t=1767885929; c=relaxed/simple;
+	bh=TnqqVmU/omsPxInzuSAB4rkZpzVUW/rbaQABAZOlvDE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nyFd9NHO4aPGxpEDLDUkJEOxp1L3rlcfKZlDGpLj3OcZHytjk7CQ9goG+P4uxJEX0olJgYYl6/DegALXyMtcHkw/RgJsyp4xccfpeec6vgMhx1g8Yhrg5V/PsWbnKf6kLKxQIyc2Gz+2xUVHufWSZRspclcEd1PGzeGvGBK6ioE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TclmQzJ3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C10F7C116C6;
+	Thu,  8 Jan 2026 15:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767885650;
-	bh=kj9/L1h9QFZS6wMHhPgh4NTq4aVPlZfDQzmk8AYQgVU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aRhkLWGiPKtpyO6PuD4gE7esDHAwgPu0Ne8Ork+0d/SVkDOV7tcU2iy14cG+5LFs/
-	 dVeVJq5SQcpsE46hTLhIOvT1gu42nmVyS2fpeKE8ZzipfI0GAxYV2eq4AmgG0ds9T7
-	 +cVhwNYuYaSW2ptAy/ZiwL4RWPkLGGWDzB8bCj5ENKEgsd2dQ6egn0eVf6shLnv82m
-	 XLXN3so119rbtHrcqAB2hwPiS9258GSk8rABWGGCPGXjExADK35Attf/+wHJRQAA8R
-	 6vycGveZdz9oF46zK0hgQCV6BKjEHEzC9zAEkuXkvT/O/uRRAz74apze2AFtl5qkXV
-	 2lriJkzOZyVRA==
-Message-ID: <604c7b1d-f366-4faa-9abd-bae8ae73b561@kernel.org>
-Date: Thu, 8 Jan 2026 08:20:48 -0700
+	s=k20201202; t=1767885928;
+	bh=TnqqVmU/omsPxInzuSAB4rkZpzVUW/rbaQABAZOlvDE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TclmQzJ329uswzMXiYuO2Eutn4XRM7OD7mfBmDL7EQBj516Ey1Qy/E4Uma/gRYZhi
+	 vl3GizN/80KGJ0hy1UP7252jedXvGMdJiF7ee6Xyvq/Z9+cwgAzbWH/6Beu0T9DUlq
+	 YqcTBU2xVsA1PCv2Qy7OxUm5FhMTzb5Yg6knHHJSa4yhdGrrHoXnkfqPdYLkkJICtH
+	 bUK+7L8fMLtyEGJD6m6vJwPEpnbW9y6RNmrD+uC8SnimxlkKA4NM8zCcX/XBOCeFUE
+	 N+v/MQHeFH9StyoY6g8r5JVvbA1lEye0xmwRRqwQ6CGKYWG61C8N6ETdVQP6nYVjPu
+	 lCaq+Q/+OKvbQ==
+Date: Thu, 8 Jan 2026 16:25:25 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Joel Fernandes <joel@joelfernandes.org>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+	Paul E McKenney <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Kai Yao <yaokai34@huawei.com>, Tengda Wu <wutengda2@huawei.com>
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
+ softirq
+Message-ID: <aV_MZfdIfsITRfFD@localhost.localdomain>
+References: <aV7o36CHTLc-tD41@pavilion.home>
+ <A88C7853-504A-496E-93A2-C9FE7D80E0D5@joelfernandes.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2 net-next v2] selftests: ipv6_icmp: add tests for
- ICMPv6 handling
-Content-Language: en-US
-To: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260107153841.5030-1-fmancera@suse.de>
- <20260107153841.5030-2-fmancera@suse.de>
- <72d45fe9-c058-4944-b7a2-260b7259096f@kernel.org>
- <1660abed-e6ad-4657-8736-599ab9114f68@suse.de>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <1660abed-e6ad-4657-8736-599ab9114f68@suse.de>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <A88C7853-504A-496E-93A2-C9FE7D80E0D5@joelfernandes.org>
 
-On 1/8/26 4:24 AM, Fernando Fernandez Mancera wrote:
-> On 1/7/26 5:41 PM, David Ahern wrote:
->> On 1/7/26 8:38 AM, Fernando Fernandez Mancera wrote:
->>> +icmpv6_to_vrf_based_local_address()
->>> +{
->>> +    local rc
->>> +    local lldummy
->>> +
->>> +    echo
->>> +    echo "ICMPv6 to VRF based local address"
->>> +
->>> +    setup
->>> +
->>> +    lldummy=$(get_linklocal dummy0)
->>> +
->>> +    if [ -z "$lldummy" ]; then
->>> +        echo "Failed to get link local address for dummy0"
->>> +        return 1
->>> +    fi
->>> +
->>> +    run_cmd "$NS_EXEC sysctl -w net.ipv6.conf.all.keep_addr_on_down=1"
->>> +
->>> +    # create VRF and setup
->>> +    run_cmd "$IP link add vrf0 type vrf table 10"
->>> +    run_cmd "$IP link set vrf0 up"
->>> +    run_cmd "$IP link set dummy0 master vrf0"
->>
->> run_cmd "$IP -6 addr add ::1 dev vrf0 nodad"
->>
->> makes the VRF device the loopback.
->>
->>> +
->>> +    # route to reach 2001:db8::1/128 on VRF device and back to ::1
->>> +    run_cmd "$IP -6 route add 2001:db8:1::1/64 dev vrf0"
->>> +    run_cmd "$IP -6 route add ::1/128 dev vrf0 table 10"
->>
->> and then this route add should not be needed. This is how fcnal-test.sh
->> works.
->>
+Le Wed, Jan 07, 2026 at 08:02:43PM -0500, Joel Fernandes a écrit :
 > 
-> Oh neat! Thanks.
 > 
->>> +
->>> +    # ping6 to link local address
->>> +    run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
->>> +    log_test $? 0 "Ping to link local address on VRF context"
->>> +
->>> +    # ping6 to link local address from localhost (::1)
->>> +    run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
->>
->> -I vrf0 should be needed for all VRF tests. I suspect your current
->> passing tests are because you have a single setup step and then run
->> non-VRF test followed by VRF test. Really you need to do the setup,
->> run_test, cleanup for each test.
->>
+> > On Jan 7, 2026, at 6:15 PM, Frederic Weisbecker <frederic@kernel.org> wrote:
+> > 
+> > ﻿Le Thu, Jan 01, 2026 at 11:34:10AM -0500, Joel Fernandes a écrit :
+> >> From: Yao Kai <yaokai34@huawei.com>
+> >> 
+> >> Commit 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in
+> >> __rcu_read_unlock()") removes the recursion-protection code from
+> >> __rcu_read_unlock(). Therefore, we could invoke the deadloop in
+> >> raise_softirq_irqoff() with ftrace enabled as follows:
+> >> 
+> >> WARNING: CPU: 0 PID: 0 at kernel/trace/trace.c:3021 __ftrace_trace_stack.constprop.0+0x172/0x180
+> >> Modules linked in: my_irq_work(O)
+> >> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G O 6.18.0-rc7-dirty #23 PREEMPT(full)
+> >> Tainted: [O]=OOT_MODULE
+> >> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> >> RIP: 0010:__ftrace_trace_stack.constprop.0+0x172/0x180
+> >> RSP: 0018:ffffc900000034a8 EFLAGS: 00010002
+> >> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
+> >> RDX: 0000000000000003 RSI: ffffffff826d7b87 RDI: ffffffff826e9329
+> >> RBP: 0000000000090009 R08: 0000000000000005 R09: ffffffff82afbc4c
+> >> R10: 0000000000000008 R11: 0000000000011d7a R12: 0000000000000000
+> >> R13: ffff888003874100 R14: 0000000000000003 R15: ffff8880038c1054
+> >> FS:  0000000000000000(0000) GS:ffff8880fa8ea000(0000) knlGS:0000000000000000
+> >> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >> CR2: 000055b31fa7f540 CR3: 00000000078f4005 CR4: 0000000000770ef0
+> >> PKRU: 55555554
+> >> Call Trace:
+> >> <IRQ>
+> >> trace_buffer_unlock_commit_regs+0x6d/0x220
+> >> trace_event_buffer_commit+0x5c/0x260
+> >> trace_event_raw_event_softirq+0x47/0x80
+> >> raise_softirq_irqoff+0x6e/0xa0
+> >> rcu_read_unlock_special+0xb1/0x160
+> >> unwind_next_frame+0x203/0x9b0
+> >> __unwind_start+0x15d/0x1c0
+> >> arch_stack_walk+0x62/0xf0
+> >> stack_trace_save+0x48/0x70
+> >> __ftrace_trace_stack.constprop.0+0x144/0x180
+> >> trace_buffer_unlock_commit_regs+0x6d/0x220
+> >> trace_event_buffer_commit+0x5c/0x260
+> >> trace_event_raw_event_softirq+0x47/0x80
+> >> raise_softirq_irqoff+0x6e/0xa0
+> >> rcu_read_unlock_special+0xb1/0x160
+> >> unwind_next_frame+0x203/0x9b0
+> >> __unwind_start+0x15d/0x1c0
+> >> arch_stack_walk+0x62/0xf0
+> >> stack_trace_save+0x48/0x70
+> >> __ftrace_trace_stack.constprop.0+0x144/0x180
+> >> trace_buffer_unlock_commit_regs+0x6d/0x220
+> >> trace_event_buffer_commit+0x5c/0x260
+> >> trace_event_raw_event_softirq+0x47/0x80
+> >> raise_softirq_irqoff+0x6e/0xa0
+> >> rcu_read_unlock_special+0xb1/0x160
+> >> unwind_next_frame+0x203/0x9b0
+> >> __unwind_start+0x15d/0x1c0
+> >> arch_stack_walk+0x62/0xf0
+> >> stack_trace_save+0x48/0x70
+> >> __ftrace_trace_stack.constprop.0+0x144/0x180
+> >> trace_buffer_unlock_commit_regs+0x6d/0x220
+> >> trace_event_buffer_commit+0x5c/0x260
+> >> trace_event_raw_event_softirq+0x47/0x80
+> >> raise_softirq_irqoff+0x6e/0xa0
+> >> rcu_read_unlock_special+0xb1/0x160
+> >> __is_insn_slot_addr+0x54/0x70
+> >> kernel_text_address+0x48/0xc0
+> >> __kernel_text_address+0xd/0x40
+> >> unwind_get_return_address+0x1e/0x40
+> >> arch_stack_walk+0x9c/0xf0
+> >> stack_trace_save+0x48/0x70
+> >> __ftrace_trace_stack.constprop.0+0x144/0x180
+> >> trace_buffer_unlock_commit_regs+0x6d/0x220
+> >> trace_event_buffer_commit+0x5c/0x260
+> >> trace_event_raw_event_softirq+0x47/0x80
+> >> __raise_softirq_irqoff+0x61/0x80
+> >> __flush_smp_call_function_queue+0x115/0x420
+> >> __sysvec_call_function_single+0x17/0xb0
+> >> sysvec_call_function_single+0x8c/0xc0
+> >> </IRQ>
+> >> 
+> >> Commit b41642c87716 ("rcu: Fix rcu_read_unlock() deadloop due to IRQ work")
+> >> fixed the infinite loop in rcu_read_unlock_special() for IRQ work by
+> >> setting a flag before calling irq_work_queue_on(). We fix this issue by
+> >> setting the same flag before calling raise_softirq_irqoff() and rename the
+> >> flag to defer_qs_pending for more common.
+> >> 
+> >> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read_unlock()")
+> >> Reported-by: Tengda Wu <wutengda2@huawei.com>
+> >> Signed-off-by: Yao Kai <yaokai34@huawei.com>
+> >> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> >> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> > 
+> > Looks good but, BTW, what happens if rcu_qs() is called
+> > before rcu_preempt_deferred_qs() had a chance to be called?
 > 
-> You are right here about the cleanup, although the tests are passing
-> even if the cleanup is properly done or if `-t
-> icmpv6_to_vrf_based_local_address`. I don't see why they should not pass.
+> Could you provide an example of when that can happen?
 
-Without ::1 on the vrf device there is no valid address. ie., ::1 is in
-the default vrf and dummy0 is in the VRF so it should not be allowed.
-Something is off.
-> 
-> I am changing them to use `-I vrf0` because it makes more sense.
+It can happen because rcu_qs() is called before rcu_preempt_deferred_qs()
+in rcu_softirq_qs(). Inverting the calls could help but IRQs must be disabled
+to ensure there is no read side between rcu_preempt_deferred_qs() and rcu_qs().
 
-I should have asked yesterday: how do these tests differ from what is
-done in fcnal-test.sh - ipv4_ping and ipv6_ping? Those tests cover
-loopback, linklocal address and global address combined with vrf and no vrf.
+I'm not aware of other ways to trigger that, except perhaps this:
 
+https://lore.kernel.org/rcu/20251230004124.438070-1-joelagnelf@nvidia.com/T/#u
 
+Either we fix those sites and make sure that rcu_preempt_deferred_qs() is always
+called before rcu_qs() in the same IRQ disabled section (or there are other
+fields set in ->rcu_read_unlock_special for later clearance). If we do that we
+must WARN_ON_ONCE(rdp->defer_qs_pending == DEFER_QS_PENDING) in rcu_qs().
+
+Or we reset rdp->defer_qs_pending from rcu_qs(), which sounds more robust.
+
+Ah an alternative is to make rdp::defer_qs_pending a field in union rcu_special
+which, sadly, would need to be expanded as a u64.
+
+Thanks.
+
+-- 
+Frederic Weisbecker
+SUSE Labs
 
