@@ -1,303 +1,241 @@
-Return-Path: <linux-kselftest+bounces-48454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BD93D00876
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 02:03:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC558D00BBF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 03:54:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8C5503000509
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 01:03:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E10F5301354A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 02:52:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767AD212FB9;
-	Thu,  8 Jan 2026 01:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A3EE19E7F7;
+	Thu,  8 Jan 2026 02:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="CS7nN2RQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FVifHYih"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51812116E0
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 01:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC03519258E
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 02:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767834178; cv=none; b=c8Sk5td1Ro6YhwPaebre/UMmXfdK5t7skVxit9r/luLxCTTZagq5OkCz6TPKG3D2LPzfHKZ8PNdq6CKm757avRiu1gPF3bbMJO4F5oGx6C/gJ7dotwucnBgtYEp0Mu/CsyX3N4iKU0sU6y39AFiCEgXeGqA3Nj/GgfNbHxEObns=
+	t=1767840719; cv=none; b=dV6v2Qy2NzDxX9c3Cjph3zYhFkNVy+idfW+8zFpiZVxh4gkxLIJsCVA4a0koCObDn51cBuE+hnDTSc2KLJLHpBpb+gIcy1iwA509v+VActyMwjUVsBUwqNFnW0hwm7YAkKC2H3EDPIiQ7j5IIlPjn0iF8xo7lm/QZ0McNUj7/CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767834178; c=relaxed/simple;
-	bh=LaGEFk0u9Ah0SwBDYRhYdCc2dfVBPIXzJYYYHnjJjGo=;
-	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
-	 Cc:In-Reply-To:To; b=sx3hxatsVYAaBe6kThMeOnYnhOptB1NQnVILF8BjH4SWON6eXuJ3E4qfzw84YV05sVHtCzfnnbxlKtgnTR7jUvxu+9FffkBTbrof6YmQWxHxxzJ89/mLuaQH91Ru+FnaJh3cwLnjqcIMXEzc4Xy/8GE5qSz6NwLCCb6fgHD80gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=CS7nN2RQ; arc=none smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-11f1fb91996so1686518c88.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 17:02:56 -0800 (PST)
+	s=arc-20240116; t=1767840719; c=relaxed/simple;
+	bh=do9l6eGvvyDKINEPSQ7IHQBEOd/mowpyOxaGE0SLNeE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HOLJj9eWarz2xf4GUdttgN/FUjYMh2zBiI0c4/RTKnla7304ML07jAmar/uujVshARAc8u5KhKJ6yB0nl/JyXo5yzuRq7C/VSjkGPHq6XBZv8ugYtyzeVNJpchOdds6+GsmtlGsSdLcEuerq42lDq3X/TxPO/KkhXqFeENgmVUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FVifHYih; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4fc42188805so28839821cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 18:51:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1767834175; x=1768438975; darn=vger.kernel.org;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q+cibWmp2EIFIhU9pnQjoqNBSGOyWGbUTf6dJQy4Buk=;
-        b=CS7nN2RQF83JnNoz3OSR47ykWro/LfK6wd1OEgfj1DgA9rwo87BHtKEsgjkPpM/Ccf
-         maQViuUZfb+zVSv5O+l+zIV4i6i7Y3f0kF0+ZiczpiXiGJmUsa0d62IuI6ZURMETmrU0
-         Igsn2Qf9jH++YYentv0cb1RQscjoZS6U8SyN8=
+        d=gmail.com; s=20230601; t=1767840716; x=1768445516; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WJ0O3nuDBxLsxoMKJl4tF5zDnnuLWj/3NEIyxU+lc3Y=;
+        b=FVifHYihtgBsKIWSUuaeRz1qARDQJesQO8MzKdzbtZGER68eiLWhD4mfi6mwMsnzIC
+         sy/dnSMXUu/N+IY/srIUpeAbiv6thO1FoYpbozfLeEQFw2M+9HGjbtZwYt/sWXTZPRwk
+         E2FYuZ+av5QvsfwepMvuMf87SQutODYPs+RtuJEtrMRHHE30QlOllBn8LCLj2dehtc7K
+         0JIXDHlPAdpL15Czw6DRQOckQLNfr7eBoi/F52nEZ0DQ9kKt6sxmOyaF2IWmP1pgT9YY
+         0uMl9u+bkpjvxBiRHa7+TdWPY4Zy+xaivW/QCwtvd/alqlHn8MtpN+RfX0DCKER5qJhQ
+         M3aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767834175; x=1768438975;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Q+cibWmp2EIFIhU9pnQjoqNBSGOyWGbUTf6dJQy4Buk=;
-        b=XDQOxuCFjMj+W3qZHZHIUzLJc1h2uGVMGVBkKz8IK9KNw4h7JrXK6OhkFoxb3eT6J4
-         8Mn3qtXP8JHdko7XlSN05rWUrb9CuIULsu0uZldKc0KN1IyGVNrUNmEwRi0HkWrOpPCQ
-         MzxWWyzlElH8Dyubd0Rir2ja4ZpLew55pHP4LEZY3SfwfCCjCErQ+YDpDIiffhvPM+V1
-         +DXTb0d73UCH1EQWwHCknfGA+ykV/t+XdQPNNM8y5ubK1S9MEgDMKZ90OoAG7mpS8rv8
-         5IQw7rr6M4AIf4eg+iRD/5XaS0ryr7fruwcUKUTAp/IjP45sosrOdLBo5TtgK+TjD+Wx
-         bgHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWYairzVSK1PSIHWH/fG+wGIUu5PG9By9h5tIDXsXv53i0qQTG1gJ0CnuWL2De970VtICBRIz0Psbvl+gR+y8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpPB7sdFx0ICU0RkjrQiSDdAY/lGRJduOhcPPmCX0hweLbPpRe
-	YKcwfmDB9jfK14gc4tTvFD7XAPLRFkQR5LJMUsVN+z/D9lEUnNO8oVbEDVO3OIR5Q1U=
-X-Gm-Gg: AY/fxX5vNPSfdvs6s0suPEb1pyfMZWFmMSlTkShPBupnA8BJrp4A4cEAV9Qi1qPj1Yk
-	9zysstfGy3JW7CxF67/75IUel4J2H64V9hpULFWixATTXBS+Lf8TF5dw7RbYYsZ8EUQGwONadTy
-	QYun0GxsY+S61hZj1QmLEqGxQJy0UuJ9h4yy0jzMmwYZDauq5fkSW1yl/BlyOaPt6FPP82DmxlV
-	TqDIK3dem/+vJC2hywJXm88gOlGR7jyR/DYMX4Y0IohxcXCNqGhQca2CduWH1+JFsEOk/Zy9VJ8
-	03z0cpO+hC6cse9cGCOUkb+0Qh2Pkh0+Ohaaq3y3jhi7zbrLxtJ/ruAo6C5u1teNsSz4ma49ykj
-	GyUnFaw6bHSOcbhL5EjWUECTP5b73cPhAG+HxT/vAa+j6Lmqabujyii4qj3znneSJ6dHCZup1Ux
-	ro0NEteXZCYbYZBu9uUsL85NRt2h8p8oruEw==
-X-Google-Smtp-Source: AGHT+IFsjdNLf5/MXeBe5tI14o5USLs9twXkeilj2J1WPfUL0kxHF1JfAn20WArIDxKes/KZKqbLNw==
-X-Received: by 2002:a05:7022:248f:b0:119:fac9:cdb1 with SMTP id a92af1059eb24-121f8add5f5mr3973333c88.20.1767834175326;
-        Wed, 07 Jan 2026 17:02:55 -0800 (PST)
-Received: from smtpclient.apple ([71.219.3.177])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f248bb6esm11733743c88.12.2026.01.07.17.02.54
+        d=1e100.net; s=20230601; t=1767840716; x=1768445516;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WJ0O3nuDBxLsxoMKJl4tF5zDnnuLWj/3NEIyxU+lc3Y=;
+        b=pPKyP9sezm7JefSBtJpfA4KtjlG9BpJR5ev46C9Fapx1gw5QuOnfiS3UdeJa4LWdUf
+         6ASvqhMFAYTGN1tUqCUrim8baTRcp9OCqSrhBYusv0YwHk81xTUzhqNTJqkIlgiS3rXM
+         TDSuEx4iBvoBrJNCf61KEh5Q908t5yWnJ9XijhQm1aWpWZMC2jPI2RMKhlcFzjTu50UF
+         VN5BByrAolpvhP+6Sov3+cA0MUs+wNhXl7+DJkIQ/3kgUHJfk5zgnap36pGzOn5bjru0
+         hbYxuqNW19zj2XMDWCGL0hDepJZUwd4gjJpFaBkETc5RZiIc2SXsHPz3QU0kJmXRYm8n
+         A6VA==
+X-Forwarded-Encrypted: i=1; AJvYcCXV9iepdZgwfxdBIEEzTnU8fRDyPAJo5dW4eJb90JdCUqpRd4PnJOIpBB2ecK2gp3ddb/naXr3hgkiOcQX29ao=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLb+AfhmJnCe4izph2tAxxnabxwr6vpx11a1X5ff1M4b8rWxMz
+	uZa9cTAH3F39tSscQN1+XVPa0LJjSqMzLbC1FO98iV77VarY/BC6jZVpx0Fb1g==
+X-Gm-Gg: AY/fxX6GsOpcpuzfYE58wHoovFRK6ikBofZGzBXDYqQKalPVl/70zs+DDVcCiLCmkMa
+	2ZczNmRF5Asda/sJI8/CMn26z9hj/JzT+7Xw8T5iX1Im4GNdaVGiUPpb2ONt8TeTzrvAFjdEZ8a
+	ZzDPOaRiYgtVUMPkzmptgmn9Z5ksM9gSynUryYG/QBVNz/TZG4uqxnDCBJdnX46TbCxDEwqTE8V
+	nGHE4+2MziQ26AReIxlJ79XYff97TJaXx+pcIVBwA0fJro7vzXjfIYMxgnd+mUyrN9mJLFDtN+x
+	fNRlXVlgOzVZbRtyoLStk5I1vqnMYNfrloDtolU4FOkNr/CTYLEC6XINGG1zKJnKFReIPB/wW1b
+	0SINgLRxqB/SPMRMTQvs4VG4wnlOANMveKn/uBpz6VNPpjZw2X4vRPY1SPFo+RtAeGB5rXf7jxG
+	0dNLMGiBZOPA==
+X-Google-Smtp-Source: AGHT+IFTPsy9VwPhKALWTvLAxLL4YRWKWUiavLYzsq3SmgBSOEcDED2k8hwXyHd77UWp0Yyjdri5kw==
+X-Received: by 2002:a05:690e:1404:b0:644:43f7:11b8 with SMTP id 956f58d0204a3-64716b33a92mr3911696d50.13.1767833919327;
+        Wed, 07 Jan 2026 16:58:39 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:4f::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d80be64sm2714670d50.6.2026.01.07.16.58.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 17:02:54 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Joel Fernandes <joel@joelfernandes.org>
+        Wed, 07 Jan 2026 16:58:39 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v8 0/5] net: devmem: improve cpu cost of RX token
+ management
+Date: Wed, 07 Jan 2026 16:57:34 -0800
+Message-Id: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to softirq
-Date: Wed, 7 Jan 2026 20:02:43 -0500
-Message-Id: <A88C7853-504A-496E-93A2-C9FE7D80E0D5@joelfernandes.org>
-References: <aV7o36CHTLc-tD41@pavilion.home>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
- Paul E McKenney <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- rcu@vger.kernel.org, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Kai Yao <yaokai34@huawei.com>,
- Tengda Wu <wutengda2@huawei.com>
-In-Reply-To: <aV7o36CHTLc-tD41@pavilion.home>
-To: Frederic Weisbecker <frederic@kernel.org>
-X-Mailer: iPhone Mail (23B85)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAABX2kC/5XSS2rEMAyA4asEr0dFfsixZ9V7lC78UJrQJhliN
+ 8xQ5u6FLNqQXdaC7xdCP6LwMnAR1+ZHLLwOZZgncW3cpRGpD9MHw5DFtREKFaFTHkpaQk09xDn
+ GB5f+i8cwQeZ15BFqukGdP3mC71upC4cRlFeRZWsyoRaXRtwW7ob7VnwTE1eY+F7F+6UR/VDqv
+ Dy2VVa5zbeqR3W6ukpAyN5YaX0kInwduYaXNI9balU7XsrzvAKE5DC3mmI2pA+83vHKnuc1IKA
+ z0diYg3Pdgac/XqLS53kCBNOm6KgjRZ4PvP3nJZrzvAUEDt6lzmSD8XicdsfL8w+1toAgQ0zO2
+ FaTSTv++Xz+AkyAtcrSAgAA
+X-Change-ID: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
+ David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
+ Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
+ asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
+This series improves the CPU cost of RX token management by adding an
+attribute to NETDEV_CMD_BIND_RX that configures sockets using the
+binding to avoid the xarray allocator and instead use a per-binding niov
+array and a uref field in niov.
 
+Improvement is ~13% cpu util per RX user thread.
 
-> On Jan 7, 2026, at 6:15=E2=80=AFPM, Frederic Weisbecker <frederic@kernel.o=
-rg> wrote:
->=20
-> =EF=BB=BFLe Thu, Jan 01, 2026 at 11:34:10AM -0500, Joel Fernandes a =C3=A9=
-crit :
->> From: Yao Kai <yaokai34@huawei.com>
->>=20
->> Commit 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in
->> __rcu_read_unlock()") removes the recursion-protection code from
->> __rcu_read_unlock(). Therefore, we could invoke the deadloop in
->> raise_softirq_irqoff() with ftrace enabled as follows:
->>=20
->> WARNING: CPU: 0 PID: 0 at kernel/trace/trace.c:3021 __ftrace_trace_stack.=
-constprop.0+0x172/0x180
->> Modules linked in: my_irq_work(O)
->> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G O 6.18.0-rc7-dirty #23 PR=
-EEMPT(full)
->> Tainted: [O]=3DOOT_MODULE
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/0=
-1/2014
->> RIP: 0010:__ftrace_trace_stack.constprop.0+0x172/0x180
->> RSP: 0018:ffffc900000034a8 EFLAGS: 00010002
->> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
->> RDX: 0000000000000003 RSI: ffffffff826d7b87 RDI: ffffffff826e9329
->> RBP: 0000000000090009 R08: 0000000000000005 R09: ffffffff82afbc4c
->> R10: 0000000000000008 R11: 0000000000011d7a R12: 0000000000000000
->> R13: ffff888003874100 R14: 0000000000000003 R15: ffff8880038c1054
->> FS:  0000000000000000(0000) GS:ffff8880fa8ea000(0000) knlGS:0000000000000=
-000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 000055b31fa7f540 CR3: 00000000078f4005 CR4: 0000000000770ef0
->> PKRU: 55555554
->> Call Trace:
->> <IRQ>
->> trace_buffer_unlock_commit_regs+0x6d/0x220
->> trace_event_buffer_commit+0x5c/0x260
->> trace_event_raw_event_softirq+0x47/0x80
->> raise_softirq_irqoff+0x6e/0xa0
->> rcu_read_unlock_special+0xb1/0x160
->> unwind_next_frame+0x203/0x9b0
->> __unwind_start+0x15d/0x1c0
->> arch_stack_walk+0x62/0xf0
->> stack_trace_save+0x48/0x70
->> __ftrace_trace_stack.constprop.0+0x144/0x180
->> trace_buffer_unlock_commit_regs+0x6d/0x220
->> trace_event_buffer_commit+0x5c/0x260
->> trace_event_raw_event_softirq+0x47/0x80
->> raise_softirq_irqoff+0x6e/0xa0
->> rcu_read_unlock_special+0xb1/0x160
->> unwind_next_frame+0x203/0x9b0
->> __unwind_start+0x15d/0x1c0
->> arch_stack_walk+0x62/0xf0
->> stack_trace_save+0x48/0x70
->> __ftrace_trace_stack.constprop.0+0x144/0x180
->> trace_buffer_unlock_commit_regs+0x6d/0x220
->> trace_event_buffer_commit+0x5c/0x260
->> trace_event_raw_event_softirq+0x47/0x80
->> raise_softirq_irqoff+0x6e/0xa0
->> rcu_read_unlock_special+0xb1/0x160
->> unwind_next_frame+0x203/0x9b0
->> __unwind_start+0x15d/0x1c0
->> arch_stack_walk+0x62/0xf0
->> stack_trace_save+0x48/0x70
->> __ftrace_trace_stack.constprop.0+0x144/0x180
->> trace_buffer_unlock_commit_regs+0x6d/0x220
->> trace_event_buffer_commit+0x5c/0x260
->> trace_event_raw_event_softirq+0x47/0x80
->> raise_softirq_irqoff+0x6e/0xa0
->> rcu_read_unlock_special+0xb1/0x160
->> __is_insn_slot_addr+0x54/0x70
->> kernel_text_address+0x48/0xc0
->> __kernel_text_address+0xd/0x40
->> unwind_get_return_address+0x1e/0x40
->> arch_stack_walk+0x9c/0xf0
->> stack_trace_save+0x48/0x70
->> __ftrace_trace_stack.constprop.0+0x144/0x180
->> trace_buffer_unlock_commit_regs+0x6d/0x220
->> trace_event_buffer_commit+0x5c/0x260
->> trace_event_raw_event_softirq+0x47/0x80
->> __raise_softirq_irqoff+0x61/0x80
->> __flush_smp_call_function_queue+0x115/0x420
->> __sysvec_call_function_single+0x17/0xb0
->> sysvec_call_function_single+0x8c/0xc0
->> </IRQ>
->>=20
->> Commit b41642c87716 ("rcu: Fix rcu_read_unlock() deadloop due to IRQ work=
-")
->> fixed the infinite loop in rcu_read_unlock_special() for IRQ work by
->> setting a flag before calling irq_work_queue_on(). We fix this issue by
->> setting the same flag before calling raise_softirq_irqoff() and rename th=
-e
->> flag to defer_qs_pending for more common.
->>=20
->> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read=
-_unlock()")
->> Reported-by: Tengda Wu <wutengda2@huawei.com>
->> Signed-off-by: Yao Kai <yaokai34@huawei.com>
->> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
->> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
->=20
-> Looks good but, BTW, what happens if rcu_qs() is called
-> before rcu_preempt_deferred_qs() had a chance to be called?
+Using kperf, the following results were observed:
 
-Could you provide an example of when that can happen?=20
+Before:
+	Average RX worker idle %: 13.13, flows 4, test runs 11
+After:
+	Average RX worker idle %: 26.32, flows 4, test runs 11
 
-If rcu_qs() results in reporting of a quiescent state up the node tree befor=
-e the deferred reporting work had a chance to act, then indeed we should be c=
-learing the flag (after canceling the pending raise_softirq_irqoff()).
+Two other approaches were tested, but with no improvement. Namely, 1)
+using a hashmap for tokens and 2) keeping an xarray of atomic counters
+but using RCU so that the hotpath could be mostly lockless. Neither of
+these approaches proved better than the simple array in terms of CPU.
 
->> flag to defer_qs_pending for more common.
->>=20
->> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read=
-_unlock()")
->> Reported-by: Tengda Wu <wutengda2@huawei.com>
->> Signed-off-by: Yao Kai <yaokai34@huawei.com>
->> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
->> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
->=20
-> Looks good but, BTW, what happens if rcu_qs() is called
-> before rcu_preempt_deferred_qs() had a chance to be called?
+The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
+optimization. It is an optional attribute and defaults to 0 (i.e.,
+optimization on).
 
-Could you provide an example of when that can happen?=20
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+To: Willem de Bruijn <willemb@google.com>
+To: Neal Cardwell <ncardwell@google.com>
+To: David Ahern <dsahern@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: asml.silence@gmail.com
+Cc: matttbe@kernel.org
+Cc: skhawaja@google.com
 
-As far as I can see, even if that were to happen, which I think you are righ=
-t it can happen, we will still go through the path to report deferred quiesc=
-ent states and cancel the pending work (reset the flag).
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 
-> current->rcu_read_unlock_special.b.need_qs is reset by rcu_qs()
-> so subsequent calls to rcu_read_unlock() won't issue rcu_read_unlock_speci=
-al()
-> (unless the task is blocked). And further calls to rcu_preempt_deferred_qs=
-()
-> through rcu_core() will be ignored as well.
+Changes in v8:
+- change static branch logic (only set when enabled, otherwise just
+  always revert back to disabled)
+- fix missing tests
+- Link to v7: https://lore.kernel.org/r/20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com
 
-I am not sure if this implies that deferred quiescent state gets cancelled b=
-ecause we have already called unlock once. We have to go through the deferre=
-d quiescent state path on all subsequent quiescent state reporting, even if n=
-eed_qs reset. How else will the GP complete.
->=20
-> But rdp->defer_qs_pending will remain in the DEFER_QS_PENDING state until
-> the next grace period. And if rcu_read_unlock_special() is called again
-> during the next GP on unfortunate place needing deferred qs, the state mac=
-hine
-> will spuriously assume that either rcu_core or the irq_work are pending, w=
-hen
-> none are anymore.
->=20
-> The state should be reset by rcu_qs().
+Changes in v7:
+- use netlink instead of sockopt (Stan)
+- restrict system to only one mode, dmabuf bindings can not co-exist
+  with different modes (Stan)
+- use static branching to enforce single system-wide mode (Stan)
+- Link to v6: https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com
 
-In fact I would say if a deferred QS is pending, we should absolutely not re=
-set its state from rcu_qs..
+Changes in v6:
+- renamed 'net: devmem: use niov array for token management' to refer to
+  optionality of new config
+- added documentation and tests
+- make autorelease flag per-socket sockopt instead of binding
+  field / sysctl
+- many per-patch changes (see Changes sections per-patch)
+- Link to v5: https://lore.kernel.org/r/20251023-scratch-bobbyeshleman-devmem-tcp-token-upstream-v5-0-47cb85f5259e@meta.com
 
-Maybe we should reset it from rcu_report_qs_rdp/rnp?
+Changes in v5:
+- add sysctl to opt-out of performance benefit, back to old token release
+- Link to v4: https://lore.kernel.org/all/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v4-0-39156563c3ea@meta.com
 
-Unfortunately, all of this is coming from me being on a phone and not at a c=
-omputer, so I will revise my response, but probably tomorrow, because today t=
-he human body is not cooperating.=20
+Changes in v4:
+- rebase to net-next
+- Link to v3: https://lore.kernel.org/r/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v3-0-084b46bda88f@meta.com
 
-thanks,
+Changes in v3:
+- make urefs per-binding instead of per-socket, reducing memory
+  footprint
+- fallback to cleaning up references in dmabuf unbind if socket
+  leaked tokens
+- drop ethtool patch
+- Link to v2: https://lore.kernel.org/r/20250911-scratch-bobbyeshleman-devmem-tcp-token-upstream-v2-0-c80d735bd453@meta.com
 
- - Joel
+Changes in v2:
+- net: ethtool: prevent user from breaking devmem single-binding rule
+  (Mina)
+- pre-assign niovs in binding->vec for RX case (Mina)
+- remove WARNs on invalid user input (Mina)
+- remove extraneous binding ref get (Mina)
+- remove WARN for changed binding (Mina)
+- always use GFP_ZERO for binding->vec (Mina)
+- fix length of alloc for urefs
+- use atomic_set(, 0) to initialize sk_user_frags.urefs
+- Link to v1: https://lore.kernel.org/r/20250902-scratch-bobbyeshleman-devmem-tcp-token-upstream-v1-0-d946169b5550@meta.com
 
+---
+Bobby Eshleman (5):
+      net: devmem: rename tx_vec to vec in dmabuf binding
+      net: devmem: refactor sock_devmem_dontneed for autorelease split
+      net: devmem: implement autorelease token management
+      net: devmem: document NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+      selftests: drv-net: devmem: add autorelease test
 
-> current->rcu_read_unlock_special.b.need_qs is reset by rcu_qs()
-> so subsequent calls to rcu_read_unlock() won't issue rcu_read_unlock_speci=
-al()
-> (unless the task is blocked). And further calls to rcu_preempt_deferred_qs=
-()
-> through rcu_core() will be ignored as well.
+ Documentation/netlink/specs/netdev.yaml           |  12 +++
+ Documentation/networking/devmem.rst               |  70 +++++++++++++
+ include/net/netmem.h                              |   1 +
+ include/net/sock.h                                |   7 +-
+ include/uapi/linux/netdev.h                       |   1 +
+ net/core/devmem.c                                 | 114 ++++++++++++++++++----
+ net/core/devmem.h                                 |  13 ++-
+ net/core/netdev-genl-gen.c                        |   5 +-
+ net/core/netdev-genl.c                            |  10 +-
+ net/core/sock.c                                   | 103 ++++++++++++++-----
+ net/ipv4/tcp.c                                    |  76 ++++++++++++---
+ net/ipv4/tcp_ipv4.c                               |  11 ++-
+ net/ipv4/tcp_minisocks.c                          |   3 +-
+ tools/include/uapi/linux/netdev.h                 |   1 +
+ tools/testing/selftests/drivers/net/hw/devmem.py  |  21 +++-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c |  19 ++--
+ 16 files changed, 389 insertions(+), 78 deletions(-)
+---
+base-commit: 627f8a2588139ec699cda5d548c6d4733d2682ca
+change-id: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
 
-I am not sure if this implies that deferred quiescent state gets cancelled b=
-ecause we have already called unlock once. We have to go through the deferre=
-d quiescent state path on all subsequent quiescent state reporting, even if n=
-eed_qs reset. How else will the GP complete.
->=20
-> But rdp->defer_qs_pending will remain in the DEFER_QS_PENDING state until
-> the next grace period. And if rcu_read_unlock_special() is called again
-> during the next GP on unfortunate place needing deferred qs, the state mac=
-hine
-> will spuriously assume that either rcu_core or the irq_work are pending, w=
-hen
-> none are anymore.
->=20
-> The state should be reset by rcu_qs().
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
 
-In fact I would say if a deferred QS is pending, we should absolutely not re=
-set its state from rcu_qs..
-
-Maybe we should reset it from rcu_report_qs_rdp/rnp?
-
-thanks,
-
- - Joel
-
-
->=20
-> Thanks.
->=20
-> --
-> Frederic Weisbecker
-> SUSE Labs
->=20
 
