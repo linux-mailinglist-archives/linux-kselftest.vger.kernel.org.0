@@ -1,110 +1,103 @@
-Return-Path: <linux-kselftest+bounces-48546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 056D0D04A45
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 18:03:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D451D04EC8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 18:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9EFBA30500F9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 16:42:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3ED04319EABC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 16:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0CB2D9EF9;
-	Thu,  8 Jan 2026 16:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 045422C11F6;
+	Thu,  8 Jan 2026 16:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLvKHVYk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrjTyWmG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A6B2D9ECD;
-	Thu,  8 Jan 2026 16:42:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF79923C8A0;
+	Thu,  8 Jan 2026 16:26:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767890561; cv=none; b=f9rsR1CWXRLQA/krCYXsJHxhg1NB1ToUuvkpygpAd9BLhIU08ko4234bIUcQhphEeoA6CavKmLlh70QEmNk4mYPIFyT3CRh0Gi7D9rf7/Nalsar56dHTHYZwsEOdr2IypvYYVc+wx8fciHWg0tnFUk+2Sc/Q0qDDt3HSLC7x4+M=
+	t=1767889560; cv=none; b=EOzkhaFWAtt5CDH3boXsSFpgFIofuKHu3GycfitPqwDnoI8T9PNw0wMR+WfPwZFA+3j48VmAFzClN3g0GSHBbt65V2iByCYGrKoBgPNWRa03e2VxjxaS0DxYihl+ivsrCXxGw528WgMkupLFWoY/sh9btHh4rhrOOH4JX/S2hY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767890561; c=relaxed/simple;
-	bh=2JTt6hDJvWzDTM0dUBCnhSTPgPA0XojNDbovadYlQYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HGDftm3fYX36d/61RQd3b7DOLChqtpdiMSjrvbTYbM3NbpTWeJhp0tyawqfbqz5/GWOCp8hblLZ7kNOm/9lh359QrvFz/D8klXv3dYSzw+F7ULrMBaOhm3qkvseOeltB0jt6sXzA3++ylYMUZgkjBwRgMWLsDF7EZSLFveY7NyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLvKHVYk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B89FC116C6;
-	Thu,  8 Jan 2026 16:42:33 +0000 (UTC)
+	s=arc-20240116; t=1767889560; c=relaxed/simple;
+	bh=OQxDuNgfE6e5tF4qpwq4v6IWP64NBvnqK3wmGYcyRBU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=nHRUeJRWbqFIj2phBtiWj9KjQydmQRiP3khS2H9TBvGPY+kTB+iHIJiVknEiKwROSK1YEWTiRNiKyS5jCa5VxK0IeRL7Jl9NN4862BD+mt9HS1+soF02CY2GTGUmL096cj24KCttyiOmXA4tHKgaxSxc9/uDAIBxFu1HbAhHud4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrjTyWmG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A1C6C116C6;
+	Thu,  8 Jan 2026 16:25:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767890560;
-	bh=2JTt6hDJvWzDTM0dUBCnhSTPgPA0XojNDbovadYlQYg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eLvKHVYkzB2xrU3XqpRv+2aLl6pb+jRfwARYY9Gxguxdkn8r9y0YSpc9yAOQyawit
-	 jBgZ5eOGLampXS8fNTGMK703bEQytzlTq802pMzoQzghCWEe7OXDUYVjBozH3DCnIj
-	 vnxYhigbIOOxXNN+2OyB7mlFksiJ3lyfhYBbLCtW3jfHL+uBKYkAP7fVGURjrCVufF
-	 Ug3dQE83ZJW7ZZEyzwCBVcURUF8xgKEjqODKKR1ibueNYt2Ydo/9eVTcWi5MVw8wiq
-	 V2+DYtzMYtGiZtRJ5NLbsCmxMBVkXZ4A26Z7p9xzeU+H6hdXHZiecp/bHsFvpZElwX
-	 LfyfkMgOlasPA==
-Date: Thu, 8 Jan 2026 16:42:29 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Fuad Tabba <tabba@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 02/30] arm64/fpsimd: Update FA64 and ZT0 enables when
- loading SME state
-Message-ID: <cb6372ea-b7f7-4e87-91b5-09378f2dd526@sirena.org.uk>
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
- <20251223-kvm-arm64-sme-v9-2-8be3867cb883@kernel.org>
- <CA+EHjTxdSnpFHkm6o85EtjQjAWemBfcv9Oq6omWyrrMdkOuuVA@mail.gmail.com>
- <3c8b4a5e-89f4-47e0-9a5d-24399407db0c@sirena.org.uk>
- <CA+EHjTxLkLjPj=1vwDqROXOUXi2LhOQb90WP6dFaTiYG1nWovA@mail.gmail.com>
- <e50b4923-ee45-43de-9d4e-344546c635bb@sirena.org.uk>
- <CA+EHjTybF+aq2b2vhcEqi6U_sJjtt7ngzMZ9UcJ15G-Kqj=A9A@mail.gmail.com>
+	s=k20201202; t=1767889560;
+	bh=OQxDuNgfE6e5tF4qpwq4v6IWP64NBvnqK3wmGYcyRBU=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=XrjTyWmGlM9ynS+kE26WK4jWibbKKPLMLH4CBpcdhpleY8DPE45SA/UTzeXmERy24
+	 mJ+bBrcHNSnuJqBMo+ZxKOtxxbkobRs0QELFpHk2Z7U3owKAcH3fcdtz0syeOcU61U
+	 z6dikvGvgVC7qTCzSXkLBy2Gjmac25yXoX7s7Y79wP8niEBFgC87wv5ceryJMxvtbQ
+	 PbUU9O8SUola85nvSNQju0ZcS+8OELA8AVILAo1bGJJHXBHP7pwHVwU5R7IuZVsKeG
+	 5NT85m/20ljCZqQrzL3XnjHB59ocPhq3OMPbh0ThCl2b812NDixOgLf0NFWIUrBAwy
+	 ijChpFvHraCQQ==
+Date: Thu, 8 Jan 2026 09:25:53 -0700 (MST)
+From: Paul Walmsley <pjw@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+cc: Paul Walmsley <pjw@kernel.org>, x86@kernel.org, 
+    Paul Walmsley <paul.walmsley@sifive.com>, 
+    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+    Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+    Christian Brauner <brauner@kernel.org>, 
+    Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+    Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+    Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
+    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+    =?ISO-8859-15?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+    Andreas Hindborg <a.hindborg@kernel.org>, 
+    Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+    Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+    linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+    linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+    richard.henderson@linaro.org, jim.shu@sifive.com, 
+    Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com, 
+    charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com, 
+    cleger@rivosinc.com, alexghiti@rivosinc.com, samitolvanen@google.com, 
+    broonie@kernel.org, rick.p.edgecombe@intel.com, 
+    rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>, 
+    Andreas Korb <andreas.korb@aisec.fraunhofer.de>, 
+    Valentin Haudiquet <valentin.haudiquet@canonical.com>, 
+    Charles Mirabile <cmirabil@redhat.com>, 
+    Jesse Huang <jesse.huang@sifive.com>
+Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
+In-Reply-To: <CAKC1njQ-hS+kUJ0C_v0oqZW1EZw2zAXMp-SnnA-ZXh_H-SoVdQ@mail.gmail.com>
+Message-ID: <30f969d2-794f-937f-53b7-3af3f2b88ef7@kernel.org>
+References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com> <e052745b-6bf0-c2a3-21b2-5ecd8b04ec70@kernel.org> <aTxf7IGlkGLgHgI2@debug.ba.rivosinc.com> <CAKC1njQ-hS+kUJ0C_v0oqZW1EZw2zAXMp-SnnA-ZXh_H-SoVdQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IBbOtxmVdG86xy2i"
-Content-Disposition: inline
-In-Reply-To: <CA+EHjTybF+aq2b2vhcEqi6U_sJjtt7ngzMZ9UcJ15G-Kqj=A9A@mail.gmail.com>
-X-Cookie: If you suspect a man, don't employ him.
+Content-Type: text/plain; charset=US-ASCII
+
+Hi Deepak,
+On Thu, 8 Jan 2026, Deepak Gupta wrote:
+
+> I have a bugfix for a bug reported by Jesse Huang (thanks Jesse) in riscv
+> implementation of `map_shadow_stack`.
+> 
+> Should I send a new series or only the bugfix-patch for implementation
+> of `map_shadow_stack`
+
+If you just send the bugfix patch, I'll roll it in to the patches that I'm 
+applying.
+
+Thanks for asking and happy new year,
 
 
---IBbOtxmVdG86xy2i
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Thu, Jan 08, 2026 at 04:19:34PM +0000, Fuad Tabba wrote:
-
-> Would it be worth adding a comment above the macro noting this
-> difference from sve_cond_update_zcr_vq()? Something along the lines of
-> 'Intentionally overwrites to ensure strict control of enable bits', to
-> save future readers from getting confused...
-
-Sure, makes sense.  Possibly also rename it, I'll have a think.
-
---IBbOtxmVdG86xy2i
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlf3nQACgkQJNaLcl1U
-h9B9Tgf+IN7Byiwu2Z/BASg5BnKyxCB2XaDCnpzYIDqiBTAHcDa4uurE8parsO5u
-9gSiFE/fGFAUTL0ApBcB3Q+eZ0CzXPzCri5Ao2rb19bWYj4OnhSmsrBiVvgjWc92
-pyUPxBVcXfScjS/eFtDSjiBIjLWbvOjFRRSbc2W/CJzcwBH0Ch6A35vBv5plM4QJ
-txTV72D3BnfnQFqt5cNi3UFVg+XpZQQ/i6+ickNqRBJKRy6Q9LKvoYegHabPvt8g
-oOo8YpwCAqUYl8dAEFrHLU6t0JMmMnLMzUCBDDKcTwZbZd/zMyd9L8jGbtMMuim6
-6FXHMUIcx+PFnhj4HinUO/IJYZX31A==
-=FXRp
------END PGP SIGNATURE-----
-
---IBbOtxmVdG86xy2i--
+- Paul
 
