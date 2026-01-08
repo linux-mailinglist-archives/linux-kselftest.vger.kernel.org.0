@@ -1,160 +1,195 @@
-Return-Path: <linux-kselftest+bounces-48474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1B70D03B2C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 16:14:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AE72D040F9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 16:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 828DC32C22D3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:01:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9F9F03127DF2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:35:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748953033D7;
-	Thu,  8 Jan 2026 09:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88113806B8;
+	Thu,  8 Jan 2026 11:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="AxXI2Drc"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ez5y9y1k";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="23j6UC6p";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ez5y9y1k";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="23j6UC6p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0153B3BF30B;
-	Thu,  8 Jan 2026 09:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3A9469228
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 11:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767863716; cv=none; b=loC7uaRDKD3ekMHQxKnFYca/Qqwun0MdYq/EO+ZR8z+Qnl+lM09U25GVK3sfT9q4oh4/k4L7yuy4ok6WUri5YQVmD6FIhyzaLjyWjAR+HZUIdQi864sw2geJ4OVlUNBdC/wEwkWZfEKTfClU8RL1swG7DbDLdrbUEEXcPhcLWEQ=
+	t=1767871655; cv=none; b=sWiYO+UsI4Nj/c4tJTd4ggs1gED32JCL6zXRHpiqbZbSz9fYOJdNzfVoEZclIB/xYewrwdqGWv8jAuhEEqrDj84pWOOp2Q6XfYrIGB0TLigP0r770ZFPZqWH+hMjOFpJldcP4yc0BgmiKpeUoFqnzHWjWs0BnfKrDxHfwe9XcTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767863716; c=relaxed/simple;
-	bh=GrvmQPNNjyubjGAPChLZuS1LIBty/8AGFBvYXCFrPss=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h/QAkwsbjJFIgBTCE38j/kTggCX9BvG7P0tpCHFtzY7WlhT7Qu75CqtgpElTDHEaNboWmSe61BHXtJpz+eJI9ubs3ikrrNGn09BmRYK+yZHQbSXm6ei7n2OeHh3Ir2zjnDdt1CzjB0WjU6yNs2zkvtRIM6obzVELrgTDCvSWSb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=AxXI2Drc; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from localhost.localdomain (2.general.phlin.uk.vpn [10.172.194.39])
+	s=arc-20240116; t=1767871655; c=relaxed/simple;
+	bh=bzvOONiz/LrJGZ56bA5aDZ5W3+UC5VgEFzIfgk/o5sE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TVGED5JtnBloJra+pfVcE450wnL3UDJRUu9YmXUmhfLfTgOyLqanEQ+qBJjV8yctUVurcH8tMdBnTFXpgQcRRohFtjrbCj/u+lx4IPGSDl9dD+ftRzgWEnvk81JJUC448ww49GWdA5l5p3QFsFBPw7ClghU3SWd+NZWTNyGLqew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ez5y9y1k; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=23j6UC6p; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ez5y9y1k; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=23j6UC6p; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 48D1F409F0;
-	Thu,  8 Jan 2026 09:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1767863220;
-	bh=t2nEF9Md+jwIu8sobxZsbUxrKxqWsrp7AVFfJIDoUZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version;
-	b=AxXI2Drcf4D3KtkBBfEu/GGBmDNVMa2hGqlsbRb0Oz0+IXm3i5vr8ur8tECrmYqoQ
-	 mjAt1YIO+eEaZkb95Iv6V/7ZQ9gftRw/DFIyLjxdU1S7xBrEfuOFie8Z3lGio0zJ9q
-	 jdCDaAFk2qhBFGqV3iajWqh9lPaO7h9XPDyrVIIdU6gORQ+4/CmdiVvsIuWjMVxbUI
-	 RfmCrotHQmJoDN7k4JT/E/0tU50U70E+xOzDXFw6AISzJDU6BitWuyY3MvO0UFU46D
-	 UH16wE9ndjYwz/feJMpKp6bKj9cQ5Y65b681Yde0FiY1Yzx8ovPjJNcbVE/YCRsre4
-	 X32/5je+fBNLY8e7fL15UZhm3fBzyxf8Dc9TdwFK+LewO2nbv2+zSDWPqz6V6VW9qN
-	 IRMZqzOqnAZf+pmCGXQqfWIpF2PeHqkDf37gmhxICIhZID6bv+JbU5/02JcxvqZPgT
-	 sRhXYXa2RifmQ1n0LyQ913e3mbMmcjcm1RBd0qTMwKUX1Rk4E6My8GzLoCNhlC9pdS
-	 Ok3ed3B/7hNKwJ9AP50k0rG3ZaBfXCiqgHJflyNOxG8o8kVzmJfI1IBSWD4byHXHQG
-	 xSBOHzoOcmqYqT1OFvmB4IYv4aKJh/Tfm/UhQwe3iaE8DDn+7hj4fKVlYIDyqzhej1
-	 Yct/aHrf1jpsLeJHz/LAnqPA=
-From: Po-Hsu Lin <po-hsu.lin@canonical.com>
-To: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: po-hsu.lin@canonical.com,
-	shuah@kernel.org,
-	mike.kravetz@oracle.com
-Subject: [PATCH 1/1] selftests/memfd: fix return value override issue in run_hugetlbfs_test.sh
-Date: Thu,  8 Jan 2026 17:06:06 +0800
-Message-ID: <20260108090606.20660-2-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260108090606.20660-1-po-hsu.lin@canonical.com>
-References: <20260108090606.20660-1-po-hsu.lin@canonical.com>
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 689AA33E49;
+	Thu,  8 Jan 2026 11:27:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767871648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
+	b=ez5y9y1k5PJpJZBIY5kuWSSPaOP//kUTZfZU2haEA1oIegYrfsM78P2k/kTBcE9sfrPMos
+	TUP8LL6+M5QG2ljvmkCsQNXNxaDfGcJp9MH9WXL1sSmGH5hh3v54+wpQLRCEg21tj8hxxG
+	cksBCh3zF+NL2OQTOg2tjvdZ3GNMLWI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767871648;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
+	b=23j6UC6p8Gs/hgAi7WwLy8z7JKeGgdbEyEv30gyXaW67k9/uTyL37/aODGuxGOGA8uY5NM
+	1pIHq517KItYaLBQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767871648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
+	b=ez5y9y1k5PJpJZBIY5kuWSSPaOP//kUTZfZU2haEA1oIegYrfsM78P2k/kTBcE9sfrPMos
+	TUP8LL6+M5QG2ljvmkCsQNXNxaDfGcJp9MH9WXL1sSmGH5hh3v54+wpQLRCEg21tj8hxxG
+	cksBCh3zF+NL2OQTOg2tjvdZ3GNMLWI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767871648;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
+	b=23j6UC6p8Gs/hgAi7WwLy8z7JKeGgdbEyEv30gyXaW67k9/uTyL37/aODGuxGOGA8uY5NM
+	1pIHq517KItYaLBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E01533EA63;
+	Thu,  8 Jan 2026 11:27:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id zdDNM5+UX2mKEAAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Thu, 08 Jan 2026 11:27:27 +0000
+Message-ID: <f308ff67-5de1-452a-999c-e9230fc31e35@suse.de>
+Date: Thu, 8 Jan 2026 12:27:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2 net-next v2] ipv6: use the right ifindex when replying
+ to icmpv6 from localhost
+To: Brian Haley <haleyb.dev@gmail.com>, netdev@vger.kernel.org
+Cc: davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260107153841.5030-1-fmancera@suse.de>
+ <099019ee-05f4-457b-a82b-0fac55d8dd48@gmail.com>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <099019ee-05f4-457b-a82b-0fac55d8dd48@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
+	TAGGED_RCPT(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:email]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-If the clean up task in the end of this script has successed, this
-test will be considered as passed regardless the sub tests results.
+On 1/7/26 6:05 PM, Brian Haley wrote:
+> Hi Fernando,
+> 
+> On 1/7/26 10:38 AM, Fernando Fernandez Mancera wrote:
+>> When replying to a ICMPv6 echo request that comes from localhost address
+>> the right output ifindex is 1 (lo) and not rt6i_idev dev index. Use the
+>> skb device ifindex instead. This fixes pinging to a local address from
+>> localhost source address.
+>>
+>> $ ping6 -I ::1 2001:1:1::2 -c 3
+>> PING 2001:1:1::2 (2001:1:1::2) from ::1 : 56 data bytes
+>> 64 bytes from 2001:1:1::2: icmp_seq=1 ttl=64 time=0.037 ms
+>> 64 bytes from 2001:1:1::2: icmp_seq=2 ttl=64 time=0.069 ms
+>> 64 bytes from 2001:1:1::2: icmp_seq=3 ttl=64 time=0.122 ms
+>>
+>> 2001:1:1::2 ping statistics
+>> 3 packets transmitted, 3 received, 0% packet loss, time 2032ms
+>> rtt min/avg/max/mdev = 0.037/0.076/0.122/0.035 ms
+>>
+>> Fixes: 1b70d792cf67 ("ipv6: Use rt6i_idev index for echo replies to a 
+>> local address")
+>> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+>> ---
+>> v2: no changes
+>> ---
+>>   net/ipv6/icmp.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
+>> index 5d2f90babaa5..5de254043133 100644
+>> --- a/net/ipv6/icmp.c
+>> +++ b/net/ipv6/icmp.c
+>> @@ -965,7 +965,9 @@ static enum skb_drop_reason 
+>> icmpv6_echo_reply(struct sk_buff *skb)
+>>       fl6.daddr = ipv6_hdr(skb)->saddr;
+>>       if (saddr)
+>>           fl6.saddr = *saddr;
+>> -    fl6.flowi6_oif = icmp6_iif(skb);
+>> +    fl6.flowi6_oif = ipv6_addr_type(&fl6.daddr) & IPV6_ADDR_LOOPBACK ?
+>> +             skb->dev->ifindex :
+>> +             icmp6_iif(skb);
+>>       fl6.fl6_icmp_type = type;
+>>       fl6.flowi6_mark = mark;
+>>       fl6.flowi6_uid = sock_net_uid(net, NULL);
+> 
+> Using ipv6_addr_loopback(&fl6.daddr) might be more efficient as it does 
+> a direct comparison of the address.
+> 
 
-$ sudo ./run_hugetlbfs_test.sh
-memfd-hugetlb: CREATE
-memfd-hugetlb: BASIC
-memfd-hugetlb: SEAL-EXEC
-memfd-hugetlb:  Apply SEAL_EXEC
-fchmod(/memfd:kern_memfd_seal_exec (deleted), 00777) didn't fail as expected
-./run_hugetlbfs_test.sh: line 60: 16833 Aborted                 (core dumped) ./memfd_test hugetlbfs
-opening: ./mnt/memfd
-ADD_SEALS(4, 0 -> 8) failed: Device or resource busy
-8 != 0 = GET_SEALS(4)
-Aborted (core dumped)
-$ echo $?
-0
+Yes, I think you are right.
 
-Fix this by checking the return value of each sub-test.
+Thanks!
+Fernando.
 
-With this patch, the return value of this test will be reflected
-correctly and we can avoid a false-negative result:
-$ sudo ./run_hugetlbfs_test.sh
-memfd-hugetlb: CREATE
-memfd-hugetlb: BASIC
-memfd-hugetlb: SEAL-EXEC
-memfd-hugetlb:	Apply SEAL_EXEC
-fchmod(/memfd:kern_memfd_seal_exec (deleted), 00777) didn't fail as expected
-./run_hugetlbfs_test.sh: line 68: 16688 Aborted                 (core dumped) ./memfd_test hugetlbfs
-opening: ./mnt/memfd
-ADD_SEALS(4, 0 -> 8) failed: Device or resource busy
-8 != 0 = GET_SEALS(4)
-Aborted (core dumped)
-$ echo $?
-134
-
-Fixes: 8eecdd4d04 ("selftests: memfd: split regular and hugetlbfs tests")
-Cc: stable@vger.kernel.org
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/memfd/run_hugetlbfs_test.sh | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/tools/testing/selftests/memfd/run_hugetlbfs_test.sh b/tools/testing/selftests/memfd/run_hugetlbfs_test.sh
-index fb633eeb0290..48f701983604 100755
---- a/tools/testing/selftests/memfd/run_hugetlbfs_test.sh
-+++ b/tools/testing/selftests/memfd/run_hugetlbfs_test.sh
-@@ -4,12 +4,21 @@
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-+ret=0
- #
- # To test memfd_create with hugetlbfs, there needs to be hpages_test
- # huge pages free.  Attempt to allocate enough pages to test.
- #
- hpages_test=8
- 
-+# set global exit status, but never reset nonzero one.
-+check_err()
-+{
-+	if [ $ret -eq 0 ]; then
-+		ret=$1
-+	fi
-+}
-+
- #
- # Get count of free huge pages from /proc/meminfo
- #
-@@ -58,7 +67,9 @@ fi
- # Run the hugetlbfs test
- #
- ./memfd_test hugetlbfs
-+check_err $?
- ./run_fuse_test.sh hugetlbfs
-+check_err $?
- 
- #
- # Give back any huge pages allocated for the test
-@@ -66,3 +77,4 @@ fi
- if [ -n "$nr_hugepgs" ]; then
- 	echo $nr_hugepgs > /proc/sys/vm/nr_hugepages
- fi
-+exit $ret
--- 
-2.34.1
+> -Brian
+> 
 
 
