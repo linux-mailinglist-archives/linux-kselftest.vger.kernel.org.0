@@ -1,236 +1,256 @@
-Return-Path: <linux-kselftest+bounces-48621-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22E0BD0B43C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 17:32:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B02B4D0B4A5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 17:38:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D7D13058446
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 16:24:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 911AC30501A0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 16:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AEF2222C0;
-	Fri,  9 Jan 2026 16:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 777FD364041;
+	Fri,  9 Jan 2026 16:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TsSq+IG6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SUmEcPMt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5237826ED28
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 16:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767975897; cv=none; b=Pi6RwAZxoPmTaJk8OD+KCXueYH764lRwtq4JSTKWUmGJlJtZSWBE7o8RaktjlDJ0CJ2LWpfcKtGTRv48VfSjfcyiupBVaZLwWw9VXZY2iY5as2Ihjzch/5d6Gd9V+5b7sfYcKomUbXeS7JU58echvh335Pau6Wqsif1RqhXKqZ8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767975897; c=relaxed/simple;
-	bh=DsoNiErAyhf3A90GHQfACdBGfpojvMzHJ+IZ5BcSxgc=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF56330D27
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 16:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767976287; cv=pass; b=MiAt6QatgUO0WOgTX582+0o/AE7+uxSph/BjGjFC9M2R4OqIwPNnxMkVQSvKOyzx+KrRUatho2Vx50YOYTv3oU1dGSiSkrFd2jsRoRhA/VLEPcvhfqwTJ3mdiR2zsjZ2Ye9Ju2kunWBeAh0Hh3T5+GlKlOXAqGeaqKsroAcT2dk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767976287; c=relaxed/simple;
+	bh=TvYZA4dBSlsSpGSZUaKtQ+jUGYaXayrnDE16b2gj2N0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YhmzZn++ytWVwrFIQISrJH3M5EuxZx4f4LpfjBgDAxAmdF9Qbltjb+v2Zee9o+4akky5ZjNl61CgEOgXmfYTcH4dg0WQU4oxn8cmTI3u2Gx3y40RCFe4QwANPj2K7Rm2eVo1IyLZRa07lqLnNzUr7Iqsb9jqqzsLpcv/hdWZAjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TsSq+IG6; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-47755de027eso26251555e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 08:24:55 -0800 (PST)
+	 To:Cc:Content-Type; b=kl98FPMM7bbhNrpxCKJGAp9H4kF6JP0E6AlXCGq1clap5gNLzZxGyLfnPDxYGBOB5yBa85a1nkreAhHEdZAejIw/fQt5iGsJohF0R/DFSQQ6XZqmtqTW1B5c1GmiZEX7TRICKjPauhKiwzxf38IPLWmUTmrmrdtgKgU46BcPgt8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SUmEcPMt; arc=pass smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4edb8d6e98aso600011cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 08:31:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1767976284; cv=none;
+        d=google.com; s=arc-20240605;
+        b=C4HkY+JCPtnwt8A58ZqbkPqvVxBM/l85lD9HmwEzCrKDSracxq7KYAROFHYNrTHFVF
+         KEW6MOloOq3pJQdtZFO1lUyzV6oFWQdWu7kH02ZQPlPZMvPtKj+uJ094fSet2F/iOphG
+         UYoLvrep7xgSIWxD5UrdjM1pHtMqIBuR8jLeOP4Vyv9nBPDFGfhr6H8CuvBYjR3T5tc5
+         GKCyQvoagCttDzIzfE1bfbUOMi4+3E/dvywJY6Ds4Sd54ruquNp30jfdR3vIB6ftMR47
+         fcE4l99xMuJfxx1StRu8WtY8MDZ+UodnuT+55w06OckJCFzFMmFkPCSVOz5kceaHdpcs
+         ZZww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=bOqelCfA+niHr585Q7gjhs1CWJtFJzsgDt10/9RfHhM=;
+        fh=Gojr8XaOUNFIWmw7aJRisFQpWbl7jy8iJkEcoQptTUQ=;
+        b=ZudD3INJYXnp6tArgbzItYEBC6wMa9vZybPSEsB53AtEdtEOqbvRiWA7P3jFI5Te23
+         eM0zr7/9IxYpKFgx/BAPdC4KWIB6GSDyop8DPeUg8apl4kDXh1pM6Kl+dkp5LjlLDiFg
+         sJidiRO8q8qjM6Uao2Xf1Iz7WkBV0QvcglLdJFGG034XbETSClPxstPOaHGc75Ur05e2
+         f5F8vXdg/nKAE6i6ecAIt+apVHYLeF+0+XlTCIdFlP0YUnW13ERV5bdl+HJwCHL8ZI3H
+         M18E75zAvqS+c4ZjW+sP7200+oqEuGUVYZkwnf8kUzsdgNopYHcdtwrMzJi4M799g+xy
+         L6lg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767975893; x=1768580693; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aHmfnqgDCEmK613FRrQHV+ATkk1Rai86bVueukmcvOY=;
-        b=TsSq+IG6ozA/zUfAyQkCipaHBAEicf6+Ng74O2wCD1FeL0qNNProlDRua6tcy9fiNR
-         JqzuXzC2g1OSOgPjDpueIaELTRS5X14TU9V7T+XflgzxaNVXlWHdO0rpUkGcPF6XIrAW
-         4VsjspW06kmKN3iYDduKFPzZYUDMzn/AfJTihRgeGSKCZw7RPKySM5kQB3Py+YY2/EBQ
-         EBYNUzoc+3Xy33QaB3Cm/PPNGv59DYFvbHkXpYxV+Izy0HnDjrkxNFH07fWgO9fUsQkM
-         rfzgWuggSjQTUSEHTEGOspr+ajiQI9gDDOE5gO8I8AX/ZsriLNFU56pS3nywr5QcmmdW
-         wTCA==
+        d=google.com; s=20230601; t=1767976284; x=1768581084; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bOqelCfA+niHr585Q7gjhs1CWJtFJzsgDt10/9RfHhM=;
+        b=SUmEcPMtZxpzkG7Bxjg/Em0Y4U4kQ4BXBdxvHw88nWLlZMLlpnYJhGMRvUYt14OuAr
+         XvU8EGNgnCG4EmyCZq9crSxUQvfbljbQQlBriYJqhvTaHOved4CPzrhOgh2VK7owO+G7
+         EsTEmaMk7C2ctWZ7Qdf8qvEwmh+gs1zF/LK2F4JfPBu4SED8gGVrQi1B0hZS3fTqsLaT
+         HdTsCbGc+dFII0ZaEMeBMXSZ4pqDqyGT7sPUCa6FyqQZ68/r8EziJQEhUvjiE5jfeett
+         xHup5hSV99h75/7VoiuhOp8RxmhBXGnAsaIzSx2nJO7tS53TZuGc2KdLfR2Iboequ6Ov
+         bLbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767975893; x=1768580693;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=aHmfnqgDCEmK613FRrQHV+ATkk1Rai86bVueukmcvOY=;
-        b=p4TljVrn7k7gE8oZ8YJV3ahpbnnd+fIg7P00RHgbCG5iR1fV5LFYLuM53E+AHmXkXi
-         52KUnBOAiIvJ1SFZ6ZGE+iTqw/HXSugXdwynSBOie81NWM4W+4CKs0lot6DhiAuug/4N
-         JtU/9jCXKhnc4Re1zc8c+nI5tXWSW0kusFClAQ5IlXNluTqzEWhzabH+RghOSbOjUw7Y
-         A4zGNuRYe2K2/Ms5cQ4pmlSHAWAqGiKp0KTqYoRRrPFbUsf3OL8JjMKFeOPsf+dq34Y2
-         Brl+vftu7JZ4h5EKqJvog7pevgEecDCauR9dyGDvLxDH6C2mh4RkX1NTwDYRV7HD21ue
-         Cnmw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUhw8qF6o9199h626sjzoNszSsrSFCiyhYyDKMSW8V84pxAsko82rM1WhllXKA2www6VzvbBq38uNu7t76Bi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKer70slm1DtaHNMocVXq9rQd9dJ7L3ithm5AsXlfrMlQu8mmZ
-	BQRoh6InSpvO328lCEBCVMfkH+CsqEMq1/X50WX1GWQll7f+j4CHYvdVJyYDQIINukABSnFOPox
-	PjwcU6iTn5ykdmm5Fdc6LYTYmOXRB6m4=
-X-Gm-Gg: AY/fxX4BIvM/Jt6hwffJDaU+ljB+cfevSVPKWLVK3KqZdbOkpTGQU1UwYkCRE930mEH
-	4qwYWfN/cdQBm8+cInaifz0NmjN4Dmm8HgerPDXLRWyHipRgP0oS6bUoqKMP3BZh6GXllGI+CUe
-	+pQ7SS03+xCV7XF4V2xCnvVPnhI+7yqosSmlhQbkGCWdIi1CObJzCeHBUyuKglY+Jr3sylTuBxN
-	0sHxL+leaVvMaOtIlnTwmwvA1HVDLShR43yxpGHw0OQPkMgCLZCVukyMXjbkAI9fzGjSxLpnyMw
-	q5uwwehNuzNzS3IGnzMnyUkaB39f
-X-Google-Smtp-Source: AGHT+IH8/QRjd++hMR8vlKQXLENn7AamAuc5FJZXDbW/uNvxUAJMk5qvZVioKDc46eg8K59Ls8JDHizJk5fuymSkcis=
-X-Received: by 2002:a05:600c:4694:b0:46e:3d41:6001 with SMTP id
- 5b1f17b1804b1-47d84b3db20mr97255695e9.34.1767975893237; Fri, 09 Jan 2026
- 08:24:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767976284; x=1768581084;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bOqelCfA+niHr585Q7gjhs1CWJtFJzsgDt10/9RfHhM=;
+        b=u1R7qOyWWwFUl07aA8LbdcXwosD3PhDvflC7l0G1QFn1pAmCwDLZCwzkuBQfxdmw9n
+         PRWbw5NDNHRBj6ZujGNxL4iwwRoBQz729fpSyWLoQdKi8o+/rWWGnoaSsQXA9zmZFMQY
+         IOm5FDjpDnDomElJO0UvLgeNlkPqnBxAHzVYuMVt842F99XP7U2PV99re3sV3S7PRlCM
+         AjudrpOPXcydiMSWfquP6vNBKILhPJSlvvUR3Lt8OLygExq2aAbdG9q6mluYS8zv6MlG
+         xEI+ff3OH/ziW9vJmx+jEQm9azTFpl67ntHfniUDd1drvJ2J90i0wmySg3b/NDKtIWf1
+         AVOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXfutQnXa7S4TjXA3v+oe3OG0gbqfKeO2BAGRMyoB1Q2haEb+wVNSiovZNTJ3GXIaN972XgKkfhUb6qImMMi8s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7W9dZXb0JMIao+mLv1PDGfTaHJEx5Z67kbGphKgKH8diQlnnk
+	myijZQCJsw6B0F4nTStTxDIJfdsw9RUWYFGjYi3Ls9bsPmKYh4jglE/iSDaKFCWxAGfrCqb2DVn
+	VNUdyu1IJtyD7beYdGfF44XFW2P1O1Wz90PBdoXDO
+X-Gm-Gg: AY/fxX7xNHzDErN3m/E7L0FZsYFxTO73bwBrnNeY6uR0ia6WX8XF91ryj8tUsqVUgSv
+	KxUb4/e/0+UFhgFIqC1yCtbLJKjOBhj13u8OT1BfHvXj8bc78QFNY77vyskumnyoGSRLYr8CO59
+	n2NWiGQn0cLQMPFUZLNn0JH93JEGFVh2lJSj5rW7mjRA1B+OlCgI2iHOrKPXbPthJJQeEU+mwUw
+	khgpeK5pVI4mieCIFLPSl/UJn0itCmW0XJtOvIc5CPDzeXfnDKlJV5trNxrgzy3CNHOi5Wa
+X-Received: by 2002:ac8:5d8d:0:b0:4ed:70d6:6618 with SMTP id
+ d75a77b69052e-4ffca3899e0mr12373901cf.10.1767976283510; Fri, 09 Jan 2026
+ 08:31:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260109153420.32181-1-leon.hwang@linux.dev> <20260109153420.32181-2-leon.hwang@linux.dev>
-In-Reply-To: <20260109153420.32181-2-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 9 Jan 2026 08:24:41 -0800
-X-Gm-Features: AZwV_Qjs-h5Q6oTESWcQ85ioWJXfjnRIPt3WHmpg0AdmKGFJ63hMwzpPEGHOOQk
-Message-ID: <CAADnVQK4O-igzuSvfgjG1ZqdUBXrjNL=4tJZuS1uy36GCD2mVg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/3] bpf, x64: Call perf_snapshot_branch_stack in trampoline
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, "David S . Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org> <20251223-kvm-arm64-sme-v9-15-8be3867cb883@kernel.org>
+In-Reply-To: <20251223-kvm-arm64-sme-v9-15-8be3867cb883@kernel.org>
+From: Fuad Tabba <tabba@google.com>
+Date: Fri, 9 Jan 2026 16:31:00 +0000
+X-Gm-Features: AZwV_Qg_Mx3Uve2Ajz9vtAn4ZY1Okl_E_qqP5nAl07n9Fwy2xIITsZXnkaSndwU
+Message-ID: <CA+EHjTzP9roJNcHhVrcGm9RMAn0E+RGPkJ57w44OL4fy3EW-wA@mail.gmail.com>
+Subject: Re: [PATCH v9 15/30] KVM: arm64: Support SME control registers
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Ben Horgan <ben.horgan@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Peter Maydell <peter.maydell@linaro.org>, 
+	Eric Auger <eric.auger@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 9, 2026 at 7:37=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
-ote:
+On Tue, 23 Dec 2025 at 01:22, Mark Brown <broonie@kernel.org> wrote:
 >
-> When the PMU LBR is running in branch-sensitive mode,
-> 'perf_snapshot_branch_stack()' may capture branch entries from the
-> trampoline entry up to the call site inside a BPF program. These branch
-> entries are not useful for analyzing the control flow of the tracee.
+> SME is configured by the system registers SMCR_EL1 and SMCR_EL2, add
+> definitions and userspace access for them.  These control the SME vector
+> length in a manner similar to that for SVE and also have feature enable
+> bits for SME2 and FA64.  A subsequent patch will add management of them
+> for guests as part of the general floating point context switch, as is
+> done for the equivalent SVE registers.
 >
-> To eliminate such noise for tracing programs, the branch snapshot should
-> be taken as early as possible:
->
-> * Call 'perf_snapshot_branch_stack()' at the very beginning of the
->   trampoline for fentry programs.
-> * Call 'perf_snapshot_branch_stack()' immediately after invoking the
->   tracee for fexit programs.
->
-> With this change, LBR snapshots remain meaningful even when multiple BPF
-> programs execute before the one requesting LBR data.
->
-> In addition, more relevant branch entries can be captured on AMD CPUs,
-> which provide a 16-entry-deep LBR stack.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->  arch/x86/net/bpf_jit_comp.c | 66 +++++++++++++++++++++++++++++++++++++
->  include/linux/bpf.h         | 16 ++++++++-
->  2 files changed, 81 insertions(+), 1 deletion(-)
+>  arch/arm64/include/asm/kvm_host.h     |  2 ++
+>  arch/arm64/include/asm/vncr_mapping.h |  1 +
+>  arch/arm64/kvm/sys_regs.c             | 36 ++++++++++++++++++++++++++++++++++-
+>  3 files changed, 38 insertions(+), 1 deletion(-)
 >
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index e3b1c4b1d550..a71a6c675392 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -12,6 +12,7 @@
->  #include <linux/bpf.h>
->  #include <linux/memory.h>
->  #include <linux/sort.h>
-> +#include <linux/perf_event.h>
->  #include <asm/extable.h>
->  #include <asm/ftrace.h>
->  #include <asm/set_memory.h>
-> @@ -19,6 +20,7 @@
->  #include <asm/text-patching.h>
->  #include <asm/unwind.h>
->  #include <asm/cfi.h>
-> +#include "../events/perf_event.h"
->
->  static bool all_callee_regs_used[4] =3D {true, true, true, true};
->
-> @@ -3137,6 +3139,54 @@ static int invoke_bpf_mod_ret(const struct btf_fun=
-c_model *m, u8 **pprog,
->         return 0;
+> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> index b41700df3ce9..f24441244a68 100644
+> --- a/arch/arm64/include/asm/kvm_host.h
+> +++ b/arch/arm64/include/asm/kvm_host.h
+> @@ -504,6 +504,7 @@ enum vcpu_sysreg {
+>         CPTR_EL2,       /* Architectural Feature Trap Register (EL2) */
+>         HACR_EL2,       /* Hypervisor Auxiliary Control Register */
+>         ZCR_EL2,        /* SVE Control Register (EL2) */
+> +       SMCR_EL2,       /* SME Control Register (EL2) */
+>         TTBR0_EL2,      /* Translation Table Base Register 0 (EL2) */
+>         TTBR1_EL2,      /* Translation Table Base Register 1 (EL2) */
+>         TCR_EL2,        /* Translation Control Register (EL2) */
+> @@ -542,6 +543,7 @@ enum vcpu_sysreg {
+>         VNCR(ACTLR_EL1),/* Auxiliary Control Register */
+>         VNCR(CPACR_EL1),/* Coprocessor Access Control */
+>         VNCR(ZCR_EL1),  /* SVE Control */
+> +       VNCR(SMCR_EL1), /* SME Control */
+>         VNCR(TTBR0_EL1),/* Translation Table Base Register 0 */
+>         VNCR(TTBR1_EL1),/* Translation Table Base Register 1 */
+>         VNCR(TCR_EL1),  /* Translation Control Register */
+> diff --git a/arch/arm64/include/asm/vncr_mapping.h b/arch/arm64/include/asm/vncr_mapping.h
+> index c2485a862e69..44b12565321b 100644
+> --- a/arch/arm64/include/asm/vncr_mapping.h
+> +++ b/arch/arm64/include/asm/vncr_mapping.h
+> @@ -44,6 +44,7 @@
+>  #define VNCR_HDFGWTR_EL2       0x1D8
+>  #define VNCR_ZCR_EL1            0x1E0
+>  #define VNCR_HAFGRTR_EL2       0x1E8
+> +#define VNCR_SMCR_EL1          0x1F0
+>  #define VNCR_TTBR0_EL1          0x200
+>  #define VNCR_TTBR1_EL1          0x210
+>  #define VNCR_FAR_EL1            0x220
+> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+> index 3576e69468db..5c912139d264 100644
+> --- a/arch/arm64/kvm/sys_regs.c
+> +++ b/arch/arm64/kvm/sys_regs.c
+> @@ -2827,6 +2827,37 @@ static bool access_gic_elrsr(struct kvm_vcpu *vcpu,
+>         return true;
 >  }
 >
-> +DEFINE_PER_CPU(struct bpf_tramp_branch_entries, bpf_branch_snapshot);
-> +
-> +static int invoke_branch_snapshot(u8 **pprog, void *image, void *rw_imag=
-e)
+> +static unsigned int sme_el2_visibility(const struct kvm_vcpu *vcpu,
+> +                                      const struct sys_reg_desc *rd)
 > +{
-> +       struct bpf_tramp_branch_entries __percpu *pptr =3D &bpf_branch_sn=
-apshot;
-> +       u8 *prog =3D *pprog;
-> +
-> +       /*
-> +        * Emit:
-> +        *
-> +        * struct bpf_tramp_branch_entries *br =3D this_cpu_ptr(&bpf_bran=
-ch_snapshot);
-> +        * br->cnt =3D static_call(perf_snapshot_branch_stack)(br->entrie=
-s, x86_pmu.lbr_nr);
-> +        */
-> +
-> +       /* mov rbx, &bpf_branch_snapshot */
-> +       emit_mov_imm64(&prog, BPF_REG_6, (long) pptr >> 32, (u32)(long) p=
-ptr);
-> +#ifdef CONFIG_SMP
-> +       /* add rbx, gs:[<off>] */
-> +       EMIT2(0x65, 0x48);
-> +       EMIT3(0x03, 0x1C, 0x25);
-> +       EMIT((u32)(unsigned long)&this_cpu_off, 4);
-> +#endif
-> +       /* mov esi, x86_pmu.lbr_nr */
-> +       EMIT1_off32(0xBE, x86_pmu.lbr_nr);
-> +       /* lea rdi, [rbx + offsetof(struct bpf_tramp_branch_entries, entr=
-ies)] */
-> +       EMIT4(0x48, 0x8D, 0x7B, offsetof(struct bpf_tramp_branch_entries,=
- entries));
-> +       /* call static_call_query(perf_snapshot_branch_stack) */
-> +       if (emit_rsb_call(&prog, static_call_query(perf_snapshot_branch_s=
-tack),
-> +                         image + (prog - (u8 *)rw_image)))
-> +               return -EINVAL;
-> +       /* mov dword ptr [rbx], eax */
-> +       EMIT2(0x89, 0x03);
-> +
-> +       *pprog =3D prog;
-> +       return 0;
+> +       return __el2_visibility(vcpu, rd, sme_visibility);
 > +}
 > +
-> +static bool bpf_prog_copy_branch_snapshot(struct bpf_tramp_links *tl)
+> +static bool access_smcr_el2(struct kvm_vcpu *vcpu,
+> +                           struct sys_reg_params *p,
+> +                           const struct sys_reg_desc *r)
 > +{
-> +       bool copy =3D false;
-> +       int i;
+> +       unsigned int vq;
+> +       u64 smcr;
 > +
-> +       for (i =3D 0; i < tl->nr_links; i++)
-> +               copy =3D copy || tl->links[i]->link.prog->copy_branch_sna=
-pshot;
-> +
-> +       return copy;
-> +}
-> +
->  /* mov rax, qword ptr [rbp - rounded_stack_depth - 8] */
->  #define LOAD_TRAMP_TAIL_CALL_CNT_PTR(stack)    \
->         __LOAD_TCC_PTR(-round_up(stack, 8) - 8)
-> @@ -3366,6 +3416,14 @@ static int __arch_prepare_bpf_trampoline(struct bp=
-f_tramp_image *im, void *rw_im
->
->         save_args(m, &prog, regs_off, false, flags);
->
-> +       if (bpf_prog_copy_branch_snapshot(fentry)) {
-> +               /* Get branch snapshot asap. */
-> +               if (invoke_branch_snapshot(&prog, image, rw_image)) {
-> +                       ret =3D -EINVAL;
-> +                       goto cleanup;
-> +               }
+> +       if (guest_hyp_sve_traps_enabled(vcpu)) {
+
+Should this be guest_hyp_sme_traps_enabled() ?
+
+> +               kvm_inject_nested_sve_trap(vcpu);
+
+And by the same token, should this be kvm_inject_nested_sme_trap()?
+That function doesn't exist, but would inject ESR_ELx_EC_SME instead
+of ESR_ELx_EC_SVE.
+
+> +               return false;
 > +       }
+> +
+> +       if (!p->is_write) {
+> +               p->regval = __vcpu_sys_reg(vcpu, SMCR_EL2);
+> +               return true;
+> +       }
+> +
+> +       smcr = p->regval;
+> +       vq = SYS_FIELD_GET(SMCR_ELx, LEN, smcr) + 1;
+> +       vq = min(vq, vcpu_sme_max_vq(vcpu));
+> +       __vcpu_assign_sys_reg(vcpu, SMCR_EL2, SYS_FIELD_PREP(SMCR_ELx, LEN,
+> +                                                            vq - 1));
 
-Andrii already tried to do it.
-I hated it back then and still hate the idea.
-We're not going to add custom logic for one specific use case
-no matter how appealing it sounds to save very limited LBR entries.
-The HW will get better, but we will be stuck with this optimization forever=
-.
+I think this might be wrong. This code only writes the LEN, discarding
+other fields in SMCR_EL2. The analogous SVE code in access_zcr_el2()
+is only concerned with the length, and doesn't need to worry about
+other bits to preserve.
 
-pw-bot: cr
+Should this be something along the lines of the below instead?
+
++       smcr = p->regval;
++       vq = SYS_FIELD_GET(SMCR_ELx, LEN, smcr) + 1;
++       vq = min(vq, vcpu_sme_max_vq(vcpu));
++       smcr &= ~SMCR_ELx_LEN_MASK;
++       smcr |= SYS_FIELD_PREP(SMCR_ELx, LEN, vq - 1);
++       __vcpu_assign_sys_reg(vcpu, SMCR_EL2, smcr);
+
+Cheers,
+/fuad
+
+
+
+
+> +       return true;
+> +}
+> +
+>  static unsigned int s1poe_visibility(const struct kvm_vcpu *vcpu,
+>                                      const struct sys_reg_desc *rd)
+>  {
+> @@ -3291,7 +3322,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>         { SYS_DESC(SYS_ZCR_EL1), NULL, reset_val, ZCR_EL1, 0, .visibility = sve_visibility },
+>         { SYS_DESC(SYS_TRFCR_EL1), undef_access },
+>         { SYS_DESC(SYS_SMPRI_EL1), undef_access },
+> -       { SYS_DESC(SYS_SMCR_EL1), undef_access },
+> +       { SYS_DESC(SYS_SMCR_EL1), NULL, reset_val, SMCR_EL1, 0, .visibility = sme_visibility },
+>         { SYS_DESC(SYS_TTBR0_EL1), access_vm_reg, reset_unknown, TTBR0_EL1 },
+>         { SYS_DESC(SYS_TTBR1_EL1), access_vm_reg, reset_unknown, TTBR1_EL1 },
+>         { SYS_DESC(SYS_TCR_EL1), access_vm_reg, reset_val, TCR_EL1, 0 },
+> @@ -3655,6 +3686,9 @@ static const struct sys_reg_desc sys_reg_descs[] = {
+>
+>         EL2_REG_VNCR(HCRX_EL2, reset_val, 0),
+>
+> +       EL2_REG_FILTERED(SMCR_EL2, access_smcr_el2, reset_val, 0,
+> +                        sme_el2_visibility),
+> +
+>         EL2_REG(TTBR0_EL2, access_rw, reset_val, 0),
+>         EL2_REG(TTBR1_EL2, access_rw, reset_val, 0),
+>         EL2_REG(TCR_EL2, access_rw, reset_val, TCR_EL2_RES1),
+>
+> --
+> 2.47.3
+>
 
