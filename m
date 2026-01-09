@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-48607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48608-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB2F1D0A7AA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 14:46:52 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4EA0D0A7EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 14:50:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA7723029B8E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 13:41:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EB1C0303C117
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 13:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E46F35CB80;
-	Fri,  9 Jan 2026 13:41:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A06135E52C;
+	Fri,  9 Jan 2026 13:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mCmf/qFA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HraFFJ/x"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7839B35CB75;
-	Fri,  9 Jan 2026 13:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6B635CB8C;
+	Fri,  9 Jan 2026 13:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767966116; cv=none; b=V9blOh+rc+C3LpdhTMRc0NUORB8+fZafGAFvQiwQk0A/zsTbTXH3S/U7QDHjr7nH04yNWsWezEVoT9tTTS1xjVPDL+ojs+kTjUa386Rfr0oNdcJELBUUiUqgtjgUwZQlKHTJK2h9bCxxTxRCTViM0LZER0CaYiNZLHV2iPFKt/4=
+	t=1767966339; cv=none; b=eYEYCWsjN7kGBJKTGWFwlDC/IjhwA0USzeEMYyL4SSjPyuqZYuAjn25RMUW99e1sztMlprkBTO3VP0zzPP5XevJcpk1NotmNlfBNrTYQmQWCumxmnjIjBSItpSUkth+JCBTT3SmzBMirst7MswT/sFiQ+bwhGWbXrCtK6bXNYc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767966116; c=relaxed/simple;
-	bh=85W2k/vZ6p+6iy0+yFWg6C8malR33X2ekz9QgywhdHg=;
+	s=arc-20240116; t=1767966339; c=relaxed/simple;
+	bh=u4CAnuyKa22cPZqPczAHTBUsJfWDDiZoz2nyUc91Sg8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oqF3NcFhjdS6xYRu64tNTn+HJ6aK8o3fQd3Q7CL9BGtWUczLGYUjUQdk32du0G3fPHmoq6xDwdCQWgSkhTq0ZSRL6fr6pcS9+wFbBDxWyrmKlgo6Eg3SI9v9Hk2R4aIsF+RHgN2OT6hkSuvKsnqdiAYqGziKNdXK/xsPr678I/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mCmf/qFA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127F9C4CEF1;
-	Fri,  9 Jan 2026 13:41:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=i61Ji7KHEYtNg2A7AnlkxdCW2HBqKFG/q7fYbptY1fVIL1/X0NapTjjdMP4pL6mStic5J+WORr4tttm2HEe693Ny7mDn+V+fiKiKuGCN4WWDuR/1EdSCDdPXi0D41Moj7eVV16G94Rf0W7Gw4aM+rCP5AspzPyQxIgUwIuHdrPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HraFFJ/x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0443EC4CEF1;
+	Fri,  9 Jan 2026 13:45:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767966116;
-	bh=85W2k/vZ6p+6iy0+yFWg6C8malR33X2ekz9QgywhdHg=;
+	s=k20201202; t=1767966338;
+	bh=u4CAnuyKa22cPZqPczAHTBUsJfWDDiZoz2nyUc91Sg8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=mCmf/qFAVz66FGjo+1VfRjKDgm9C2YWUh/58ThjZTg1c3qbTdFenCDdpXC5sul1xA
-	 NEinrrPqz1ENk859Qij7ccldBetl/K8nhPAZsHEI/WGyU17lEsKkQE3zj2J+gLMfwF
-	 Sjx1xESmbA9GzXyMj1Lfi/BjDSbn+P8bHM/5S4ETldvoBCPT9Wj23mwBe5hoj2wwY+
-	 oK2l8L3c9w78ggaUMnaxi18GaJAgToAzNL1Uc0Vin/Kif3762G/gwAh3MhdZAhLX1T
-	 jv83fvYBoYK9v3r0KqOR+CdrHj2mmE34RZvYEfa3JqDPL7lRXm1uasdfX7/glbDzuf
-	 r+Z1asmNqwGrQ==
-Message-ID: <3cd08409-8c6b-42ab-97d5-e4440efe4f6a@kernel.org>
-Date: Fri, 9 Jan 2026 14:41:51 +0100
+	b=HraFFJ/xcLLuJ6o1wjBP6cPlh87ajBGgHxo1MRoTGAy4BNHUr01Z8zde9bUM+tvf7
+	 nmnuA30z8KEgrXu6TLPQmXmrbHXNliphc6zgOhjje0A4KOCbtrpro/0IczJ6rcbYwZ
+	 bxbIP7Z4nXzoHu/r/8H35agquZuMzRJcj/JCNQaHBQMXnJpw4PFOONMPxad1nyIbbP
+	 yf8JMQhBAAcYPxL7FhHOEJQQFwtx7aca0fBm0vDNVDhYnQq4A+fM+zJNKv5hfIFrAH
+	 jvLr2s7xwE3QIUY+um05rBfxS+dwZuxbsRqlpNl50OL9Cr/YQa+H0Dqrb56PNtMYpM
+	 /nDxFpzqDGXbQ==
+Message-ID: <9413a995-9182-493e-a28a-6d2d3a17236b@kernel.org>
+Date: Fri, 9 Jan 2026 14:45:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,14 +48,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: fix relative path handling
-To: sun jian <sun.jian.kdev@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20260108031604.12379-1-sun.jian.kdev@gmail.com>
- <20260108132851.bb6b7813277a5b40ba3aec8f@linux-foundation.org>
- <CABFUUZGinC04zPEtwq3+maN-iNVNdc1p_BFnTdPNTsLXcQ1hnA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] selftests/mm: add memory failure selftests
+To: Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
+ shuah@kernel.org
+Cc: lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ nao.horiguchi@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260107093710.3928374-1-linmiaohe@huawei.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -101,34 +101,62 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <CABFUUZGinC04zPEtwq3+maN-iNVNdc1p_BFnTdPNTsLXcQ1hnA@mail.gmail.com>
+In-Reply-To: <20260107093710.3928374-1-linmiaohe@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 1/9/26 03:08, sun jian wrote:
->> hm, why?  Is that a thing people actually do?
->>
->> Is anyone going to actually test this feature?
+On 1/7/26 10:37, Miaohe Lin wrote:
+> Introduce selftests to validate the functionality of memory failure.
+> These tests help ensure that memory failure handling for anonymous
+> pages, pagecaches pages works correctly, including proper SIGBUS
+> delivery to user processes, page isolation, and recovery paths.
 > 
-> Yes — invoking selftests directly from the kernel root can easily happen in
-> practice, for example::
-> 
->    sudo tools/testing/selftests/mm/run_vmtests.sh
-> 
-> This currently results in false failures because relative paths being resolved
-> against the caller's cwd instead of the script directory.
->>
->> Alternatively we could check that we're in the correct directory and
->> error out if not.
-> 
-> That would also be reasonable, but I slightly prefer auto-cd because it
-> avoids an easy invocation pitfall and makes the runner more robust for
-> wrappers/CI
-> where the cwd is  not stable. That said, I'm happy to switch to a fail-fast cwd
-> check if you prefer the behavior.
+> Currently madvise syscall is used to inject memory failures. And only
+> anonymous pages and pagecaches are tested. More test scenarios, e.g.
+> hugetlb, shmem, thp, will be added. Also more memory failure injecting
+> methods will be supported, e.g. APEI Error INJection, if required.
 
-I'd prefer to just fail for the case that we never supported instead of 
-adding support for it.
+0day reports that these tests fail:
+
+# # ------------------------
+# # running ./memory-failure
+# # ------------------------
+# # TAP version 13
+# # 1..6
+# # # Starting 6 tests from 2 test cases.
+# # #  RUN           memory_failure.madv_hard.anon ...
+# # #            OK  memory_failure.madv_hard.anon
+# # ok 1 memory_failure.madv_hard.anon
+# # #  RUN           memory_failure.madv_hard.clean_pagecache ...
+# # # memory-failure.c:166:clean_pagecache:Expected setjmp (1) == 0 (0)
+# # # clean_pagecache: Test terminated by assertion
+# # #          FAIL  memory_failure.madv_hard.clean_pagecache
+# # not ok 2 memory_failure.madv_hard.clean_pagecache
+# # #  RUN           memory_failure.madv_hard.dirty_pagecache ...
+# # # memory-failure.c:207:dirty_pagecache:Expected unpoison_memory(self->pfn) (-16) == 0 (0)
+# # # dirty_pagecache: Test terminated by assertion
+# # #          FAIL  memory_failure.madv_hard.dirty_pagecache
+# # not ok 3 memory_failure.madv_hard.dirty_pagecache
+# # #  RUN           memory_failure.madv_soft.anon ...
+# # #            OK  memory_failure.madv_soft.anon
+# # ok 4 memory_failure.madv_soft.anon
+# # #  RUN           memory_failure.madv_soft.clean_pagecache ...
+# # # memory-failure.c:282:clean_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
+# # # clean_pagecache: Test terminated by assertion
+# # #          FAIL  memory_failure.madv_soft.clean_pagecache
+# # not ok 5 memory_failure.madv_soft.clean_pagecache
+# # #  RUN           memory_failure.madv_soft.dirty_pagecache ...
+# # # memory-failure.c:319:dirty_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
+# # # dirty_pagecache: Test terminated by assertion
+# # #          FAIL  memory_failure.madv_soft.dirty_pagecache
+# # not ok 6 memory_failure.madv_soft.dirty_pagecache
+# # # FAILED: 2 / 6 tests passed.
+# # # Totals: pass:2 fail:4 xfail:0 xpass:0 skip:0 error:0
+# # [FAIL]
+# not ok 71 memory-failure # exit=1
+
+
+Can the test maybe not deal with running in certain environments (config options etc)?
 
 -- 
 Cheers
