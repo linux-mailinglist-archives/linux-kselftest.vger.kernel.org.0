@@ -1,209 +1,198 @@
-Return-Path: <linux-kselftest+bounces-48625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F8F9D0B6B2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 17:58:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6032FD0B7E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 18:05:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9ED3530382B0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 16:57:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 095733023535
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 17:05:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE60364E81;
-	Fri,  9 Jan 2026 16:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F9E3644A6;
+	Fri,  9 Jan 2026 17:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1MwnqwsA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2M2r0SvV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81844350D74
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 16:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767977855; cv=pass; b=WCCDDxz1pgz25o/coWVfqATXemki+dFmdy8ThJkyJ5ugT+6VAO2QZFd4iuiA524fwhQLj59LefdIU6P/pE6hY3GVYJcVwtayW6PKab8P+c3bK0MIvCssaqxaDQPunzNVF+/IYRmAq/K5w4oFEJvqy7DwxZbYTCZu01b1C7ybaQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767977855; c=relaxed/simple;
-	bh=SkjHGF8FR8F2ZPGg4e/H1IK+TJO92/b+hbarPM46pt4=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01E623B604
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 17:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767978304; cv=none; b=MB4uIPrjrNZKuMCJUkAuAtsyAbmuV9m6CUIAisY3M/IujQyz7vZPvnQ1uNl75f4qA2YtNb7UtjCS7/qadHrAzXxPbckx2OkrMwTMYXFWSsiN8K14U8og8OdVrViNkYjTZYcO5bH1aCrpzOs/vpfZX+G3T7YIgQ6SWobgiduKFm4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767978304; c=relaxed/simple;
+	bh=lWvqKO0fJJBroe9AWAqol2OjERp0X7J2dN38mXAq4hs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dtK7NjvS9MSsdiEcceCiDlOHxeBImSg8u2AvmDLnwzvC6YzIrR4TFXei/XRWUyCXtMUJt3nV2IoWZM0Sn7B4A3QsCIA3Fx9X6XG9Ki3SnNXLVEXNBPSiFDgbxoItwmEc96l/EAjQR73soUIaQ2w3NKd9BpfVN5V/DSYAutyse+Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1MwnqwsA; arc=pass smtp.client-ip=209.85.160.171
+	 To:Cc:Content-Type; b=BCGqM/+OMSjcUnDMcP6KhfulK9jK+yaU5mKKHSTOlF5hgTxYundge1KOWGKyhfQWIFSSlB/szimOSLdikvTl/U2zp5iYJRDtKW+XgPeumUil7Rug/dWRZKAnRHbR96Ygto2u7rU/aEIdVukewE/XiubutfSLKpcxz4dCIxGRYU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2M2r0SvV; arc=none smtp.client-ip=209.85.222.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4ee147baf7bso486521cf.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 08:57:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1767977851; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YUPC0AX5l5SbzUFDMnpO+VNfWmic3KiMrV00Aqox9z2Gp+kTLGJ2tbuzXQmm/ToO2K
-         M8AgLa9qSgx1PiCX9A0Wcr5xTYV0sQHY+OO0HRx2OwYsrNbUVKJdN151mDA3lGTyvg+n
-         +Fcafln3Qxfoz0tqf98vk8ro+ntcJ+fWHSLRpPYBq3FaiPudouBGWuOZXRW8fru4BurI
-         JHVHp6W6JmEbXOIsiuEkRvQkUJCdgk4OFBU7Q9M2zlrEceITTuR+CQNDd8yET0HNg0gV
-         kZAjV5iqDgrEIvylJy52K8kJF0ZVUjKHduJjNXuqYWah7SjssPK6k/LPwF/oTVQDJflt
-         1EcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=MpztCWy9ipsSXHs0mL6YjlVmfult44YS26X504J/dJw=;
-        fh=0dVgN1G/glFs2dKK0mEp5QN3cMp59Xdgp/VNrl0ek9M=;
-        b=EvRF8HW43xI0IYNo8nBoBXfE/LIpzR5L+METQqnRko0+kTtRMGeHhOyvbmgYvyjpH8
-         VkDseynpDC3A43n1dAmXZmmxxlaG67r35jI85MkUjML9OZSNP9VKxDGY+rFsfyuXcZ3r
-         Clt5nRB7hmsy6MgAFCyJl+AoHnW2UeM+yOnm6ISU6q7DY5pdA99az1o3+Pqy3Do5X5/X
-         0/jIxeM5AroW7x0GoRCTyBA8tQ/PJEDArptDaHejzWppjMAoQslIdAiNQ5S/A6Wqclm/
-         5pgkmIvjJOed5LtSowoM5z1hR2iuj5grwINt8U3sjBx8reakg6ZsNlAxK2dAgNxMcqSu
-         QR1w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-93f5910b06cso1969544241.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 09:05:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767977851; x=1768582651; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MpztCWy9ipsSXHs0mL6YjlVmfult44YS26X504J/dJw=;
-        b=1MwnqwsA56nPfeMq/y0NAzhBtPXZtuG+jenGXdhITh3WJ0bs686hgm+uz1VQbtAw92
-         TILHKrK3s4MDEwKMcWyWMHGLQUhqJEbWgiANkchDVj9ajkdbAak9B6m+LBQI9asPtn4m
-         Uo2ckqThpv7ixB/7aZzhUYz5e6CWwJ1nYvo0gdCanSSBXKNjOLdMqhL2xf+BsELr1AF3
-         t9QAzrTEqk6cWBDjaUsJEoI1x5iP2ZFlhm/WAtzTMuKb8J5YTLStQJ9b527ZraSR/z7j
-         YUNzdCFhs9i3osWszSz8pAmjxkwduZB+L7nIg4Ca/LKmRoS7wzTLyoyCIcx85ypwapiR
-         Wwjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767977851; x=1768582651;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1767978301; x=1768583101; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MpztCWy9ipsSXHs0mL6YjlVmfult44YS26X504J/dJw=;
-        b=ao6BajJu8Nt6/RMNLh4ZHxPKqaAtTSDQ3bLdQsoX6rl+4p3c9lKy1bY0OdgHlvCVy2
-         YEvwdCyMiYFZcj1vXEptlEmNgjbsFw+WPhEqTTBf3UzCqMm4HMKganH/KrVXKkVbyfo+
-         FktWbNS4N2SP2vaVJUbHuvT65OTzoFXaa4554+F6sI1+olIHqfJjuLrksXf/+cOI47k0
-         TwJIr6GpNOHDbwDrhRSvn9WTs7yM+uVzCZ2nQoA/i/t7w9DbOq+Qqs6vaamxQNO91mXQ
-         557P5tHTm7FZYzR/ruVyVhohlMVwHQlqxR0LqQkmHeMz2VQAqeRh9S8sW9xFAudibTVr
-         tXag==
-X-Forwarded-Encrypted: i=1; AJvYcCV/PyvimZofWd8iGKZKAfJQ82iSGNjeIRLJQHAF7cYLTOJNbg5H/AqM55kXLSxiNK+Vi1ZOVdcniiNcAXeFtUM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzs3G63EqeLgdzJQXGgasxrftFlh3d7ab0M4lNSauGdIt28q9de
-	MVLv3ACi97vThfXGsdCqbK06pc8ASlEPxBw+QfbR2K1ZMMp1CYBpZ4oufyoWVAEq1Fz86KeN2pP
-	6veYfMPNjvTnm/qVyA9MflCLJvVPmJp00mFiDAE0V
-X-Gm-Gg: AY/fxX7wLsjqbikNnPM6ZzofWPCZ6sAcrXGpEJwp/IDOpZ/FV+I4yfVD4FIXhgb13t3
-	kmAwTWDxfpSmCBOwXm+XuIlSET0eT0DZg2Tboq3S3CUbit0+gcK7QHVAoWV0+41ZJ5myp/QP47I
-	59lqm3CxHOMQqk7C2NyqoFkZ2DVN87yF/pKj7U1TONDNKz+4zjGsJcHaGXCwhRcz8i4UKQR4cHe
-	JZH2KyPsc0Vn/tutqEpj7j/mXiltj99Ndl7N9yTcvo4qZ1GP0jyn75awW9o7sHeXee0E5v2
-X-Received: by 2002:a05:622a:198e:b0:4e8:aa24:80ec with SMTP id
- d75a77b69052e-4ffca38a667mr12955411cf.14.1767977851098; Fri, 09 Jan 2026
- 08:57:31 -0800 (PST)
+        bh=iaEI0xs28SJgawQSAoXQmdI4y+9qg+NrJ13ubq6mphA=;
+        b=2M2r0SvVKd7yEcenKMnZSSPJ3kLU2UO+8HyCzasN70b6AUx38LFvw0bB7qg3Pt/wA/
+         5NQKpt6kiVyhJ7IDKvxNdKYI/UwywzCIQDr9jSR4taKMSh88Ydf/mkHWxIh7x1ezII9w
+         QwgE7Cb+xrXkJytIFw5mM4QBB6l1YJIEOK+phejVO42m3TKNdFfJrlRckasRkni0GTFS
+         rlZ9/GAQEB4p1F7LiTREixy8MLRYwTZLiPRPfBKga0bJODYpGjdaHakDZPYnbu2ZPyo5
+         hzLzcSShpo3STF9NmmoCfFvj3v0Z3KJeBIpJ0+iYmLoqKs1fZ7jP9wgZiNIKz4//vYn2
+         D6ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767978301; x=1768583101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iaEI0xs28SJgawQSAoXQmdI4y+9qg+NrJ13ubq6mphA=;
+        b=FKMsWrBu8wrvkI7C60Ep+wQiwLz26/9+plAadq4kRX6HJSEaCtGSGKkTBc8X9K3+mj
+         PDfNJIwPkGLBAnHU8++GkPAjmRzY59J73CZ8vZynlZTvMTk/y+tmrEOqJKpAWPrhPShp
+         MjtUkFEOTSZ/fQOINKm0du4LxGuOQVaYNs2vX/rHZyh9247zg2yl1HY2iZt9C0oc7CQL
+         nuRo7+51o5bFq3x8Ww1bP5Uubjj+8ARu3/KcdS1LybyK7sqF7PyyE2+tmwHXEH+VT0fG
+         xgF2d3u5M46vDsre4h+j0/8oa73M7pr4PcsQE3GRt7ubTknhoNm9q1GcbaLZ2+Oi2XzW
+         rUWA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdw6LakKtR5gPQZYHbLexEIQa7oFSMbI9KrQ0albtZrmCQzyioyGv1I81X0Od7S+cHjEKE2O1jgLhEXqgF5Zw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3BFV43Q5uKMsogsCw8aBVZNdKHFXoKmxBWDEa4vlMCLSGK+K0
+	oXu8DtVZpIq9s3ll0ne1f8LI5g8TLQPl1gcgO81sKDjrHvCyuqfiJWMJMnPaEaVAcLOm0Z2uBmm
+	P9QTAp5FbtbXEENW6GRFStM0SSuJxKdMhqCdur4vU
+X-Gm-Gg: AY/fxX7K4DynMr+8sX8SLaNGoCKji5N4RcHn9yUt9jgIKEYlAYwsuQbe6uxa1UA5/K5
+	B0wuG8yoULxXPW2ZefSvPP/8XX584Y79PMydrUULdO7Nadqv3YeB63Erf3+obp39VO0DNRzX9Hd
+	s5hE+xgAvI7tDRTKg7BSjQrQIZtowFrSsWsbRXUq8veQRo9z6PlQKmX2stKrQOikTbdjzzoR4wj
+	YmWytXx0nsvhZuPHJp3gsV7RLlIzDNWUGWecmqWwPB8PvV++5zAIl59wXFnF1ckE/WrFV7S
+X-Google-Smtp-Source: AGHT+IHHNOzmGq3S4WztxxQNhzJ1I7UiChOzASqA+Z5xYHsfOj5WYv1FSHKXAH8Y4qK216a4vGNQeLYbRr9II3U/M3k=
+X-Received: by 2002:a05:6122:4588:b0:55b:7494:383c with SMTP id
+ 71dfb90a1353d-5634639a886mr4263826e0c.7.1767978299781; Fri, 09 Jan 2026
+ 09:04:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org> <20251223-kvm-arm64-sme-v9-16-8be3867cb883@kernel.org>
-In-Reply-To: <20251223-kvm-arm64-sme-v9-16-8be3867cb883@kernel.org>
-From: Fuad Tabba <tabba@google.com>
-Date: Fri, 9 Jan 2026 16:57:00 +0000
-X-Gm-Features: AZwV_QiwST85CNc25KZYMBDJwxaQzBlftzyvIde5n_9dAYz2SEbvmx43n1faTzI
-Message-ID: <CA+EHjTwTmjNEV+4w8w=LXfR0g_v7yHk1pQD+Oos8V3vFfEVdMw@mail.gmail.com>
-Subject: Re: [PATCH v9 16/30] KVM: arm64: Support TPIDR2_EL0
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Ben Horgan <ben.horgan@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Peter Maydell <peter.maydell@linaro.org>, 
-	Eric Auger <eric.auger@redhat.com>
+References: <aV7yIchrL3mzNyFO@google.com> <20260108005406.GA545276@ziepe.ca>
+ <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com> <20260108141044.GC545276@ziepe.ca>
+ <20260108084514.1d5e3ee3@shazbot.org> <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
+ <20260108183339.GF545276@ziepe.ca> <aWAhuSgEQzr_hzv9@google.com>
+ <20260109003621.GG545276@ziepe.ca> <aWBPNHOsaP1sNvze@google.com> <20260109005440.GH545276@ziepe.ca>
+In-Reply-To: <20260109005440.GH545276@ziepe.ca>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 9 Jan 2026 09:04:30 -0800
+X-Gm-Features: AZwV_QhVWGYhqQIfTUYUXRtLURmLyOAP6VuLvXPKfyNrm-0dlJR4DLC4lN4ZLio
+Message-ID: <CALzav=cBGkhbbyggkfaYh3wfqodxRHZKXTNdnmjoXOgwMouBuA@mail.gmail.com>
+Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Alex Williamson <alex@shazbot.org>, Alex Mastro <amastro@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 23 Dec 2025 at 01:22, Mark Brown <broonie@kernel.org> wrote:
+On Thu, Jan 8, 2026 at 4:54=E2=80=AFPM Jason Gunthorpe <jgg@ziepe.ca> wrote=
+:
 >
-> SME adds a new thread ID register, TPIDR2_EL0. This is used in userspace
-> for delayed saving of the ZA state but in terms of the architecture is
-> not really connected to SME other than being part of FEAT_SME. It has an
-> independent fine grained trap and the runtime connection with the rest
-> of SME is purely software defined.
+> On Fri, Jan 09, 2026 at 12:43:32AM +0000, David Matlack wrote:
+> > On 2026-01-08 08:36 PM, Jason Gunthorpe wrote:
+> > > On Thu, Jan 08, 2026 at 09:29:29PM +0000, David Matlack wrote:
+> > > > On 2026-01-08 02:33 PM, Jason Gunthorpe wrote:
+> > > > > On Thu, Jan 08, 2026 at 10:24:19AM -0800, David Matlack wrote:
+> > > > > > > > Oh, I was thinking about a compatability only flow only in =
+the type 1
+> > > > > > > > emulation that internally magically converts a VMA to a dma=
+buf, but I
+> > > > > > > > haven't written anything.. It is a bit tricky and the type =
+1 emulation
+> > > > > > > > has not been as popular as I expected??
+> > > > > > >
+> > > > > > > In part because of this gap, I'd guess.  Thanks,
+> > > > > >
+> > > > > > Lack of huge mappings in the IOMMU when using VFIO_TYPE1_IOMMU =
+is
+> > > > > > another gap I'm aware of.
+> > > > > > vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dm=
+a_map_unmap
+> > > > > > fails when IOMMUFD_VFIO_CONTAINER is enabled.
+> > > > >
+> > > > > What is this? I'm not aware of it..
+> > > >
+> > > > It's one of the test cases within
+> > > > tools/testing/selftests/vfio/vfio_dma_mapping_test.c.
+> > > >
+> > > > Here's the output when running with CONFIG_IOMMUFD_VFIO_CONTAINER=
+=3Dy:
+> > > >
+> > > >   #  RUN           vfio_dma_mapping_test.vfio_type1_iommu_anonymous=
+_hugetlb_1gb.dma_map_unmap ...
+> > > >   Mapped HVA 0x7f0480000000 (size 0x40000000) at IOVA 0x0
+> > > >   Searching for IOVA 0x0 in /sys/kernel/debug/iommu/intel/0000:6a:0=
+1.0/domain_translation_struct
+> > > >   Found IOMMU mappings for IOVA 0x0:
+> > > >   PGD: 0x0000000203475027
+> > > >   P4D: 0x0000000203476027
+> > > >   PUD: 0x0000000203477027
+> > > >   PMD: 0x00000001e7562027
+> > > >   PTE: 0x00000041c0000067
+> > > >   # tools/testing/selftests/vfio/vfio_dma_mapping_test.c:188:dma_ma=
+p_unmap:Expected 0 (0) =3D=3D mapping.pte (282394099815)
+> > > >   # dma_map_unmap: Test terminated by assertion
+> > > >   #          FAIL  vfio_dma_mapping_test.vfio_type1_iommu_anonymous=
+_hugetlb_1gb.dma_map_unmap
+> > >
+> > > I can't think of any reason this would fail, I think your tests have
+> > > found a real bug?? Can you check into it, what kernel call fails and
+> > > where does the kernel code come from?
+> >
+> > Oh I thought it was by design. This code in iommufd_vfio_set_iommu():
+> >
+> >       /*
+> >        * The difference between TYPE1 and TYPE1v2 is the ability to unm=
+ap in
+> >        * the middle of mapped ranges. This is complicated by huge page =
+support
+> >        * which creates single large IOPTEs that cannot be split by the =
+iommu
+> >        * driver. TYPE1 is very old at this point and likely nothing use=
+s it,
+> >        * however it is simple enough to emulate by simply disabling the
+> >        * problematic large IOPTEs. Then we can safely unmap within any =
+range.
+> >        */
+> >       if (type =3D=3D VFIO_TYPE1_IOMMU)
+> >               rc =3D iopt_disable_large_pages(&ioas->iopt);
+> >
+> > git-blame says some guy named Jason Gunthorpe wrote it :P
 >
-> Expose the register as a system register if the guest supports SME,
-> context switching it along with the other EL0 TPIDRs.
+> Er, maybe I mis understood the output then?
 >
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> This is not a "failure" though, the map succeeded and gave a small
+> page mapping.
+>
+> This is not reflecting a bug in iommufd but a bug in the TYPE1 support
+> in VFIO itself because it definitely cannot maintain the required
+> unmap anywhere semantic if it mapped in a 1G huge page like this.
+>
+> Basically, if you are mapping with TYPE1 mode then this should be trigger=
+ed:
+>
+>         if (!strcmp(variant->iommu_mode, "iommufd_compat_type1"))
+>                 mapping_size =3D SZ_4K;
+>
+> And VFIO should be the one to fail, not iommufd.
+>
+> If you really want to test TYPE1 you need to test what makes it
+> unique, which is that you can map any VMA and then unmap any slice of
+> it. Including within what should otherwise be a 1G page.
+>
+> But I doubt anyone cares enough to fix this, so just exclude
+> VFIO_TYPE1_IOMMU from this test?
 
-Reviewed-by: Fuad Tabba <tabba@google.com>
+Ah, ok, thanks for the explanation. So VFIO_TYPE1_IOMMU should always
+use 4K mappings regardless of backend (VFIO or iommufd) so that unmap
+can work as intended.
 
-Cheers,
-/fuad
-
-
-> ---
->  arch/arm64/include/asm/kvm_host.h          |  1 +
->  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 15 +++++++++++++++
->  arch/arm64/kvm/sys_regs.c                  |  3 ++-
->  3 files changed, 18 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index f24441244a68..825b74f752d6 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -448,6 +448,7 @@ enum vcpu_sysreg {
->         CSSELR_EL1,     /* Cache Size Selection Register */
->         TPIDR_EL0,      /* Thread ID, User R/W */
->         TPIDRRO_EL0,    /* Thread ID, User R/O */
-> +       TPIDR2_EL0,     /* Thread ID, Register 2 */
->         TPIDR_EL1,      /* Thread ID, Privileged */
->         CNTKCTL_EL1,    /* Timer Control Register (EL1) */
->         PAR_EL1,        /* Physical Address Register */
-> diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> index 5624fd705ae3..8c3b3d6df99f 100644
-> --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> @@ -88,6 +88,17 @@ static inline bool ctxt_has_sctlr2(struct kvm_cpu_context *ctxt)
->         return kvm_has_sctlr2(kern_hyp_va(vcpu->kvm));
->  }
->
-> +static inline bool ctxt_has_sme(struct kvm_cpu_context *ctxt)
-> +{
-> +       struct kvm_vcpu *vcpu;
-> +
-> +       if (!system_supports_sme())
-> +               return false;
-> +
-> +       vcpu = ctxt_to_vcpu(ctxt);
-> +       return kvm_has_sme(kern_hyp_va(vcpu->kvm));
-> +}
-> +
->  static inline bool ctxt_is_guest(struct kvm_cpu_context *ctxt)
->  {
->         return host_data_ptr(host_ctxt) != ctxt;
-> @@ -127,6 +138,8 @@ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
->  {
->         ctxt_sys_reg(ctxt, TPIDR_EL0)   = read_sysreg(tpidr_el0);
->         ctxt_sys_reg(ctxt, TPIDRRO_EL0) = read_sysreg(tpidrro_el0);
-> +       if (ctxt_has_sme(ctxt))
-> +               ctxt_sys_reg(ctxt, TPIDR2_EL0)  = read_sysreg_s(SYS_TPIDR2_EL0);
->  }
->
->  static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
-> @@ -204,6 +217,8 @@ static inline void __sysreg_restore_user_state(struct kvm_cpu_context *ctxt)
->  {
->         write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL0),     tpidr_el0);
->         write_sysreg(ctxt_sys_reg(ctxt, TPIDRRO_EL0),   tpidrro_el0);
-> +       if (ctxt_has_sme(ctxt))
-> +               write_sysreg_s(ctxt_sys_reg(ctxt, TPIDR2_EL0), SYS_TPIDR2_EL0);
->  }
->
->  static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt,
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 5c912139d264..7e550f045f4d 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -3504,7 +3504,8 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->           .visibility = s1poe_visibility },
->         { SYS_DESC(SYS_TPIDR_EL0), NULL, reset_unknown, TPIDR_EL0 },
->         { SYS_DESC(SYS_TPIDRRO_EL0), NULL, reset_unknown, TPIDRRO_EL0 },
-> -       { SYS_DESC(SYS_TPIDR2_EL0), undef_access },
-> +       { SYS_DESC(SYS_TPIDR2_EL0), NULL, reset_unknown, TPIDR2_EL0,
-> +         .visibility = sme_visibility},
->
->         { SYS_DESC(SYS_SCXTNUM_EL0), undef_access },
->
->
-> --
-> 2.47.3
->
+I think excluding VFIO_TYPE1_IOMMU from this assertion makes sense if
+we don't care about fixing it.
 
