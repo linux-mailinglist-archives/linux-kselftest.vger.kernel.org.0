@@ -1,175 +1,119 @@
-Return-Path: <linux-kselftest+bounces-48633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F1BD0C577
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 22:38:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07679D0C7E2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 23:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 932E13027589
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 21:38:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 406D430090BB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 22:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B5F33D518;
-	Fri,  9 Jan 2026 21:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4CC23469E3;
+	Fri,  9 Jan 2026 22:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="fJdZcUro";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="O7CTJaPo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ajACC4zp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B59A33D4F6;
-	Fri,  9 Jan 2026 21:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F3E34678D
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 22:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767994719; cv=none; b=eEPd3O57Zk5QSL6zrtzsAywKuGt9K7S85fNBcomxjCKlPW3BBJpfZz2jjjmGtsNhdZ9vEGPvTnSj/LDcH6za8WmgPYep1g9mIt1qWLzC8jcrsZxh1dX6fPSm46rhL5ISbYgnqxVPIZatwk87amnC/5uCUuq3q3j1VKzyQ//YP0E=
+	t=1767999099; cv=none; b=ef/ghVMWDZpQstHAS2Pkq2KETnBFBC62wJZE7y7uFRr5c1SgeFN967m9EfLb+DB6ENVynNGa6WKUTmo6k0L1IEzh/q/qTr0XYJisdex2SGJ+Cxq1ZdEjDP5DK7sFB5MnakQnnzoM+qhbUQO/0pcyuuy9cOU1xiXb37itoqRDgJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767994719; c=relaxed/simple;
-	bh=iFcbhGt4sl07dI/vgTsNt/XXjlhieSN2X15MCPhWfTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MU56B5RV7iXjZfKyjTZ6gfsS41RL6UHjveQuqCAUz/6GDZla7qoPfys3Uw3DYh4PDk9wE2VlmBZ7uqD83eEQmJPZrkuSQbQ0HW6NT6B7Y8zL/E+dZD0veOM8ILHP29GEBE3XOLnJaa4VnZxZ+Y0WafEqO3uO8ZBWweJLYm8nfek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=fJdZcUro; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=O7CTJaPo; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 2EC2BEC0129;
-	Fri,  9 Jan 2026 16:38:33 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 09 Jan 2026 16:38:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1767994713;
-	 x=1768081113; bh=gvtvSAYi4oFbZNkjA+PRpLh/s0xkmUKgjuZp66x8+6I=; b=
-	fJdZcUroaBUWu505kk5QVkdyQb9ZZc2ZLuIZPelLw80Q98edrJ+km3L3a/fA2Nc+
-	3UId0xTKzJF6wwIhbZSUKIIGIyQ0OFSUHCF4uvAoY4WqYXoavDSU3hNqo/Xea0T2
-	j62h8E+GchdgzdhCjLbsZhr5WhNAUOry8qeLDk1W5Ska4MrFyr5yl/CH0rKy/dYE
-	H/aVyUa3pFLoAZsV633MjyNeLUX9bVUiO7cOAn6uV9PhQn5JDd/mFe1XcNlYvxZN
-	GtjmwJDKyZ8ZlGqaF2CGJFNlV4ApQc4iQ8hHuFKGI0rnzoVQ3dG8uEeJi15TOnD5
-	jOl015QCshOf8ieKofA87A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767994713; x=
-	1768081113; bh=gvtvSAYi4oFbZNkjA+PRpLh/s0xkmUKgjuZp66x8+6I=; b=O
-	7CTJaPomy1TOqAV138g6AiRzpF26Nq+IqNY1mWuXaXG4P1Ua0g2EkJbFP/D30zZ+
-	32kcEwDqICG51QjtmB7yn+hygqGra90oOP6w1FJBE7y4yC67IwSjF4l5rSEqjBZr
-	kywNqeYe+jUQD65K5AHuITvU3csfdxCN9J8gIomZt1ru39Bc/qEOd/rAgxa/vJ+P
-	w7sWA361vA9tgTanRJVeeqj9kzc50U/WObhmP3Vi2aXGJLpbFELTnbr2vWimuha5
-	d1Pu1MprwWPSkxp5bUSDy6dmBw9f7BMTX5XotkbwyetVc+ce+PB7ZheeSx4Arf7Z
-	5RR+OtgIhC1CEtqkQRsXg==
-X-ME-Sender: <xms:WHVhaWPoUTXswz-TyFSypR8CTtjJLG5qugBXfmRPctJQ3a2c033iKw>
-    <xme:WHVhaQ_ipEA1qy5GI2yfUxcSw6WXhdQkvSf85xmN2LJfbu-4IsW8-b-6r2_LAQisW
-    rixyi0OOACmF9mBtthAPTNdSQ2WNB2_ogWLwwVmK_Dh3lM5VpS2iA>
-X-ME-Received: <xmr:WHVhafcK5ZN_Q7b7gPGZdfvS2ojOFoUsRnYTPCjyCdKNy_DwLvuhyHcPjY0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddutdelleduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
-    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
-    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepkedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtohepjhhgghesiihivghpvgdrtggrpdhrtghpthhtohepug
-    hmrghtlhgrtghksehgohhoghhlvgdrtghomhdprhgtphhtthhopegrmhgrshhtrhhosehf
-    sgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgv
-    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhvmhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:WHVhaXx1x0A8sokKqYTsh5-uaI6p7H-hpPFYgRAhwgufMo5KjEEPJA>
-    <xmx:WHVhacJC6CWuwpDqaVVQkRxCPbT3wWdqtHPMUGmXB7E6jUqVaW-fXg>
-    <xmx:WHVhaRFuQ6SK5RXxhfVm_4LiCuDHCs1k51MdlZYy49qz7jBZqNfEOw>
-    <xmx:WHVhaQ9TxTyCbhPfOeebSxtg9AfNWJz-sD_ERB40lZAHVrm5R_MNLw>
-    <xmx:WXVhacwCEhJEi9X6hZTXQQvwvPOiafZbBlkY1AjsNBRBrcUi_P92jw9Y>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Jan 2026 16:38:32 -0500 (EST)
-Date: Fri, 9 Jan 2026 14:38:30 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: David Matlack <dmatlack@google.com>, Alex Mastro <amastro@fb.com>, Shuah
- Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <20260109143830.176dc279@shazbot.org>
-In-Reply-To: <20260109180153.GI545276@ziepe.ca>
-References: <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
-	<20260108141044.GC545276@ziepe.ca>
-	<20260108084514.1d5e3ee3@shazbot.org>
-	<CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
-	<20260108183339.GF545276@ziepe.ca>
-	<aWAhuSgEQzr_hzv9@google.com>
-	<20260109003621.GG545276@ziepe.ca>
-	<aWBPNHOsaP1sNvze@google.com>
-	<20260109005440.GH545276@ziepe.ca>
-	<CALzav=cBGkhbbyggkfaYh3wfqodxRHZKXTNdnmjoXOgwMouBuA@mail.gmail.com>
-	<20260109180153.GI545276@ziepe.ca>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767999099; c=relaxed/simple;
+	bh=FxBy4FZqdwNrjXp7kUgNP2DTPQwGCA11DgvPugnUAQk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nMTY/Xc+KUsenykaHcN2vWcxraYW+qyydUHi8zcZ64hrbvOdBNH5uPZrvDM2B6XRuvEo+TYkAPHNQj3aKkvB34NR1aojXI4GmG5ZrOjaREhxwuWoLq79pE1vC9BCGSGsSDaW37nocSjwFx/GaJLdEyuaw+z8pVanvN2oEMhxePU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ajACC4zp; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-459fa8b6044so3141770b6e.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Jan 2026 14:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1767999096; x=1768603896; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Qqxdc3iSw1oDJtxQ6sPbrPeu0O6MQwhvX4RqMc6t0PE=;
+        b=ajACC4zpVV8JO2n5ZkWe0gZIvLd5YBX2/c+xd7zOxHqhaooazmFovM4mPHeAMh/oud
+         mwaEVf6k7QyUOzDjvRj8I6tixhlgtfKVadoyQO0EWhUQ5BJ7xfIdz/d/CNL9Nv0tNDKK
+         r0t/ErVQopgSjHf+Ut29aDcVfq2wa6RYPykkI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767999096; x=1768603896;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qqxdc3iSw1oDJtxQ6sPbrPeu0O6MQwhvX4RqMc6t0PE=;
+        b=qq6sEjtYwGpbzUae0HIc5mPIuLOCY6Psmt/MSlXyq7DbSatfVvF5z0SBF6DEe5VewO
+         9eO4CC10Bx0gdeABLR3K8+RYN6mWdc0U16nDD4HRbce8nKNUaBOEBfQrvQ0o/NVaa04W
+         nq0B8SE1SgYP2tMK1Ul03oeDLMA7Q29YBXqGIerbXfgvWgMQeaMk+5hYE3JFR/YZqvFs
+         ViCHCPOft5oCss5HeFu0YE0wHTjl/IyVDXs8n9iGve7dgfqQo6GNDHOy3y6MzTQ4Lu2u
+         U1pfrEWWpW/e3Rpw7Jwbm9pHqjsj6M9v45yESqkjfluxcJIjchPRHBEZRcn2JEI8TpZX
+         Hm3w==
+X-Forwarded-Encrypted: i=1; AJvYcCW3sbk2sr5Zzt5TXIBOsr/gsYFN8fztGociZuHC6W3NyOipEnLMN0ah8P6io5R8yDDfhz0CKEniEcRDkQktMLY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOLDHByepvk+3n2+Cn0J7BQ7RjUBglP47H5UJwnrDtIzCGSeus
+	YC3c/4I6Xo1X9rLIoB5hGvzHsjhW6j7ErR8ErLHBa860x1geHGV9CDvaEy5H8aSYsGo=
+X-Gm-Gg: AY/fxX43j180gzjhUGqale43hpWqGiARma87wL9VH3rFW/6IVmYBfdcm0D26bOKpik2
+	6GWktVgYKs0TtqpKjCVYU8/e35B6gP59Ga42maql+UbA/5wdyib13dN6/KWBtCN/tHtSEe1kW7a
+	fif7ByvatDjjH28JuIWo4PrJkr0b1JmZUpH/8yp4S9yI8KHsllxRI77WrwPok4PhP4dJP3qc3W/
+	8cEyl0KmAwwPMfO6xNGvr8kIu6rWfBFeC0anp2FzRlQrM9Hx4qW+P2fhfh+0pf1coD20kJaxwbE
+	ef2CwobvDozXjBfiGDyMuNKHASkCwneyHj65TXd+LyjNywJQKerbxyriOVqzfKZE7HCkrUuD9La
+	sYIVqgnkprOgPG3gCaO5iaKS1J6IbmbeTAERrTTPEqVhD5cN+fE/xaLgDpXVEETwBLczi5lJO03
+	ToQr4qe6aSLdB6FQ/Xffh4Lv8=
+X-Google-Smtp-Source: AGHT+IHHPWtAASdfA2cFXKfe0WnH9UpvIrOeltbh6InlGG6D5LTffSmeRA6Rg1LT0cGbIBcuXn49rQ==
+X-Received: by 2002:a05:6808:158e:b0:442:82:3efd with SMTP id 5614622812f47-45a6bd690b2mr6631377b6e.18.1767999096215;
+        Fri, 09 Jan 2026 14:51:36 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-45a5e2e8fb1sm5117059b6e.21.2026.01.09.14.51.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jan 2026 14:51:35 -0800 (PST)
+Message-ID: <1d52f1ee-0f60-410e-8c7e-c5fee0a92402@linuxfoundation.org>
+Date: Fri, 9 Jan 2026 15:51:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests/tracing: Fix test_multiple_writes stall
+To: Fushuai Wang <fushuai.wang@linux.dev>, rostedt@goodmis.org,
+ mhiramat@kernel.org, mathieu.desnoyers@efficios.com, shuah@kernel.org,
+ wangfushuai@baidu.com
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20260109033620.25727-1-fushuai.wang@linux.dev>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260109033620.25727-1-fushuai.wang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 9 Jan 2026 14:01:53 -0400
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
-
-> On Fri, Jan 09, 2026 at 09:04:30AM -0800, David Matlack wrote:
-> > > If you really want to test TYPE1 you need to test what makes it
-> > > unique, which is that you can map any VMA and then unmap any slice of
-> > > it. Including within what should otherwise be a 1G page.
-> > >
-> > > But I doubt anyone cares enough to fix this, so just exclude
-> > > VFIO_TYPE1_IOMMU from this test?  
-> > 
-> > Ah, ok, thanks for the explanation. So VFIO_TYPE1_IOMMU should always
-> > use 4K mappings regardless of backend (VFIO or iommufd) so that unmap
-> > can work as intended.  
+On 1/8/26 20:36, Fushuai Wang wrote:
+> From: Fushuai Wang <wangfushuai@baidu.com>
 > 
-> IDK, I think you should just ignore testing TYPE1v0. The actual real
-> semantics that it had are quite confusing and iommufd provides an
-> emulation that is going to be functionally OK (indeed, functionally
-> more capable) but is not the exactly the same.
+> When /sys/kernel/tracing/buffer_size_kb is less than 12KB,
+> the test_multiple_writes test will stall and wait for more
+> input due to insufficient buffer space.
 > 
-> The old comment here is sort of enlightening:
+> Check current buffer_size_kb value before the test. If it is
+> less than 12KB, it temporarily increase the buffer to 12KB,
+> and restore the original value after the tests are completed.
 > 
-> +        * vfio-iommu-type1 (v1) - User mappings were coalesced together to
-> +        * avoid tracking individual mappings.  This means that the granularity
-> +        * of the original mapping was lost and the user was allowed to attempt
-> +        * to unmap any range.  Depending on the contiguousness of physical
-> +        * memory and page sizes supported by the IOMMU, arbitrary unmaps may
-> +        * or may not have worked.  We only guaranteed unmap granularity
-> +        * matching the original mapping; even though it was untracked here,
-> +        * the original mappings are reflected in IOMMU mappings.  This
-> +        * resulted in a couple unusual behaviors.  First, if a range is not
-> +        * able to be unmapped, ex. a set of 4k pages that was mapped as a
-> +        * 2M hugepage into the IOMMU, the unmap ioctl returns success but with
-> +        * a zero sized unmap.  Also, if an unmap request overlaps the first
-> +        * address of a hugepage, the IOMMU will unmap the entire hugepage.
-> +        * This also returns success and the returned unmap size reflects the
-> +        * actual size unmapped.
-> 
-> iommufd does not try to do this "returned unmap size reflects the
-> actual size unmapped" part, it always unmaps exactly what was
-> requested, because it disables huge pages.
+> Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+> V2 -> V3: Make the From and SoB match.
+> V1 -> V2: Restore buffer_size_kb outside of awk script.
 
-I think there was also some splitting code in the IOMMU drivers that
-has since been removed that may have made the v1 interface slightly
-more sane.  It certainly never restricted mappings to PAGE_SIZE in
-order to allow arbitrary unmaps, it relied on users to do sane things
-and examine the results.  Those "sane things" sort of became the v2
-interface.
+Thank you. Applied to linux-kselftest fixes branch.
+I will send this up for the next rc.
 
-In any case, we've had v2 for a long time and if IOMMUFD compat make v1
-more bloated and slow such that users realize they're using an old,
-crappy interface, that's probably for the best.  Examining what page
-size is used for v1 is probably not worthwhile though.  Thanks,
-
-Alex
+thanks,
+-- Shuah
 
