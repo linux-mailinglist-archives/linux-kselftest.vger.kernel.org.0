@@ -1,77 +1,78 @@
-Return-Path: <linux-kselftest+bounces-48593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1473D08D4C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 12:12:05 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62322D08D25
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 12:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F695304F11A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 11:09:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 64FB130010E9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 11:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54AF339B44;
-	Fri,  9 Jan 2026 11:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503FE33B95B;
+	Fri,  9 Jan 2026 11:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dBmot0JA"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="khLJaFvL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013041.outbound.protection.outlook.com [40.93.196.41])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011052.outbound.protection.outlook.com [52.101.52.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA52433B962;
-	Fri,  9 Jan 2026 11:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E8E22A1E1;
+	Fri,  9 Jan 2026 11:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767956982; cv=fail; b=ks0D9TqvNbNITZgsN+dw0x7wwnzDp05aic2bHcFkHREnRwDFkgb45BT/2aIg7PwnVm/CPXGw6dlNPxl0/AB1gltnE/f4QJubQ0/rlQBtBnZhGiwHozIgtGyzJrnKhvdkt5oomaLVbdfuEfHllJ62kwY7sqieK9sGcJGAceVzCeA=
+	t=1767956983; cv=fail; b=KzOruYdV3KtLgYvsy+3xazfzV9L5qmgL7bYr+Gr2LS7CZe7WzgFNeiqphuQ5wLQTvHhIKr0rFB9RmOJ35j9l5iZvsgInINtSLvsVl5yrBFf7k1AXREAJYbEiJ5aOzp5Pzeq1Wb1gS19ViGfLBRnDXeEeawG4BlRTlfyJ2Ncj0mA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767956982; c=relaxed/simple;
-	bh=aziUNcS8vmchlSthCKBFb0wqc81jeiJs+1/qvXtF91I=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Dms9bzGP+rIqFjV4ff7BC0Q1d3EiYez36qTKxVXLXnQLSVagueABFQe33Ao6Ifa6aNBjUpfVaNm7YY5b0AA9rkCxtg9xNf5FBQsxRalJUdBAElImL8QcAqXczPy2mVQ+60aYsfUuf9xCvVYiKvmiEdtsIsxtCI+cyHA44K9C0SI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dBmot0JA; arc=fail smtp.client-ip=40.93.196.41
+	s=arc-20240116; t=1767956983; c=relaxed/simple;
+	bh=VrRGgdv7Rrd/rVUCIOkGufJFXIbe3/Opy5qnRl1YdXc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GoxXBAHOm/xP+rRhimXQBId7iPet6EPFcCbAADso7ulazm6LNt33dAekznxZRO/UQ6FG/C5KDpEVvQEYcKCADMBruKCB5yh3X3JXBUJgFIKMzQOjBeKO9h1fveuxL3cxbDh+p3Sh2hBSHjYZDTtHsWfv4oo2LQOJMKDo26UOCgY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=khLJaFvL; arc=fail smtp.client-ip=52.101.52.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KayQ23orOGWzBuo3PymzQ71xe8IvuyikSryuriYgiFzUHNzy5jlWZinhBfSYQAsfOdO+x4lPjU0zpCnVrIe0rKCrNf/G0DGXGFiZV+R65Z2nWZ7QtW1x8ufQ2DggvGhPp37fR1fl8iwKQE08XJ/CkNJJRc/l3zoeJX3/d8eLo7oTmYt67NLmHbzjKcGvv3HIl890SsLpg8YZjQoOfgZDWho6TlUg+AeAC0dJGGAyeJeRPY+8GW5pab8RRhLIo71gwUpuzPZGOmFaiQFmvUXziH+7LSOQjjQxkc+dPo3azmBSB/ADIsYLD41TctVi80nLC/sRVOw3sJFfLHwuudorGQ==
+ b=PIYIsvf0xFdA7OSwrBsMd5IGiZlwvi1LM4vQr92TbhpNQJPiNFm+uOTVFFccIE7PPQINlkYNKGq3YKuopmWgtujekj7daIV30EeTUEf0hrpe7W/R7Wz/mwqX82GMC+lx4Fk7Bu+PDIjcIkzK80QCLdwfdGiakRIDCnDaF8Z0Hp/WbkrdEgUweT2WamGnXtN2CaqkLHxRcI0ZwKsd/81g0YrIEMfd0g8htfPBQjaWz7qZjd1+2BGCfuvJp637gjgGp7snk2yr7xEW6CdgRs2/GUFD/oQrYDsZ5Jhu3NczrH+nxuMtPcUm2JuQ1sj7m+wfuzWxbcYrJ7U6sNVQ1Iowqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RcbBLFckhoJ7RTSa3xK4n1qSwLCZ2HniZr8cLT/4wxA=;
- b=QBPZixEyL2stkXYQdeRc60h+2fD8NVic3LADc8DuyzuLL8TUS1aRAlpz4tqSyaezTUE3d06+GUao/Xyic5YGKXQuRUzr0U3f81gmX97fL6UWVraT2hJDA2CFkRql5R/2z2m1ZL0tp6U1Qe9EpYuCHcFKC9MRdU5mTaGEG/IVWkImVqeWVJPoVCPTGCqMYf6WIkhkA50Nnq4P27nhlA6xdtSuDWfAwBDSUisNmhriqhgABtaPu+/fRpCRoYbvSbe1pb428/SZJU8D2BTCHTRtZTEqAUQgTunZEJ+X9NlsqAJG05FV5mQ0Th4mdMBRgroqvPpM/l2OhGGNRprrlNFdpA==
+ bh=lQchdsuNjnu5O9AMwUoomXYbsIe3G+CcN1GI0Hq361M=;
+ b=Ptn8b6RRDrnN7NMX/fCUz1UjhkI7EP4NqC5n+9C0TwrOeBLXXRBymurq7KTbccDumGyEV7hu9VvgNMfWqd5OaRzAcd4Bqr1CdwcqtpEYnwrcAOTgaf/RQFJahncosgQklHRZliVtu8wxGlAyAnBVJuWQfbdZ1ZBDMpvsnDzNwvuTQAvUtu1IcVEYrJ9nJ6lLJfsjcpCj8vlxyrEezV6YVHdyTAEQ5FqZXl5S4iXRnSlCSh3lqw4MAUmgrgVQo/GrxeScYpRL01YGNlz+Z4uZ0JAxH1zazdtgTeQl+QTsY1eEMJ0xbxqJHes4ZfDbcQTD45ABdVmb/iIuQ0CyoGobhg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RcbBLFckhoJ7RTSa3xK4n1qSwLCZ2HniZr8cLT/4wxA=;
- b=dBmot0JAnX/KVWU6/ASJWSM2zvM0WRTCvugRR7W8/RXT999/O7VxUY+zR2W5FKC6WJe724KEInEKGaMOtyLXJ/654f+xpHJOZnALk9EsTCRScanGhTyTh/6DoJn60+KbFLRsnWsMjJiHwxTs+uXQSv6RkHooOXaJJexKwuKwia5vkmlaay8fNN57NnCO3lMpXncS0yTgYsC3cEs34BjaQBy80ReluDICuZDqfEKWNQlTIcxBab8N0IkJ3Pwf5YsSdEPW8lcO8YyfWarjLUiEMWLCsJN69nJAjT2Gjctt5mLxpYrwChUdQT3TDXUr2kyxLbBulXwZ3Lm9zjQIb7QSJw==
-Received: from SJ0PR05CA0166.namprd05.prod.outlook.com (2603:10b6:a03:339::21)
- by CYXPR12MB9443.namprd12.prod.outlook.com (2603:10b6:930:db::9) with
+ bh=lQchdsuNjnu5O9AMwUoomXYbsIe3G+CcN1GI0Hq361M=;
+ b=khLJaFvLlYNC2bLv/HUKZ00LWQq1GGJ0ihsQ6dQtQcKaw7oUQWzjMuQ2nuc1lwdUXnvNJw8Pr5NfO8uZpw7NIpdzpDo7qPw4A9zWecLD+JCY5n65s3YWqC7kdArqUj0kzR2esI+TJnt+YLWJgvIvuUHTVDg4t5v7GXymUwKHRFwvSbfHUjfLp8TvtBVja//CA9pEtbtgJhPzYDA6rUa5IvlJsxmS9/Vlz0A+c2Goy1sUJikn/+ewuydNIJxRiZ97bdWz0UTuJHpSb0fYWy9OM8gZBPgFRmtWnpKja3JKJLWKmDu8hqdU1AEiU2ot3Sl+nLpyRehdXI3WaGK4q3BCyw==
+Received: from DM6PR04CA0025.namprd04.prod.outlook.com (2603:10b6:5:334::30)
+ by MW6PR12MB8913.namprd12.prod.outlook.com (2603:10b6:303:247::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.5; Fri, 9 Jan
- 2026 11:09:29 +0000
-Received: from SJ5PEPF000001F1.namprd05.prod.outlook.com
- (2603:10b6:a03:339:cafe::a6) by SJ0PR05CA0166.outlook.office365.com
- (2603:10b6:a03:339::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.0 via Frontend Transport; Fri, 9
- Jan 2026 11:09:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.3; Fri, 9 Jan
+ 2026 11:09:36 +0000
+Received: from DS1PEPF0001709A.namprd05.prod.outlook.com
+ (2603:10b6:5:334:cafe::be) by DM6PR04CA0025.outlook.office365.com
+ (2603:10b6:5:334::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9499.4 via Frontend Transport; Fri, 9
+ Jan 2026 11:09:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ5PEPF000001F1.mail.protection.outlook.com (10.167.242.69) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF0001709A.mail.protection.outlook.com (10.167.18.104) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9520.1 via Frontend Transport; Fri, 9 Jan 2026 11:09:28 +0000
+ 15.20.9520.1 via Frontend Transport; Fri, 9 Jan 2026 11:09:35 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 9 Jan
- 2026 03:09:17 -0800
+ 2026 03:09:20 -0800
 Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.231.35) by
  rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Fri, 9 Jan 2026 03:09:13 -0800
+ 15.2.2562.20; Fri, 9 Jan 2026 03:09:17 -0800
 From: Cosmin Ratiu <cratiu@nvidia.com>
 To: <netdev@vger.kernel.org>
 CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
@@ -79,10 +80,12 @@ CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
 	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
 	<shuah@kernel.org>, Cosmin Ratiu <cratiu@nvidia.com>, Carolina Jubran
 	<cjubran@nvidia.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v2 0/1] PSP self test improvements
-Date: Fri, 9 Jan 2026 13:08:50 +0200
-Message-ID: <20260109110851.2952906-1-cratiu@nvidia.com>
+Subject: [PATCH net-next v2 1/1] selftests: drv-net: psp: Better control the used PSP dev
+Date: Fri, 9 Jan 2026 13:08:51 +0200
+Message-ID: <20260109110851.2952906-2-cratiu@nvidia.com>
 X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20260109110851.2952906-1-cratiu@nvidia.com>
+References: <20260109110851.2952906-1-cratiu@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,66 +98,237 @@ X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001F1:EE_|CYXPR12MB9443:EE_
-X-MS-Office365-Filtering-Correlation-Id: 91e2055d-b098-4249-e1b4-08de4f6f8ee1
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001709A:EE_|MW6PR12MB8913:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90aff22a-b877-47c7-4ea7-08de4f6f9305
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?du9Z/+6ZI8e7WWdGcprwFK2VJ99LgL/jC9CUxGr1Y74+CVBBRc+LuYkU2+2k?=
- =?us-ascii?Q?gBuz+F5b7uigckZgQNli3ZU2DfEaYesShDqUnhQv6IO8BCm6VAxSrDUkgjSI?=
- =?us-ascii?Q?UHo+kbHucxXmK7AhL+VKuKs8j9ibXipND8lRCPpBYey1Of9rbqxZ28pgg0sj?=
- =?us-ascii?Q?8FR+WxbtYYK7mzC0635rcBaU0QVKogDytc3Iaa6yRcbX7+qqKAwPJGm6spem?=
- =?us-ascii?Q?rqZSLf5zHErSYW+K1z8hIexw1ZhKkxmX7v6wTF6Zs0EZGVan7BT1yVCE2r11?=
- =?us-ascii?Q?0EPbYsX8i5JlaKas69WbB4z/Dcny9eYb9YiQQqRd0/QJ38ycie6TwOmjXLj0?=
- =?us-ascii?Q?HRlJNqLgPn/g8G9yW4dGPY3WjRvFtMxhrqohSEZTnKDZM/Z/O5USVF0z5GAX?=
- =?us-ascii?Q?tPGrlSxvZv5lhgg0UIeJr7N+4DC9Om6DET6Vz43t6UxU1PpLy0P4i70CeUOr?=
- =?us-ascii?Q?NmjFipgLiU2BmCoHAgEiF+PsGPYeAravBlPIOBSv+0QSPdKobjqsCMyFZy5v?=
- =?us-ascii?Q?uKTl37SV/aJm2/eL5fLc0747CgaB+tvrscrr0l6R6NqcTvLVj9P12R6WVNZ3?=
- =?us-ascii?Q?+ZwzW0Il5v83kZdU/y6SbZY+wyjYr3DUVubneXkcriouMfaaWOtKZILCM0Xp?=
- =?us-ascii?Q?3p+fgyIkkhotyow1zt/Zmmck2a+cxh30U/hSi/3NMZZVeyRCnZA5aDxEqbEA?=
- =?us-ascii?Q?LEaoTPp3VaFl7R1qxiTLRZ84nAxwGgFjSwq3Krvq9hLET9xaSWsbjasS+YAp?=
- =?us-ascii?Q?57Q85xY4Opmw2zhUUxh3i1l1sQuN8YXWzT2XcdUA7LJPR/PrfkdHpMu4Chii?=
- =?us-ascii?Q?KA8qtGxWTJYmo9095WqvnuHkixgLTSpADHQvLXyIC1DX1e36JpZXppvBt0P8?=
- =?us-ascii?Q?FGcBFixpcLfd5Q1V3FFPG45nfr/XnyNwjdPWIsLIf5QozQarGJl7VDmz8kDn?=
- =?us-ascii?Q?xVZKQXu0kRFr8IUD3OxJ2MUzVeYQzYAkdYRz1ei5eTx0X6tzk4Oi1TQCRtC5?=
- =?us-ascii?Q?aFY2oEzO289UurBzo+p74/TA+Ks8jW+z5pfkqf+gmXS64sqbW6keTCYh5vid?=
- =?us-ascii?Q?UuXm0yxMRXH/s94J4Lht1s/sVfH1bNkpSUXjHBLF/6LB/6yNTu00nU5uj904?=
- =?us-ascii?Q?gD7LGklDLfAoCC6p1HRWtKI4eK4Gq5Epgvqe8ulIPfmWYHBL3SsofXKX9uV5?=
- =?us-ascii?Q?OLG7cQ62PVURefUKMdk5I9oFMBbGAvPoRVghsqmGYelXatVhGejUnxZsnjPs?=
- =?us-ascii?Q?S5uCoEs+AU1D+r7iIX96EbikaB77ivm8T8q6O2OJ5hB7WFMX0C6C2hoaPJHU?=
- =?us-ascii?Q?mdEQ3P31+sra7ywkND6hS1fD/mI1ACCLSTBl4PMIHt9X93kakr8YE2Z0pV5I?=
- =?us-ascii?Q?fV+seaBw8OnEzLQWEo4Pae1UI5yzzqv3z6WnlgLpm5x6WBuQNpwLqHdPoPLt?=
- =?us-ascii?Q?OUjcoIwANkk3w4w+77OqmwHnxCjgn0E3R1Zj31wwmsNLpcggXdYdkLlFfzAh?=
- =?us-ascii?Q?FPJPRdlp2Zvr/DNE8/LGihqkRPsCM7NjBiFdxx+nBzocVwTcEpNSsxnMXVY5?=
- =?us-ascii?Q?bCCc+tHvvxAYv9cHF8I=3D?=
+	=?us-ascii?Q?HkMdVjqRbPZ+dBmARf7SjYHaCBQCdRaq5exkvFlXvxX+Cp4Npk/krjuExTXu?=
+ =?us-ascii?Q?K2+2IK0saM0f/TAENuc+4tCVDgM+IUvAqiFleBwoqZ1z5zvSunBbureS0DTE?=
+ =?us-ascii?Q?ZWivFpGzdDCzlyrO+4IEOPjaFYDfwH6Mn6rp4gaFl9tE2w2BCrBYwLupA47f?=
+ =?us-ascii?Q?x9/ZcqD/9ZgiHohGKZspXW+u3SBoH5WMFwHzBTeZcTXmSvvDQhHsW/ZkzWI3?=
+ =?us-ascii?Q?x45QAeSHh4J3Sdvh/9XWhjhDdzVUClwxvgpJfYwuZsZ2pqu4Li7amvgp4uBJ?=
+ =?us-ascii?Q?uagoDLhwEmEMXgEG4nwJk3AnliD73R0fu537N6gbmZTBX6anI12VntYpOsci?=
+ =?us-ascii?Q?bLE3SeHtZgShTzdAvNX+LbpztlxE7/J5BbqjEjkbMazLR1UorbWEuStu4lNG?=
+ =?us-ascii?Q?e/38wbPPE9jnoPyLum1f15bN+xthKDVjtNbd0qFZc+v5ZLeJCJOEvAfkw245?=
+ =?us-ascii?Q?n7YS4v3UoF9BbCiI1qCzv75K8Sa5TGNKuaz1Ep5g2zLr3v7s+BeHg+CDA6nB?=
+ =?us-ascii?Q?AH6I/eRYw+iHTXWMR6VHMpE101+33Zg/ly7BlZHBPQAKsdLPhD0fjTUL8pC2?=
+ =?us-ascii?Q?UYoM6oz/Cplp+Z6XD1d9/mkjwnD8kIsIh59vmCbBdzi+5jh83AapwUDddTdB?=
+ =?us-ascii?Q?gfW275F7RbAcKltHTAWbBDjKiWkawi+13JUyaf6zkB8FhIiRt4DEie4y3ldy?=
+ =?us-ascii?Q?b7L0zHMbEhP4hwkqZJZ9zBx7YtDqQzJt/TVqpEU2KOXlheYckFocJW3P7ik0?=
+ =?us-ascii?Q?qsJl0QDJItEwqNFH47dnJlFxzGjX6i0DgOSn9E6pVD4g38AnQT8w/7zjjWjK?=
+ =?us-ascii?Q?R8TFlSSuquV14aoIge4EvW3pp7E+AtRuPoMw79CWj2Ux3qCfww3SnW68Qybu?=
+ =?us-ascii?Q?IqV+Asw24KXC4rW9FjI2KAxgLYU0gYytYOswpJ/OB4JIWQkZqijseu6kCX8v?=
+ =?us-ascii?Q?cWMRJhnM6HPX7xsfBFpMME8vFNzPbGg27OUDT3AV2DlBqiF7XZfhV2kUvKET?=
+ =?us-ascii?Q?dLpWMpEC7WySSUqQLkQ1PcKUxlJ+sXrX9DIV9S+4d5rQfAe49+FLLYcd7KnW?=
+ =?us-ascii?Q?B84WvlB3OgP67Hlx9adDMHsqzRgf1WfPICaZdEkLu5JI9YUDrMjvVvstFv6C?=
+ =?us-ascii?Q?VV6SWhQZ+CsReGWjPp3QaRvOlrEs+S1jorrpnlQBmcnT2U9aFs/ngINEhufM?=
+ =?us-ascii?Q?bOgHsyq5M8wA0TSheMe9ph6Yw8ZzqtWGRRnruK01grczU/nMYoY+WX2NpOsC?=
+ =?us-ascii?Q?dotAF5OWhefLsmh+x+qHYjkACT57AV8mYpUYc6doPzY95x8NQcL+jOhMPkX7?=
+ =?us-ascii?Q?qJq6jZmaJdYog+ZVR38IwXzRgReT3GcXYAMEIAfeoxK9TqjCGPUxrLv6G2VL?=
+ =?us-ascii?Q?zQfuA+WDUjvyOy474VUHfSB86z2w2PYJ+rWkWMNL91KpAZWwVPPZeJ+NcfS0?=
+ =?us-ascii?Q?Ov51a0pruqEjAHg8HdNdvRCVSAMNcR8iqktpScJ9CXull5z70W1zP30dEhO9?=
+ =?us-ascii?Q?OMPZOZLkBdZUnMg4/idbQUtdfmGpz54Fc1WquensFC++yD2cB1Vuevd+iPE4?=
+ =?us-ascii?Q?pFQuK8tq87Y5+8N457I=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2026 11:09:28.9964
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2026 11:09:35.8303
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91e2055d-b098-4249-e1b4-08de4f6f8ee1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90aff22a-b877-47c7-4ea7-08de4f6f9305
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001F1.namprd05.prod.outlook.com
+	DS1PEPF0001709A.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYXPR12MB9443
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8913
 
-Changes since v1:
-- Used ifindex in psp_responder to select the PSP device
-- Merged the two patches since they started overlapping too much.
+The PSP responder fails when zero or multiple PSP devices are detected.
+There's an option to select the device id to use (-d) but it's
+currently not used from the PSP self test. It's also hard to use because
+the PSP test doesn't dump the PSP devices so can't choose one.
+When zero devices are detected, psp_responder fails which will cause the
+parent test to fail as well instead of skipping PSP tests.
 
-Cosmin Ratiu (1):
-  selftests: drv-net: psp: Better control the used PSP dev
+Fix both of these problems. Change psp_responder to:
+- not fail when no PSP devs are detected.
+- get an optional -i ifindex argument instead of -d.
+- select the correct PSP dev from the dump corresponding to ifindex or
+- select the first PSP dev when -i is not given.
+- fail when multiple devs are found and -i is not given.
+- warn and continue when the requested ifindex is not found.
 
+Also plumb the ifindex from the Python test.
+
+With these, when there are no PSP devs found or the wrong one is chosen,
+psp_responder opens the server socket, listens for control connections
+normally, and leaves the skipping of the various test cases which
+require a PSP device (~most, but not all of them) to the parent test.
+This results in output like:
+
+ok 1 psp.test_case # SKIP No PSP devices found
+[...]
+ok 12 psp.dev_get_device # SKIP No PSP devices found
+ok 13 psp.dev_get_device_bad
+ok 14 psp.dev_rotate # SKIP No PSP devices found
+[...]
+
+Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
+---
  .../selftests/drivers/net/lib/py/env.py       |  1 +
  tools/testing/selftests/drivers/net/psp.py    |  4 +-
  .../selftests/drivers/net/psp_responder.c     | 50 +++++++++----------
  3 files changed, 26 insertions(+), 29 deletions(-)
 
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index 8b644fd84ff2..63495376e654 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -170,6 +170,7 @@ class NetDrvEpEnv(NetDrvEnvBase):
+         self.remote_ifname = self.resolve_remote_ifc()
+         self.remote_dev = ip("-d link show dev " + self.remote_ifname,
+                              host=self.remote, json=True)[0]
++        self.remote_ifindex = self.remote_dev['ifindex']
+ 
+         self._required_cmd = {}
+ 
+diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+index 06559ef49b9a..de3dfd85edff 100755
+--- a/tools/testing/selftests/drivers/net/psp.py
++++ b/tools/testing/selftests/drivers/net/psp.py
+@@ -599,8 +599,8 @@ def main() -> None:
+         cfg.comm_port = rand_port()
+         srv = None
+         try:
+-            with bkg(responder + f" -p {cfg.comm_port}", host=cfg.remote,
+-                     exit_wait=True) as srv:
++            with bkg(responder + f" -p {cfg.comm_port} -i {cfg.remote_ifindex}",
++                     host=cfg.remote, exit_wait=True) as srv:
+                 wait_port_listen(cfg.comm_port, host=cfg.remote)
+ 
+                 cfg.comm_sock = socket.create_connection((cfg.remote_addr,
+diff --git a/tools/testing/selftests/drivers/net/psp_responder.c b/tools/testing/selftests/drivers/net/psp_responder.c
+index f309e0d73cbf..a26e7628bbb1 100644
+--- a/tools/testing/selftests/drivers/net/psp_responder.c
++++ b/tools/testing/selftests/drivers/net/psp_responder.c
+@@ -22,7 +22,7 @@ static bool should_quit;
+ 
+ struct opts {
+ 	int port;
+-	int devid;
++	int ifindex;
+ 	bool verbose;
+ };
+ 
+@@ -360,7 +360,7 @@ static void usage(const char *name, const char *miss)
+ 	if (miss)
+ 		fprintf(stderr, "Missing argument: %s\n", miss);
+ 
+-	fprintf(stderr, "Usage: %s -p port [-v] [-d psp-dev-id]\n", name);
++	fprintf(stderr, "Usage: %s -p port [-v] [-i ifindex]\n", name);
+ 	exit(EXIT_FAILURE);
+ }
+ 
+@@ -368,7 +368,7 @@ static void parse_cmd_opts(int argc, char **argv, struct opts *opts)
+ {
+ 	int opt;
+ 
+-	while ((opt = getopt(argc, argv, "vp:d:")) != -1) {
++	while ((opt = getopt(argc, argv, "vp:i:")) != -1) {
+ 		switch (opt) {
+ 		case 'v':
+ 			opts->verbose = 1;
+@@ -376,8 +376,8 @@ static void parse_cmd_opts(int argc, char **argv, struct opts *opts)
+ 		case 'p':
+ 			opts->port = atoi(optarg);
+ 			break;
+-		case 'd':
+-			opts->devid = atoi(optarg);
++		case 'i':
++			opts->ifindex = atoi(optarg);
+ 			break;
+ 		default:
+ 			usage(argv[0], NULL);
+@@ -410,12 +410,11 @@ static int psp_dev_set_ena(struct ynl_sock *ys, __u32 dev_id, __u32 versions)
+ int main(int argc, char **argv)
+ {
+ 	struct psp_dev_get_list *dev_list;
+-	bool devid_found = false;
+ 	__u32 ver_ena, ver_cap;
+ 	struct opts opts = {};
+ 	struct ynl_error yerr;
+ 	struct ynl_sock *ys;
+-	int first_id = 0;
++	int devid = -1;
+ 	int ret;
+ 
+ 	parse_cmd_opts(argc, argv, &opts);
+@@ -429,20 +428,19 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	dev_list = psp_dev_get_dump(ys);
+-	if (ynl_dump_empty(dev_list)) {
+-		if (ys->err.code)
+-			goto err_close;
+-		fprintf(stderr, "No PSP devices\n");
+-		goto err_close_silent;
+-	}
++	if (ynl_dump_empty(dev_list) && ys->err.code)
++		goto err_close;
+ 
+ 	ynl_dump_foreach(dev_list, d) {
+-		if (opts.devid) {
+-			devid_found = true;
++		if (opts.ifindex) {
++			if (d->ifindex != opts.ifindex)
++				continue;
++			devid = d->id;
+ 			ver_ena = d->psp_versions_ena;
+ 			ver_cap = d->psp_versions_cap;
+-		} else if (!first_id) {
+-			first_id = d->id;
++			break;
++		} else if (devid < 0) {
++			devid = d->id;
+ 			ver_ena = d->psp_versions_ena;
+ 			ver_cap = d->psp_versions_cap;
+ 		} else {
+@@ -452,23 +450,21 @@ int main(int argc, char **argv)
+ 	}
+ 	psp_dev_get_list_free(dev_list);
+ 
+-	if (opts.devid && !devid_found) {
+-		fprintf(stderr, "PSP device %d requested on cmdline, not found\n",
+-			opts.devid);
+-		goto err_close_silent;
+-	} else if (!opts.devid) {
+-		opts.devid = first_id;
+-	}
++	if (opts.ifindex && devid < 0)
++		fprintf(stderr,
++			"WARN: PSP device with ifindex %d requested on cmdline, not found\n",
++			opts.ifindex);
+ 
+-	if (ver_ena != ver_cap) {
+-		ret = psp_dev_set_ena(ys, opts.devid, ver_cap);
++	if (devid >= 0 && ver_ena != ver_cap) {
++		ret = psp_dev_set_ena(ys, devid, ver_cap);
+ 		if (ret)
+ 			goto err_close;
+ 	}
+ 
+ 	ret = run_responder(ys, &opts);
+ 
+-	if (ver_ena != ver_cap && psp_dev_set_ena(ys, opts.devid, ver_ena))
++	if (devid >= 0 && ver_ena != ver_cap &&
++	    psp_dev_set_ena(ys, devid, ver_ena))
+ 		fprintf(stderr, "WARN: failed to set the PSP versions back\n");
+ 
+ 	ynl_sock_destroy(ys);
 -- 
 2.45.0
 
