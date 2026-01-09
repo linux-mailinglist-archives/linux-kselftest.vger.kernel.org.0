@@ -1,123 +1,149 @@
-Return-Path: <linux-kselftest+bounces-48573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E608D0688C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 00:22:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65784D069EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 01:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A19A9303B791
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 23:21:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4782B3010E59
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 00:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E16533D6EA;
-	Thu,  8 Jan 2026 23:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75AB715A85A;
+	Fri,  9 Jan 2026 00:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VW6bXm9s"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="QleLx14W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5A53382DC;
-	Thu,  8 Jan 2026 23:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7181F95C
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 00:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767914511; cv=none; b=NpT/YSapuR79gxQp6UrMjjcs/aRi0LetQSp7049/OCVvK5HxBLNXlCUBiT43nsngz9J2Lfhhsh8Tn6hh+6QvDH5ugeUdoibmuNAXMLGt8AG5FWQPjE43qukLhv/AaB8/O0qN+Nv6twobQ7zKI7hcTIDGhDtCD+PJUJayFOo2Erc=
+	t=1767918985; cv=none; b=lAyvusevoNdPuGCjX/nFY2tnZT6GJwBHQ046Qvqqj07T47hOAh3M/NacnrajLePwsSwQgk2jfGzSrDgHOKw2zMOnMWc2W8wH6UASrLxJ/LYm3gnYPoZaxbyjTIDwVboM2OdSoIX+5Yi1uEFNpxtGzDfU/8eBKqTYqiXFgqaxvEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767914511; c=relaxed/simple;
-	bh=fULRMJ8gNERzqVof9K4oQyTZcTL+iKG/CWpQf9d+U30=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mm5mdtuEbR/aiY5oJintjDKBl0//5LonzjmQfQoTkNVMrMUf4YYJj/nsuvcSg/DmtPDnVtbR15CYjxdRlRI6hJuekuGawD4qlFnAXcj0rzrFAZxk2bfaO0z1bLDtw6CSzJA2NLrGDgXzqOXlC/IAr6nKOEV7Aa+kqMJbWKc4shQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VW6bXm9s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C57C116C6;
-	Thu,  8 Jan 2026 23:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767914511;
-	bh=fULRMJ8gNERzqVof9K4oQyTZcTL+iKG/CWpQf9d+U30=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=VW6bXm9s+w+tCw0CuySHz0g8hd2ex6TYcVZpJ9Amb0fBTiMYdLbIXwC8nf+KbO81w
-	 XbGeSdQQdbjc+q1TjOa+XZ7oCHF0JsyBMy64dRtYR6bBgNrOc9MuJrgHAdAOYeNOSY
-	 jkoIkZIRS4VuNK75f4llaXiXh9zQWxx4LmojEX/ALzkIvpli8UcGhWlmHC9m7SkCmA
-	 9FSxpTKh4qLWqOsi//DRVtXl1zu9MM9OlzIRYhOx69JMHrlL90PNOX4VvA2dTaLaZ8
-	 bfFn/HS5nDiR9uR2m9PBnaGv6KdojABAFrYImawJsBk1fm8wli9ISwREliPq6yryfT
-	 FKv42+g4LPL8A==
-Content-Type: multipart/mixed; boundary="===============3358533704666574923=="
+	s=arc-20240116; t=1767918985; c=relaxed/simple;
+	bh=HSbyzJte7ef9LUSwX8ZKl4Km7f9/oIn4+KkoGy1YFfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pZSqFlZn6A9SIlhw6hOTy8pRJtgxWNZJdvm9O/0QVe144hyt9gIPeIfKn1RzQFhaHbNDhZGnmJZWnQDyj27fN53c8XXsrB2yAVSznuBhJGGEYDVZxoAipg+J94wdl3jO28mJ1h0E01sNh5bI66BEYCnJ2MYgy4kmbGnCMLse48Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=QleLx14W; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-88fe44cce7eso30512626d6.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 16:36:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1767918983; x=1768523783; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=akXataDrrm2I8aSPYbuC2L/r92iwVSgkWRP1kilxNcE=;
+        b=QleLx14W8+B1sjcbDSeHYPuLmdRPt64TE4pSsYuMOogdNbj5w0gjjjMdVDbSWS/xxW
+         cWhcMj44zUdkiTADW28uJ8i8I9MahK1tdkwcXADKhbbF+H1cqo2a4WKG9LepEgWPFFjI
+         IpqNvBl6nsvEdB7yNmMc2wJep5ad6xW4wEUoP9q4gu81oJt42MVN90lPSV4hxOtfbdlX
+         PPb6vYbZSIjNU2hiJ6TYNNYA/fiJkh4Ck53VKP7VK1JABgAfvphXZMs6bwyaOR8yqzAf
+         pSc/YcT/ORcOxS+SP/R05iaeYZxV9bV6BLawGzZbERjmsTvrOed2nl16kFGcXtPcDh16
+         tB3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767918983; x=1768523783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=akXataDrrm2I8aSPYbuC2L/r92iwVSgkWRP1kilxNcE=;
+        b=Cw1+E83TyNEE7xi8FgJjKoLVIbQL8xbMvMck3gMm4vqsKqQ7N9PVijBdOirMuRLZqH
+         vNg9cVOzUYxaYqONhEvH/ARWThTJa+cl4JyGwlRQiq4L3CLpS/twqy8pdaw5cZiCIbG+
+         v4lKcdMSAuhl/zd/2erEQWGj7T0Bm5pSWsOi4yrme5eUw+h65kJDFVVTynzJfurH7dCw
+         vrTXTyzuGbzAGouzr4WqJ85nEl/7rsKZ4vMZFdPRDDPgUbVwHQqiCJ7JdTtD9fa9WoIz
+         Y4WiC9I8eUl9NxFnIAdDnQ3a/rzpn5c19tNbn4M7MnE2YYUaOVcJ1JcDuDdyeB40YBD4
+         Kmkg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbb5fG0C0sjYEZYhSibBcm+Zii9ERFw1c6yfwAI31KIaM6nfpOOXyvObCSFB8ATmMgE2jX0ZkIQCTIiocmxiQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj/fAqkQy4Myq38DBPv8jE6EiYgcTOkQertDgFPJZOwLzra5Gp
+	Phrxhd7xwizAWCrAL9TO6ZIY0bHgUFIkfLR0XQJCh14aeKFRLnYnBdGDKGlzM5xtQlg=
+X-Gm-Gg: AY/fxX5T1DVvNykf//6cG0PUJOmuHbb6jvnMtCidp2Zvttnljv8Hb0OGyJv4LOJHeUA
+	/1EVSrg/AQpASkjBVo/qe7/zetqBG2NEKYi6u9wCRo2SH/C1me1qZJdJ8g3tBkQPqwVg1bHgwLR
+	LYm29AopsobssiAWgS3wiCzxItDbn7jtsrAw0D4kBV1H0myoXfYdlNAIXmLJzAyffYKtmafx25G
+	T2DYwxJqRsrnTd1C1YngLdr8/yeKbHci9/o4HUW4BpnTCQd6QSnGFMBD/pz3qE539wMZxadeph/
+	un9NPy9SV79hBNh2NMSDRPb+3MceI6ue/8Z6CBHtT/MNuhluSZG6nQylhO61GkTCEmiN7GZ4H2C
+	zsc4IhXTxr+NEfAwjlSXxznByMNH2760C7dujg923AEnX8GX6/J4Ho6Ve7AeyF673xxfEurmiy2
+	c7Lj7W1qadW1+wm95wyQnZXB3Q9z9r36vBKN6JYYPziSnfRGEjo/51PzhkpYAUBrldV3i0ylhKc
+	3HqrA==
+X-Google-Smtp-Source: AGHT+IHmWhRihsDEqETUF+e9G1AVgeqEhpLtMexa+k8HuoAsY94LO++GxPutVwxZ0KIRKX6KuiPb9Q==
+X-Received: by 2002:ac8:5785:0:b0:4e8:9920:be58 with SMTP id d75a77b69052e-4ffb456fd65mr100400051cf.0.1767918982598;
+        Thu, 08 Jan 2026 16:36:22 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ffa8e6257esm57727181cf.31.2026.01.08.16.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 16:36:22 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1ve0UH-00000002vXg-1uqs;
+	Thu, 08 Jan 2026 20:36:21 -0400
+Date: Thu, 8 Jan 2026 20:36:21 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>, Alex Mastro <amastro@fb.com>,
+	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
+Message-ID: <20260109003621.GG545276@ziepe.ca>
+References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
+ <aV7yIchrL3mzNyFO@google.com>
+ <20260108005406.GA545276@ziepe.ca>
+ <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
+ <20260108141044.GC545276@ziepe.ca>
+ <20260108084514.1d5e3ee3@shazbot.org>
+ <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
+ <20260108183339.GF545276@ziepe.ca>
+ <aWAhuSgEQzr_hzv9@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0823b48aff04b144bc67d0e4d3c633ad80ed3feb94f546a911de01592aaac049@mail.kernel.org>
-In-Reply-To: <20260108225523.3268383-3-wusamuel@google.com>
-References: <20260108225523.3268383-3-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v2 2/4] bpf: Open coded BPF for wakeup_sources
-From: bot+bpf-ci@kernel.org
-To: wusamuel@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
-Cc: wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  8 Jan 2026 23:21:50 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aWAhuSgEQzr_hzv9@google.com>
 
---===============3358533704666574923==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, Jan 08, 2026 at 09:29:29PM +0000, David Matlack wrote:
+> On 2026-01-08 02:33 PM, Jason Gunthorpe wrote:
+> > On Thu, Jan 08, 2026 at 10:24:19AM -0800, David Matlack wrote:
+> > > > > Oh, I was thinking about a compatability only flow only in the type 1
+> > > > > emulation that internally magically converts a VMA to a dmabuf, but I
+> > > > > haven't written anything.. It is a bit tricky and the type 1 emulation
+> > > > > has not been as popular as I expected??
+> > > >
+> > > > In part because of this gap, I'd guess.  Thanks,
+> > > 
+> > > Lack of huge mappings in the IOMMU when using VFIO_TYPE1_IOMMU is
+> > > another gap I'm aware of.
+> > > vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap
+> > > fails when IOMMUFD_VFIO_CONTAINER is enabled.
+> > 
+> > What is this? I'm not aware of it..
+> 
+> It's one of the test cases within
+> tools/testing/selftests/vfio/vfio_dma_mapping_test.c.
+> 
+> Here's the output when running with CONFIG_IOMMUFD_VFIO_CONTAINER=y:
+> 
+>   #  RUN           vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap ...
+>   Mapped HVA 0x7f0480000000 (size 0x40000000) at IOVA 0x0
+>   Searching for IOVA 0x0 in /sys/kernel/debug/iommu/intel/0000:6a:01.0/domain_translation_struct
+>   Found IOMMU mappings for IOVA 0x0:
+>   PGD: 0x0000000203475027
+>   P4D: 0x0000000203476027
+>   PUD: 0x0000000203477027
+>   PMD: 0x00000001e7562027
+>   PTE: 0x00000041c0000067
+>   # tools/testing/selftests/vfio/vfio_dma_mapping_test.c:188:dma_map_unmap:Expected 0 (0) == mapping.pte (282394099815)
+>   # dma_map_unmap: Test terminated by assertion
+>   #          FAIL  vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap
 
-> diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source_iter.c
-> index ab83d212a1f9..149baecfe436 100644
-> --- a/kernel/bpf/wakeup_source_iter.c
-> +++ b/kernel/bpf/wakeup_source_iter.c
+I can't think of any reason this would fail, I think your tests have
+found a real bug?? Can you check into it, what kernel call fails and
+where does the kernel code come from?
 
-[ ... ]
+I don't think I can run these tests with the HW I have??
 
-> +__bpf_kfunc int bpf_iter_wakeup_source_new(struct bpf_iter_wakeup_source *it)
-> +{
-> +	it->srcuidx = wakeup_sources_read_lock();
-> +	it->ws = wakeup_sources_walk_start();
-> +
-> +	return 0;
-> +}
-> +
-> +__bpf_kfunc struct wakeup_source *bpf_iter_wakeup_source_next(struct bpf_iter_wakeup_source *it)
-> +{
-> +	struct wakeup_source *prev = it->ws;
-> +
-> +	if (!prev)
-> +		return NULL;
-> +
-> +	it->ws = wakeup_sources_walk_next(it->ws);
-> +
-> +	return prev;
-> +}
-
-When the wakeup_sources list is empty, wakeup_sources_walk_start() returns
-a bogus pointer via list_entry_rcu()/container_of() on the list head itself,
-rather than NULL.  The check "if (!prev)" at line 112 will not catch this
-bogus pointer since it is non-NULL.
-
-Does this return a bogus pointer to the BPF program when the wakeup_sources
-list is empty?  If so, the BPF program could then access invalid memory when
-it tries to read fields of the returned wakeup_source.
-
-For reference, wakeup_sources_walk_start() in drivers/base/power/wakeup.c:
-
-    struct wakeup_source *wakeup_sources_walk_start(void)
-    {
-        struct list_head *ws_head = &wakeup_sources;
-        return list_entry_rcu(ws_head->next, struct wakeup_source, entry);
-    }
-
-When wakeup_sources is empty, ws_head->next == ws_head, so this returns
-container_of(ws_head, struct wakeup_source, entry) which points to memory
-before the wakeup_sources variable rather than a valid wakeup_source struct.
-
-Other BPF open-coded iterators like bpf_iter_dmabuf handle this differently
-by initializing to NULL and getting the first element lazily in _next().
-Would a similar approach work here?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20835022582
-
---===============3358533704666574923==--
+Jason
 
