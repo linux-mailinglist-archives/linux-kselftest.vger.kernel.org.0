@@ -1,230 +1,116 @@
-Return-Path: <linux-kselftest+bounces-48580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48581-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AF69D06C27
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 02:39:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A5F1D06CA8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 03:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AA36C3010AAE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 01:39:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C28C8303EB5A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 02:08:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237AE2356BA;
-	Fri,  9 Jan 2026 01:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83064261B8F;
+	Fri,  9 Jan 2026 02:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="C5dN/yp6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTE1pDt0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969DD22A4F6
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 01:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E890259C92
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 02:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767922756; cv=none; b=D6U0yYUCYVB580HFkRucVBm1ucGzepFOiZT0k1Ahuk0DAZclHPhpxwoK+V5VRRFn3hvkckVPEro9nqImcA0dg9ipJARxZKjJrbjJdYWPW9ZM67PqBmvD0+sqfQDkJnZ/UoHKb+ASRiPzBgFbmBj7XB8rHBMME9T/sw77uGAHHbQ=
+	t=1767924515; cv=none; b=VNniuZMI5p6y6zOQor/Yj2ZUQLFfeBfH9sBBedYcxOOZM5OFPi7UOKhZsWS25NYQcC5mzsY0q1rr75ZgFwqhJeT/bQSC6LoZhonO8huVSGliIUY4iZHjzx0ExHuJ6+VjKwoYu+Uo7qSJSE/H9eVq86EbzF2Pf9Ur9F19plvcFeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767922756; c=relaxed/simple;
-	bh=PPC7NX2ky94z97LL+o2Dliiog79NuXV9wEsI2rx2Zcw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pBendV4jHNqLX3flZ2ZNzezgZ7izgK3e4yQlQxgQuA68NrM07ovyg9o1EOaEM5khfIexCeMzGfWYKOxugPDfFRZtTNTYdVtLlUydnWExzLL1okch5469Em8EbDVzTcGTOQCkYxMSqIUKguAxChkFEiwFpkQ+2CX7yXrTa5Xj5DU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=C5dN/yp6; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2ae29ddaed9so1255269eec.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 17:39:14 -0800 (PST)
+	s=arc-20240116; t=1767924515; c=relaxed/simple;
+	bh=xgoVtk4jMSob77ruYZEQ6lJPBHmk6jz9x8HlWBDYD30=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KLUB0ztTlIUmpZ32K/79ud9Zkq8ReQkubakY30GkhQypqrioDih3CSWqxaejDc0FupSvB557sTJjXzJjH2zfgAdTkveI5zk/FetMAhNKrWuvgQT++SbRgjoj7stVKn+XG/ZaLgt/ckFqteWE9v7TqhsvxfJC0ogEKzPWs8EfGU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTE1pDt0; arc=none smtp.client-ip=74.125.224.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-6455a60c11fso3186567d50.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 18:08:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1767922754; x=1768527554; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dJvo7ueweLLuRHlCgBfnBfMmqli0qvfiVgRtcT1/2SE=;
-        b=C5dN/yp68GIuTBRhA7mH80jsHJEDqW6yg+mN1ZGpOpyjujAqFYmsxy4CYKr7oQQv/A
-         rguT144/zBCIPO8pppGllnJTyXlzGLGP6aWDZSZMpO2dSZkBEMIBnl0P+UW4TVWY+5JM
-         2EvR52HzZ3yR5rhC6NlyjPk8B37iMm5aFWrVA=
+        d=gmail.com; s=20230601; t=1767924511; x=1768529311; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hHx+c8KcdYuhPzaBZwkqSYHqGog6hASf2z7O5RA56LI=;
+        b=LTE1pDt0X0VM0/vO1MCH9cMHyDe0gHJdaXAZxSWChaM0Zuo1oNokcmMEqOUVPgP31s
+         d3Z50MnOaNoQEAtGLVkbA/g5yTVCujumy2MgcooWVQ2xIXe9c1v2yv15eLfEU7ewFxrj
+         7KFd+6RumvDdH3sscljq2O29M/JXvqTY/5wtkpu/hZUarhxB/CSXa+hDip/bxyMPi3V+
+         l9Yy8vAjPtP0VLoUvMWXlOR+iLiDRt2cWT5GaM7cFIIBRFfTiih+IJ8XpJyhPe4eLfdQ
+         A0oeWZiXpwrCABLE/ClSpl1TBeoHauHhoUAMvpnNmSOwqLN2M+Eq3lDY1uK8RI3nWLO8
+         NgPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767922754; x=1768527554;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dJvo7ueweLLuRHlCgBfnBfMmqli0qvfiVgRtcT1/2SE=;
-        b=wQBsvjZ/Emkf8JXNXB2ZteiEG9n6kAzgyk/f/B8+JmB+8/fyIKqoYHHTEaHOUMoy06
-         MeoIJKn8BPvNOnCfucwQ2wd/1N/Crhnu3OclNfvCla46fGBqCH+rnjG1VUd5b8hi8Wly
-         UbFdxEPmo6RZWasl5+w4obcyZwp0nSFCd5yJlMsceBa5QFL/M+gDFyEnqstKMICC8Wi6
-         UFwfDCxg0VUYNnk+FR4/WVGdKUzySNR+w6Uirbjpi6eVZanDFEeBAMtlKyLTIXufLW/y
-         xIkTD9TxU5XsYbpDSGxlKoANx4XHiaU5HxBFv+UAtJspX2jJ4fM5Fe/szO3BbPhU6p3E
-         RmRw==
-X-Forwarded-Encrypted: i=1; AJvYcCX8OuJlomxJpIsXKn4LW3JyEgJOBCzuiVog2BE4b69LRH5EViW+UZJ3bDlVMWiSCXXLdKyxob2nbeWXI2I3klg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqmCeZPMc0o89psQBP9gD8TqZAVgZ9zWvhaOMXfxKO3S185wCY
-	KBtehf5l3Fs021WUdHmAktcQ46ocecR7bs53oHW4tt1lXECvZz20XdV2WDjD5vAggbU=
-X-Gm-Gg: AY/fxX4N6aUYgOAYrBvy/e3UfEOxCJ8P3c+PlAiofuInbKaswXf1bDPt1RHXI/p7HOg
-	Fa5+S5OUpWrqnvzLJx1roffWeEVsvVB+akapzOyxg662C8H2XjoI98lKMhRe8TJOf2zTOt3dahy
-	Wb0ZBMjkxTNgQcKQX3iTZTW8zvQEzi2gJgKBYEYPc524ruGWDhM2Im+pbew8ksaN8Ed80wGtHLJ
-	vwREH/LGaaLwVuH/NGT89kVVKJP1LpWhKnj0ydHhEiG3H/TXEpO7pg+nBBo/lkJgY2U0u/f3OC1
-	X0yK61HjZhjKyQ/4nsENpEpNOou3U4g/Uo6/alrN1U+cPJX596AMdPoESYeDgsnsHFgRR1vL3Z/
-	83Xs7vL8pVpXhDzYNdyGE7RSbTDfTDspb33epf/yyun+WwDk1sqtRlgf8uqF8W/DLdQiMQIRFm/
-	w30sAwdApq
-X-Google-Smtp-Source: AGHT+IHoUVHypybcTgdklE8/ULnSnVrNSakulYa/6M6TJUePbDMMkN93P2CjKbVcyXpJbfsc0ucH0w==
-X-Received: by 2002:a05:7022:fa04:b0:11a:fb0a:ceca with SMTP id a92af1059eb24-121f1b1f568mr8380710c88.16.1767922753532;
-        Thu, 08 Jan 2026 17:39:13 -0800 (PST)
-Received: from localhost ([71.219.3.177])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f248bb6esm15223052c88.12.2026.01.08.17.39.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 17:39:12 -0800 (PST)
-Date: Thu, 8 Jan 2026 20:39:11 -0500
-From: Joel Fernandes <joel@joelfernandes.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH -next 3/8] rcu/nocb: Remove unnecessary WakeOvfIsDeferred
- wake path
-Message-ID: <20260109013911.GA1102915@joelbox2>
-References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
- <20260101163417.1065705-4-joelagnelf@nvidia.com>
- <aV_T5kLzX2qMpxpt@localhost.localdomain>
+        d=1e100.net; s=20230601; t=1767924511; x=1768529311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hHx+c8KcdYuhPzaBZwkqSYHqGog6hASf2z7O5RA56LI=;
+        b=kIwics9jg3pvab2XP6g72x/JzIV5O0sqKd5pPjuBAastNdsABw7+SyBTEZXxe+aaLx
+         cyHu37woe9+6mfNHkI2UcLOQ3bX7rmrmO+zvu8IVLH5XuF2OadINAUoyKxVSYeM2XdYv
+         KtYPEx0Ch3EceEDIKM4asGZu0gkjcm7IygF6uvruFCdkEdpMCZZ+Dui9b4yKJfFGeGcx
+         Z7UXvd+AW+vWQeF/VkLzQF99VV3sDgolAtj/xA1i2Iv8veSbFBjAIGWARFWZ0SpA+epk
+         TKTOBD/r4Xp9uyIx2r97SbwJgR6vEP9L+a7k2AVqq36+j89GCbwfei9isabdYy55PY06
+         sQDw==
+X-Forwarded-Encrypted: i=1; AJvYcCVuhKQbVW/1euxy+g426I4W4lYpFevZHEX6Y+U6mhdzWiB8AyK+j9lK0ZDvpqL2Z+/7pqvq+KR+T9DjpcGuYho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEY66DgRgqYJ/3420hUp7AWsIdLVzjIv1FzxkWgUcSHKnGeKqf
+	KVp5v1acl0kBdJPA/heEs6VNCqemYWv4RAk4h0Pstz3aH2p7Jv53dP7OPQZkcOKWu8VVWIcDH1d
+	SfNV2ecxiI2jgcEYta5Dt/Q9hYLkvLgo=
+X-Gm-Gg: AY/fxX7U8CtkCOnv/GGEgxQS5HeqhIFg/iwHLPputulxK+r/Gjkxg7hAgAOPilKCt6E
+	COHLbdzY4XDG21uS0ctxqAteVnk5jPEQrJYlp4JuyNOIcWEJxWRamSgYeWLXTOiTFh/7Soq8r7o
+	KPcXgx7HFwMMmHHGkD7sWVtBTP4UtBEpppV8nNM15RVjMDAVQwHifx2+E3R2SJPJRLcZC98xiCQ
+	ZGdBLsuzmEHQL+G50pswB1Vu8lwNR3vlQNRJUlnjZAN8rf+INF8YRQV/YAXs3uwoO7Mcb1UBluW
+	Oi0P1/M=
+X-Google-Smtp-Source: AGHT+IEJQ0fMk367IuiUcJa+C9gVXUq3sIfJ7z62OpfaArexsG4BAb7+MZ+Y1aG40K4QceJTCiYn6MGa8a6noT6QHe8=
+X-Received: by 2002:a05:690e:1516:b0:63f:ba88:e8ee with SMTP id
+ 956f58d0204a3-64716b6fa72mr7912980d50.21.1767924511358; Thu, 08 Jan 2026
+ 18:08:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aV_T5kLzX2qMpxpt@localhost.localdomain>
+References: <20260108031604.12379-1-sun.jian.kdev@gmail.com> <20260108132851.bb6b7813277a5b40ba3aec8f@linux-foundation.org>
+In-Reply-To: <20260108132851.bb6b7813277a5b40ba3aec8f@linux-foundation.org>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Fri, 9 Jan 2026 10:08:20 +0800
+X-Gm-Features: AZwV_QhDj8oetBdJVKSBgN1xg1eqVAcBhY3KQPbVpkF2GBJK3i2pqNm1v6345dk
+Message-ID: <CABFUUZGinC04zPEtwq3+maN-iNVNdc1p_BFnTdPNTsLXcQ1hnA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: fix relative path handling
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 08, 2026 at 04:57:26PM +0100, Frederic Weisbecker wrote:
-> Le Thu, Jan 01, 2026 at 11:34:12AM -0500, Joel Fernandes a écrit :
-> > @@ -974,8 +959,7 @@ static bool do_nocb_deferred_wakeup_common(struct rcu_data *rdp_gp,
-> >  		return false;
-> >  	}
-> >  
-> > -	ndw = rdp_gp->nocb_defer_wakeup;
-> > -	ret = __wake_nocb_gp(rdp_gp, rdp, ndw == RCU_NOCB_WAKE_FORCE, flags);
-> > +	ret = __wake_nocb_gp(rdp_gp, rdp, false, flags);
-> 
-> The force parameter can now be removed, right? (same applies to wake_nocb_gp()).
-> 
-> Other than that:
-> 
-> Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+> hm, why?  Is that a thing people actually do?
+>
+> Is anyone going to actually test this feature?
 
-Ah true! Thanks, so the following hunk needs to be squashed into the patch
-then, with the review tag. Boqun, if you want to do that please do, or I can
-send it again for the next merge window.
+Yes =E2=80=94 invoking selftests directly from the kernel root can easily h=
+appen in
+practice, for example::
 
----8<-----------------------
+  sudo tools/testing/selftests/mm/run_vmtests.sh
 
-From: "Joel Fernandes" <joelagnelf@nvidia.com>
-Subject: [PATCH] fixup! rcu/nocb: Remove unnecessary WakeOvfIsDeferred wake
- path
+This currently results in false failures because relative paths being resol=
+ved
+against the caller's cwd instead of the script directory.
+>
+> Alternatively we could check that we're in the correct directory and
+> error out if not.
 
-Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
----
- kernel/rcu/tree.c      |  2 +-
- kernel/rcu/tree.h      |  2 +-
- kernel/rcu/tree_nocb.h | 14 +++++++-------
- 3 files changed, 9 insertions(+), 9 deletions(-)
+That would also be reasonable, but I slightly prefer auto-cd because it
+avoids an easy invocation pitfall and makes the runner more robust for
+wrappers/CI
+where the cwd is  not stable. That said, I'm happy to switch to a fail-fast=
+ cwd
+check if you prefer the behavior.
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 293bbd9ac3f4..2921ffb19939 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3769,7 +3769,7 @@ static void rcu_barrier_entrain(struct rcu_data *rdp)
- 	}
- 	rcu_nocb_unlock(rdp);
- 	if (wake_nocb)
--		wake_nocb_gp(rdp, false);
-+		wake_nocb_gp(rdp);
- 	smp_store_release(&rdp->barrier_seq_snap, gseq);
- }
- 
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 653fb4ba5852..7dfc57e9adb1 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -499,7 +499,7 @@ static void zero_cpu_stall_ticks(struct rcu_data *rdp);
- static struct swait_queue_head *rcu_nocb_gp_get(struct rcu_node *rnp);
- static void rcu_nocb_gp_cleanup(struct swait_queue_head *sq);
- static void rcu_init_one_nocb(struct rcu_node *rnp);
--static bool wake_nocb_gp(struct rcu_data *rdp, bool force);
-+static bool wake_nocb_gp(struct rcu_data *rdp);
- static bool rcu_nocb_flush_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
- 				  unsigned long j, bool lazy);
- static void call_rcu_nocb(struct rcu_data *rdp, struct rcu_head *head,
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index daff2756cd90..c6f1ddecc2d8 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -192,7 +192,7 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
- 
- static bool __wake_nocb_gp(struct rcu_data *rdp_gp,
- 			   struct rcu_data *rdp,
--			   bool force, unsigned long flags)
-+			   unsigned long flags)
- 	__releases(rdp_gp->nocb_gp_lock)
- {
- 	bool needwake = false;
-@@ -225,13 +225,13 @@ static bool __wake_nocb_gp(struct rcu_data *rdp_gp,
- /*
-  * Kick the GP kthread for this NOCB group.
-  */
--static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
-+static bool wake_nocb_gp(struct rcu_data *rdp)
- {
- 	unsigned long flags;
- 	struct rcu_data *rdp_gp = rdp->nocb_gp_rdp;
- 
- 	raw_spin_lock_irqsave(&rdp_gp->nocb_gp_lock, flags);
--	return __wake_nocb_gp(rdp_gp, rdp, force, flags);
-+	return __wake_nocb_gp(rdp_gp, rdp, flags);
- }
- 
- #ifdef CONFIG_RCU_LAZY
-@@ -553,7 +553,7 @@ static void __call_rcu_nocb_wake(struct rcu_data *rdp, bool was_alldone,
- 					   TPS("WakeLazy"));
- 		} else if (!irqs_disabled_flags(flags)) {
- 			/* ... if queue was empty ... */
--			wake_nocb_gp(rdp, false);
-+			wake_nocb_gp(rdp);
- 			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu,
- 					    TPS("WakeEmpty"));
- 		} else {
-@@ -959,7 +959,7 @@ static bool do_nocb_deferred_wakeup_common(struct rcu_data *rdp_gp,
- 		return false;
- 	}
- 
--	ret = __wake_nocb_gp(rdp_gp, rdp, false, flags);
-+	ret = __wake_nocb_gp(rdp_gp, rdp, flags);
- 	trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("DeferredWake"));
- 
- 	return ret;
-@@ -1255,7 +1255,7 @@ lazy_rcu_shrink_scan(struct shrinker *shrink, struct shrink_control *sc)
- 		}
- 		rcu_nocb_try_flush_bypass(rdp, jiffies);
- 		rcu_nocb_unlock_irqrestore(rdp, flags);
--		wake_nocb_gp(rdp, false);
-+		wake_nocb_gp(rdp);
- 		sc->nr_to_scan -= _count;
- 		count += _count;
- 		if (sc->nr_to_scan <= 0)
-@@ -1640,7 +1640,7 @@ static void rcu_init_one_nocb(struct rcu_node *rnp)
- {
- }
- 
--static bool wake_nocb_gp(struct rcu_data *rdp, bool force)
-+static bool wake_nocb_gp(struct rcu_data *rdp)
- {
- 	return false;
- }
--- 
-2.34.1
-
+Regards,
+Sun
 
