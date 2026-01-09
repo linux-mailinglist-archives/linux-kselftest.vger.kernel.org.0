@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-48614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48615-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D372D0AFC7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 16:42:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74944D0AFFA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 16:43:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 90B703012775
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 15:37:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5039130574CE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 15:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB384325720;
-	Fri,  9 Jan 2026 15:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 305A1363C58;
+	Fri,  9 Jan 2026 15:37:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Al1nrBrE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mm1147DI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC0A2C21E6;
-	Fri,  9 Jan 2026 15:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603292EAB6E
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 15:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767973045; cv=none; b=rn+Cbm61nuqfwprn5emtk/5G2aTGdVqEn+K5FtLZtVapKTTVRX4uALpCsAAIgXux3kK8k2W5BP+t7XJDoKO1bqw2shDl9h2Dif8fV8VW5l+KZTXD2jRrfTaLHNZz8RQtEXzJM4EMM/Q0cmv9zzybUoqdYl9cPnNAj69pN9sqH38=
+	t=1767973057; cv=none; b=AKA5xyPmNzfysET6C9tfi+Ztj27DbuV/2vnVX89dig1eGh+BDGadg+9F75RCZvrhpMxI0qMRgn1DyeYY4/PDoxXijhIzGLlg+baqfB2EToltGW2BCdTysMVRMk5oqSXV11aIlHAKrRT/ddiO5a9tkMHIf1CKD4P51lkEZGcf6zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767973045; c=relaxed/simple;
-	bh=rqfMJJtPdBcZvpTr2g0yJoZkcjlR+c5YphY+4gxnujQ=;
+	s=arc-20240116; t=1767973057; c=relaxed/simple;
+	bh=olXGm4lhKZ/DUlPJ4xDJl2D4L2YZF2AiKKcbPFW+qYo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C81phBAOIoc9T3k5Yr8IAQASWqlshYjGbeTwg8D4crpEROe5JU0Qf+i0He+/e1IDzsclrvxGGwCu+EAYhuAsXA9ClT5/W/1BrUBGwuZ1Z2aqbKScbIi+ZTrS/upTnnzB9AzHxxaY9w5GP57RRGdIPi1Os7ue/8LGAbYPytw/XAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Al1nrBrE; arc=none smtp.client-ip=95.215.58.181
+	 MIME-Version; b=mrxFtC8yiXIDhTUkpFEcomdOW9YKSKEteaII0sI6oUA+oTI6XsWBrneozsvOCpT1ek8Xnjuz8Zjr6u9D6O9POGqJQj2O1s6DrNBM3J3MWUPcpJLRTZfSv+m60h4CCkP1iSUqeUxXu/ZkgHvbxgfLgIZ2mZaBfcU3wHSTchroVMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mm1147DI; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767973041;
+	t=1767973053;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=y/YV8q+S59t939howf4hH6znlW4fUA9Hm9Vtbx1c9V4=;
-	b=Al1nrBrEqSSCF0Hol59g8tD1ncBex/8y1ucgdOTpLFHLlsuQsRHlpMGoipWVGqrqSX1D+P
-	Bs2ZNYEAbLCCgBd3Bu42U+3AiOhDBhIczdYyXgj8wg3PlsgdOimHKATvI1usKQ6s+Tp0EH
-	xw6N+eHAdFR45dq3p//DS/o3S/0iSVM=
+	bh=zGmQZRRwHlrtsRbft3WSiOCAz3aFQwD5zodc3tv48HM=;
+	b=Mm1147DIHhLW7zP2EauxyHdsXI9RKxz3GC3qUwmoLQ4yuNjCPdidgxYYT9PcDapwg/HC7B
+	MIvVhpXMv5LqUDNM6kDVe2b6YwJnRCuX5+WfKrlJoHQ8IOb6UHl2QQHnDRVNPXoNFbNqIf
+	R0eRMuWuubcK/ROndIFPVPTrdcatV40=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -73,9 +73,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 2/3] bpf: Introduce BPF_BRANCH_SNAPSHOT_F_COPY flag for bpf_get_branch_snapshot helper
-Date: Fri,  9 Jan 2026 23:34:19 +0800
-Message-ID: <20260109153420.32181-3-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add BPF_BRANCH_SNAPSHOT_F_COPY test
+Date: Fri,  9 Jan 2026 23:34:20 +0800
+Message-ID: <20260109153420.32181-4-leon.hwang@linux.dev>
 In-Reply-To: <20260109153420.32181-1-leon.hwang@linux.dev>
 References: <20260109153420.32181-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -87,139 +87,85 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce BPF_BRANCH_SNAPSHOT_F_COPY flag for tracing programs to copy
-branch entries from *bpf_branch_snapshot*.
-
-Instead of introducing a new kfunc, extend bpf_get_branch_snapshot
-helper to add the BPF_BRANCH_SNAPSHOT_F_COPY flag support.
-
-Therefore, when BPF_BRANCH_SNAPSHOT_F_COPY is specified:
-
-* Check the *flags* value in verifier's 'check_helper_call()'.
-* Skip inlining 'bpf_get_branch_snapshot()' helper in verifier's
-  'do_misc_fixups()'.
-* 'memcpy()' branch entries in the 'bpf_get_branch_snapshot()' helper.
+Add test for BPF_BRANCH_SNAPSHOT_F_COPY flag by adding flag to the
+callsite of bpf_get_branch_snapshot helper.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/linux/bpf.h          |  4 ++++
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/verifier.c        | 30 ++++++++++++++++++++++++++++++
- kernel/trace/bpf_trace.c     | 17 ++++++++++++++---
- 4 files changed, 49 insertions(+), 3 deletions(-)
+ .../bpf/prog_tests/get_branch_snapshot.c      | 26 ++++++++++++++++---
+ .../selftests/bpf/progs/get_branch_snapshot.c |  3 ++-
+ 2 files changed, 25 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 16dc21836a06..71ce225e5160 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1249,6 +1249,10 @@ struct bpf_tramp_branch_entries {
- DECLARE_PER_CPU(struct bpf_tramp_branch_entries, bpf_branch_snapshot);
- #endif
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
+index 0394a1156d99..6b8ab1655ab0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
++++ b/tools/testing/selftests/bpf/prog_tests/get_branch_snapshot.c
+@@ -73,7 +73,7 @@ static void close_perf_events(void)
+ 	free(pfd_array);
+ }
+ 
+-void serial_test_get_branch_snapshot(void)
++static void test_branch_snapshot(int flags)
+ {
+ 	struct get_branch_snapshot *skel = NULL;
+ 	int err;
+@@ -89,8 +89,14 @@ void serial_test_get_branch_snapshot(void)
+ 		goto cleanup;
+ 	}
+ 
+-	skel = get_branch_snapshot__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "get_branch_snapshot__open_and_load"))
++	skel = get_branch_snapshot__open();
++	if (!ASSERT_OK_PTR(skel, "get_branch_snapshot__open"))
++		goto cleanup;
++
++	skel->rodata->flags = flags;
++
++	err = get_branch_snapshot__load(skel);
++	if (!ASSERT_OK(err, "get_branch_snapshot__load"))
+ 		goto cleanup;
+ 
+ 	err = kallsyms_find("bpf_testmod_loop_test", &skel->bss->address_low);
+@@ -128,3 +134,17 @@ void serial_test_get_branch_snapshot(void)
+ 	get_branch_snapshot__destroy(skel);
+ 	close_perf_events();
+ }
++
++void serial_test_get_branch_snapshot(void)
++{
++	test_branch_snapshot(0);
++}
++
 +enum {
 +	BPF_BRANCH_SNAPSHOT_F_COPY	= 1,	/* Copy branch snapshot from bpf_branch_snapshot. */
 +};
 +
- /* Different use cases for BPF trampoline:
-  * 1. replace nop at the function entry (kprobe equivalent)
-  *    flags = BPF_TRAMP_F_RESTORE_REGS
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 130bcbd66f60..c60a145e0466 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -561,6 +561,7 @@ struct bpf_insn_aux_data {
- 	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
- 	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
- 	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
-+	bool copy_branch_snapshot; /* BPF_BRANCH_SNAPSHOT_F_COPY for bpf_get_branch_snapshot helper */
- 	u8 alu_state; /* used in combination with alu_limit */
- 	/* true if STX or LDX instruction is a part of a spill/fill
- 	 * pattern for a bpf_fastcall call.
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 53635ea2e41b..0a537f9c2f8c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11772,6 +11772,33 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		err = push_callback_call(env, insn, insn_idx, meta.subprogno,
- 					 set_user_ringbuf_callback_state);
- 		break;
-+	case BPF_FUNC_get_branch_snapshot:
-+	{
-+		u64 flags;
-+
-+		if (!is_reg_const(&regs[BPF_REG_3], false)) {
-+			verbose(env, "Flags in bpf_get_branch_snapshot helper must be const.\n");
-+			return -EINVAL;
-+		}
-+		flags = reg_const_value(&regs[BPF_REG_3], false);
-+		if (flags & ~BPF_BRANCH_SNAPSHOT_F_COPY) {
-+			verbose(env, "Invalid flags in bpf_get_branch_snapshot helper.\n");
-+			return -EINVAL;
-+		}
-+
-+		if (flags & BPF_BRANCH_SNAPSHOT_F_COPY) {
-+			if (env->prog->type != BPF_PROG_TYPE_TRACING ||
-+			    (env->prog->expected_attach_type != BPF_TRACE_FENTRY &&
-+			     env->prog->expected_attach_type != BPF_TRACE_FEXIT)) {
-+				verbose(env, "Only fentry and fexit programs support BPF_BRANCH_SNAPSHOT_F_COPY.\n");
-+				return -EINVAL;
-+			}
-+
-+			env->insn_aux_data[insn_idx].copy_branch_snapshot = true;
-+			env->prog->copy_branch_snapshot = true;
-+		}
-+		break;
-+	}
- 	}
-
- 	if (err)
-@@ -23370,6 +23397,9 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			 */
- 			BUILD_BUG_ON(br_entry_size != 24);
-
-+			if (env->insn_aux_data[i + delta].copy_branch_snapshot)
-+				goto patch_call_imm;
-+
- 			/* if (unlikely(flags)) return -EINVAL */
- 			insn_buf[0] = BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0, 7);
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 6e076485bf70..e9e1698cf608 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1172,10 +1172,20 @@ BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
- 	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
- 	u32 entry_cnt = size / br_entry_size;
-
--	entry_cnt = static_call(perf_snapshot_branch_stack)(buf, entry_cnt);
--
--	if (unlikely(flags))
-+	if (likely(!flags)) {
-+		entry_cnt = static_call(perf_snapshot_branch_stack)(buf, entry_cnt);
-+#ifdef CONFIG_X86_64
-+	} else if (flags & BPF_BRANCH_SNAPSHOT_F_COPY) {
-+		struct bpf_tramp_branch_entries *br;
-+
-+		br = this_cpu_ptr(&bpf_branch_snapshot);
-+		entry_cnt = min_t(u32, entry_cnt, br->cnt);
-+		if (entry_cnt)
-+			memcpy(buf, (void *) br->entries, entry_cnt * br_entry_size);
-+#endif
-+	} else {
- 		return -EINVAL;
-+	}
-
- 	if (!entry_cnt)
- 		return -ENOENT;
-@@ -1189,6 +1199,7 @@ const struct bpf_func_proto bpf_get_branch_snapshot_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_UNINIT_MEM,
- 	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg3_type	= ARG_ANYTHING,
- };
-
- BPF_CALL_3(get_func_arg, void *, ctx, u32, n, u64 *, value)
---
++void serial_test_copy_branch_snapshot(void)
++{
++	test_branch_snapshot(BPF_BRANCH_SNAPSHOT_F_COPY);
++}
+diff --git a/tools/testing/selftests/bpf/progs/get_branch_snapshot.c b/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
+index 511ac634eef0..47a1984bdf46 100644
+--- a/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
++++ b/tools/testing/selftests/bpf/progs/get_branch_snapshot.c
+@@ -6,6 +6,7 @@
+ 
+ char _license[] SEC("license") = "GPL";
+ 
++volatile const int flags = 0;
+ __u64 test1_hits = 0;
+ __u64 address_low = 0;
+ __u64 address_high = 0;
+@@ -25,7 +26,7 @@ int BPF_PROG(test1, int n, int ret)
+ {
+ 	long i;
+ 
+-	total_entries = bpf_get_branch_snapshot(entries, sizeof(entries), 0);
++	total_entries = bpf_get_branch_snapshot(entries, sizeof(entries), flags);
+ 	total_entries /= sizeof(struct perf_branch_entry);
+ 
+ 	for (i = 0; i < ENTRY_CNT; i++) {
+-- 
 2.52.0
 
 
