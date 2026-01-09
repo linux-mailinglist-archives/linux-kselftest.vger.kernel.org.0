@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-48606-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48607-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D1BFD0A6A5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 14:28:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB2F1D0A7AA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 14:46:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2C66630124D1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 13:28:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DA7723029B8E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 13:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83E60359F8B;
-	Fri,  9 Jan 2026 13:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E46F35CB80;
+	Fri,  9 Jan 2026 13:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llL55zqj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mCmf/qFA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE7921D3F4;
-	Fri,  9 Jan 2026 13:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7839B35CB75;
+	Fri,  9 Jan 2026 13:41:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767965333; cv=none; b=sX90hXrfTvRCX9bFIeFj02DBON4wRuqCXMRQVVF0XLAgANqkSY1qMWPn86rOfs/YDf0rH6oNhr8HZFLVzS/z0lwyoVAwaKWqcpm6hM00jCQlHE7+s/2gYaLYnzS/LFNuoliWaZYk0MX14NjzRgFGoAD/46fgxYsz5LCEqafW5ls=
+	t=1767966116; cv=none; b=V9blOh+rc+C3LpdhTMRc0NUORB8+fZafGAFvQiwQk0A/zsTbTXH3S/U7QDHjr7nH04yNWsWezEVoT9tTTS1xjVPDL+ojs+kTjUa386Rfr0oNdcJELBUUiUqgtjgUwZQlKHTJK2h9bCxxTxRCTViM0LZER0CaYiNZLHV2iPFKt/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767965333; c=relaxed/simple;
-	bh=KbGNKDR58KSn4+oTOJL1NdoFtGGmzkqP2D4O9W11qko=;
+	s=arc-20240116; t=1767966116; c=relaxed/simple;
+	bh=85W2k/vZ6p+6iy0+yFWg6C8malR33X2ekz9QgywhdHg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Jxv3MBctVqi6WGXGW2KvEUmR3X65p6JJEiOAOCildxzVVx4nYJ4DAvUEwEqKatKmotIYOoNP++OuxO9eFlTzY0Q4TooJlOzwRR0/AgV7RcEc8J5xV0OTGYTEU+8NkuBtfQpjtNys8kxna0pcFHoDk0ZuRZUzGzaiAjeMlqZm9Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llL55zqj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD68AC4CEF1;
-	Fri,  9 Jan 2026 13:28:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=oqF3NcFhjdS6xYRu64tNTn+HJ6aK8o3fQd3Q7CL9BGtWUczLGYUjUQdk32du0G3fPHmoq6xDwdCQWgSkhTq0ZSRL6fr6pcS9+wFbBDxWyrmKlgo6Eg3SI9v9Hk2R4aIsF+RHgN2OT6hkSuvKsnqdiAYqGziKNdXK/xsPr678I/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mCmf/qFA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127F9C4CEF1;
+	Fri,  9 Jan 2026 13:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767965333;
-	bh=KbGNKDR58KSn4+oTOJL1NdoFtGGmzkqP2D4O9W11qko=;
+	s=k20201202; t=1767966116;
+	bh=85W2k/vZ6p+6iy0+yFWg6C8malR33X2ekz9QgywhdHg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=llL55zqjqi+MT92LPRj4SFMimqMF6ITiHAVUU1cLWrTf0TVZfjetX53J3dPEPjAXj
-	 qV6WzGKL/23BEdDanD9wA02+lSX8dh15NzcDjdSFtCINTReIC8Q58OYORr6GSgRWD+
-	 UH8oRGbB6lpl/lLZBF350wdYHN0k5GXOPIb/JWfwiyi0PXkG8YZopbVSo6UqrZqzWq
-	 PYGawZf6RL8p96oA1+TcxhOs9sqGB4HQlalFlKqLh2b3PATLisuPYZJIWni/C+1tI/
-	 0RgeEYAP8hGhpHJMUaLcmGXkvrGSdxxKXykY5kxxsb9Om5YN5pi183VK+ZRZpnYel/
-	 bzwLe8wPPcrxw==
-Message-ID: <b5502d6c-62c2-41bb-9564-3741656e07e2@kernel.org>
-Date: Fri, 9 Jan 2026 14:28:43 +0100
+	b=mCmf/qFAVz66FGjo+1VfRjKDgm9C2YWUh/58ThjZTg1c3qbTdFenCDdpXC5sul1xA
+	 NEinrrPqz1ENk859Qij7ccldBetl/K8nhPAZsHEI/WGyU17lEsKkQE3zj2J+gLMfwF
+	 Sjx1xESmbA9GzXyMj1Lfi/BjDSbn+P8bHM/5S4ETldvoBCPT9Wj23mwBe5hoj2wwY+
+	 oK2l8L3c9w78ggaUMnaxi18GaJAgToAzNL1Uc0Vin/Kif3762G/gwAh3MhdZAhLX1T
+	 jv83fvYBoYK9v3r0KqOR+CdrHj2mmE34RZvYEfa3JqDPL7lRXm1uasdfX7/glbDzuf
+	 r+Z1asmNqwGrQ==
+Message-ID: <3cd08409-8c6b-42ab-97d5-e4440efe4f6a@kernel.org>
+Date: Fri, 9 Jan 2026 14:41:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,22 +48,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] loongarch: wire up memfd_secret system call
-To: Lain Fearyncess Yang <fearyncess@aosc.io>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
-Cc: Kexy Biscuit <kexybiscuit@aosc.io>, Mingcong Bai <jeffbai@aosc.io>,
- Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20260109051054.188030-1-fearyncess@aosc.io>
+Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: fix relative path handling
+To: sun jian <sun.jian.kdev@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20260108031604.12379-1-sun.jian.kdev@gmail.com>
+ <20260108132851.bb6b7813277a5b40ba3aec8f@linux-foundation.org>
+ <CABFUUZGinC04zPEtwq3+maN-iNVNdc1p_BFnTdPNTsLXcQ1hnA@mail.gmail.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -109,61 +101,34 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <20260109051054.188030-1-fearyncess@aosc.io>
+In-Reply-To: <CABFUUZGinC04zPEtwq3+maN-iNVNdc1p_BFnTdPNTsLXcQ1hnA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/9/26 06:10, Lain Fearyncess Yang wrote:
-> From: "Lain \"Fearyncess\" Yang" <fearyncess@aosc.io>
+On 1/9/26 03:08, sun jian wrote:
+>> hm, why?  Is that a thing people actually do?
+>>
+>> Is anyone going to actually test this feature?
 > 
-> LoongArch supports ARCH_HAS_SET_DIRECT_MAP, therefore wire up the
-> memfd_secret system call, which depends on it.
+> Yes — invoking selftests directly from the kernel root can easily happen in
+> practice, for example::
 > 
-> Signed-off-by: Lain "Fearyncess" Yang <fearyncess@aosc.io>
-> ---
->   arch/loongarch/include/asm/unistd.h     | 1 +
->   arch/loongarch/kernel/Makefile.syscalls | 6 +++---
->   tools/testing/selftests/mm/Makefile     | 2 +-
->   3 files changed, 5 insertions(+), 4 deletions(-)
+>    sudo tools/testing/selftests/mm/run_vmtests.sh
 > 
-> diff --git a/arch/loongarch/include/asm/unistd.h b/arch/loongarch/include/asm/unistd.h
-> index e2c0f3d86c7bd..e7649c1582482 100644
-> --- a/arch/loongarch/include/asm/unistd.h
-> +++ b/arch/loongarch/include/asm/unistd.h
-> @@ -10,5 +10,6 @@
->   
->   #define __ARCH_WANT_NEW_STAT
->   #define __ARCH_WANT_SYS_CLONE
-> +#define __ARCH_WANT_MEMFD_SECRET
->   
->   #define NR_syscalls (__NR_syscalls)
-> diff --git a/arch/loongarch/kernel/Makefile.syscalls b/arch/loongarch/kernel/Makefile.syscalls
-> index cd46c2b69c7fd..6360381baf931 100644
-> --- a/arch/loongarch/kernel/Makefile.syscalls
-> +++ b/arch/loongarch/kernel/Makefile.syscalls
-> @@ -1,5 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
-> -# No special ABIs on loongarch so far
-> -syscall_abis_32 +=
-> -syscall_abis_64 +=
-> +# Add memfd_secret explictly for la64 and la32
-> +syscall_abis_32 += memfd_secret
-> +syscall_abis_64 += memfd_secret
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index eaf9312097f7b..79582438efc4d 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -72,7 +72,7 @@ TEST_GEN_FILES += madv_populate
->   TEST_GEN_FILES += map_fixed_noreplace
->   TEST_GEN_FILES += map_hugetlb
->   TEST_GEN_FILES += map_populate
-> -ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64))
-> +ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64))
+> This currently results in false failures because relative paths being resolved
+> against the caller's cwd instead of the script directory.
+>>
+>> Alternatively we could check that we're in the correct directory and
+>> error out if not.
+> 
+> That would also be reasonable, but I slightly prefer auto-cd because it
+> avoids an easy invocation pitfall and makes the runner more robust for
+> wrappers/CI
+> where the cwd is  not stable. That said, I'm happy to switch to a fail-fast cwd
+> check if you prefer the behavior.
 
-For the core-mm bits
-
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+I'd prefer to just fail for the case that we never supported instead of 
+adding support for it.
 
 -- 
 Cheers
