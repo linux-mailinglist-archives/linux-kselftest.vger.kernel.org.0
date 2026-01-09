@@ -1,188 +1,365 @@
-Return-Path: <linux-kselftest+bounces-48576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A27D2D06A8A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 01:55:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116F8D06B2D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 09 Jan 2026 02:13:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E144D3038941
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 00:54:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 591303030383
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Jan 2026 01:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A4D1F130B;
-	Fri,  9 Jan 2026 00:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C951E2135B8;
+	Fri,  9 Jan 2026 01:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="ggX30qBi"
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="oYX8TWwN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71841E633C
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 00:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E3A1F130B
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Jan 2026 01:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767920084; cv=none; b=dXXRtQ1dMSjSPSIzofnwiMQzvR0L83IPpIpWQxOIS+cIi/tQoXfoE8wHBLPE07dJbQ/65d+vZmuAZ1JmrN/IhjwXm1f+/lpw5Q5TJOtQmODAZfb40Fk67mbhBFRRBbW8/A+tpgmn7yZhU4pAMj49EmNZnd1BBFyOD0YgJzgbnTc=
+	t=1767921182; cv=none; b=A16cRvU4NTHsLSMtzlNkBWKKGhZaLoTp5fs5XB73nZrK/A35KW4g3EtvUuAwUZqBgHIeVydiOH9Au5mVT/EKE5RXbckkRYoYSlgt2cUWuoIa6HvM6g5AGBhJlH8PNgzl/XxuobARoiQ6gHLK7g+90rsLT7/dc/35GILcW/A2G3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767920084; c=relaxed/simple;
-	bh=U+ERXgUfSRxYcQMpnmJcQtwAEw2tC+IRhF/3sM+ULAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O/eXHs/hmLwQ+Gz5c0S5VpSVc9++6sp7V9aTQHHGq+6ZsqTAbyFxOY9rSEIsssqDaOvl6YNKEzyjgiRkqUZkqSDyuDYBNohpB+r9yapOPnHEC5FO4Jm2F6JrPgGshcxjXYzty3w8OlLljuGQLOtcJPYaepUneyLWhPHVPFxL1yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=ggX30qBi; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-88a2f2e5445so43739206d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 16:54:42 -0800 (PST)
+	s=arc-20240116; t=1767921182; c=relaxed/simple;
+	bh=/eSlBPX/kyyrFBZsDG9AIA0KS95FwtVFMG9OiB4oWzk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dVVhkwUkgKl/vNRmge3hPBysgKlqKJn1GC9USFeIjj/56W9fuwyb3J9bg8Lzvxq0BLDRIJ2TGERDEYdrwNZ3tejWvxdIv3DZUoxbw1oZzqBrQ9PWiUba10MG53SdlAr9c9jVdpTPwhw8tywlqvWLn+5jDo9HP31JQypT16zTnxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=oYX8TWwN; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-11b992954d4so3747230c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 17:12:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1767920082; x=1768524882; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UAZE/20dBWNTVWUx21XoEWWGeB11q9XckqXbeOgh60E=;
-        b=ggX30qBiAA8FaTfWYEYTd5EVPvdmBPZZ6h4Fzhli80Hv/xquejjv4DN09tgGqAvd1y
-         yAec770oyGkerbMoZxppKuWLybqrpqz3eU4ml/98fCnvuKO36Za7g4bdnyXAM247sZor
-         qSUPOtjBCkrxaXONgBm5oZBIvj4McFWA62b6PeasVvYNnG1QTKH5Gw8uOCMlAyVYNWTU
-         xC/ld2DlyymkCDkMBf4KZ1KzJWmHWTMvTe1xeZujFsL1AASI3zXTwp/PncVOgIeToS9s
-         1Ei8ETUnTti6nu9Gs281fX3h6wmnHZtyIixVcYSbES5jyy+XBepBS5atgox2y4tDn+HD
-         KQNg==
+        d=joelfernandes.org; s=google; t=1767921179; x=1768525979; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xnGlbZvYuz03Yb0nrZqn2RjtIyjEfedXQ3hxMAKDtco=;
+        b=oYX8TWwNURDl0yb5YBoY1GZCYNS0B+cuwNnQ3iiYNxt5DPdatS5DsYpUTpYSwU+Ij7
+         pe8s3U7jKVXCCBkW9DNH6/MQh7clQyy7pBR4ALmzWVzqSWr7h4AsOS3V9iQn9zMYePV3
+         zCPb9AX+3vtu44xRWXYcGcO1IKTcady44kKyg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767920082; x=1768524882;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UAZE/20dBWNTVWUx21XoEWWGeB11q9XckqXbeOgh60E=;
-        b=elsljxURQNoyD97dvCZfhbfxcr+9Rj8MUOeW2z34C81Lo6jqL9Dyfu/41tTwYlXqOD
-         7k7WBou0rr7QAbo0pnMc1k/ChBGIbXfN+vpYrrF0ffBf6Bin4ip30fyMLJk4VaDHrE4A
-         UnOdMprSN7L7rt12wNhTv05mH7FCbhqxu99uHW1kRwTxzn+Hj+KjwdlViSS8mV0xqxTR
-         O+6XtYUhNslWRMAdLyNdxFc9uWIlxlc/4Qnkq8fOJsLpx0halzSYCSz2xtrh+kuFDiIM
-         DTunDxyb+p5gWraIQ7967wPLoKVE85dJn1/T/dhFXuRWz+BjXLrMg1BKFzZW4vYEjqum
-         BiNg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7/kJPr+p7y4cI3KaqUAifYQZHR9bQM8IOqvBRNnZl5j20n8d1a8ESmbtx1NKD8+mBttA4X/KeGnNImkBqVkI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzekQ0Sd+DvBOFpk8Aylp/PN+WX+rwKDLdTIQPNfq6TCimdmFm9
-	rLSn3YJI6hWTGvPGZ3Q31rinAHLDHr4gKcZDzcv7Wb9JrQL4NPv+glOr7JTN8qSQiez7hBwci6Q
-	Qiku9
-X-Gm-Gg: AY/fxX5u8YS/bUHYfBJ7X+yPFNR1xkOFBhpkAynwgbf03uGVDAOnV6sHmbcyZu2G/x1
-	1r5sBlRUVzReYNbKR9+kASbj6Busi4y8Pb+ghp7+lOZlu9cSMSBItMgCZLMkhDu1/9jI0qpMtKU
-	LLbgphy1N3kwSw9PQ8VKJKjhh7EjLMpoaxDQdJo8pNfcgVvAjhXkXmPfHlMhF/flzrRGpXHnh1I
-	0Vuit491i5oyDlwXIuOpByO3S8EBHwULhk39S2PCQqvMAMaXRE9K219/BUIYDlqlAyMSYDlbIvs
-	ZOMMfMGz2JjoniU25LuACK8sYx/oEFYNt0M05+JqD/ngeFgeHU9Qe+6N2JjJ6XufliyJ1ou3PRx
-	zs0S/7BF+H9qXKDZ3EpzD/McHrPPBw+fJTXNN+JxbSq/iH3JkYJnoHArw35oPjrohujyoQQoj84
-	LTcn+FMsV+kchFYGGcfqbAF8Uq8g+4k/y8jPTotYxKEtzLtjF++o4C5G5axbLK9dz8YjY=
-X-Google-Smtp-Source: AGHT+IEZs++vifxK2irZp/20XefsAkmL6blTJ2OewTq/V0KD+K9JOYPvZ0wrg4AeAg9Aq7isQibh6Q==
-X-Received: by 2002:a05:6214:4509:b0:88a:3c0e:3251 with SMTP id 6a1803df08f44-8908425445emr106914126d6.32.1767920081945;
-        Thu, 08 Jan 2026 16:54:41 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8907726041fsm67934866d6.45.2026.01.08.16.54.41
+        d=1e100.net; s=20230601; t=1767921179; x=1768525979;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xnGlbZvYuz03Yb0nrZqn2RjtIyjEfedXQ3hxMAKDtco=;
+        b=xGLtwBNUrmKZdfjctVr+q5GIR4b+s5Vic1eg/u7Y87cj9EyV+XuSKz7vwU3TAnFJRW
+         2FrdiM6B7IvpNnSBRlYjnKoHYFMUP3y5+LKRMLhH9wTzyLUY64N5E91bzGCQVHVAHxlR
+         GWAiNMdyYXhZnZ1pQKsDSF3ZlScgztwjBCSslelYQYuJjqwavC2m6emu6r1N+SH55mp2
+         hu65/wwp/r8lEgxtHBWRiW1z5EcUxA3aX/JKZUbdHv7HzDg9HUMUaIizkSW7999KkL+0
+         ik54aI0LCcTi5Uj/0hzC9cc6/17S4kCZvYZPg9D/eJdtcXb061DJhqTlnFGKkDfE3e0D
+         mtXA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcJZuN7qUqxWe02NONqAkBteek3kIXkrRDZ97v9hl+XDV6Fy3w+Xp2JHFu+lWKdYCvR+PHa4jKoZu6O2ZgmJg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YywQ32BrAK5ptdM2tE7EoBQ0gm0gu1bzVkVVrxTSwNJbUo+qilP
+	6ymHlD32vfOhtF6+QChs5mffpt78t8Hssh721JI8Ls00axsZ3QquI2A/qz8kMt9sPIo=
+X-Gm-Gg: AY/fxX5tgUIqAytuD9TkIBIiOFWYjYWWc++HGZIjLMTh/m+DrgBkYdkCQXxnSi1cXNT
+	t1YmkTSr5tDow0NC/6yj5UgO3DPXtPl0uC4J5fJB3SsDfnjfw7EnQhC//JLQWo8zFd3uDkynZGR
+	tBXjMRDGpkwO3obPJU1qCNm/ZZMkNFl2JuwoDO5UVJh0F27RceU1AsEt4AWAYFTc4BEDCxXNoga
+	AG592Qso2OTYD7IAuQrdX4LzybAKedKfRUnCuMDelh5LUkBol6b62AOiz+AMlbZ8zOZMx9A0ZiQ
+	xAc9R8a1BNInmcbfsUl0m5jrTUTOLGYPoV7EukHbZGUFMwxGKZAJC/ZFmpbhsGULHjGUl6m8iPs
+	WuxZx0wjdvlmtbiY6sMU1y7h7kv5KFtomDqICnPOWv/yu9+y/8Y/I/Va2V5qh2lzJDhG37FCb3d
+	UBp7cg/lz2l7suJV1Z0g==
+X-Google-Smtp-Source: AGHT+IEo/ViGo3mBYCIINoPRUxDpsbHqk6s5jdGyhnucbk8EjmBieDT2xf4lTkrWXcd3jc+0wPMLJQ==
+X-Received: by 2002:a05:7022:220:b0:122:8d:3680 with SMTP id a92af1059eb24-122008d3bb3mr3187718c88.40.1767921178397;
+        Thu, 08 Jan 2026 17:12:58 -0800 (PST)
+Received: from localhost ([71.219.3.177])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f243421esm15803053c88.2.2026.01.08.17.12.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 16:54:41 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1ve0m0-00000002vlZ-3hDX;
-	Thu, 08 Jan 2026 20:54:40 -0400
-Date: Thu, 8 Jan 2026 20:54:40 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Alex Mastro <amastro@fb.com>,
-	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <20260109005440.GH545276@ziepe.ca>
-References: <aV7yIchrL3mzNyFO@google.com>
- <20260108005406.GA545276@ziepe.ca>
- <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
- <20260108141044.GC545276@ziepe.ca>
- <20260108084514.1d5e3ee3@shazbot.org>
- <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
- <20260108183339.GF545276@ziepe.ca>
- <aWAhuSgEQzr_hzv9@google.com>
- <20260109003621.GG545276@ziepe.ca>
- <aWBPNHOsaP1sNvze@google.com>
+        Thu, 08 Jan 2026 17:12:57 -0800 (PST)
+From: Joel Fernandes <joel@joelfernandes.org>
+X-Google-Original-From: Joel Fernandes <joelagnelf@nvidia.com>
+Date: Thu, 8 Jan 2026 20:12:56 -0500
+To: Frederic Weisbecker <frederic@kernel.org>,
+	Joel Fernandes <joel@joelfernandes.org>
+Cc: Paul E McKenney <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+	rcu@vger.kernel.org, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Kai Yao <yaokai34@huawei.com>, Tengda Wu <wutengda2@huawei.com>
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
+ softirq
+Message-ID: <20260109011256.GA1099041@joelbox2>
+References: <aV7o36CHTLc-tD41@pavilion.home>
+ <A88C7853-504A-496E-93A2-C9FE7D80E0D5@joelfernandes.org>
+ <aV_MZfdIfsITRfFD@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aWBPNHOsaP1sNvze@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aV_MZfdIfsITRfFD@localhost.localdomain>
+User-Agent: Mozilla Thunderbird
 
-On Fri, Jan 09, 2026 at 12:43:32AM +0000, David Matlack wrote:
-> On 2026-01-08 08:36 PM, Jason Gunthorpe wrote:
-> > On Thu, Jan 08, 2026 at 09:29:29PM +0000, David Matlack wrote:
-> > > On 2026-01-08 02:33 PM, Jason Gunthorpe wrote:
-> > > > On Thu, Jan 08, 2026 at 10:24:19AM -0800, David Matlack wrote:
-> > > > > > > Oh, I was thinking about a compatability only flow only in the type 1
-> > > > > > > emulation that internally magically converts a VMA to a dmabuf, but I
-> > > > > > > haven't written anything.. It is a bit tricky and the type 1 emulation
-> > > > > > > has not been as popular as I expected??
-> > > > > >
-> > > > > > In part because of this gap, I'd guess.  Thanks,
-> > > > > 
-> > > > > Lack of huge mappings in the IOMMU when using VFIO_TYPE1_IOMMU is
-> > > > > another gap I'm aware of.
-> > > > > vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap
-> > > > > fails when IOMMUFD_VFIO_CONTAINER is enabled.
-> > > > 
-> > > > What is this? I'm not aware of it..
-> > > 
-> > > It's one of the test cases within
-> > > tools/testing/selftests/vfio/vfio_dma_mapping_test.c.
-> > > 
-> > > Here's the output when running with CONFIG_IOMMUFD_VFIO_CONTAINER=y:
-> > > 
-> > >   #  RUN           vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap ...
-> > >   Mapped HVA 0x7f0480000000 (size 0x40000000) at IOVA 0x0
-> > >   Searching for IOVA 0x0 in /sys/kernel/debug/iommu/intel/0000:6a:01.0/domain_translation_struct
-> > >   Found IOMMU mappings for IOVA 0x0:
-> > >   PGD: 0x0000000203475027
-> > >   P4D: 0x0000000203476027
-> > >   PUD: 0x0000000203477027
-> > >   PMD: 0x00000001e7562027
-> > >   PTE: 0x00000041c0000067
-> > >   # tools/testing/selftests/vfio/vfio_dma_mapping_test.c:188:dma_map_unmap:Expected 0 (0) == mapping.pte (282394099815)
-> > >   # dma_map_unmap: Test terminated by assertion
-> > >   #          FAIL  vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap
-> > 
-> > I can't think of any reason this would fail, I think your tests have
-> > found a real bug?? Can you check into it, what kernel call fails and
-> > where does the kernel code come from?
+Hi Frederic,
+
+On 1/8/2026 10:25 AM, Frederic Weisbecker wrote:
+> Le Wed, Jan 07, 2026 at 08:02:43PM -0500, Joel Fernandes a écrit :
+>>
+>>
+>>> On Jan 7, 2026, at 6:15 PM, Frederic Weisbecker <frederic@kernel.org> wrote:
+>>>
+>>> ﻿Le Thu, Jan 01, 2026 at 11:34:10AM -0500, Joel Fernandes a écrit :
+>>>> From: Yao Kai <yaokai34@huawei.com>
+>>>>
+>>>> Commit 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in
+>>>> __rcu_read_unlock()") removes the recursion-protection code from
+>>>> __rcu_read_unlock(). Therefore, we could invoke the deadloop in
+>>>> raise_softirq_irqoff() with ftrace enabled as follows:
+>>>>
+>>>> WARNING: CPU: 0 PID: 0 at kernel/trace/trace.c:3021 __ftrace_trace_stack.constprop.0+0x172/0x180
+>>>> Modules linked in: my_irq_work(O)
+>>>> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G O 6.18.0-rc7-dirty #23 PREEMPT(full)
+>>>> Tainted: [O]=OOT_MODULE
+>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+>>>> RIP: 0010:__ftrace_trace_stack.constprop.0+0x172/0x180
+>>>> RSP: 0018:ffffc900000034a8 EFLAGS: 00010002
+>>>> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
+>>>> RDX: 0000000000000003 RSI: ffffffff826d7b87 RDI: ffffffff826e9329
+>>>> RBP: 0000000000090009 R08: 0000000000000005 R09: ffffffff82afbc4c
+>>>> R10: 0000000000000008 R11: 0000000000011d7a R12: 0000000000000000
+>>>> R13: ffff888003874100 R14: 0000000000000003 R15: ffff8880038c1054
+>>>> FS:  0000000000000000(0000) GS:ffff8880fa8ea000(0000) knlGS:0000000000000000
+>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> CR2: 000055b31fa7f540 CR3: 00000000078f4005 CR4: 0000000000770ef0
+>>>> PKRU: 55555554
+>>>> Call Trace:
+>>>> <IRQ>
+>>>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>>>> trace_event_buffer_commit+0x5c/0x260
+>>>> trace_event_raw_event_softirq+0x47/0x80
+>>>> raise_softirq_irqoff+0x6e/0xa0
+>>>> rcu_read_unlock_special+0xb1/0x160
+>>>> unwind_next_frame+0x203/0x9b0
+>>>> __unwind_start+0x15d/0x1c0
+>>>> arch_stack_walk+0x62/0xf0
+>>>> stack_trace_save+0x48/0x70
+>>>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>>>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>>>> trace_event_buffer_commit+0x5c/0x260
+>>>> trace_event_raw_event_softirq+0x47/0x80
+>>>> raise_softirq_irqoff+0x6e/0xa0
+>>>> rcu_read_unlock_special+0xb1/0x160
+>>>> unwind_next_frame+0x203/0x9b0
+>>>> __unwind_start+0x15d/0x1c0
+>>>> arch_stack_walk+0x62/0xf0
+>>>> stack_trace_save+0x48/0x70
+>>>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>>>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>>>> trace_event_buffer_commit+0x5c/0x260
+>>>> trace_event_raw_event_softirq+0x47/0x80
+>>>> raise_softirq_irqoff+0x6e/0xa0
+>>>> rcu_read_unlock_special+0xb1/0x160
+>>>> unwind_next_frame+0x203/0x9b0
+>>>> __unwind_start+0x15d/0x1c0
+>>>> arch_stack_walk+0x62/0xf0
+>>>> stack_trace_save+0x48/0x70
+>>>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>>>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>>>> trace_event_buffer_commit+0x5c/0x260
+>>>> trace_event_raw_event_softirq+0x47/0x80
+>>>> raise_softirq_irqoff+0x6e/0xa0
+>>>> rcu_read_unlock_special+0xb1/0x160
+>>>> __is_insn_slot_addr+0x54/0x70
+>>>> kernel_text_address+0x48/0xc0
+>>>> __kernel_text_address+0xd/0x40
+>>>> unwind_get_return_address+0x1e/0x40
+>>>> arch_stack_walk+0x9c/0xf0
+>>>> stack_trace_save+0x48/0x70
+>>>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>>>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>>>> trace_event_buffer_commit+0x5c/0x260
+>>>> trace_event_raw_event_softirq+0x47/0x80
+>>>> __raise_softirq_irqoff+0x61/0x80
+>>>> __flush_smp_call_function_queue+0x115/0x420
+>>>> __sysvec_call_function_single+0x17/0xb0
+>>>> sysvec_call_function_single+0x8c/0xc0
+>>>> </IRQ>
+>>>>
+>>>> Commit b41642c87716 ("rcu: Fix rcu_read_unlock() deadloop due to IRQ work")
+>>>> fixed the infinite loop in rcu_read_unlock_special() for IRQ work by
+>>>> setting a flag before calling irq_work_queue_on(). We fix this issue by
+>>>> setting the same flag before calling raise_softirq_irqoff() and rename the
+>>>> flag to defer_qs_pending for more common.
+>>>>
+>>>> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read_unlock()")
+>>>> Reported-by: Tengda Wu <wutengda2@huawei.com>
+>>>> Signed-off-by: Yao Kai <yaokai34@huawei.com>
+>>>> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+>>>> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+>>>
+>>> Looks good but, BTW, what happens if rcu_qs() is called
+>>> before rcu_preempt_deferred_qs() had a chance to be called?
+>>
+>> Could you provide an example of when that can happen?
 > 
-> Oh I thought it was by design. This code in iommufd_vfio_set_iommu():
+> It can happen because rcu_qs() is called before rcu_preempt_deferred_qs()
+> in rcu_softirq_qs(). Inverting the calls could help but IRQs must be disabled
+> to ensure there is no read side between rcu_preempt_deferred_qs() and rcu_qs().
+
+Ah the rcu_softorq_qs() path. Indeed, I see what you're saying now. Not sure
+how to trigger it, but yeah good catch. it would delay the reset of the flag.
+
+> I'm not aware of other ways to trigger that, except perhaps this:
 > 
-> 	/*
-> 	 * The difference between TYPE1 and TYPE1v2 is the ability to unmap in
-> 	 * the middle of mapped ranges. This is complicated by huge page support
-> 	 * which creates single large IOPTEs that cannot be split by the iommu
-> 	 * driver. TYPE1 is very old at this point and likely nothing uses it,
-> 	 * however it is simple enough to emulate by simply disabling the
-> 	 * problematic large IOPTEs. Then we can safely unmap within any range.
-> 	 */
-> 	if (type == VFIO_TYPE1_IOMMU)
-> 		rc = iopt_disable_large_pages(&ioas->iopt);
+> https://lore.kernel.org/rcu/20251230004124.438070-1-joelagnelf@nvidia.com/T/#u
 > 
-> git-blame says some guy named Jason Gunthorpe wrote it :P
+> Either we fix those sites and make sure that rcu_preempt_deferred_qs() is always
+> called before rcu_qs() in the same IRQ disabled section (or there are other
+> fields set in ->rcu_read_unlock_special for later clearance). If we do that we
+> must WARN_ON_ONCE(rdp->defer_qs_pending == DEFER_QS_PENDING) in rcu_qs().
+> 
+> Or we reset rdp->defer_qs_pending from rcu_qs(), which sounds more robust.
 
-Er, maybe I mis understood the output then?
+If we did that, can the following not happen? I did believe I tried that and it
+did not fix the IRQ work recursion. Supposed you have a timer interrupt and an
+IRQ that triggers BPF on exit. Both are pending on the CPU's IRQ controller.
 
-This is not a "failure" though, the map succeeded and gave a small
-page mapping.
+First the non-timer interrupt does this:
 
-This is not reflecting a bug in iommufd but a bug in the TYPE1 support
-in VFIO itself because it definitely cannot maintain the required
-unmap anywhere semantic if it mapped in a 1G huge page like this.
+irq_exit()
+  __irq_exit_rcu()
+    /* in_hardirq() returns false after this */
+    preempt_count_sub(HARDIRQ_OFFSET)
+    tick_irq_exit()
+      tick_nohz_irq_exit()
+	    tick_nohz_stop_sched_tick()
+	      trace_tick_stop()  /* a bpf prog is hooked on this trace point */
+		   __bpf_trace_tick_stop()
+		      bpf_trace_run2()
+			    rcu_read_unlock_special()
+                              /* will send a IPI to itself */
+			      irq_work_queue_on(&rdp->defer_qs_iw, rdp->cpu);
 
-Basically, if you are mapping with TYPE1 mode then this should be triggered:
+<timer interrupt runs>
 
-        if (!strcmp(variant->iommu_mode, "iommufd_compat_type1"))
-                mapping_size = SZ_4K;
+The timer interrupt runs, and does the clean up that the IRQ work was supposed
+to do.
 
-And VFIO should be the one to fail, not iommufd.
+<IPI now runs for the IRQ work>
+  ->irq_exit()
+   ... recursion since IRQ work issued again.
 
-If you really want to test TYPE1 you need to test what makes it
-unique, which is that you can map any VMA and then unmap any slice of
-it. Including within what should otherwise be a 1G page.
+Maybe it is unlikely to happen, but it feels a bit fragile still.  All it
+takes is one call to rcu_qs() after the IRQ work was queued and before it
+ran, coupled with an RCU reader that somehow always enters the slow-path.
 
-But I doubt anyone cares enough to fix this, so just exclude
-VFIO_TYPE1_IOMMU from this test?
+> Ah an alternative is to make rdp::defer_qs_pending a field in union rcu_special
+> which, sadly, would need to be expanded as a u64.
 
-Jason
+I was thinking maybe the most robust is something like the following. We
+_have_ to go through the node tree to report QS, once we "defer the QS",
+there's no other way out of that, that's a path that is a guarantee to go
+through in order to end the GP. So just unconditionally clear the flag there
+and all such places, something like the following which passes light
+rcutorture on all scenarios.
+
+Once we issue an IRQ work or raise a softirq, we don't need to do that again
+for the same CPU until the GP ends).
+
+(EDIT: actually rcu_disable_urgency_upon_qs() or its callsites might just be
+the place, since it is present in (almost?) all call sites we are to report
+up on the node tree).
+
+Thoughts? I need to double check if there any possibilities of requiring IRQ
+work for more than one time during the same GP and the same CPU. I don't think
+so though.
+
+---8<-----------------------
+
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index b7c818cabe44..81c3af5d1f67 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -729,6 +729,12 @@ static void rcu_disable_urgency_upon_qs(struct rcu_data *rdp)
+ 	}
+ }
+ 
++static void rcu_defer_qs_clear_pending(struct rcu_data *rdp)
++{
++	if (READ_ONCE(rdp->defer_qs_pending) == DEFER_QS_PENDING)
++		WRITE_ONCE(rdp->defer_qs_pending, DEFER_QS_IDLE);
++}
++
+ /**
+  * rcu_is_watching - RCU read-side critical sections permitted on current CPU?
+  *
+@@ -2483,6 +2490,8 @@ rcu_report_qs_rdp(struct rcu_data *rdp)
+ 		}
+ 
+ 		rcu_disable_urgency_upon_qs(rdp);
++		rcu_defer_qs_clear_pending(rdp);
++
+ 		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+ 		/* ^^^ Released rnp->lock */
+ 	}
+@@ -2767,6 +2776,12 @@ static void force_qs_rnp(int (*f)(struct rcu_data *rdp))
+ 			if (ret > 0) {
+ 				mask |= rdp->grpmask;
+ 				rcu_disable_urgency_upon_qs(rdp);
++				/*
++				 * Clear any stale defer_qs_pending for idle/offline
++				 * CPUs reporting QS. This can happen if a CPU went
++				 * idle after raising softirq but before it ran.
++				 */
++				rcu_defer_qs_clear_pending(rdp);
+ 			}
+ 			if (ret < 0)
+ 				rsmask |= rdp->grpmask;
+@@ -4373,6 +4388,7 @@ void rcutree_report_cpu_starting(unsigned int cpu)
+ 
+ 		local_irq_save(flags);
+ 		rcu_disable_urgency_upon_qs(rdp);
++		rcu_defer_qs_clear_pending(rdp);
+ 		/* Report QS -after- changing ->qsmaskinitnext! */
+ 		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+ 	} else {
+@@ -4432,6 +4448,7 @@ void rcutree_report_cpu_dead(void)
+ 	if (rnp->qsmask & mask) { /* RCU waiting on outgoing CPU? */
+ 		/* Report quiescent state -before- changing ->qsmaskinitnext! */
+ 		rcu_disable_urgency_upon_qs(rdp);
++		rcu_defer_qs_clear_pending(rdp);
+ 		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
+ 		raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	}
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 96c49c56fc14..7f2af0e45883 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -272,6 +272,10 @@ static void rcu_report_exp_rdp(struct rcu_data *rdp)
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+ 	WRITE_ONCE(rdp->cpu_no_qs.b.exp, false);
+ 	ASSERT_EXCLUSIVE_WRITER(rdp->cpu_no_qs.b.exp);
++
++	/* Expedited QS reported. TODO: what happens if we deferred both exp and normal QS (and viceversa for the other callsites)? */
++	rcu_defer_qs_clear_pending(rdp);
++
+ 	rcu_report_exp_cpu_mult(rnp, flags, rdp->grpmask, true);
+ }
+ 
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 6c86c7b96c63..d706daea021f 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -487,8 +487,6 @@ rcu_preempt_deferred_qs_irqrestore(struct task_struct *t, unsigned long flags)
+ 	union rcu_special special;
+ 
+ 	rdp = this_cpu_ptr(&rcu_data);
+-	if (rdp->defer_qs_pending == DEFER_QS_PENDING)
+-		rdp->defer_qs_pending = DEFER_QS_IDLE;
+ 
+ 	/*
+ 	 * If RCU core is waiting for this CPU to exit its critical section,
 
