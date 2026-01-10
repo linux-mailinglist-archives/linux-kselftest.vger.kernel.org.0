@@ -1,58 +1,57 @@
-Return-Path: <linux-kselftest+bounces-48647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECA4FD0CAC1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 02:00:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14561D0CAFD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 02:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 874F1301FF60
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 01:00:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F390E301E22D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 01:16:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0910E19D071;
-	Sat, 10 Jan 2026 01:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 422661DF248;
+	Sat, 10 Jan 2026 01:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlR0bOOC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZsyTwe/z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4D42A1BF;
-	Sat, 10 Jan 2026 01:00:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F40742048;
+	Sat, 10 Jan 2026 01:16:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768006846; cv=none; b=YLHRmQCwrXzLULJtRf57/22wvSM7g9c6ngFiwcyljLuuUemek6fUoOl129RPn/UIOK1eGuQpeTpadxnmImPv6XPLLv6q2fKsZLuLn8L3aujdvWD7rjmEz06NjXgj+H/KKAVE6zMv91Xh3FkHcWFNGZmud6Oi0RdJJSsMOMpxe1Q=
+	t=1768007810; cv=none; b=QQmWQsOUEJ0RvM2BdqHKYFcNCD6P671k9wXpgCf3VQiZKs2bMMBWcJsOjdBUVFcGmGmYq+14HJw4e3tqYhkIKHHKKOByh6/oKdsUTl83el9OekqvlR6uIzNedKw2YJyENXMulOHqlwRzMkUN+bT8Lsx5FZtCin9lJy6G2Xfbodw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768006846; c=relaxed/simple;
-	bh=8aEYqTxr0J54u22VUMYWBDE5QKYiAhl26ZI9/MaymeI=;
+	s=arc-20240116; t=1768007810; c=relaxed/simple;
+	bh=1yqAuwPlUfRbkywsOHYeC8zQzYiMnx9T0dqkU24ak7M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZiSALFrAyuPAMRRi1rMA8C62x95TmCpLBsxYl+8FE1VeLfHLYkLDc1/uUo+s78i3MtScUw0JCh7yEoZhhpZhzY2uBeK1dAthmCxjtKWw6Na5OCCXGJI3sSgbh9xaYVsC3POiQFzQjOr/uHBZFBoOpttzJy7mmRlB1Utp2LaxMiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlR0bOOC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4DDC4CEF1;
-	Sat, 10 Jan 2026 01:00:46 +0000 (UTC)
+	 MIME-Version; b=j8Y0mRyR93XmmdlqrC2bD6hl8jDmaGGBgu9WedsVvx6AuSdKJ1a4YaLTNLGCP1xub22X1BkyM3bBTdR/mQxPQkRX7Y1HNFE5p3qVf8KTFmENssfQrB8I/RRt9EP+tw8I1OusVOvr7Lwz9cMOugrYpvztlXcLBHBMrRhWZv2WaJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZsyTwe/z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE73C4CEF1;
+	Sat, 10 Jan 2026 01:16:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768006846;
-	bh=8aEYqTxr0J54u22VUMYWBDE5QKYiAhl26ZI9/MaymeI=;
+	s=k20201202; t=1768007809;
+	bh=1yqAuwPlUfRbkywsOHYeC8zQzYiMnx9T0dqkU24ak7M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HlR0bOOCV6CXoMwvHju+GiBQph7JGA3JPhcidDf0e7j8ZSdfMQCMvR9sOr6igaBxL
-	 lr4E+h3zFQj1LB8PBHoPm0rTQDffVYcZMplmVsxcBsT56E4SIOFrmsZnY7nCGMntuS
-	 b3k5k/J+olc+eyt/QDUmurAKl2D7e1rl204gXIet3fMHBodiTGDMJ+UWzoSKa1h44F
-	 qLRPqqJpEgdqIzX6i9IZWghWVMhWX95QKdWbpztnb4mX6SofUy+OaAmJ2eOXFN43ee
-	 apRsH9v8mDAxrtMAiDzZXe+LTuOBIURxmltGbqyiV+NARYp8R3N/UYPg1QV+nbi3Bz
-	 9v/ipgwxRBrDA==
+	b=ZsyTwe/zSpke6a9XZ6AKLa6ZQ3ADLRwY8NzsYMoo9vtCM3McMX3RZNQR+YG/YJvjR
+	 +Kojk+cRQFG/GZcRFeJ3+4dRApBG4Q9p1BQWOcS0lpfCb5Kv8bB2c/GXgr+TXFa+R6
+	 Ho0hzcKyk6cAA/6uifqZ0/bE/wR/EMwh98DG/nk3KFRkzUc5JJQ1uvFFsZ9Ybfs9fB
+	 PBXZi2e60iSAjHuQryLCZ025oRuwIf7gLFgOHEwVxAcMyC+QpDFzMfI6GZOap9rXZ7
+	 pwCARKTqLLedq/a7gA6X06GdaXr9Kr9bAEaSMNC55mAdfRzhfk5OX+QW21X87BYV2u
+	 SZbtvQNv34LXg==
 From: SeongJae Park <sj@kernel.org>
 To: Sun Jian <sun.jian.kdev@gmail.com>
 Cc: SeongJae Park <sj@kernel.org>,
-	David Hildenbrand <david@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	Andrew Morton <akpm@linux-foundation.org>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/mm: run_vmtests.sh: fail if invoked from the wrong directory
-Date: Fri,  9 Jan 2026 17:00:43 -0800
-Message-ID: <20260110010044.80694-1-sj@kernel.org>
+Subject: Re: [PATCH] selftests/mm: ksm_tests: skip when not run as root
+Date: Fri,  9 Jan 2026 17:16:40 -0800
+Message-ID: <20260110011641.81278-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260109172833.2989-1-sun.jian.kdev@gmail.com>
+In-Reply-To: <20260109094313.52307-1-sun.jian.kdev@gmail.com>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -62,15 +61,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Sat, 10 Jan 2026 01:28:33 +0800 Sun Jian <sun.jian.kdev@gmail.com> wrote:
+On Fri,  9 Jan 2026 17:43:13 +0800 Sun Jian <sun.jian.kdev@gmail.com> wrote:
 
-> run_vmtests.sh assumes it is invoked from tools/testing/selftests/mm.
-> When run from another working directory, relative paths can lead to
-> confusing failures. Detect this case and abort with a clear message.
+> ksm_tests writes KSM sysfs knobs under /sys/kernel/mm/ksm, which requires
+> root privileges. When run unprivileged, it fails with permission errors
+> and reports FAIL, which is misleading.
+> 
+> Skip the test early when not run as root to avoid false failures.
 > 
 > Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+> ---
+>  tools/testing/selftests/mm/ksm_tests.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index a0b48b839d54..c22cd9c61711 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -766,6 +766,11 @@ int main(int argc, char *argv[])
+>  	bool merge_across_nodes = KSM_MERGE_ACROSS_NODES_DEFAULT;
+>  	long size_MB = 0;
+>  
+> +	if (geteuid() != 0) {
+> +		printf("# SKIP ksm_tests requires root privileges\n");
+> +		return KSFT_SKIP;
 
-Reviewed-by: SeongJae Park <sj@kernel.org>
+What about using ksft_exit_skip() instead, like compaction_test.c does?
 
 
 Thanks,
