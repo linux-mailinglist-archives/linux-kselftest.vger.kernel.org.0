@@ -1,78 +1,48 @@
-Return-Path: <linux-kselftest+bounces-48653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B149BD0CB82
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 02:35:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7481FD0CBE2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 02:43:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C0F14302D913
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 01:33:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0F24930094AB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 01:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA4A2367DC;
-	Sat, 10 Jan 2026 01:33:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B4F22B5AC;
+	Sat, 10 Jan 2026 01:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M3BW45ZJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XPEBx8pG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F3C22689C
-	for <linux-kselftest@vger.kernel.org>; Sat, 10 Jan 2026 01:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445832A1CF;
+	Sat, 10 Jan 2026 01:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768008822; cv=none; b=LtKaVd3/sDpq7Ta6w9gHrDdSpd+44CYmrw3sn/w3DYw/26CIWcKzot/LAZtefOycsmFH6WyYNYsmgUJFky/FwLLHs7HYMvdTbceVnpH6vGv2PvCg30kjldDsZAOR9V6eCI/TyfQJRmfg6dI9k+X/mHroF6M/SEqRfnigMM0Lct0=
+	t=1768009418; cv=none; b=dpubXM+/oHv6odjfcFw1YZ3ZQib0VOOwor1OXwjBLcKpsrMJtpzn7Asrit1CmIbklpq7Xbsw7h4zhqiepLdS8xKvGmLW5Bmit+ylOq3WopuVh4u0YEtmW9eZjSIE10y+Upl4ZoZxxgCt0/6LrKTRKHO2QuEzzl1z5Gul3hK0HW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768008822; c=relaxed/simple;
-	bh=jszMQ9Hme920SEwWQlamDC1aqLelIKuv2qdD1sEPIok=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=biIgBpjlVNPg39UDXxAp9MxXW+0u/1wjZsCgLb6A5X1ofFtE01li3hN93yL6e8CVazuAPjT3KqmBmjY3lRdgdKRwXEklRAJ5FN987B1w1TN+xB8K5uvIAP66ISEouLsUPFWsdxY+YMOa2cb9HqQhBBXG8KlABAYUcX0s2GYHQPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M3BW45ZJ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768008820;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fr0ElCgQVjIh7r1Wo+RnxZptNIJHrGjQ+YLFV8GVIR0=;
-	b=M3BW45ZJom62Sf9ytwdyn2PQoNRFLLO1jjZAoHaoiazkWiQroQoGzX3IimUGnru9JQK9Hp
-	96IB/YI5AgdtG+wD9N6/w+SHYtG09emtQZDqm9JpfaB+Eriz9WhktfS0W/Oag1ItztB7os
-	ylyD/fHgSDXs3X2MaOTL8b5tkOkwzWI=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-556-DhV1qanDPqGLevhPmgJHiw-1; Fri,
- 09 Jan 2026 20:33:36 -0500
-X-MC-Unique: DhV1qanDPqGLevhPmgJHiw-1
-X-Mimecast-MFC-AGG-ID: DhV1qanDPqGLevhPmgJHiw_1768008815
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0362419560B7;
-	Sat, 10 Jan 2026 01:33:35 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.90.10])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CF8CB1800285;
-	Sat, 10 Jan 2026 01:33:32 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Sun Shaojie <sunshaojie@kylinos.cn>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH cgroup/for-6.20 v3 5/5] cgroup/cpuset: Move the v1 empty cpus/mems check to cpuset1_validate_change()
-Date: Fri,  9 Jan 2026 20:32:46 -0500
-Message-ID: <20260110013246.293889-6-longman@redhat.com>
-In-Reply-To: <20260110013246.293889-1-longman@redhat.com>
-References: <20260110013246.293889-1-longman@redhat.com>
+	s=arc-20240116; t=1768009418; c=relaxed/simple;
+	bh=SooGb7Rs/BrumFC1Ul13PYFGR0gg7pXpiEHHkzi8YFs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Cg42ne6e7whbOpZ8O1/+xfRReQb/BPQsOTmvkzldfFR+aX0ZLTl8G142rEXtXPt8kzllNjhQ1peHalW2gb24A3PiN/9wIe0gBN2JQ/e3UTp77wfRys5m+5vNLK0FdSVcwViC0DwENvfazuKVmVkaZQEPI9FhBqOCSfIrpyOiotk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XPEBx8pG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22AA0C4CEF1;
+	Sat, 10 Jan 2026 01:43:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768009418;
+	bh=SooGb7Rs/BrumFC1Ul13PYFGR0gg7pXpiEHHkzi8YFs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=XPEBx8pGrfJHcMd57d4WYXNWfp521AdH6BZmM3JYHPGKTipiZN/dY3jB+A3XpSjd3
+	 QzswL2NYRgrpIegzA71IEdmT8foAzU3P8wGGtNeXelLds0B1Zwot40WzFlsRMqhcnk
+	 Ce9qMxmywpwAYE8oaEQ+wPZXjG2O7vq1uP7QE4IuPyvQ8+cBL7g1T75tK6pgJjq7UQ
+	 4Y0rDgRNO6KT4PiGFQX4lKATxjwIiBJrlRXtzX813nbeKch9exFe0BnNuNL0y5yQ5S
+	 YVEcMC/2A7x0/ywqlYh+DL1sugQEoDa7x6UaGVY0FuhHCc8TBAZ8jOKcH3yAlJyl3Z
+	 OvlOMh6ReuM7Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2B8D3AA9F46;
+	Sat, 10 Jan 2026 01:40:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,133 +50,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Subject: Re: [PATCH net-next] selftests: forwarding: update PTP tcpdump
+ patterns
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176800921377.446502.1178944732050569872.git-patchwork-notify@kernel.org>
+Date: Sat, 10 Jan 2026 01:40:13 +0000
+References: <20260107145320.1837464-1-kuba@kernel.org>
+In-Reply-To: <20260107145320.1837464-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ vladimir.oltean@nxp.com, alexander.sverdlin@gmail.com,
+ linux-kselftest@vger.kernel.org
 
-As stated in commit 1c09b195d37f ("cpuset: fix a regression in validating
-config change"), it is not allowed to clear masks of a cpuset if
-there're tasks in it. This is specific to v1 since empty "cpuset.cpus"
-or "cpuset.mems" will cause the v2 cpuset to inherit the effective CPUs
-or memory nodes from its parent. So it is OK to have empty cpus or mems
-even if there are tasks in the cpuset.
+Hello:
 
-Move this empty cpus/mems check in validate_change() to
-cpuset1_validate_change() to allow more flexibility in setting
-cpus or mems in v2. cpuset_is_populated() needs to be moved into
-cpuset-internal.h as it is needed by the empty cpus/mems checking code.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Also add a test case to test_cpuset_prs.sh to verify that.
+On Wed,  7 Jan 2026 06:53:19 -0800 you wrote:
+> Recent version of tcpdump (tcpdump-4.99.6-1.fc43.x86_64) seems to have
+> removed the spurious space after msg type in PTP info, e.g.:
+> 
+>  before:  PTPv2, majorSdoId: 0x0, msg type : sync msg, length: 44
+>  after:   PTPv2, majorSdoId: 0x0, msg type: sync msg, length: 44
+> 
+> Update our patterns to match both.
+> 
+> [...]
 
-Reported-by: Chen Ridong <chenridong@huaweicloud.com>
-Closes: https://lore.kernel.org/lkml/7a3ec392-2e86-4693-aa9f-1e668a668b9c@huaweicloud.com/
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset-internal.h               |  9 ++++++++
- kernel/cgroup/cpuset-v1.c                     | 14 +++++++++++
- kernel/cgroup/cpuset.c                        | 23 -------------------
- .../selftests/cgroup/test_cpuset_prs.sh       |  3 +++
- 4 files changed, 26 insertions(+), 23 deletions(-)
+Here is the summary with links:
+  - [net-next] selftests: forwarding: update PTP tcpdump patterns
+    https://git.kernel.org/netdev/net-next/c/68ec2b9fc59e
 
-diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
-index e8e2683cb067..fd7d19842ded 100644
---- a/kernel/cgroup/cpuset-internal.h
-+++ b/kernel/cgroup/cpuset-internal.h
-@@ -260,6 +260,15 @@ static inline int nr_cpusets(void)
- 	return static_key_count(&cpusets_enabled_key.key) + 1;
- }
- 
-+static inline bool cpuset_is_populated(struct cpuset *cs)
-+{
-+	lockdep_assert_cpuset_lock_held();
-+
-+	/* Cpusets in the process of attaching should be considered as populated */
-+	return cgroup_is_populated(cs->css.cgroup) ||
-+		cs->attach_in_progress;
-+}
-+
- /**
-  * cpuset_for_each_child - traverse online children of a cpuset
-  * @child_cs: loop cursor pointing to the current child
-diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
-index 04124c38a774..7a23b9e8778f 100644
---- a/kernel/cgroup/cpuset-v1.c
-+++ b/kernel/cgroup/cpuset-v1.c
-@@ -368,6 +368,20 @@ int cpuset1_validate_change(struct cpuset *cur, struct cpuset *trial)
- 	if (par && !is_cpuset_subset(trial, par))
- 		goto out;
- 
-+	/*
-+	 * Cpusets with tasks - existing or newly being attached - can't
-+	 * be changed to have empty cpus_allowed or mems_allowed.
-+	 */
-+	ret = -ENOSPC;
-+	if (cpuset_is_populated(cur)) {
-+		if (!cpumask_empty(cur->cpus_allowed) &&
-+		    cpumask_empty(trial->cpus_allowed))
-+			goto out;
-+		if (!nodes_empty(cur->mems_allowed) &&
-+		    nodes_empty(trial->mems_allowed))
-+			goto out;
-+	}
-+
- 	ret = 0;
- out:
- 	return ret;
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 83fb83a86b4b..a3dbca125588 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -370,15 +370,6 @@ static inline bool is_in_v2_mode(void)
- 	      (cpuset_cgrp_subsys.root->flags & CGRP_ROOT_CPUSET_V2_MODE);
- }
- 
--static inline bool cpuset_is_populated(struct cpuset *cs)
--{
--	lockdep_assert_held(&cpuset_mutex);
--
--	/* Cpusets in the process of attaching should be considered as populated */
--	return cgroup_is_populated(cs->css.cgroup) ||
--		cs->attach_in_progress;
--}
--
- /**
-  * partition_is_populated - check if partition has tasks
-  * @cs: partition root to be checked
-@@ -695,20 +686,6 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
- 
- 	par = parent_cs(cur);
- 
--	/*
--	 * Cpusets with tasks - existing or newly being attached - can't
--	 * be changed to have empty cpus_allowed or mems_allowed.
--	 */
--	ret = -ENOSPC;
--	if (cpuset_is_populated(cur)) {
--		if (!cpumask_empty(cur->cpus_allowed) &&
--		    cpumask_empty(trial->cpus_allowed))
--			goto out;
--		if (!nodes_empty(cur->mems_allowed) &&
--		    nodes_empty(trial->mems_allowed))
--			goto out;
--	}
--
- 	/*
- 	 * We can't shrink if we won't have enough room for SCHED_DEADLINE
- 	 * tasks. This check is not done when scheduling is disabled as the
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index ff4540b0490e..5dff3ad53867 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -425,6 +425,9 @@ TEST_MATRIX=(
- 	# cpuset.cpus can be set to a subset of sibling's cpuset.cpus.exclusive
- 	" C1-3:X1-3  .      .    C4-5      .     .      .     C1-2   0 A1:1-3|B1:1-2"
- 
-+	# cpuset.cpus can become empty with task in it as it inherits parent's effective CPUs
-+	" C1-3:S+   C2      .      .       .    T:C     .      .     0 A1:1-3|A2:1-3"
-+
- 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
- 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
- 	# Failure cases:
+You are awesome, thank you!
 -- 
-2.52.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
