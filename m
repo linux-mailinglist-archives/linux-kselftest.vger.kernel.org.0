@@ -1,78 +1,147 @@
-Return-Path: <linux-kselftest+bounces-48664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A071D0D2B7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 08:31:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB91FD0D3E0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 10:20:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EF52B301EC55
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 07:31:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4ABAF3005F3C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 09:20:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AEF23D7FD;
-	Sat, 10 Jan 2026 07:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412C823D7E6;
+	Sat, 10 Jan 2026 09:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5nbRnqk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-49.mail.aliyun.com (out28-49.mail.aliyun.com [115.124.28.49])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A238D1F12E0;
-	Sat, 10 Jan 2026 07:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C59650097C;
+	Sat, 10 Jan 2026 09:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768030312; cv=none; b=GmeWVPgUAtptLR/dt3XcXTmrVc6mQvjWa+I8NyDRUgUPLX4pkxTldLNr3N0t53mhWuICFRIUMgtUhCKnaxZEiY/PFjENtiDrLROYunanVmX61b7f62cYR1PSWJXcZ7KZEjDMlzK8t+AEh36tpKpjecnDFltgcMrH1/Djqw5pSS4=
+	t=1768036833; cv=none; b=Awo/PPnAdFoY1M4rLwTp/ASLjM3MTWbECTVLBKM/IB2qsDfcRg4MQnqvYJ7JzSUaaYzf9C5xk8g/IZZF9l+TX/FrN5XuO9Ax4F8GCagQSYUl99/ijK7LgD/vETECOrEcjDQu3eE9IyG4twDbXguaWK7+aaJ+lmlmVdpCbyMcaaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768030312; c=relaxed/simple;
-	bh=/wB05W6e84K94JmMQZWaHmkeKOaXajSrHLtnZ52TTyc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qDv7aMQMZAQi5BZnXT0WrcuCOTGfgX517WZ7lhE6BneBVurT38s6kk/L8ZamBvFA6vT84BpLDT+tvepeEa/2VAsXzlZZL2dJKAd03ENBxkRaDlQWNOYs7ollO5ALGdnrzqFy31rQoVvZglmwHrghPGSpCt5bRn10FF7wFbj5izE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.g31FqaW_1768029983 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Sat, 10 Jan 2026 15:26:24 +0800
-Message-ID: <2abf5456-919b-437f-acc3-a251b453ad39@open-hieco.net>
-Date: Sat, 10 Jan 2026 15:26:23 +0800
+	s=arc-20240116; t=1768036833; c=relaxed/simple;
+	bh=KKQtxoH3rYBYZwb0H4z4PIa/K3M/KmoAeEeb+nV8ZC0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=exxHtQsBNupm3kjyZEwRAGmN7vKapBDTRB6rGv//UwJ49/MlOZhEbjmgYfbrNgjaupiNJuY0/hj5HkE9q9kSmIFjBbIvgQYscjVbdqmAG7xjK8+9nfX+Ntuh1IUDYmFgWXjARvdsgSg7YuMpv1TvmeMDTdzodLMqzvOBm9Ehz1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5nbRnqk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49BABC4CEF1;
+	Sat, 10 Jan 2026 09:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768036832;
+	bh=KKQtxoH3rYBYZwb0H4z4PIa/K3M/KmoAeEeb+nV8ZC0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=e5nbRnqkrmpqJL669y3TwB7vzH359xmBdq58AvNVfsZhcyXqx39qkfWb2OsZLQ0XV
+	 9LKDvxIDzM/JKvtXhcSHXlSBWLdeGRvhDqMEMJosc5gzgpFnLUPpDSqYdjuM3jTruE
+	 MdFpH7jE1rNW29Lot6vOKiy8LLOoaq2SfYEFVgUg4hWlI99R8y87hcy3evvXr2Qtd+
+	 ABqyrsluMRbEGaecyXhTFXrxwGQh6BbWP14QoarCLsSeza1zJVfOoDylk24JSgS6y/
+	 5AtV40MwYKfRiparTR4D77qvwlzXxrIOIq75K1egLrkXZHldorYp7+o5gzU3HjnzHx
+	 7XEXIdSE71jGg==
+Date: Sat, 10 Jan 2026 10:20:30 +0100 (CET)
+From: Jiri Kosina <jikos@kernel.org>
+To: Alex Tran <alex.t.tran@gmail.com>
+cc: Benjamin Tissoires <bentiss@kernel.org>, shuah@kernel.org, 
+    linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>, 
+    Ping Cheng <ping.cheng@wacom.com>, Jason Gerecke <jason.gerecke@wacom.com>
+Subject: Re: [PATCH v2 RESEND] selftests: hid: tests: test_wacom_generic:
+ add tests for display devices and opaque devices
+In-Reply-To: <20251220204811.3539836-1-alex.t.tran@gmail.com>
+Message-ID: <38r99s88-7pp2-6s6n-2148-34s5rrs4s225@xreary.bet>
+References: <20251220204811.3539836-1-alex.t.tran@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/4] selftests/resctrl: Add Hygon CPUs support and bug
- fixes
-To: Reinette Chatre <reinette.chatre@intel.com>, Shuah <shuah@kernel.org>,
- tony.luck@intel.com, bp@alien8.de, fenghuay@nvidia.com
-Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
- x86@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
- shenxiaochen@open-hieco.net
-References: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
- <bdecae64-5f6e-42d4-a05b-3334b95e6ec0@intel.com>
- <3692e9fb-b827-413f-902e-a57d6d3aca20@kernel.org>
- <bea4807f-fb01-4bbd-a5d2-66b78d524c30@intel.com>
-Content-Language: en-US
-From: Xiaochen Shen <shenxiaochen@open-hieco.net>
-In-Reply-To: <bea4807f-fb01-4bbd-a5d2-66b78d524c30@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Shuah, Reinette, Tony and Fenghua,
+On Sat, 20 Dec 2025, Alex Tran wrote:
 
-On 1/10/2026 8:02 AM, Reinette Chatre wrote:
+> Verify Wacom devices set INPUT_PROP_DIRECT on display devices and
+> INPUT_PROP_POINTER on opaque devices. Moved test_prop_pointer into
+> TestOpaqueTablet. Created a DirectTabletTest mixin class for 
+> test_prop_direct that can be inherited by display tablet test classes.
+> Used DirectTabletTest for TestDTH2452Tablet case.
 > 
-> 
-> On 1/9/26 3:51 PM, Shuah wrote:
->>
->> Applied to linux-kselftest next branch for Linux 6.20-rc1
-> 
-> Thank you very much Shuah.
-> 
-> Reinette
+> Signed-off-by: Alex Tran <alex.t.tran@gmail.com>
 
+Let me CC Benjamin and Wacom folks to take a look here as well.
 
-I truly appreciate your great help with the code review and patch merge - thanks!
+> ---
+> Changes in v2:
+> - Removed the tests from the BaseTest class
+> - Removed disabling tests for certain subclasses
+> - Moved test_prop_pointer under TestOpaqueTablet
+> - Created DirectTabletTest mixin class
+> - Moved test_prop_direct under TestDTH2452Tablet
+>  .../selftests/hid/tests/test_wacom_generic.py | 30 +++++++++++--------
+>  1 file changed, 17 insertions(+), 13 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/hid/tests/test_wacom_generic.py b/tools/testing/selftests/hid/tests/test_wacom_generic.py
+> index 2d6d04f0f..9d0b0802d 100644
+> --- a/tools/testing/selftests/hid/tests/test_wacom_generic.py
+> +++ b/tools/testing/selftests/hid/tests/test_wacom_generic.py
+> @@ -598,18 +598,6 @@ class BaseTest:
+>                  if unit_set:
+>                      assert required[usage].contains(field)
+>  
+> -        def test_prop_direct(self):
+> -            """
+> -            Todo: Verify that INPUT_PROP_DIRECT is set on display devices.
+> -            """
+> -            pass
+> -
+> -        def test_prop_pointer(self):
+> -            """
+> -            Todo: Verify that INPUT_PROP_POINTER is set on opaque devices.
+> -            """
+> -            pass
+> -
+>  
+>  class PenTabletTest(BaseTest.TestTablet):
+>      def assertName(self, uhdev):
+> @@ -677,6 +665,13 @@ class TestOpaqueTablet(PenTabletTest):
+>              uhdev.event(130, 240, pressure=0), [], auto_syn=False, strict=True
+>          )
+>  
+> +    def test_prop_pointer(self):
+> +        """
+> +        Verify that INPUT_PROP_POINTER is set on opaque devices.
+> +        """
+> +        evdev = self.uhdev.get_evdev()
+> +        assert libevdev.INPUT_PROP_POINTER in evdev.properties
+> +
+>  
+>  class TestOpaqueCTLTablet(TestOpaqueTablet):
+>      def create_device(self):
+> @@ -862,7 +857,16 @@ class TestPTHX60_Pen(TestOpaqueCTLTablet):
+>          )
+>  
+>  
+> -class TestDTH2452Tablet(test_multitouch.BaseTest.TestMultitouch, TouchTabletTest):
+> +class DirectTabletTest():
+> +    def test_prop_direct(self):
+> +        """
+> +        Verify that INPUT_PROP_DIRECT is set on display devices.
+> +        """
+> +        evdev = self.uhdev.get_evdev()
+> +        assert libevdev.INPUT_PROP_DIRECT in evdev.properties
+> +
+> +
+> +class TestDTH2452Tablet(test_multitouch.BaseTest.TestMultitouch, TouchTabletTest, DirectTabletTest):
+>      ContactIds = namedtuple("ContactIds", "contact_id, tracking_id, slot_num")
+>  
+>      def create_device(self):
+> -- 
+> 2.51.0
+> 
 
-Best regards,
-Xiaochen Shen
+-- 
+Jiri Kosina
+SUSE Labs
+
 
