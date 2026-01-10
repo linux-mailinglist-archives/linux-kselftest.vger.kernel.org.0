@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-48641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05F85D0CA8A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 01:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13900D0CA8D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 01:53:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E859303DD26
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 00:51:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 230E33038023
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Jan 2026 00:51:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68B0C2046BA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D410C21423C;
 	Sat, 10 Jan 2026 00:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKmDnP6F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/nWOLNj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458771F91D6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16DD20C463;
 	Sat, 10 Jan 2026 00:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768006299; cv=none; b=Bn9BqTuHeJ4AI4MB7GhibDbNfS6I9/6CNsUe4gRyPhxWMDCW5IxNwaDKKb6tSXRao+jZ2o2bpJtpFMa5yN9AtYTKkb69CSFWQl/lGDUhMuNvTH21leB4Wk5IOFGKQZt3gYg3cZX0Qqy80B2nus3D4oWdhf8lF5U3ldR9DDDd1wg=
+	t=1768006299; cv=none; b=UIMmGSHopi+EznoRQQH941HZnW9gjW46d2ogSS2vZe7/2MqiVD96Gg8EKno6fumkA1GqHBUxWQDj2hPpx1qmqjLT6/ao5kU6pY11yXNDAysuuNpsFtkaSWzlrA/074Brg3mEfAyVxAmCQuYV12HtUYNZGjIjCC6R+mYyLIEmlRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768006299; c=relaxed/simple;
-	bh=r8Y7dWVOVxkf7Pjozhyubw7hUj1jnGYJSX7KllDI7rY=;
+	bh=dWVGugC0tE55cnQl16ySMZ4zv7y42Cy6+WZvC90Jb8o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D+rPpLKp8++2jeZDEJxkH6ru3zH2/fdJKKHgfPgYTCHRA57abHdQ+jChvk6XJ74I54IH10K2PSZyUrh9337koDTwQoMqgOvNzZhC4uRchvykWs/uSPfS6d55MPHIdq7e0EzoVaG7aWLgcC7YQjGlqjNIH2+9a22Xq0tmlkcaBG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKmDnP6F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752A8C19424;
-	Sat, 10 Jan 2026 00:51:38 +0000 (UTC)
+	 MIME-Version; b=QExwOpW5O84VZdwINkJnff2eiu5JwodPZ2g7cFJ6p0nHkhXvyXK+parvn5Q9BmdmGtpexe83vFdBbYnWv0dJm6VkedJHh3vmpXXc9GG+MMtJkccqc/URT0631RFMNhD14QnOhDLVLHTUE9BX1V/nAEksADT2RwYMiMLqjMuJ7I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/nWOLNj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D075C2BC86;
+	Sat, 10 Jan 2026 00:51:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768006298;
-	bh=r8Y7dWVOVxkf7Pjozhyubw7hUj1jnGYJSX7KllDI7rY=;
+	s=k20201202; t=1768006299;
+	bh=dWVGugC0tE55cnQl16ySMZ4zv7y42Cy6+WZvC90Jb8o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gKmDnP6F7PpRvRZk6iaQQhRnugP4+Zx7d7KlIPktRtwNq0CYrSx/zkqz2YcNCNGkq
-	 zgpJimCFR2WqAtprDzvb+B4hX3q4PIQDa7lLKw9QcCKJLTwDlwhMV55yJEzzSzMPkh
-	 mkaiRVDr09JmLEPPIOs43vbaFDlQHcq2enrb3PGeBmNRbiIvNhwT8pUHBpxNZglqbU
-	 JvXspEtjDYLNjQ/WrwAov6R7lKKnIyTT1BfjenPbUVG+r7axCBATnD30MNpPD8B8Kg
-	 HHrfN7zmtWNH5pN95nwZ32T8Fq7K9M+pm2/8aCYftXkF9KvcK517FYnbzTghn5BWqX
-	 p/LRvBm7V7YuQ==
+	b=P/nWOLNjpS+UXUsBDvSeBBdar4K1EZPtRWoIJ3trSdHLckvUvmvDNObPi37wiX9Db
+	 p/KOAMfG+ifADAOdx7MI7CI67+Wu2efnsEUhK3Uw0QVdHBHnT1btN4XIJv21NNCINL
+	 VlyaAVsQjko+EKhDtf3XMSfDOGvwXfkTT10sK7O7R+T1m3Q+1NUycFFGAq7tjrbvfD
+	 jSf0JwvyOH6aCTd4WQGJkKHJl2k2gJZzx16B4RzpXr2KKtOyMGefFLLCrw+C+Jz5za
+	 5RT1QxR/cb/bmvrAemmnE5aqoOHb2sYQps9/Ek8Lla5cgAl5QBT+LrYeePf60LOZw3
+	 c47pHhuBEc+pw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc: netdev@vger.kernel.org,
 	willemb@google.com,
 	petrm@nvidia.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 1/6] selftests: net: py: teach ksft_pr() multi-line safety
-Date: Fri,  9 Jan 2026 16:51:16 -0800
-Message-ID: <20260110005121.3561437-2-kuba@kernel.org>
+Subject: [PATCH net-next v2 2/6] selftests: net: py: teach cmd() how to print itself
+Date: Fri,  9 Jan 2026 16:51:17 -0800
+Message-ID: <20260110005121.3561437-3-kuba@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260110005121.3561437-1-kuba@kernel.org>
 References: <20260110005121.3561437-1-kuba@kernel.org>
@@ -66,76 +66,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Make printing multi-line logs easier by automatically prefixing
-each line in ksft_pr(). Make use of this when formatting exceptions.
+Teach cmd() how to print itself, to make debug prints easier.
+Example output (leading # due to ksft_pr()):
+
+  # CMD: /root/ksft-net-drv/drivers/net/gro
+  #   EXIT: 1
+  #   STDOUT: ipv6 with ext header does coalesce:
+  #   STDERR: Expected {200 }, Total 1 packets
+  #           Received {100 [!=200]100 [!=0]}, Total 2 packets.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/net/lib/py/ksft.py | 29 ++++++++++++++--------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ tools/testing/selftests/net/lib/py/utils.py | 23 +++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index 531e7fa1b3ea..4ca21d829b1c 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -32,8 +32,23 @@ KSFT_DISRUPTIVE = True
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 106ee1f2df86..881a17fbb5fd 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -41,7 +41,9 @@ import time
+         self.ret = None
+         self.ksft_term_fd = None
  
- 
- def ksft_pr(*objs, **kwargs):
-+    """
-+    Print logs to stdout.
++        self.host = host
+         self.comm = comm
 +
-+    Behaves like print() but log lines will be prefixed
-+    with # to prevent breaking the TAP output formatting.
+         if host:
+             self.proc = host.cmd(comm)
+         else:
+@@ -99,6 +101,27 @@ import time
+             raise CmdExitFailure("Command failed: %s\nSTDOUT: %s\nSTDERR: %s" %
+                                  (self.proc.args, stdout, stderr), self)
+ 
++    def __repr__(self):
++        def str_fmt(name, s):
++            name += ': '
++            return (name + s.strip().replace('\n', '\n' + ' ' * len(name)))
 +
-+    Extra arguments (on top of what print() supports):
-+      line_pfx - add extra string before each line
-+    """
-+    sep = kwargs.pop("sep", " ")
-+    pfx = kwargs.pop("line_pfx", "")
-+    pfx = "#" + (" " + pfx if pfx else "")
-     kwargs["flush"] = True
--    print("#", *objs, **kwargs)
++        ret = "CMD"
++        if self.host:
++            ret += "[remote]"
++        if self.ret is None:
++            ret += f" (unterminated): {self.comm}\n"
++        elif self.ret == 0:
++            ret += f" (success): {self.comm}\n"
++        else:
++            ret += f": {self.comm}\n"
++            ret += f"  EXIT: {self.ret}\n"
++        if self.stdout:
++            ret += str_fmt("  STDOUT", self.stdout) + "\n"
++        if self.stderr:
++            ret += str_fmt("  STDERR", self.stderr) + "\n"
++        return ret.strip()
 +
-+    text = sep.join(str(obj) for obj in objs)
-+    prefixed = f"\n{pfx} ".join(text.split('\n'))
-+    print(pfx, prefixed, **kwargs)
  
- 
- def _fail(*args):
-@@ -165,9 +180,7 @@ KSFT_DISRUPTIVE = True
-             entry.exec_only()
-         except Exception:
-             ksft_pr(f"Exception while handling defer / cleanup (callback {i} of {qlen_start})!")
--            tb = traceback.format_exc()
--            for line in tb.strip().split('\n'):
--                ksft_pr("Defer Exception|", line)
-+            ksft_pr(traceback.format_exc(), line_pfx="Defer Exception|")
-             KSFT_RESULT = False
- 
- 
-@@ -325,9 +338,7 @@ KsftCaseFunction = namedtuple("KsftCaseFunction",
-             cnt_key = 'xfail'
-         except BaseException as e:
-             stop |= isinstance(e, KeyboardInterrupt)
--            tb = traceback.format_exc()
--            for line in tb.strip().split('\n'):
--                ksft_pr("Exception|", line)
-+            ksft_pr(traceback.format_exc(), line_pfx="Exception|")
-             if stop:
-                 ksft_pr(f"Stopping tests due to {type(e).__name__}.")
-             KSFT_RESULT = False
-@@ -336,9 +347,7 @@ KsftCaseFunction = namedtuple("KsftCaseFunction",
-         try:
-             ksft_flush_defer()
-         except BaseException as e:
--            tb = traceback.format_exc()
--            for line in tb.strip().split('\n'):
--                ksft_pr("Exception|", line)
-+            ksft_pr(traceback.format_exc(), line_pfx="Exception|")
-             if isinstance(e, KeyboardInterrupt):
-                 ksft_pr()
-                 ksft_pr("WARN: defer() interrupted, cleanup may be incomplete.")
+ class bkg(cmd):
+     """
 -- 
 2.52.0
 
