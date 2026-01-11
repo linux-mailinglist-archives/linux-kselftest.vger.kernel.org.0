@@ -1,180 +1,185 @@
-Return-Path: <linux-kselftest+bounces-48676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC3EFD0E702
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 10:16:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26F6D0E72E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 10:22:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B34A8300D16E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 09:16:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D4AA7300942D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 09:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4966933030C;
-	Sun, 11 Jan 2026 09:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD122D0C64;
+	Sun, 11 Jan 2026 09:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fZHESGw4";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="eK2GgtJY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZxtxT8RP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A927C220F47
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 09:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6C9212554
+	for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 09:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768122971; cv=none; b=RHfsC6PXfF61n2u0VAO4KA86aGl9Izv5hSwtjRmHUywLlfnyTgknwlL3rwRHvQaEsRKb5tJ6dPeEr7qM/SCdtoxt8PoRvU0OfovgNigmtERusdBZhrJ+yA1SF0qZmDZ9pp0TY6nLssOQNcriAuPcjZtSuzivTHxf9kXjKAXQ6bk=
+	t=1768123354; cv=none; b=OXuhrn4W4nxnAMtfwp/lXilHfN+EQneHmXSIUQxX6WOmKQtvj8Tj+Q7FCbbbI5Zy6Rbc6Q4QIoVKb+sBCFucYMmXYuMWOFvylj5sW49f1wpndNNGBsT7+1WrCk7SBVX2CvNnud2rPwB3RPZ8RLo2+GoDfYFoJIk1/eFv/fTGV7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768122971; c=relaxed/simple;
-	bh=BZOccm4XxVdjIcV5Tne5ceXK0NuuvIGdkFXUs4hhCZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o5A5DvkequBV5ZF+SUskEdFaVL/w9frnYvm/1NTj+Ncxq/hjn7H6T42J0zE7xFinGc7Tyei/1bOKCwm9ldsVjZgNptxXoGRo9XU3YwF28oYYMAhVZTOxm4lHYSJ5nxbV3Qd3XhMd/YUouO3JX991pnXRE4TUdGBRg4t3hjWnCxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fZHESGw4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=eK2GgtJY; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768122968;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WS2+XzdVc7BsmtGzyRzQokn3ZRi3QBRYwnL4Qo9AS50=;
-	b=fZHESGw46MqZ/BTH1GEtg6wncEo7GcqVL82wRt2A6LWNsiz7SO0Gsdlp2vGkCyapXKWOvh
-	0SVUl3GUodpOPK6w8g64SxV8gb9WFo9VfoW+JKO25f3Y6OtyIJFJph8wMenkakx6xQ5P16
-	8HvOhFg10Gz0KDzgh4Rv1Xq182t/EKg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-601-eIGv6VMvN8qftCQbtnhCRw-1; Sun, 11 Jan 2026 04:16:07 -0500
-X-MC-Unique: eIGv6VMvN8qftCQbtnhCRw-1
-X-Mimecast-MFC-AGG-ID: eIGv6VMvN8qftCQbtnhCRw_1768122966
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-42fdbba545fso2218566f8f.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 01:16:07 -0800 (PST)
+	s=arc-20240116; t=1768123354; c=relaxed/simple;
+	bh=LKsAGUQMvmL11lmGfMYcWXJRH7UW5iw+CwUGb/wlONY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gIhUkIpkEwVNIo6x3T4n3yPP4cc/3PbKkgGc4eMzmUfLMTtkT1+w8pgdgh5bHWShG3CHwpSiOmqWnI07YM3XAAL9AYYYlBSLzJjPMChrgZ7v5Uqli2FxQW0tKQw+G5pyIuMEZx8SSdkLAXlY7UIYT+Ih+MqmbLMnDM3eVGLi+LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZxtxT8RP; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-29efd139227so39406045ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 01:22:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768122966; x=1768727766; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WS2+XzdVc7BsmtGzyRzQokn3ZRi3QBRYwnL4Qo9AS50=;
-        b=eK2GgtJYRxTqI9k6TKmJPoD82wmLnI3rqB9NyUoDEHY8KJF4aliV39nsigBXoY6pUc
-         vfaIyZguYN/6Kmh1oOQy7KHuj6ENMBb1EAShoq3EoukQtBH/MXgyrEnreUym8eIxjWCo
-         xF9GiWFSnFmg4kXQt/R18sW3cgt8j11Xw8Kp6YiRxJH6Am4vrIUPnbIx816QBvksQohP
-         P7lzmgiGh8o3mc4GpTKNTmnSfikQKqbhm1Us3YgzGH1nTiCE5qiVwlOOtsKsOKNeU/OU
-         piBfJu66XJMjh56ZyzqntcvWURH6B4MmPNu8hr6mkykiN74eGI3u5oi5SeKa5mIj+a9V
-         C3Cg==
+        d=gmail.com; s=20230601; t=1768123352; x=1768728152; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UCm/drnWWfGcY1VClJPtxWKc/C1MtIQpIdK458YIl5Y=;
+        b=ZxtxT8RPmdGMVCrTpXI3JUHrIEgTdGrexTu3DmMJT6EZbDu9K3REIKCeESRrCLeBsw
+         qKhlwBIdosZenKqZtWWiaNeLjnGHLPYlcEsLuiCdnLxBTCCGS2V2X5dt8qvkaF02/KTz
+         D1+SGDvk8DhRun4JC+Q4881ZXhk7gR34OIZqN/PkJYQQ1BwBLQEC4HNqvxb+7t+Q/CrX
+         ydikXz5uSZ7Fzmnps9prOdNyu1ZY0exxBzCpjhRgYNJtn8v4z6j9xZpvWWuM1r6xIGug
+         xzZKkE+0Pz2/07SbEQF+VlUp5Aarv8j90xT82r3YiScBP+uk4PkX9UFsvEXgKl8NJBHl
+         wTYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768122966; x=1768727766;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WS2+XzdVc7BsmtGzyRzQokn3ZRi3QBRYwnL4Qo9AS50=;
-        b=en9O79FSKPGM0WBY/rf3yx199FlMwH90/0TKZfILI64W4bNV2BjhUMd5wM8QrafFQo
-         ihgfeZpsdYC+qbNPdyGB0LuTZs+v8yGD3lA1vnIY6RBckS+x/lOr9MLFc1HnL2V6SDGd
-         OmCw7ZzidI7u7XmE/YkO+0tDtSMKYobJ4dU1vyvDGNPzalqROSi/dbn9hWgrmjHD+jEx
-         sxE3RHScMR7PfTjIvFmYwxhjk9WwXyoDgiPgB0xbx+yo4IwcU0Syzzb731VVEk2rFf0h
-         ay6Dh0IWKxexsd78nC7RWFzTjeAVAxvOGVXn3R1J6EfP0ooG8z6mC9NOCppSkdAilhme
-         V2hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXOxqF4YWmCS54oq328cIG+5V1ojsRuseyotapfdOWlu8EsxRlReFDgb/5IB5a4QencFRWH0hdYLS8bDjIc+NM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2rX20ChEk32qy52eE2Ux6MQJapIxGoK3v91VYtqfrbLtAXDTK
-	JZRIXF9Dx9BaeXDLDTo2SBbsESRxr5ex/PeK/W1J3E0yq3CFSPrEJMitboY0HCCvSyew9dYjTDY
-	AI2A3jjOqwAymtQ/lvV+M6IaY+N1edDBYe8NV9hYea0/EcZU9GqbLct1J8S77bTMO+5UrnA==
-X-Gm-Gg: AY/fxX5FXwYO+/bl7jNwLhID+XzpdS3p150R2V3k7z8q4ZZRnJdysJmXoAGJR5u+apW
-	jLANoN+DX7U7FPjXFuGGzvZNBtohBza5K28ald1T71FVjNn3Hz1kGtJWcHKFy9xmO3oz02Tqnkm
-	JM9vShJ9b/rnV8uKOYuIA+rUy8MBG+7cPRsv9rvnQaPsUKzvnKtHOkWwyuuiiurdjuPzlMpXmOD
-	D3j5NPo6Y5+BSGRsEjbE3qJFXbdSrgyWp3Cxo0KFJilnSZk3VoqTVQXg36fACa/moqi2spCzQLE
-	ir5VeTzOY4m1XABegLHdkHk75wApzuVtOjhsqPrrliE18OEOdWDTFQ5vsFIAmHP58EDo/khxWRK
-	zuLiM3etiFlQBfbSX+ZtbZ8tg/ghJBgI=
-X-Received: by 2002:a05:600c:3ba9:b0:477:9d88:2da6 with SMTP id 5b1f17b1804b1-47d847d0f30mr193215365e9.0.1768122966059;
-        Sun, 11 Jan 2026 01:16:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG1T4RKFHLydRXZSk4hv5pRkHtZL1MUAZhZsWSp+woZTG55Ip7dDXQ0exZCHM77fG+sLNTHpQ==
-X-Received: by 2002:a05:600c:3ba9:b0:477:9d88:2da6 with SMTP id 5b1f17b1804b1-47d847d0f30mr193214965e9.0.1768122965611;
-        Sun, 11 Jan 2026 01:16:05 -0800 (PST)
-Received: from redhat.com (IGLD-80-230-35-22.inter.net.il. [80.230.35.22])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f69e13bsm296398485e9.7.2026.01.11.01.16.03
+        d=1e100.net; s=20230601; t=1768123352; x=1768728152;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UCm/drnWWfGcY1VClJPtxWKc/C1MtIQpIdK458YIl5Y=;
+        b=M2pbb9XzJFv8i+w3i4RoKRiOpu/iexeAszmOFZqY5HWufaFzAmr+o+vxNmDYuXS8+F
+         9km6COaPs+1vS8ZjeRTjl6OodYyDBFILZxH0c/0yHnm6s0bkq+K6Sb2xVM0Ky/9IIaD6
+         btW8EMbmx9O1Nt5lUZVD18T4yKac+WqQRQbnmr4YtcuyZfThIRXOn0EOp09V/JsmieUK
+         EX1qkGJP+5NeOI3n9e7ZaSbNfGUKYVA8kwuvhS4367pq4vMxlvGInFQj31zfCf7U8Dnh
+         BGJ4oLMi2Oy+tTAyv0nlQmuklBeuI2hf3PUyKtf2gmQhutNXJ5PpH608V8gcDGtU1crA
+         A9GA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMUbX+NJ9KH83JnZ1C9auRph5ORwPwR1Ws0BBxB9ZEkdFz48ITrSeQqbmcm+wikFh+ZE9o64O7IyB/wfajHcs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFqBpblCrbXFjSogb2yzljZKO5Kbwy2oNsOvK1UPBsgwB9jPxG
+	VDRPwvTJFA1qkN8vxBdlFimaox/5TjBq913WsXvyeqqX4no53P/YEZPP
+X-Gm-Gg: AY/fxX7VLZLvgXWNPvdiIXNHVsL18bQnJ336ec1XPhEbtbUy4Zvnej/LvSrTK4mQps3
+	1FYlcDfEtS9EwDt4ndXHIbCuRCbeAsO5gAuS+9xlGgJB4FC41FIRF557lSOJklq47G2WLsdt+o7
+	en8SYQB2sBmo7TPcJ1cTumy2mtpukxiNGPquuRLEZxQhDiXZH9quGIfymeVx2JvI1GX6BTC5fnP
+	DWiJp6xYvFfcYtEjoZ1t0oj2h7Shrhvap/zFkLflIBuc3B617TyE5vSL/orRtWfFzxDJ5ds8HpY
+	9kONw/YlLpD23OkJmUF9XnqYmCFw/69MQZEyJm44UGF3hsqQCrx2wujGB0zI9W8a7Qsh/NMqLYm
+	vWoIla+u6m8u2V7XDi4CwWOOMweAFFeJ0C50QoCrN7y82CFtd/sy5bzyWhnkoryDhpFu6B/bCUm
+	sOiMshGeIcdHUK30A7Z8fJube4Hz+o9BmhWXv+png0qRaHsiRfkcc=
+X-Google-Smtp-Source: AGHT+IEXRPsU8756Xoluv1FrSAdfgALB7igo232JghFF19myMgALVM9PemrDvYZb7zfCsYcJiv1tdw==
+X-Received: by 2002:a17:903:354b:b0:29f:b3e5:5186 with SMTP id d9443c01a7336-2a3ee4e7aabmr143195675ad.56.1768123352201;
+        Sun, 11 Jan 2026 01:22:32 -0800 (PST)
+Received: from tauron.. ([155.230.91.240])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81efe4a95c7sm4464537b3a.37.2026.01.11.01.22.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 01:16:05 -0800 (PST)
-Date: Sun, 11 Jan 2026 04:16:01 -0500
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, berrange@redhat.com,
-	Sargun Dhillon <sargun@sargun.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v12 02/12] vsock: add netns to vsock core
-Message-ID: <20260111030617-mutt-send-email-mst@kernel.org>
-References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
- <20251126-vsock-vmtest-v12-2-257ee21cd5de@meta.com>
+        Sun, 11 Jan 2026 01:22:31 -0800 (PST)
+From: Jiwoo Ahn <ikwydls1314@gmail.com>
+To: Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Jiwoo Ahn <ikwydls1314@gmail.com>
+Subject: [PATCH] selftests/seccomp: Add test for SECCOMP_RET_LOG semantics
+Date: Sun, 11 Jan 2026 18:21:17 +0900
+Message-ID: <20260111092117.99696-1-ikwydls1314@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251126-vsock-vmtest-v12-2-257ee21cd5de@meta.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 26, 2025 at 11:47:31PM -0800, Bobby Eshleman wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> Add netns logic to vsock core. Additionally, modify transport hook
-> prototypes to be used by later transport-specific patches (e.g.,
-> *_seqpacket_allow()).
-> 
-> Namespaces are supported primarily by changing socket lookup functions
-> (e.g., vsock_find_connected_socket()) to take into account the socket
-> namespace and the namespace mode before considering a candidate socket a
-> "match".
-> 
-> This patch also introduces the sysctl /proc/sys/net/vsock/ns_mode that
-> accepts the "global" or "local" mode strings.
-> 
-> Add netns functionality (initialization, passing to transports, procfs,
-> etc...) to the af_vsock socket layer. Later patches that add netns
-> support to transports depend on this patch.
-> 
-> dgram_allow(), stream_allow(), and seqpacket_allow() callbacks are
-> modified to take a vsk in order to perform logic on namespace modes. In
-> future patches, the net and net_mode will also be used for socket
-> lookups in these functions.
-> 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> ---
+Add a selftest to verify that SECCOMP_RET_LOG actually emits a kernel
+log entry when a system call is triggered under a seccomp filter.
 
-...
+The test installs a minimal seccomp BPF program returning
+SECCOMP_RET_LOG and checks that a corresponding seccomp message
+including the process PID appears in /dev/kmsg. If /dev/kmsg is
+inaccessible or logging is disabled, the test is skipped.
 
-> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-> index adcba1b7bf74..6113c22db8dc 100644
-> --- a/net/vmw_vsock/af_vsock.c
-> +++ b/net/vmw_vsock/af_vsock.c
+Signed-off-by: Jiwoo Ahn <ikwydls1314@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 59 ++++++++++++++++++-
+ 1 file changed, 58 insertions(+), 1 deletion(-)
 
-...
-
-> @@ -2658,6 +2745,142 @@ static struct miscdevice vsock_device = {
->  	.fops		= &vsock_device_ops,
->  };
->  
-> +static int vsock_net_mode_string(const struct ctl_table *table, int write,
-> +				 void *buffer, size_t *lenp, loff_t *ppos)
-> +{
-> +	char data[VSOCK_NET_MODE_STR_MAX] = {0};
-> +	enum vsock_net_mode mode;
-> +	struct ctl_table tmp;
-
-nit: this file should now include linux/sysctl.h for this struct definition I
-think?
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 874f17763536..fde01647668c 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -622,6 +622,64 @@ TEST(log_all)
+ 	EXPECT_EQ(parent, syscall(__NR_getppid));
+ }
+ 
++static bool kmsg_has_seccomp_log(int fd, pid_t pid)
++{
++	char buf[4096];
++	char pid_pat[32];
++	ssize_t ret;
++	int retries = 10;
++
++	snprintf(pid_pat, sizeof(pid_pat), "pid=%d", pid);
++
++	while (retries--) {
++		while ((ret = read(fd, buf, sizeof(buf) - 1)) > 0) {
++			buf[ret] = '\0';
++			if (strstr(buf, "seccomp") && strstr(buf, pid_pat))
++				return true;
++		}
++		usleep(10000); /* 10ms */
++	}
++	return false;
++}
++
++TEST(ret_log_semantics)
++{
++	struct sock_filter filter[] = {
++		BPF_STMT(BPF_RET | BPF_K, SECCOMP_RET_LOG),
++	};
++	struct sock_fprog prog = {
++		.len = (unsigned short)ARRAY_SIZE(filter),
++		.filter = filter,
++	};
++	long ret;
++	pid_t self;
++	int kmsg_fd;
++
++	/* move the file pointer to the end */
++	kmsg_fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK);
++	if (kmsg_fd >= 0)
++		lseek(kmsg_fd, 0, SEEK_END);
++
++	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
++	ASSERT_EQ(0, ret);
++
++	ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog);
++	ASSERT_EQ(0, ret);
++
++	self = getpid();
++	EXPECT_EQ(self, syscall(__NR_getpid));
++
++	/*
++	 * - only if /dev/kmsg was accessible
++	 * - skip silently otherwise
++	 */
++	if (kmsg_fd >= 0) {
++		if (!kmsg_has_seccomp_log(kmsg_fd, self))
++			SKIP(return, "seccomp log not observed (logging disabled or restricted)");
++		close(kmsg_fd);
++	}
++}
++
+ TEST_SIGNAL(unknown_ret_is_kill_inside, SIGSYS)
+ {
+ 	struct sock_filter filter[] = {
+@@ -5294,7 +5352,6 @@ TEST_F(UPROBE, uprobe_default_block_with_syscall)
+  * - 64-bit arg prodding
+  * - arch value testing (x86 modes especially)
+  * - verify that FILTER_FLAG_LOG filters generate log messages
+- * - verify that RET_LOG generates log messages
+  */
+ 
+ TEST_HARNESS_MAIN
+-- 
+2.43.0
 
 
