@@ -1,163 +1,100 @@
-Return-Path: <linux-kselftest+bounces-48680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCF17D0F234
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 15:40:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6EFAD0F6CE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 17:19:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 932343005486
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 14:40:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 840D530210F2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 16:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20FD342169;
-	Sun, 11 Jan 2026 14:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96356346AE3;
+	Sun, 11 Jan 2026 16:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QpaGKMwu"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="U7n8J9l9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADBFA33D6C7
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 14:40:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD3E346AE8;
+	Sun, 11 Jan 2026 16:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768142442; cv=none; b=OjS/nkRPvzGhGsUx9oRIDx/gk+sHA1g97IloacO1Yj5yB6MH9+EspPONVM4DUKhdnH1OGVU4JH+TBdEREkSkQRVY78to1u/fZi5hLbrtViuzkOsqf6a1HveM4sJVo4xcAePTaQGyjq15YTcoiBc0mQcMioAVU9DMHxZODJ31SvQ=
+	t=1768148361; cv=none; b=YR2SFiJvZUxGKO/+oPLorCVMCOi3v3Of1me0BiE5OsKB0AOoBYKuWg5ms6PTSufUupiDKwqgSVNSPhw9sCMflkGR7mC9OcCsXLBN8R9WTsO71q4tXyKKLB8w/FPd4s/MDUbcf0f01/HGrFPYSuFFp1/guZy0L2q2sVRX9AFzfao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768142442; c=relaxed/simple;
-	bh=wt5uXJ3hBrDjctx9GEBWgfNymhu9EBhsJLGB2dnimeY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D2ghsdtmJi1xyhAW3XvH6n77+wD1tTlvpG16bFE60UDffMPQAav3a4fUXBe56EnXoHzLORITw9kid9j/8wQqHnWekNg0634pE+fs51sfqiY0rkvfVNefr2qmNz7Y+juvWpd8czC3rqH6DBFCFn018S3GlRUBqyiQvR+KvihNshk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QpaGKMwu; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2a0ac29fca1so38136915ad.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 06:40:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768142441; x=1768747241; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A2jFKetwWtHYbVKM1rPg5F1zCmboTCH4edp2HZEtn+8=;
-        b=QpaGKMwu4vmUypi8+bkfMC9V6TEZ5yt7uN0DauHVGazCQvUWljo135Az46J3LxBs7N
-         xkeDG0vBxcFMLQuDbgVrodkdLDOlXadEtRuI5nVzsA739NHsL+fr4A6+Xfydsi76sC/9
-         o0od0GjwUsQTyvxP7GRbKiUTyoQQoUF1gqGSoO5nUaCK6lAuWpcNun5hXg30dulyhKhP
-         lH7WYiLloYc6VQ6DyEcPeAwwGO7euMZNt78+dQ/+WUcrI8lrfN+lQ2Zu9IHDEGKb/nnt
-         4IGRYHZpPb+WeCQ/ruiqjZ7FV76LpkzGd81gdwW/GLQvplHe+yiIR9qjP7d9B/FUzgsO
-         F5+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768142441; x=1768747241;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A2jFKetwWtHYbVKM1rPg5F1zCmboTCH4edp2HZEtn+8=;
-        b=BfMeZ3NFlSTFvufBrGkCKRf7ndKL1Zl3dKQjsdOHr1W5wJq0gf5F7fcCUilOKr3WtL
-         PJOEcch7enI8IeHgF/OQBo22SMU9LnWI8IuI0YMSb9wqn41eXm53ybmuo8XqGIbXtDXe
-         xjfxyUpYHpm4NZEckI9lLzRwe3/WJIykQbkX/iCGbjdZ3T26X+/CvGVcSrvVzjDDbBbh
-         2JssI6VOWyRCr/AuJ5FQ0IxfBu9qxiflzV3H+n5X6NHNMlOivXNHS20LTJAF800VvsMp
-         vOiu/ErFB11te6qFmXZmzirfR4Xrl0WkKgPdj0RQfG4Xg4gj/awKNdzwQVfDnI8P2c4J
-         rwDw==
-X-Gm-Message-State: AOJu0YxVa6YKMIQWxNa9QZmuc1owIn048iCEZuU4ngqExZ19CP+lnP5N
-	8NPQb6eAQZ5zI/2HDX3zcPbGuOEQ9lUvYAdyRSi0CH6UFgR3bFPvYZ0ESQ/WqhNG
-X-Gm-Gg: AY/fxX50TbR+P+Br1yj9Oo0iWtsZwgM5WSJlcUwZvI/o2pcvmxc7GEpKPe+SJXwo2+q
-	uUSyTzJa6fHz7dBVZU+skv0DkX1PmhZTxUJTSJeM2+8zXO+9JY+DzPHLaGRvuA6DTxSOsHxUvrg
-	Egi3CW1wvrjU6SHoQpF95jAdNRI/5Wt2/BF4KDmxzg9Vc3fScBEucOSDudUikwiN7PStMg/uhYG
-	RnlSbM3+XOzvAsa6mhCe0S1fynUMTxBL18SBiqOgcHNB9R+coVqjcpSmOk6dN3xoKbzs7wsLIp4
-	YloYWIZ0ryChyI62AtcFOpiD2TTNDC5RltWkFNBItk/48zVsT8hbb5hWDoxvvtIR2pPkg+S5OnK
-	JndStQDoaY+FcE5prZGEZmIi0OeSdnrHxhDu9IJoewIwc3LkKVfcO6b1MhFeCPZmOoDURKDbX9X
-	CjnuINuxk9EAL/aGij7aYKcsfvJrJxYI/kfIh2T10eXo+FmLeXHv0m6BIALg==
-X-Google-Smtp-Source: AGHT+IF/fsvi+m6x+c1HdBAbwfbdxmjcz5RlnjeCB2QNHCjQxK7Kl5XKdSD86n9BNsu1UbPisvAtNA==
-X-Received: by 2002:a17:903:247:b0:295:3584:1bbd with SMTP id d9443c01a7336-2a3ee4bff1cmr136444235ad.41.1768142440910;
-        Sun, 11 Jan 2026 06:40:40 -0800 (PST)
-Received: from neogulmanpassingby-IdeaPad-1-15AMN7.. ([121.148.108.47])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cb2c04sm153980615ad.53.2026.01.11.06.40.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 06:40:40 -0800 (PST)
-From: neogulmanpassingby <jouyeol8739@gmail.com>
-To: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	neogulmanpassingby <jouyeol8739@gmail.com>
-Subject: [PATCH] selftests/x86: clean up sysret_rip coding style
-Date: Sun, 11 Jan 2026 23:39:56 +0900
-Message-ID: <20260111143956.70422-1-jouyeol8739@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1768148361; c=relaxed/simple;
+	bh=hkmy4ce+2GBB/0wRfTgzZym0iQ/UALIdUVQ7hdDJVn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TKaLSB/xRirk/1nWGxmNc9Nj6qQKXM4+89vt2hovueDmXSrmTbMOcZrI6WQ9IZwfaoHPyKdNHiS4P5vk01FHBWtG3RYtXRW2eDAJFZXagOL4dPYc21epKdJx2b7lCxS34j1pVQC6ogdkfGv7E5EsZOPhW3Dv2WFsVCXyCNJXTvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=U7n8J9l9; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E665B40E01BB;
+	Sun, 11 Jan 2026 16:19:15 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 3n3jK2u_3lZI; Sun, 11 Jan 2026 16:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1768148351; bh=usNVIStM/ChEDrz+Q7gs1Vhhs+9850l67vBJDk2/ybQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U7n8J9l9dcwypNpjcm60eggG9eeNd+V410Zsl+QSs+GrZmIOHZv8r2sZuCQzIU93N
+	 zB+1V8qrbJ5Jmnqtw6aBdZx/N6OLXaDa/7dfULo+xjcUavxn+u9CN+8+RJWQVM2xC2
+	 xC4DC9CgO9Kk18nfvHhUvi3J/DZpPhr8PXMQPJ6x/Z0DfiE/6HnrEUKh0PxO5SBoz8
+	 CeQYHdqnKgciM8fvYVQdfkYCbHXmivzAdNAiaYSTXa3OHIMY3G2JOqxLaqOSlWOUpu
+	 70OrsUX96xxyMVCvBp1fKCw4BOXsiQRLFEqtAOm20c+aQ83eSELP80VeH/ydbTE/aN
+	 xOoRHNkfNN2aFtEvpiqhrKTB5wUPmlz++AgkrLwKijtvy53Hh1X66PUGgpax/TZ/2A
+	 oFk8OiWD7tqYP3jrQLckADQpu4mvELgtTLcuCIk9XR3Z5dewAZSA/NHecTsIghlxFU
+	 Sl5S6KlKeH9rexuPfGTNYoyz4wk7cH/c/qYCX8GyANRYOdDrpqCw+p6eSlRz+WlM3n
+	 rk8Qq/Jw+r8A26FRFYie6t+IH/Jc5hJM4cDn40Ip3qqbdVd9IGsyHxVWSbWN5mOhy/
+	 qCT/9E1nKHf8tzTA7kVmK1aWiN/O54gtNYGM9gyaIII4QwHIopLAy5Gj7/WjRKL3zN
+	 k5r3KkiizYJeFrF0SrDcO3ig=
+Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id E45CD40E0194;
+	Sun, 11 Jan 2026 16:19:02 +0000 (UTC)
+Date: Sun, 11 Jan 2026 17:18:55 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: neogulmanpassingby <jouyeol8739@gmail.com>
+Cc: x86@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+	dave.hansen@linux.intel.com, hpa@zytor.com
+Subject: Re: [PATCH] selftests/x86: clean up sysret_rip coding style
+Message-ID: <20260111161855.GBaWPNb8_EiUnwAlJw@fat_crate.local>
+References: <20260111143956.70422-1-jouyeol8739@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260111143956.70422-1-jouyeol8739@gmail.com>
 
-Tidy up sysret_rip style (cast spacing, main(void), const placement).
-No functional change intended.
+On Sun, Jan 11, 2026 at 11:39:56PM +0900, neogulmanpassingby wrote:
+> Tidy up sysret_rip style (cast spacing, main(void), const placement).
+> No functional change intended.
+> 
+> Signed-off-by: neogulmanpassingby <jouyeol8739@gmail.com>
 
-Signed-off-by: neogulmanpassingby <jouyeol8739@gmail.com>
----
- tools/testing/selftests/x86/sysret_rip.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+https://kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 5fb531e3ad7c..2e423a335e1c 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -31,7 +31,7 @@
- void test_syscall_ins(void);
- extern const char test_page[];
- 
--static void const *current_test_page_addr = test_page;
-+static const void *current_test_page_addr = test_page;
- 
- /* State used by our signal handlers. */
- static gregset_t initial_regs;
-@@ -40,7 +40,7 @@ static volatile unsigned long rip;
- 
- static void sigsegv_for_sigreturn_test(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
- 
- 	if (rip != ctx->uc_mcontext.gregs[REG_RIP]) {
- 		printf("[FAIL]\tRequested RIP=0x%lx but got RIP=0x%lx\n",
-@@ -56,7 +56,7 @@ static void sigsegv_for_sigreturn_test(int sig, siginfo_t *info, void *ctx_void)
- 
- static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
- 
- 	memcpy(&initial_regs, &ctx->uc_mcontext.gregs, sizeof(gregset_t));
- 
-@@ -69,8 +69,6 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- 	       ctx->uc_mcontext.gregs[REG_R11]);
- 
- 	sethandler(SIGSEGV, sigsegv_for_sigreturn_test, SA_RESETHAND);
--
--	return;
- }
- 
- static void test_sigreturn_to(unsigned long ip)
-@@ -84,7 +82,7 @@ static jmp_buf jmpbuf;
- 
- static void sigsegv_for_fallthrough(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
- 
- 	if (rip != ctx->uc_mcontext.gregs[REG_RIP]) {
- 		printf("[FAIL]\tExpected SIGSEGV at 0x%lx but got RIP=0x%lx\n",
-@@ -130,7 +128,7 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
- }
- 
--int main()
-+int main(void)
- {
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
+"then you just add a line saying:
+
+Signed-off-by: Random J Developer <random@developer.example.org>
+
+using a known identity (sorry, no anonymous contributions.)"
+	^^^^^^^^^^^^^^
+
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
 
