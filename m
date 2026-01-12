@@ -1,225 +1,205 @@
-Return-Path: <linux-kselftest+bounces-48788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333F2D15183
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 20:39:06 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54829D151DA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 20:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A390430066FC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 19:39:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CD4303008190
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 19:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7653126A7;
-	Mon, 12 Jan 2026 19:39:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB14B3090EE;
+	Mon, 12 Jan 2026 19:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QhoWURqt"
+	dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b="AcS+Yiif"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.itpri.com (mx1.itpri.com [185.125.111.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A012DCF43;
-	Mon, 12 Jan 2026 19:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191F2237180;
+	Mon, 12 Jan 2026 19:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.111.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768246744; cv=none; b=TAM72YE2WZ9bgPwVNo+nHqhQkAkrtXBezGM7hAQIkg/fp9wCMLw7WxcVoUppUYm6QTpO8ML1BHGSdq8O51OiVP7ftSN7jklJX3WGEoI+7pqy7c/xIiqfUf+dSzxbqwuN5UxiJ0dixhYV5TuvZrYmCPjXTjcFfuLcmI8YYkLeOfU=
+	t=1768247068; cv=none; b=r2JywB80YVy9o3EKxthXoLxE4XuGMTFPlN4zKio1BCNC/x90E8+Z1ipmzqc9aYE2nNMMmV+aZL4wedUqyeHLIhmJXjxPCtHxoL3OWKkyhS3614Wcap4U7mcnIyKFPvLc7rYrg98B4m6Gk1i2CG4h0q9UJdrfvlijwoUQIwFmmhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768246744; c=relaxed/simple;
-	bh=fG98iHfpwmOpTvQQdTx9szKrtu5tnsEY/6JGTID9Mkc=;
+	s=arc-20240116; t=1768247068; c=relaxed/simple;
+	bh=cFcNvwya3JZIlZDG2Yy9S8tqcSd/UniCTq6TfdCMPBI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z4mIP71K285uCFSsgeKiPyyD1LHn6u2SprSiyLUR9Hloa6Cnf2Fap0ASjU9LtwRsIs7fVztM7EY9dwSQ2ka/Z+kVMXD/oHlceJtitXRYPn33mfPlsjpV2MLSBDZU/3Ks7raAS0SAds7fDISHLCJvnsufr6qGqctU9bIAVEpVfmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QhoWURqt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F52C116D0;
-	Mon, 12 Jan 2026 19:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768246744;
-	bh=fG98iHfpwmOpTvQQdTx9szKrtu5tnsEY/6JGTID9Mkc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QhoWURqtb9dPAfNCm5xzw5IC9+5x+l+VElHvr4WAoz0v5HTvpMIv2tBVNH5F6Nho+
-	 CeuBxuxdQANtNKYrQb4gcQaFj78aoJ5iVCJfaW+lkV4CT3dUQIxUKLjekDzJlIIRZT
-	 sDwSgyCR75SYmM4dxA/jK7hiNORRbfddmBXzkB0oO74vftJZklhUB/+noUSK2NHpWK
-	 eak8PD2rX4oWxVrWPrvDyGlqeDY2jrr0mQLEVQuabSnnyaXXBSMyhRfCEkKIs8u8pU
-	 3IHBs2s3V87LuVYz6JpbbrJOvT6aEdFtHHJdkjJbmpiUfwN6a9agLEpI6S0o8nks9y
-	 ULAEJUAxpi9QQ==
-Message-ID: <d6a544a5-9d22-4c89-bd53-92330f4a9f51@kernel.org>
-Date: Mon, 12 Jan 2026 20:38:58 +0100
+	 In-Reply-To:Content-Type; b=p9vpI8/lSnyCeQ5LODPfn+dv+GBqVg4ph8yG2xq/Ey+ZWPT5iB4J6DfnLIr4eUxMMS2FKGhsPbh2Eg/C5iFjnoXFD+s2K7WYnGyngmlFaUAIDZ9fpQRjqE5T60/WyG2Iif2OPLDFEjhwWKjoM49nPPAK0hdccuENonr3wdFQgj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com; spf=pass smtp.mailfrom=zazolabs.com; dkim=pass (4096-bit key) header.d=zazolabs.com header.i=@zazolabs.com header.b=AcS+Yiif; arc=none smtp.client-ip=185.125.111.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zazolabs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zazolabs.com
+X-Virus-Scanned: Yes
+Message-ID: <5852adb6-ffa6-43a1-9002-971559adeef6@zazolabs.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=zazolabs.com; s=mail;
+	t=1768247062; bh=cFcNvwya3JZIlZDG2Yy9S8tqcSd/UniCTq6TfdCMPBI=;
+	h=Subject:To:Cc:References:Reply-To:From:In-Reply-To;
+	b=AcS+YiifjaI2Qc7ga2rxeUjVEHhskPJ2bpjP2+4zkPPkkimwRTwVhuNhy1qqERY0q
+	 VeR4b0ry8cEhUKb2DPi4lQn7ZERETSDH5e/6lmQ0dXxIp6g2RyNUFL4NUADGG1/eNF
+	 wUDgdKnGY1pj33X7kFsS/mcDOwUgpAeU6vGAR2oxInH+I/Qd5p0KzWxZvqZle+izZV
+	 DKM28AHf5K/UQLigYsjPNNZG1eQszLVqXWh14hR+Sri3glv6ivkJUMVNyk4LFcrEMR
+	 niH27fsbTZDhffKdLZ5byNP9olHHxodp3ZNKQ1wNXn6S+YkLa/xPwPPxpYeuxZ4fJ7
+	 D73j9ZBsVYtU8JwPHTn3ppQJoHeTjRK0a6swcEOigi3w5XJW9cxpCun/KhJoVbOgLQ
+	 fxIR1dkcELmu0neDfaZe4ciJGBxyBQaBYq+QPUDI6Uq3HClextyZKLaX9fiIRMudwB
+	 aqLVXtBRmL/6S+ww1blUqmE/2swwbYLJk3cFa8UYAMpjiXq1tpJqQXkm2wjh6eJ4dY
+	 lSw7+v+QjkT8SZ8AfDdnXcgMk0D0yTSPTDckR/prM2MDbca+UNQyph1FW0SY33Xd6A
+	 H834smRHSXBvVdBLVoAqBQiPPxCIAravKp3V7qm1+B3E3Z3XL5kf5mBdXl47szqZMK
+	 MP8up6zo6QxoVAlK1Ry85Kmw=
+Date: Mon, 12 Jan 2026 21:44:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] selftests/mm: add memory failure selftests
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- nao.horiguchi@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, akpm@linux-foundation.org,
- shuah@kernel.org, Philip Li <philip.li@intel.com>
-References: <20260107093710.3928374-1-linmiaohe@huawei.com>
- <9413a995-9182-493e-a28a-6d2d3a17236b@kernel.org>
- <2ae04380-fd60-a8a1-6217-386454fec610@huawei.com>
- <693dc9aa-cf86-48c7-be9c-ec554f9da855@kernel.org>
- <d958d80a-8412-6107-e144-975b8d545568@huawei.com>
- <b258b6c0-7af1-4443-bd81-2722dec610f7@huawei.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <b258b6c0-7af1-4443-bd81-2722dec610f7@huawei.com>
+Subject: Re: [PATCH v4 08/19] ublk: move offset check out of
+ __ublk_check_and_get_req()
+Content-Language: en-GB
+To: Caleb Sander Mateos <csander@purestorage.com>, alex+zkern@zazolabs.com
+Cc: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+ Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Stanley Zhang <stazhang@purestorage.com>,
+ Uday Shankar <ushankar@purestorage.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <20260108091948.1099139-1-csander@purestorage.com>
+ <20260108091948.1099139-9-csander@purestorage.com>
+ <f0c205d9-609f-4b08-af67-3d8730eb6fce@zazolabs.com>
+ <CADUfDZrAx-ALGpNckfZOwR2LUqQMYud9cb14bMp1SW_E12isLg@mail.gmail.com>
+Reply-To: alex+zkern@zazolabs.com
+From: Alexander Atanasov <alex@zazolabs.com>
+In-Reply-To: <CADUfDZrAx-ALGpNckfZOwR2LUqQMYud9cb14bMp1SW_E12isLg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 1/12/26 13:44, Miaohe Lin wrote:
-> On 2026/1/12 19:33, Miaohe Lin wrote:
->> On 2026/1/12 17:40, David Hildenbrand (Red Hat) wrote:
->>> On 1/12/26 10:19, Miaohe Lin wrote:
->>>> On 2026/1/9 21:45, David Hildenbrand (Red Hat) wrote:
->>>>> On 1/7/26 10:37, Miaohe Lin wrote:
->>>>>> Introduce selftests to validate the functionality of memory failure.
->>>>>> These tests help ensure that memory failure handling for anonymous
->>>>>> pages, pagecaches pages works correctly, including proper SIGBUS
->>>>>> delivery to user processes, page isolation, and recovery paths.
->>>>>>
->>>>>> Currently madvise syscall is used to inject memory failures. And only
->>>>>> anonymous pages and pagecaches are tested. More test scenarios, e.g.
->>>>>> hugetlb, shmem, thp, will be added. Also more memory failure injecting
->>>>>> methods will be supported, e.g. APEI Error INJection, if required.
->>>>>
->>>>
->>>> Thanks for test and report. :)
->>>>
->>>>> 0day reports that these tests fail:
->>>>>
->>>>> # # ------------------------
->>>>> # # running ./memory-failure
->>>>> # # ------------------------
->>>>> # # TAP version 13
->>>>> # # 1..6
->>>>> # # # Starting 6 tests from 2 test cases.
->>>>> # # #  RUN           memory_failure.madv_hard.anon ...
->>>>> # # #            OK  memory_failure.madv_hard.anon
->>>>> # # ok 1 memory_failure.madv_hard.anon
->>>>> # # #  RUN           memory_failure.madv_hard.clean_pagecache ...
->>>>> # # # memory-failure.c:166:clean_pagecache:Expected setjmp (1) == 0 (0)
->>>>> # # # clean_pagecache: Test terminated by assertion
->>>>> # # #          FAIL  memory_failure.madv_hard.clean_pagecache
->>>>> # # not ok 2 memory_failure.madv_hard.clean_pagecache
->>>>> # # #  RUN           memory_failure.madv_hard.dirty_pagecache ...
->>>>> # # # memory-failure.c:207:dirty_pagecache:Expected unpoison_memory(self->pfn) (-16) == 0 (0)
->>>>> # # # dirty_pagecache: Test terminated by assertion
->>>>> # # #          FAIL  memory_failure.madv_hard.dirty_pagecache
->>>>> # # not ok 3 memory_failure.madv_hard.dirty_pagecache
->>>>> # # #  RUN           memory_failure.madv_soft.anon ...
->>>>> # # #            OK  memory_failure.madv_soft.anon
->>>>> # # ok 4 memory_failure.madv_soft.anon
->>>>> # # #  RUN           memory_failure.madv_soft.clean_pagecache ...
->>>>> # # # memory-failure.c:282:clean_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
->>>>> # # # clean_pagecache: Test terminated by assertion
->>>>> # # #          FAIL  memory_failure.madv_soft.clean_pagecache
->>>>> # # not ok 5 memory_failure.madv_soft.clean_pagecache
->>>>> # # #  RUN           memory_failure.madv_soft.dirty_pagecache ...
->>>>> # # # memory-failure.c:319:dirty_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
->>>>> # # # dirty_pagecache: Test terminated by assertion
->>>>> # # #          FAIL  memory_failure.madv_soft.dirty_pagecache
->>>>> # # not ok 6 memory_failure.madv_soft.dirty_pagecache
->>>>> # # # FAILED: 2 / 6 tests passed.
->>>>> # # # Totals: pass:2 fail:4 xfail:0 xpass:0 skip:0 error:0
->>>>> # # [FAIL]
->>>>> # not ok 71 memory-failure # exit=1
->>>>>
->>>>>
->>>>> Can the test maybe not deal with running in certain environments (config options etc)?
->>>>
->>>> To run the test, I think there should be:
->>>>     1.CONFIG_MEMORY_FAILURE and CONFIG_HWPOISON_INJECT should be enabled.
->>>>     2.Root privilege is required.
->>>>     3.For dirty/clean pagecache testcases, the test file "./clean-page-cache-test-file" and
->>>>       "./dirty-page-cache-test-file" are assumed to be created on non-memory file systems
->>>>       such as xfs, ext4, etc.
->>>>
->>>> Does your test environment break any of the above rules?
+On 12.01.26 20:29, Caleb Sander Mateos wrote:
+> On Mon, Jan 12, 2026 at 10:17 AM Alexander Atanasov <alex@zazolabs.com> wrote:
+>>
+>> On 8.01.26 11:19, Caleb Sander Mateos wrote:
+>>> __ublk_check_and_get_req() checks that the passed in offset is within
+>>> the data length of the specified ublk request. However, only user copy
+>>> (ublk_check_and_get_req()) supports accessing ublk request data at a
+>>> nonzero offset. Zero-copy buffer registration (ublk_register_io_buf())
+>>> always passes 0 for the offset, so the check is unnecessary. Move the
+>>> check from __ublk_check_and_get_req() to ublk_check_and_get_req().
 >>>
->>> It is 0day environment, so very likely yes. I suspect 1).
-> 
-> Hi David,
-> 
-> After taking a more close look, I think CONFIG_MEMORY_FAILURE and CONFIG_HWPOISON_INJECT should have been
-> enabled in 0day environment or testcase memory_failure.madv_hard.anon should fail. memory_failure.madv_hard.anon
-> will inject memory failure and expects seeing a SIGBUG signal.
-
-Good point.
-
-> 
+>>> Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+>>> Reviewed-by: Ming Lei <ming.lei@redhat.com>
+>>> ---
+>>>    drivers/block/ublk_drv.c | 16 +++++++++-------
+>>>    1 file changed, 9 insertions(+), 7 deletions(-)
 >>>
->>>> Am I expected to add some code to
->>>> guard against this?
+>>> diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+>>> index e7697dc4a812..8eefb838b563 100644
+>>> --- a/drivers/block/ublk_drv.c
+>>> +++ b/drivers/block/ublk_drv.c
+>>> @@ -253,11 +253,11 @@ struct ublk_params_header {
 >>>
->>> Yes, at least some.
+>>
+>> [snip]
+>>
+>>> @@ -2603,13 +2603,10 @@ static inline struct request *__ublk_check_and_get_req(struct ublk_device *ub,
+>>>                goto fail_put;
 >>>
->>> Checking for root privileges is not required. The tests are commonly run from non-memory file systems, but, in theory, could be run from nfs etc.
+>>>        if (!ublk_rq_has_data(req))
+>>>                goto fail_put;
 >>>
->>> If you require special file systems, take a look at gup_longterm.o where we test for some fileystsem types.
+>>> -     if (offset > blk_rq_bytes(req))
+>>> -             goto fail_put;
+>>> -
+>>>        return req;
+>>>    fail_put:
+>>>        ublk_put_req_ref(io, req);
+>>>        return NULL;
+>>>    }
+>>> @@ -2687,14 +2684,19 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+>>>
+>>>        if (tag >= ub->dev_info.queue_depth)
+>>>                return -EINVAL;
+>>>
+>>>        io = &ubq->ios[tag];
+>>> -     req = __ublk_check_and_get_req(ub, q_id, tag, io, buf_off);
+>>> +     req = __ublk_check_and_get_req(ub, q_id, tag, io);
+>>>        if (!req)
+>>>                return -EINVAL;
+>>>
+>>> +     if (buf_off > blk_rq_bytes(req)) {
+>>> +             ret = -EINVAL;
+>>> +             goto out;
+>>> +     }
+>>> +
+>>
+>> Offset is zero based, bytes are count so it should be >= here.
+>>
+>> It will work this way but for buf_off == blk_rq_bytes(req) user will get
+>> 0 instead of EINVAL.
 > 
-> And I think the cause of failures of testcases memory_failure.madv_hard.clean_pagecache and memory_failure.madv_hard.dirty_pagecache
-> is they running on memory filesystems. The error pages are kept in page cache in that case while memory_failure.madv_hard.clean_pagecache
-> expects to see the error page truncated.
+> This is the existing behavior in __ublk_check_and_get_req(). I agree
+> allowing buf_off == blk_rq_bytes(req) seems odd, but changing it now
+> could break ublk servers relying on the current behavior.
 
-Maybe they are run on shmem? Good question. (@Phil?)
 
+I saw it came from the existing version but I doubt that any existing 
+server rely on this. In general no code expects to get EOF from a block 
+device. It is a user error, classic off by one, to give offset equal to 
+the end. If the server have sane error handling it should either detect 
+it has a bug and fix it, or does not care at all and work as expected.
+
+The usual pattern is variation of:
+
+while (left > 0) {
+     ret = read|write(buf+offset, ....);
+     if (ret < 0) goto err;
+     left -= ret;
+     offset += ret;
+}
+
+This gets into a nice infinite loop, and I have actually hit this kind 
+of bug in other unrelated code inside the kernel - I guess it is present 
+in the original code this is based on.
+
+For example there is/was a case in ext4 that initially returned 0 for a 
+write in some edge case but that was changed to return a proper -EAGAIN 
+later on iirc to avoid such confusion.
+
+So, if it is not required to be like this by some standard,
+it might be worth considering to change.
+
+
+> Best,
+> Caleb
 > 
-> But I have no idea why memory_failure.madv_soft.dirty_pagecache and memory_failure.madv_soft.clean_pagecache return -1(-EPERM?) when try
-> to inject memory error through madvise syscall. It could be really helpful if more information can be provided.
-
-Here is more information:
-
-https://download.01.org/0day-ci/archive/20260110/202601100241.326d7cce-lkp@intel.com
-
-Unfortunately no config yet. (@Phil, could we provide that one as well 
-as part of that bundle?)
+>>
+>> static size_t ublk_copy_user_pages(const struct request *req,
+>>                   unsigned offset, struct iov_iter *uiter, int dir)
+>> {
+>>          size_t done = 0;
+>> ...
+>>           rq_for_each_segment(bv, req, iter) {
+>> ...
+>>                   if (offset >= bv.bv_len) {
+>>                           offset -= bv.bv_len; // bv_len is same as
+>> blk_rq_bytes(req)
+>>                           continue; // this breaks the loop when ==
+>>                   }
+>> ...
+>>          }
+>>          return done; // done is never incremented
+>> }
+>>
+>>>        if (!ublk_check_ubuf_dir(req, dir)) {
+>>>                ret = -EACCES;
+>>>                goto out;
+>>>        }
+>>
+>>
+>> --
+>> have fun,
+>> alex
+>>
 
 -- 
-Cheers
+have fun,
+alex
 
-David
 
