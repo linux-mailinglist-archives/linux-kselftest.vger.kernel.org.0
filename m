@@ -1,243 +1,234 @@
-Return-Path: <linux-kselftest+bounces-48716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11AE9D10D5A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 08:20:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 204FCD1104B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 08:59:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ADF893014D67
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 07:19:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 70E1F304F880
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 07:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4CB32E68D;
-	Mon, 12 Jan 2026 07:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D281633A9F7;
+	Mon, 12 Jan 2026 07:58:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMZIqTAG"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qP4z9kiB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012001.outbound.protection.outlook.com [40.107.209.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0ED32A3F1;
-	Mon, 12 Jan 2026 07:19:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768202399; cv=none; b=SsaxkYgKFUuHvAUxqqBKzlOR+4E3U5RVt1ZP0ihHn2K4qj9IKUl2EsnsS9usl6UwARWWaqMNC9FuRIgzHTv5zsdNqmMxiGLJ3hbGC6H9+2BpN5OeZc+XTWjRaelknbyB7ZAShemJgTJz4JvdNUlnLPu2DknFulJ2DzmZgJe1X6A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768202399; c=relaxed/simple;
-	bh=k5ZWMJroAH9X6RMhuRdisILf2c/lZu6r5O2cLbbc4Cg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ELHRPeFRH3sWjaYFIJaimzXRmJ4vyJn5D6Az2QWKXYL3eMCxzLhJuaQoFdWVrAo1kOjo9xh7wI9vN/VkEC8YXE1KSRrnQkia6vp/hbaUyy59V/CvnQVyTnLHV+HRCKSMWqmdJ4RbUDSVgUu5uNQCuzYiQC/f4yPbi34cNLdgNyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMZIqTAG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FB10C116D0;
-	Mon, 12 Jan 2026 07:19:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768202398;
-	bh=k5ZWMJroAH9X6RMhuRdisILf2c/lZu6r5O2cLbbc4Cg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eMZIqTAGXMeBkdP6Gy3xxqAiJKHoBTxBJQXTWn9y/8FxBAap2QqskH4pr73a5dMPZ
-	 OKmeOens5OeTThblZDu/hh3vE41wZpapG/hnfDE008cNcR4xUGA+TN35CMn29x0qbG
-	 zUE9ciRE8A6GwLQh+PwFS+FGPiH7U2w7ypJOb/4OMTfvU2NOQVuKM0a7fxV3keNtbr
-	 /8131lnWyKJIcyWR2plaZcvyV9f230+l7rsrw4Q2tUilCCfj8KfTcFli2QGBef0td5
-	 TII2sZa0ebgND5CNNWv8iXtGtC1G+9KDJ9Vy3O/7xWXfyWwbOsMHjWQ+HiirzDkRR7
-	 6DB1Sx9+w1zqw==
-Message-ID: <d22105ed-01e8-4abd-ade9-86686f48d221@kernel.org>
-Date: Mon, 12 Jan 2026 08:19:51 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42FB133987E;
+	Mon, 12 Jan 2026 07:58:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.1
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768204715; cv=fail; b=Jyiaf51GziAUS7ybYMJHdM8YTIojHmUkoXBAzHX+1Vt6lgxNIWJ+boCqNXGAIcLcJSLi6EQ2M8ibQTOPOAmp8Ecgc+37B5ySoV6xh0g7aylvPqCNU1qfBJCacMFgPR4XmsmZ+GYBdY5IdWI64+B5DGcI7xK/Ty24CcjKJUatXKg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768204715; c=relaxed/simple;
+	bh=3wVWpg9GnRAtUdu2yHKzoYKL4aOspqUr9me0O1tBNS0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=BVApAkgI6gsc/A4+7fyqtJ9EJxROPf4k+6/MieFjrasx8D2gjCjePmIxHEuXY3FqurbFD5lwzcluuzsD9bBSqQaaF+XmiDSQC/fpIbMADpJujhP8YbGOaxRitpze/vUEIkOgWoNLOiUaGiVFsmfKRPhzKKTBGiLobdJJc3jdxrc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qP4z9kiB; arc=fail smtp.client-ip=40.107.209.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MrSKSFCxHo5OJy5R64xzUKYc0J72WpF4OFqdCH4zwBNauHQ0tZIC2hFWKcwHqoTetJN5xEKLzs1Ldd1pv548niv8Yt+GUBUp5lxB/Hm+SgO94sE0tcnGx/5QXAa4TGCzDF5bUCFXqJnGZtjYOdKN+Hj2RBRocaPY1n+E07eg/0QMcDRqR1vHk7AX1rwahH7g9B5kHRiqX/v6IOfGf65kpP2+ZPvFrAx6ub+Xsbl9MkbT4yr2/RHW+4d6UTtEMNFZCZaFORhAxaqwIjJUWC09qFsqwc3uYJt3RZY5o3e5C+6Ift8RaJRqn8m/pNazd2NI93PE0yfUlvCucl/auZBegA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1L6OujRR6novpTPoW22VlyRKFI8kSCycIhkwp8lFu5Q=;
+ b=du3sE9ZUyad5eyh2+JrGeKkndqc2h/Q/Nt25hAfmlzuvY7uTv6eMuUekZyQuVJ2AigV5M8N+GSxhWHn0da3RU5MCs2p3r1wAz4DSu4R0zcbHKZOEM5hE0b0BY0IWp7Mteeu8IAdSDnaarqrE+/IuFDXl402HFNTMRKbiKz5+ZzRc/WukUi+M6KM2S88xLXkPgDFEkok09hEl40fT0Qh20FuzUJe/dBrV+643v7uBCceeL+MbFe7ITfa03+919PicFoYA2Lz3LSDKynj/5BJ+DVxl6HxgDi7BI9mvZiKDa8yF7KDDFFjZ7oJuALkvdxDpS9Xsiz+w+IlnjcJPaK+TWA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1L6OujRR6novpTPoW22VlyRKFI8kSCycIhkwp8lFu5Q=;
+ b=qP4z9kiB2CKPFjK75NjKatxIQyz5JG7wsTDsmPZIJ0XxbmA0P3LT/O1g1JConkTTaVWK2WPMd2iPG0vx4s+uodG/NkJGhtuUw9OF0+v8xpHJifpiao3znwFmDyE39QX79W8aLGr921VADAeeYmgZw1OpPMIe+BVogwn6UGd8SsYAPkBtH6ESe2mFc2qXrQsixFgf4BN/Y2/4AbS68ikL1sKBtBxpZlKbv1Y3Jao+69WISoA3dMtXr9cdUH5BrulI/Jj9Euf9H38tFrvOGIHBxGPOtlB7XLSVaMpEsXHXlqGx08ufR7KRaW0g4BWdkgO21q/v8iK0IAjZrc/Ii/25KA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA0PR12MB7003.namprd12.prod.outlook.com (2603:10b6:806:2c0::10)
+ by DM3PR12MB9285.namprd12.prod.outlook.com (2603:10b6:0:49::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9499.7; Mon, 12 Jan 2026 07:58:31 +0000
+Received: from SA0PR12MB7003.namprd12.prod.outlook.com
+ ([fe80::4099:396e:1f40:169b]) by SA0PR12MB7003.namprd12.prod.outlook.com
+ ([fe80::4099:396e:1f40:169b%4]) with mapi id 15.20.9499.005; Mon, 12 Jan 2026
+ 07:58:31 +0000
+Message-ID: <363dee6c-3a02-4f76-aa6d-46382fa41df9@nvidia.com>
+Date: Mon, 12 Jan 2026 09:58:25 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: fix RPS mask handling in
+ toeplitz test
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, netdev@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>,
+ Petr Machata <petrm@nvidia.com>, Coco Li <lixiaoyan@google.com>,
+ linux-kselftest@vger.kernel.org, Nimrod Oren <noren@nvidia.com>
+References: <20260111171658.179286-1-gal@nvidia.com>
+ <20260111171658.179286-2-gal@nvidia.com>
+ <willemdebruijn.kernel.f136c851c9ee@gmail.com>
+From: Gal Pressman <gal@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <willemdebruijn.kernel.f136c851c9ee@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TL2P290CA0007.ISRP290.PROD.OUTLOOK.COM (2603:1096:950:2::9)
+ To SA0PR12MB7003.namprd12.prod.outlook.com (2603:10b6:806:2c0::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] powerpc64/bpf: Support exceptions
-To: adubey <adubey@imap.linux.ibm.com>,
- Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
- andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, naveen@kernel.org,
- maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org
-References: <20260105105212.136645-1-adubey@linux.ibm.com>
- <20260105105212.136645-6-adubey@linux.ibm.com>
- <aWSL3DlSf5WA20lf@linux.ibm.com>
- <9102a4504413501f382cf3e22118e88f@imap.linux.ibm.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <9102a4504413501f382cf3e22118e88f@imap.linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA0PR12MB7003:EE_|DM3PR12MB9285:EE_
+X-MS-Office365-Filtering-Correlation-Id: bb13a306-afa2-4e2a-3fb9-08de51b060bf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eFg5bURrYXFYekpJS1FyUlBxTmlGRS9aaXVDalhBSGY3Sjk4eFZHR3lnZ0JF?=
+ =?utf-8?B?UEhJek52SlRiWTBVMVcwZzFCWlZJSCtsUlVvc29SRFRyTTc4cklJd241Y1hy?=
+ =?utf-8?B?Y2hRZ1AyNkVNYjlSNHVCaDZNY1d5RzdUMzVZNCtnWnpleDJiYXI4WktyTldR?=
+ =?utf-8?B?U1I0M2MvSDlFbTR2Z1lqalpLNzdUUmVNNjlESi9TZjV1NU5BeGZhVUkzcHhw?=
+ =?utf-8?B?RlNjN080Si9SSE1JOXdCNkNqckVjL2xDZHAwaHV2Mm5TZkYzRFF4NjB6NERj?=
+ =?utf-8?B?U1RySDJmN1JQNktneDhUa094QUpYTUNsb0I0VHV2MVhVa3RPKzNqcmtSTG1N?=
+ =?utf-8?B?NnZBRG1Dd1NpTlJxVGkvNEgxZGh3UThOT1p0SzcyVUdVc3VIT3EybThJaFBN?=
+ =?utf-8?B?VG5CdUxQaGZaRkVWbVVzOHVwWDY2WVRkbU5FNXd3MkZzVk04TDdrNi9CNzI5?=
+ =?utf-8?B?UjVkazd5SGNTK3JiYTBZR1BETHE3c2V1dStJR1BNMXZLeWlPMjNJcUNKeEx0?=
+ =?utf-8?B?azNZVTZuN1ZYRHdnUnl6Z0NzN0l1VU5DL2NUaklDL1hTK1NDSGhzODY2OWpz?=
+ =?utf-8?B?MWJ2Z1NaSHBONWMxM2laUDR1RGY4UGlsdUZBYzV2azIvdEFGMTVtcE5rc3NE?=
+ =?utf-8?B?VFFlaVVPQjhRWVdaQWtEbUFBRnBXaTVvdElpc1JCVGtVd09sUW5kQW13MllK?=
+ =?utf-8?B?Y3FneU9oUEtZMDBON2s4T3I2VENIL1VsbnN4UUZsMXQ5TzhhUFZUb1NNUnRF?=
+ =?utf-8?B?b280akJzb0VQQThQUXZsUUx5RFlnKzJpOHlUUWlicTZ5SVdLaG0vWkFhZnBh?=
+ =?utf-8?B?MW4zWUxoWHUrR1FiWUhSTDlPMFdjVG1VZVNva2RjakNqQjRjaUVMakdtcjFy?=
+ =?utf-8?B?NHdlWWpuU1d3ZGkyS0l5MEhaVEVPMENnbGlUcDdpRDNXMWJIWmdYYS9ib1Ns?=
+ =?utf-8?B?eDEvajRSUWJqNzAxTUhzOFl5MW92Q09WZnJZODZ0ZGx3a2VKak4rcnF5OWk3?=
+ =?utf-8?B?OVVjVlJXY3FtaUxMOWd1TXNzcmRVOHdDUXp6cktCRGFlWVZMdUdDM3JUSWMx?=
+ =?utf-8?B?VFJ2cXdNL1YrMDdzVzV1M1ZOM2czd2FrM0lpakhGVU0zb00zS0hYd1o5bnN6?=
+ =?utf-8?B?akpMQ0x1SzFFWEEzRXkyc1U5aGkxdHI4dnJDclBLUEt2QTNaL2hTSmVEUkpN?=
+ =?utf-8?B?WkZrWExNVzhWZTRmcGl3RWhPSkpKRkhwbDlIbDl2Q0pwQWFxTmJxSmUwS0Zy?=
+ =?utf-8?B?SFRlanlTQzl0QkNCVTlxa1plVmZlUGl5cWtPNFArcWhqWXRPV1owU3JCL2dB?=
+ =?utf-8?B?Mm9ZSllzYUNlOVVEbFQ1THkvTFFoZmFjdzlBT0kyZG9Mc0JHVUdhQld2U2oy?=
+ =?utf-8?B?WGlwVkNDOFQzR0l4MHNSVU15RVZRdDk5SlZkZU1ZdHNVcTFoUkYxcCtvVGNQ?=
+ =?utf-8?B?c2l6UWQrM0tnK1hMYm5wNGRJRUxiNG9NVFJTZkRuZnEvdmJRbUpiOWtyL0VW?=
+ =?utf-8?B?WVlNMnFhQlpFaUZsREdvSE9sNEc2aGxCbzhoTHBOcTYvRzl1RWpUbTJTNXNp?=
+ =?utf-8?B?cFE2ckVlb0NjM214cW53cFhWQkZRRmMvY1ZNQ044RjNyTDFVZmJLdGowdEJS?=
+ =?utf-8?B?WUFtaWtFY0VPQjZwb0loUWl0N0JyYzlJVXJFK2NBQzRMS1dZeXpSY3J4ZmR1?=
+ =?utf-8?B?RmlGcFZkL1JreDUrMXV5K3U0UlM3NzdueGdFcDlJemY4VkVqOEZDT1NiOEYr?=
+ =?utf-8?B?eGEvSFU4eXZscWd6VlVxcGxHWUFTVG1taE5lV0U4WFVxUlJlM3M4N2I5ZWIw?=
+ =?utf-8?B?MVpwcEFyWmZocXJDeW02NE1uYXM1QmtKWjdoSFJ6R2UweW0xdEJlUjVNQ2Ev?=
+ =?utf-8?B?RUVrQ2l3R25wSHVCblhnakQwS21Wb0gxL21GSVpla2NEUGpzSURGNk94cDV5?=
+ =?utf-8?Q?Fp/VHW+PV3D1IMEiaies6mKzRogObzAE?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB7003.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?WlZ6ZHI0SFc2WGNITk9CYXR1a2dZOWtKWk4vb01TZ2x6SmZtUis5Q3VyWmNE?=
+ =?utf-8?B?NmMwNnhyZ0l6aDBhWTFRNHREeHJvSVBQQ3BESUM5OFdGMy94ZWpRdC9KK0hu?=
+ =?utf-8?B?cEpjcEdWN3ZYajQvbFNRckpwb0lEQm1FK3JnTHlycUhDOWFMa1RVZHppSHpW?=
+ =?utf-8?B?QVljRXJVSUkrd2puR3NuS1VuMWo1Z1pBaU1ZWEpPMkxHR0gyVzhMbDkrSjFq?=
+ =?utf-8?B?bHZEODJySFVXWlJ5RTdXY1ZZeTJiWWVwdGVQVGpzS0JsR3ZsaGhlQitLZ05s?=
+ =?utf-8?B?dmFrc2MxaFRPUStlUDF3N1FXb3NQL2NERWY1SlVkL0dHYjlzS1h5QmlSRktp?=
+ =?utf-8?B?OWlBL3BHRGtOZW9NRmhxSEVRMXVQTDNlbXZ1QWdJRXFicUJnUVFwUDlQTFBy?=
+ =?utf-8?B?eXdPUVJtMDE3Tm5HV2haci9lTVhMaW43SElyMzlRKzVwY1p6aUc3dHdHdnAv?=
+ =?utf-8?B?TzFXY2Z3Z1ZqUTc2Z3FiMGdoclRmY1ZWUnN2cnhPWXp2Qjc4VmtYY2FtanBp?=
+ =?utf-8?B?TXRlbWV3M29RY0c4bzFabGRGMHBOanpSV2M4eG5za1J6UVo4NklBWnhmZU9L?=
+ =?utf-8?B?YkhMZVVTQmJTd25YNXlLNjJQRjUvVDFVaHUyY1oycEI1QUtrdWtjaDczbk1T?=
+ =?utf-8?B?K1RZVVhLenR2YkJ5SmhyNlNGQ3V1eUVDVTBLUHpId2h1RjY1WWVvOWI4Q0Vq?=
+ =?utf-8?B?dHNhcFpMdDBNaFd4R3R1d3dOQjVQc295Y1F6ZG1tV09GNy92NGFPdDdlWHVO?=
+ =?utf-8?B?QW5nK3dUMW1kV2tXQ0VST3dwd0VvL1V5NFZDZUUyMlB6amd1TWtwMUVTcGxD?=
+ =?utf-8?B?cHZKM3pCZ3NQSDFWelhkcUwwMEVhSlRpOU5YRC95TXdueVJYZlE3WUwyWDlJ?=
+ =?utf-8?B?MHZnQ2xhMkxvVVFldGFBVzZMOFNMenFsbnVPMm91VDNrUnpqdFp4RnJUYXVy?=
+ =?utf-8?B?TmlyZTJoRTRZSEtkZmFObVdXU1poUzVkaHZkMkYzY0lQNVpwejlTdDdUUXdC?=
+ =?utf-8?B?Q2pkb0oxQVNxa3d6blRZTkxQZTNYT1BvSlBwazRzNkRtN09JUEdzbVIra3Fx?=
+ =?utf-8?B?SzV1RTBhZG1CV0NOZU14NFZUMXJOdm5TQ2JITjhKTGRBZmJOaFQzSnQrODJ1?=
+ =?utf-8?B?dWFtQi9QcFlPa1hMOHF4NFAwb1ROSUVCZktUNGhpY0Q1Z2VFT203aHp2Nng2?=
+ =?utf-8?B?ZHRrY1MvSkhSQTRJQkxTVUUxVDNyNnF1UlNrVkh1Z2l5NGVuc0V5eWtlSDR0?=
+ =?utf-8?B?OGNnQmxOeURqaE1oamNRNmxPcGVDNXRqZUR2UG43dnEvR3ZCUTRaUTJ4VXd4?=
+ =?utf-8?B?M0orWDE1VkMzbmozOTFudzdDaHJtempsVklRZU92M05TdTVsb25obUsxaTNB?=
+ =?utf-8?B?WEt1MERFbVRmcTFMTmoveGxlZzZhT3ZpeVJzcFJPd0Y2STJzb3E2RGdaVWFM?=
+ =?utf-8?B?YUFFQjI1eGxnZS9CZlJPYWo5bno1aDN4ZGcwaUlxVTRMd3Q1M1EzZnA3RVpz?=
+ =?utf-8?B?c3k3NjBJSzgrSjVYNDFBeHBPWVlma2xyRG5QQ1JET3NOWUJXdlNGN2xPUGNK?=
+ =?utf-8?B?bzJjL3RmWndWcDA3dHNpMU9QYWtoRTVmbWV6TWswZkxGdzcvRFZNRWlNQVR5?=
+ =?utf-8?B?VUhVa1p5Y1lISVZTeldkS3JaYk05eHRMK0ovZnV6c2xqYjZFNnFiaWJSVFdR?=
+ =?utf-8?B?Z3JsZVFPbHducmtCY3V5RlJJbmEvZ2dpK2RZa1RCbDg5Tjd1eVFqNUpiOExR?=
+ =?utf-8?B?dGRCTWRxVDJuRnNyRlh3dmFCN21GZ2VUVGwzNEhPNzhLN1BrellQUEdIb3pK?=
+ =?utf-8?B?MW93V0VmcFUzOUV4NFJENHpmRWovcXEwSDYvY2FvN2Ura3VJZG1ZSkkxZXUy?=
+ =?utf-8?B?dnE0cFJtZ3lrRGtmSHdoOFZWWTB3MUNncmlrdFRKYWw1clcwQ3I2NDZZc0NG?=
+ =?utf-8?B?WlUzdUpESlpNemQranNTL2ZTUFVZWjQ1N09hSWZGOFFQSktNYTNzVlpxazBG?=
+ =?utf-8?B?elVldWUxR0J3NzZqQnU5RGI5NjFaOWhnYTlLcExESXpHNDhqNUJsc3lCTThp?=
+ =?utf-8?B?RzlKeHVNOEtRWmNFQ0VWdkRETkpGYzloQ1hLWTVJcjJPdjFGUDZDWE5qK0VK?=
+ =?utf-8?B?OC9ZR2pjR2lzcTEzdlhWV1NKZWxFdXArQzVYZFpKMEN1TkdtMWQyQUFQSVpK?=
+ =?utf-8?B?dmd2cm1HZ2J1eWU1aUxybXdhOUZYWTNiQkp6YktkbWVuTEZtTGliTXZhSGg5?=
+ =?utf-8?B?dUVzK2RxcG9ISnNveTNFUjdHajNOZXZrSDYxK0ZLRW5jRk16ODlLL20vdzh4?=
+ =?utf-8?Q?tGzLbr5J+e5wSgVfJO?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb13a306-afa2-4e2a-3fb9-08de51b060bf
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB7003.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2026 07:58:31.4933
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +hWySzTEwBrtJkhG/fjVnhY4zJOWl5ZOV46LIj3gxAjgFbT9IzL5RKbikeYbwp3a
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9285
 
-
-
-Le 12/01/2026 à 07:58, adubey a écrit :
-> [Vous ne recevez pas souvent de courriers de adubey@imap.linux.ibm.com. 
-> D?couvrez pourquoi ceci est important ? https://aka.ms/ 
-> LearnAboutSenderIdentification ]
-> 
-> On 2026-01-12 11:21, Saket Kumar Bhaskar wrote:
->> On Mon, Jan 05, 2026 at 04:22:11PM +0530, adubey@linux.ibm.com wrote:
->>> From: Abhishek Dubey <adubey@linux.ibm.com>
->>>
->>> The modified prologue/epilogue generation code now
->>> enables exception-callback to use the stack frame of
->>> the program marked as exception boundary, where callee
->>> saved registers are stored.
->>>
->>> As per ppc64 ABIv2 documentation[1], r14-r31 are callee
->>> saved registers. BPF programs on ppc64 already saves
->>> r26-r31 registers. Saving the remaining set of callee
->>> saved registers(r14-r25) is handled in the next patch.
->>>
->>> [1]
->>> https://eur01.safelinks.protection.outlook.com/? 
->>> url=https%3A%2F%2Fftp.rtems.org%2Fpub%2Frtems%2Fpeople%2Fsebh%2FABI64BitOpenPOWERv1.1_16July2015_pub.pdf&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7Cdecf1943ac9949608edb08de51a7f357%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639037978954052961%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=uCfpmnY2bQT7yD3esp8nkyLPGfEzpK9UoCgV2sm0j80%3D&reserved=0
->>>
->>> Following is exceptions selftest result on ppc64le:
->>>
->>> # ./test_progs -t exceptions
->>> #100/1   exceptions/exception_throw_always_1:OK
->>> #100/2   exceptions/exception_throw_always_2:OK
->>> #100/3   exceptions/exception_throw_unwind_1:OK
->>> #100/4   exceptions/exception_throw_unwind_2:OK
->>> #100/5   exceptions/exception_throw_default:OK
->>> #100/6   exceptions/exception_throw_default_value:OK
->>> #100/7   exceptions/exception_tail_call:OK
->>> #100/8   exceptions/exception_ext:OK
->>> #100/9   exceptions/exception_ext_mod_cb_runtime:OK
->>> #100/10  exceptions/exception_throw_subprog:OK
->>> #100/11  exceptions/exception_assert_nz_gfunc:OK
->>> #100/12  exceptions/exception_assert_zero_gfunc:OK
->>> #100/13  exceptions/exception_assert_neg_gfunc:OK
->>> #100/14  exceptions/exception_assert_pos_gfunc:OK
->>> #100/15  exceptions/exception_assert_negeq_gfunc:OK
->>> #100/16  exceptions/exception_assert_poseq_gfunc:OK
->>> #100/17  exceptions/exception_assert_nz_gfunc_with:OK
->>> #100/18  exceptions/exception_assert_zero_gfunc_with:OK
->>> #100/19  exceptions/exception_assert_neg_gfunc_with:OK
->>> #100/20  exceptions/exception_assert_pos_gfunc_with:OK
->>> #100/21  exceptions/exception_assert_negeq_gfunc_with:OK
->>> #100/22  exceptions/exception_assert_poseq_gfunc_with:OK
->>> #100/23  exceptions/exception_bad_assert_nz_gfunc:OK
->>> #100/24  exceptions/exception_bad_assert_zero_gfunc:OK
->>> #100/25  exceptions/exception_bad_assert_neg_gfunc:OK
->>> #100/26  exceptions/exception_bad_assert_pos_gfunc:OK
->>> #100/27  exceptions/exception_bad_assert_negeq_gfunc:OK
->>> #100/28  exceptions/exception_bad_assert_poseq_gfunc:OK
->>> #100/29  exceptions/exception_bad_assert_nz_gfunc_with:OK
->>> #100/30  exceptions/exception_bad_assert_zero_gfunc_with:OK
->>> #100/31  exceptions/exception_bad_assert_neg_gfunc_with:OK
->>> #100/32  exceptions/exception_bad_assert_pos_gfunc_with:OK
->>> #100/33  exceptions/exception_bad_assert_negeq_gfunc_with:OK
->>> #100/34  exceptions/exception_bad_assert_poseq_gfunc_with:OK
->>> #100/35  exceptions/exception_assert_range:OK
->>> #100/36  exceptions/exception_assert_range_with:OK
->>> #100/37  exceptions/exception_bad_assert_range:OK
->>> #100/38  exceptions/exception_bad_assert_range_with:OK
->>> #100/39  exceptions/non-throwing fentry -> exception_cb:OK
->>> #100/40  exceptions/throwing fentry -> exception_cb:OK
->>> #100/41  exceptions/non-throwing fexit -> exception_cb:OK
->>> #100/42  exceptions/throwing fexit -> exception_cb:OK
->>> #100/43  exceptions/throwing extension (with custom cb) ->
->>> exception_cb:OK
->>> #100/44  exceptions/throwing extension -> global func in
->>> exception_cb:OK
->>> #100/45  exceptions/exception_ext_mod_cb_runtime:OK
->>> #100/46  exceptions/throwing extension (with custom cb) -> global func
->>> in exception_cb:OK
->>> #100/47  exceptions/exception_ext:OK
->>> #100/48  exceptions/non-throwing fentry -> non-throwing subprog:OK
->>> #100/49  exceptions/throwing fentry -> non-throwing subprog:OK
->>> #100/50  exceptions/non-throwing fentry -> throwing subprog:OK
->>> #100/51  exceptions/throwing fentry -> throwing subprog:OK
->>> #100/52  exceptions/non-throwing fexit -> non-throwing subprog:OK
->>> #100/53  exceptions/throwing fexit -> non-throwing subprog:OK
->>> #100/54  exceptions/non-throwing fexit -> throwing subprog:OK
->>> #100/55  exceptions/throwing fexit -> throwing subprog:OK
->>> #100/56  exceptions/non-throwing fmod_ret -> non-throwing subprog:OK
->>> #100/57  exceptions/non-throwing fmod_ret -> non-throwing global
->>> subprog:OK
->>> #100/58  exceptions/non-throwing extension -> non-throwing subprog:OK
->>> #100/59  exceptions/non-throwing extension -> throwing subprog:OK
->>> #100/60  exceptions/non-throwing extension -> non-throwing subprog:OK
->>> #100/61  exceptions/non-throwing extension -> throwing global
->>> subprog:OK
->>> #100/62  exceptions/throwing extension -> throwing global subprog:OK
->>> #100/63  exceptions/throwing extension -> non-throwing global
->>> subprog:OK
->>> #100/64  exceptions/non-throwing extension -> main subprog:OK
->>> #100/65  exceptions/throwing extension -> main subprog:OK
->>> #100/66  exceptions/reject_exception_cb_type_1:OK
->>> #100/67  exceptions/reject_exception_cb_type_2:OK
->>> #100/68  exceptions/reject_exception_cb_type_3:OK
->>> #100/69  exceptions/reject_exception_cb_type_4:OK
->>> #100/70  exceptions/reject_async_callback_throw:OK
->>> #100/71  exceptions/reject_with_lock:OK
->>> #100/72  exceptions/reject_subprog_with_lock:OK
->>> #100/73  exceptions/reject_with_rcu_read_lock:OK
->>> #100/74  exceptions/reject_subprog_with_rcu_read_lock:OK
->>> #100/75  exceptions/reject_with_rbtree_add_throw:OK
->>> #100/76  exceptions/reject_with_reference:OK
->>> #100/77  exceptions/reject_with_cb_reference:OK
->>> #100/78  exceptions/reject_with_cb:OK
->>> #100/79  exceptions/reject_with_subprog_reference:OK
->>> #100/80  exceptions/reject_throwing_exception_cb:OK
->>> #100/81  exceptions/reject_exception_cb_call_global_func:OK
->>> #100/82  exceptions/reject_exception_cb_call_static_func:OK
->>> #100/83  exceptions/reject_multiple_exception_cb:OK
->>> #100/84  exceptions/reject_exception_throw_cb:OK
->>> #100/85  exceptions/reject_exception_throw_cb_diff:OK
->>> #100/86  exceptions/reject_set_exception_cb_bad_ret1:OK
->>> #100/87  exceptions/reject_set_exception_cb_bad_ret2:OK
->>> #100/88  exceptions/check_assert_eq_int_min:OK
->>> #100/89  exceptions/check_assert_eq_int_max:OK
->>> #100/90  exceptions/check_assert_eq_zero:OK
->>> #100/91  exceptions/check_assert_eq_llong_min:OK
->>> #100/92  exceptions/check_assert_eq_llong_max:OK
->>> #100/93  exceptions/check_assert_lt_pos:OK
->>> #100/94  exceptions/check_assert_lt_zero:OK
->>> #100/95  exceptions/check_assert_lt_neg:OK
->>> #100/96  exceptions/check_assert_le_pos:OK
->>> #100/97  exceptions/check_assert_le_zero:OK
->>> #100/98  exceptions/check_assert_le_neg:OK
->>> #100/99  exceptions/check_assert_gt_pos:OK
->>> #100/100 exceptions/check_assert_gt_zero:OK
->>> #100/101 exceptions/check_assert_gt_neg:OK
->>> #100/102 exceptions/check_assert_ge_pos:OK
->>> #100/103 exceptions/check_assert_ge_zero:OK
->>> #100/104 exceptions/check_assert_ge_neg:OK
->>> #100/105 exceptions/check_assert_range_s64:OK
->>> #100/106 exceptions/check_assert_range_u64:OK
->>> #100/107 exceptions/check_assert_single_range_s64:OK
->>> #100/108 exceptions/check_assert_single_range_u64:OK
->>> #100/109 exceptions/check_assert_generic:OK
->>> #100/110 exceptions/check_assert_with_return:OK
->>> #100     exceptions:OK
->>> Summary: 1/110 PASSED, 0 SKIPPED, 0 FAILED
->>>
->> It would be great to include this selftest output in the cover letter
->> instead, since it makes the git log excessively long.
+On 12/01/2026 5:43, Willem de Bruijn wrote:
+> Gal Pressman wrote:
+>> The toeplitz.py test passed the hex mask without "0x" prefix (e.g.,
+>> "300" for CPUs 8,9). The toeplitz.c strtoul() call wrongly parsed this
+>> as decimal 300 (0x12c) instead of hex 0x300.
 >>
->> Thanks,
->> Saket
+>> Use separate format strings for sysfs (plain hex via format()) and
+>> command line (prefixed hex via hex()).
+>>
+>> Fixes: 9cf9aa77a1f6 ("selftests: drv-net: hw: convert the Toeplitz test to Python")
+>> Reviewed-by: Nimrod Oren <noren@nvidia.com>
+>> Signed-off-by: Gal Pressman <gal@nvidia.com>
 > 
-> Major contributors in the community routinely include test case results
-> in commit messages, and this is not viewed as problematic.
-> Eg: bpf-next : e59997d9052599feb17419289f2a57ed300e1dfa,
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> 
+>> ---
+>>  tools/testing/selftests/drivers/net/hw/toeplitz.py | 9 ++++++---
+>>  1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
+>> index d2db5ee9e358..7a9af4af1838 100755
+>> --- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
+>> +++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
+>> @@ -94,14 +94,17 @@ def _configure_rps(cfg, rps_cpus):
+>>      mask = 0
+>>      for cpu in rps_cpus:
+>>          mask |= (1 << cpu)
+>> -    mask = hex(mask)[2:]
+>> +
+>> +    # sysfs expect hex without '0x' prefix, toeplitz.c needs the prefix
+>> +    mask_sysfs = format(mask, 'x')
+> 
+> A particular reason not to use the existing slicing?
+> 
+>> +    mask_cmdline = hex(mask)
+>>  
+>>      # Set RPS bitmap for all rx queues
+>>      for rps_file in glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*/rps_cpus"):
+>>          with open(rps_file, "w", encoding="utf-8") as fp:
+>> -            fp.write(mask)
+>> +            fp.write(mask_sysfs)
+> 
+> Alternatively 
+> 
+> -    mask = hex(mask)[2:]
+> +    mask = hex(mask)
+> 
+> - fp.write(mask)
+> + fp.write(mask[2:])
+> 
+> The comment that sysfs and toeplitz.c expect different input is
+> definitely helpful.
 
-This is a merge commit, the message comes from the cover letter of the 
-series: 
-https://lore.kernel.org/all/20240201125225.72796-1-puranjay12@gmail.com/
-
-> 6c17a882d3804dce1c66e1fec25f96d39a184067
-
-In this one the list of tests is rather small compared to the entire 
-commit message.
-
-So I also recommend to move this big list of tests in the cover letter.
-
-Christophe
-
+Will take your suggestion, thanks.
 
