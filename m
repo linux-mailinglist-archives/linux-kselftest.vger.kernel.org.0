@@ -1,150 +1,188 @@
-Return-Path: <linux-kselftest+bounces-48749-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C22DBD136D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 16:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E111ED1388B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 16:15:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DA4633096333
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 14:52:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 775F8305992C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 14:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC75E2DC77B;
-	Mon, 12 Jan 2026 14:51:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C852D9EF4;
+	Mon, 12 Jan 2026 14:58:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XJsYSamz";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="H1hFfSdX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F+BTYz+z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379492DB7AE
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 14:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579932C1586
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 14:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768229503; cv=none; b=LO+CAIOR5VmILxDVKLmsxO8qACXOAN1qdJO8gI6IB7ydhb3/ADb0TDEg5CTUVYaNT/Us88wKba7zFtRsC1f95MIorZyLIv8dwJ9dW1x2HnPf4R5MBobqD02457HGyGB0WkrxWwfn/kgKDFSIPNmf5RP+f4vZYXwn/4ar/0qpeqU=
+	t=1768229906; cv=none; b=MDivdvVomBkoVfILyzrC0JOhvG/9J6BXt7uCcH4omyD0VfxlBzXotOBuA0IKS/dDjZx34g2VarJu4cP+7A94h1zDq/m2qdtGoVdHNJnPg2tfNLKPF2RpnKceiPNkQ4/pJislrMgN/WNBnFBkHaNJWdla7zgUx2QOC6ZMqEbvxak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768229503; c=relaxed/simple;
-	bh=KfleazqhiYVtUyRFQa0Rnp9RAnsfoqSNonzAP4I3m2w=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hnfMEA0VAMlmu3JKFFu8eb6Bnsp78f5uyyElHJQ1b8rddTuKw/tPD7ev41obEzSc3d/lon2NwWBEcZsD5OmrdpTtZEQv6qiAkm8s0Sg5lgp3Ric1xrnsmo8h3P00x96+JtHKEhsR80FIRJwWmf7IdDOP8jkSMD1nlGhf/Xj8Djc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XJsYSamz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=H1hFfSdX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768229501;
+	s=arc-20240116; t=1768229906; c=relaxed/simple;
+	bh=TUmuFID1WF3Mkruczcr/LzdMWt/jQH9EYAPqsCjZGL0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AAonHdLUiTIA71Xy2AUQUICMZguP/eribquPP542pZ+p49yTKgK7ovlBvn2bV7dVcUOOnVwWVpfrU3B3O+TMbkvJFbFiS6M9u2ZXVIfA4z96P+ZWRTCxc3PoXVNYahNiTB4jSANb+92i79LBgmlA7TJRA2h7AKTNxv72F7MRpQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F+BTYz+z; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768229901;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sA5gJz/+vgMSarS6A+nPZ5R89JHYOj2EYgVc9sCvFKA=;
-	b=XJsYSamzJ+LdbfbQCGL245v2z4Cx9n7Tt19ybskCH9Dh7O6vmvKltnWbnx1HKpiB/8Myd/
-	AAmloBPMPVD6ckytGLWzcQkITuibaMV2b1tQWFtaMkw5Mdku8u8pVVbRCFeoyyIek0AbUe
-	UIhprmVR4Q7X1DHtNm98VpnwVgyIzSY=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-315-YT9HHDpfMGy0F8I1eA48Qg-1; Mon, 12 Jan 2026 09:51:37 -0500
-X-MC-Unique: YT9HHDpfMGy0F8I1eA48Qg-1
-X-Mimecast-MFC-AGG-ID: YT9HHDpfMGy0F8I1eA48Qg_1768229497
-Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-5634f73edc2so4249859e0c.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 06:51:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768229496; x=1768834296; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sA5gJz/+vgMSarS6A+nPZ5R89JHYOj2EYgVc9sCvFKA=;
-        b=H1hFfSdX03LD81cp6Q7aFhUHsu77TxhwUI5hoyrzyrVKVw+wB8s3rkOaK6ruiAIwnj
-         qrZSzjguhTTCIAVqRkDCF8OEd6lIuJ9cZTjrK9UNmxI1IwBE/wNDhNid1cz6oyajh2AS
-         dAEEzO98unRnWCI4ynw2PHooBoFR+1NZ8OgYkolGhPMpMKAJ39OyxMgR8giluj4F0nZu
-         yzF4EamLTF5Le8GD5Bc02fvPk1E9fostNDqawdGLk10+wk7be0NPmW4Kx7ZXC04gXzio
-         BoMDgWMnNjU4hp0QeyuhZ1o/zUQGBRL9FumPOwU0WxJgsvDSLTtvWnfl1ZUn/rU4dalc
-         /C9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768229496; x=1768834296;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sA5gJz/+vgMSarS6A+nPZ5R89JHYOj2EYgVc9sCvFKA=;
-        b=C7KKdpiNYWWX10zmhtRZ1s76L6V7wYna+pNZUvUDLC3cnC/fOsCplDUDXamhuOQDy5
-         ljldehWMkK5JAmBhazW3tQy0IaOnmNuGdJg/t+JKHhn/+0mIr7Ihl2/K6cGYh7uPk+jk
-         yMX2xQbE5NQspq1UsmUqlahQcGgyrg5QnJbyDvZ6qE+HRXGpjxmyomXKhGI4kOasg11o
-         YTNXiGVU8TXCove1tVGND9b0bHGA74WlawaT0KHcEL2/fazE0fRMmgOvSnAVd7lhJ0Bm
-         PGxJhUIU9xVr1xNsXB9ilx2vOi1Pnqg+LbeP118UeiLOTqQ/Cs/pZxzfhaximl0HPBh6
-         P+eg==
-X-Forwarded-Encrypted: i=1; AJvYcCXF37ZiVm39iJ501FORCXmeyHmMQ41fFni6MkcOYv5EItx8PIgcUnb+T7pKWxEbErgD7SALygFe/fxHFIZOs3s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpKVQqvL3E7bhe+Vr7sjhwImmdwl3WTiuNtr3j0sdPh7K75Ufu
-	n8JpDiD4KG/KqiVqNsMQKm+kYecNzzFxsWEzKCbnSEv42xxg9HbwDsLKOiBFikerHAQxisFQCpK
-	1NvHP8eswR3ZgZC0Ui8UB03taBuk412gEAV4iRrSGOCffrmB+NITIUmwWSaCCXWWEbZWRWUzSkU
-	McTQ==
-X-Gm-Gg: AY/fxX66PSU2uSjRX4wdVkxOhc3/6WU8lRRuC2WNEQm1FwBmb9xuJFFpGlAtTLXdgF9
-	GRqaFO2CU//CFLRef4jApy3CFdHiHtuO6yj/UKLwE2WAu0hDNjNV+7H98T1nBFbyPgfuRCdj1hL
-	fgzvn3JCDSx0Vq1jCOkdLKyRTuoWNVY9dsWs41a2Syp1R2M3gJ6sxo3iqEu3e+smgGjfDY0YSGK
-	UFSpQOSmKtmn+wvpIk93MZlD5TMxVo+uIbQ1KFwSoaTdF69n0zFMutncbmuuzOJ71pAb+exSVRE
-	0r4YeqD4lL91d/pjD8ALGpJD7cFE4U+GIZtUNpFWHDRFb5H3Vt+PlkYVEkWyDYNtKU7iOwsX4Z0
-	2cIizTcG4Dce7VxpG3Yc5okQ+ZlQBS/sJ98QWKWTJSeiRAYg4A0xBcEOV
-X-Received: by 2002:a05:6122:8b8d:b0:55b:7494:1737 with SMTP id 71dfb90a1353d-56347fd2b6bmr4913663e0c.15.1768229496021;
-        Mon, 12 Jan 2026 06:51:36 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGMkEp2BHK2L7pl73R9OM4XWJTWqWIN5qUtiLpa/I4atEkU0kDVexMtW/lTi8Ub6jSdOpy+uw==
-X-Received: by 2002:a05:6122:8b8d:b0:55b:7494:1737 with SMTP id 71dfb90a1353d-56347fd2b6bmr4913647e0c.15.1768229495568;
-        Mon, 12 Jan 2026 06:51:35 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-944124c452asm16438567241.13.2026.01.12.06.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 06:51:35 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <f33eb2b3-c2f4-48ae-b2cd-67c0fc0b4877@redhat.com>
-Date: Mon, 12 Jan 2026 09:51:28 -0500
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=b9qTGUNjrEZzKDA7wgdD+iF6xC8GSboyy9ZU7mE3yWE=;
+	b=F+BTYz+zqIUeIkEPAVQcEbTXqplWNeNhJK3879iqQ+B3Z7Bs8lFpeg7MSa7Z1twBdJYctL
+	msILXM+eITTOux1Q9VotLaT0xNawT9rR4qQb+KGvJAcUaGrlW9cOaZbrX1J5sUiRsPeNvO
+	8Fzsms0a9j1LEJyioGQpaP930OoUJUA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v5 0/9] bpf: Extend BPF syscall with common attributes support
+Date: Mon, 12 Jan 2026 22:56:07 +0800
+Message-ID: <20260112145616.44195-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH cgroup/for-6.20 v4 4/5] cgroup/cpuset: Don't invalidate
- sibling partitions on cpuset.cpus conflict
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- Sun Shaojie <sunshaojie@kylinos.cn>, Chen Ridong
- <chenridong@huaweicloud.com>, Chen Ridong <chenridong@huawei.com>
-References: <20260112040856.460904-1-longman@redhat.com>
- <20260112040856.460904-5-longman@redhat.com>
- <2naek52bbrod4wf5dbyq2s3odqswy2urrwzsqxv3ozrtugioaw@sjw5m6gizl33>
-Content-Language: en-US
-In-Reply-To: <2naek52bbrod4wf5dbyq2s3odqswy2urrwzsqxv3ozrtugioaw@sjw5m6gizl33>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 1/12/26 5:51 AM, Michal Koutný wrote:
-> On Sun, Jan 11, 2026 at 11:08:55PM -0500, Waiman Long <longman@redhat.com> wrote:
->> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> ...
->> @@ -2632,6 +2641,9 @@ Cpuset Interface Files
->>   
->>   	The root cgroup is always a partition root and its state cannot
->>   	be changed.  All other non-root cgroups start out as "member".
->> +	Even though the "cpuset.cpus.exclusive*" control files are not
->> +	present in the root cgroup, they are implicitly the same as
->> +	"cpuset.cpus".
-> cpuset.cpus.effective (that one is on root cpuset cg)
->
-> (This was likely lost among my v2 comments.)
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Sorry, I might have missed this comment of yours. The 
-"cpuset.cpus.exclusive" file lists all the CPUs that can be granted to 
-its children as exclusive CPUs. The cgroup root is an implicit partition 
-root where all its CPUs can be granted to its children whether they are 
-online or offline. "cpuset.cpus.effective" OTOH ignores the offline CPUs 
-as well as exclusive CPUs that have been passed down to existing 
-descendant partition roots so it may differ from the implicit 
-"cpuset.cpus.exclusive".
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands.
 
-Cheers,
-Longman
+The initial set of common attributes includes:
 
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': The size of log reported by kernel.
+
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
+
+Changes:
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+
+Leon Hwang (9):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Refactor reporting btf_log_true_size for btf_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add common attr support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |  19 +-
+ include/linux/bpf_verifier.h                  |  17 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  32 +---
+ kernel/bpf/log.c                              | 103 +++++++++++
+ kernel/bpf/syscall.c                          | 122 ++++++++++---
+ kernel/bpf/verifier.c                         |  19 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  49 ++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
+ 15 files changed, 518 insertions(+), 61 deletions(-)
+
+--
+2.52.0
 
