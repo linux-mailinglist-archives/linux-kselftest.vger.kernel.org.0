@@ -1,199 +1,225 @@
-Return-Path: <linux-kselftest+bounces-48724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B50C4D118A4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 10:40:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFFB2D118C8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 10:41:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 240FA3020392
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 09:40:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 936DB301057F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 09:41:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C93E349AFE;
-	Mon, 12 Jan 2026 09:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D0D34A775;
+	Mon, 12 Jan 2026 09:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="inetSa0z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SbrDW/lb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B8134AB06;
-	Mon, 12 Jan 2026 09:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A019134A793
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 09:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768210856; cv=none; b=LP7EE6nedHFEHKEnmMJqK2xhw6ytt1Gc1XxdJaFiuv8gM6CYk0ezqHbhfWWPoqYq0Mwv8Sf/UP1vQBYAB84ucCCab3Q5FKQMJNSVXbRJPid2gow3E7dGZzZe1lCrRrQ96PWyeHuH/89ahK0XlXVrNYKI/y1oJnKrs8XogD0iNSM=
+	t=1768210875; cv=none; b=TapoF9sMRC1wn7aZ9DqsOdotwJ1LhM8ydC95zelJ0rwaj1cKQITENKzmKckACQL8+b9wwBodCxRnlny7X/dkWpj5kC9vE57uq77HZw/0PY1FE0WIRktK0l0ETVMB1Yu0e1x7ngdK4pxl8f38WIpJlDpIaK46SFFh0kGy75lqtCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768210856; c=relaxed/simple;
-	bh=///vLbn2F5pl8UMSUnDHr/s7p6gqOMMohsrozaR2AGs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dJDx5rRge9T/vE8q+LBzT+p40c1MfJugTvqzbwI44TP3zRalSQx73OCgSeghXYv/RC6Mf+Lrbca3+PzX4tGibSWlCHZVS3NX307CJ+j3odxgaQ+CM2Xyb9T8wzmtNUXrlztmIumfpBnlqJ4EL1vjOIodnIC5ykzbMuAi6Py6Ij8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=inetSa0z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D2BCC16AAE;
-	Mon, 12 Jan 2026 09:40:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768210855;
-	bh=///vLbn2F5pl8UMSUnDHr/s7p6gqOMMohsrozaR2AGs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=inetSa0zx/EwkEQO5a3lnCgqOwEs4rA0lrxs8A7rB5U+FWW9dIbdRyyVCP2G5vPoL
-	 YSZq+f2WpTPgR8NDZ/3v7OylA5p36q1PkPgCbi+94jgrLiqEg8meEkUf+XH6AEBMNw
-	 AjcxcFEzW8p5f7QvkkXbkd82t3lBTUG3jQOeLmkD6eu4Fkv1sXUpqTGsWcknuABy9a
-	 kohzS41OG5C8m3Jp1TON0pBa2aRZ0pbq4Esvn2p0Zxc2HUwAkRa/eLJAcN2mxzvUoz
-	 UX3Z8aJp2nh240o0XtSzS579jeb5rwqyXqTI4q0Q9aM0Am51Fjr4q9RoppAytAF+xf
-	 1vd3W8ZuEgUVw==
-Message-ID: <693dc9aa-cf86-48c7-be9c-ec554f9da855@kernel.org>
-Date: Mon, 12 Jan 2026 10:40:49 +0100
+	s=arc-20240116; t=1768210875; c=relaxed/simple;
+	bh=D1nZ9kM/EuuYno+ZDSEcuEqHNLsDwCPEuHBego3wBFU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=totSYYgpDD6yWqWxor3SNxzD0YPiYO7yBvAvWxpIbumgbYmvnOxKwiLh9u3bJ9DbMLCAsJ/+cZdL8B7aVqD/YJ8IAiiSYhq5CtSAnjluvbxYYzfT7eSPEW1i3RRVKhzAk13BOIb/qX4NYp4dsW1ZO8LdGjFt0WdmB0FGzi9jY1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SbrDW/lb; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b8716197f3eso119300366b.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 01:41:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768210865; x=1768815665; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NcMCCbvb41kzTSUcvB+DuO2lx4ImVuo+wx0RXCc+wKw=;
+        b=SbrDW/lbtiIqu6d8HO68/knngsw5di+Fe/1guDTerjtHsHpTkTiCihnuWkmvDW6cdF
+         pxr8pQOT1P1/amv8RSerVYNKo2LQOe79NBg8r6LzeTut3ihG5S5otwSPgg9aqssmhXWR
+         2iK6gZCpJ2xoqXZNNLoSySXioiluUn3LAyleeI7vg+u9y525AAf8plrRzVlN8NE9uFjz
+         s7B12Hi64i8afjFfhi204kn4JOJlcLhRWCRrqoUA2cdLRBDXtD9FmM1BmWErqGLigHmm
+         RCkzXBDKbnVxytIewKM5RnbADgys0r4OaUwLg4xJFzmA93og+PpgnnuD3v6WXqmwdomP
+         TOyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768210865; x=1768815665;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NcMCCbvb41kzTSUcvB+DuO2lx4ImVuo+wx0RXCc+wKw=;
+        b=QxmRe2Af5y6+RHTS5DrQSPIDYVzYcsQqpPUXFIdQEkltteGQf+obeKEJ0up4TxU+EO
+         3ew95VRhyRcoUdw0IDv9n4JP6nJ5EKZYklRzSxNVp0cIWL72BtlcqxvlyngyyGtwZDi0
+         jKWUaF2LBIT3r/zrEC6pDPvCj7Gwew5YgbVEg2Zw+Zg41FvrUUAj/WxrJ8veZtdjf/Pf
+         QFto7sXobaIeyK7M7zOMVE/lBUGOTfP67ft5xVRgQV/lOlfQBJ5JEx+kjPlhBw7J6viA
+         FuxEJvHccvzyAfnwNlBbyynlT/0uH/MJOQtfWJtW5eFpw3ffHwaa9mQjGJpD9F/X4rnp
+         36Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCVeYbsLMDXoD8aM233eHAkbDvwekSm6DB5qjg/Q5Q6cdYYF99qK0jhrwhxzHuwkSvC/7O0qxZxbB5u0vHlfP98=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ+q5ExBsS8fcvP7ScsirTSx2lCsGGFAqhxg+r9S9p7a+p2Aow
+	/Y5/rqIhucrgZleCzE40ft7GoQYBgPuKs47QrESpb760iAiP7k6FU8wX
+X-Gm-Gg: AY/fxX4Pht0E7c+MmRtQH9tNcBY8Krua0ZIuqdi29UkLp30Q4JomxRdKbbrSpG/dAhq
+	Tt5G5p2oiNgzL8BmOARViHQYN0xu5o+sRwiWDBM4xUm84OagJkdzt3fLkBy0KRQS191etUZ+Ddg
+	HzRaTMaQ69lx79XwaI8vy3ZWjaItMyLPvGyFYNYojeeTYZEOViyma0AmsBHIiTFIb3LIY8EpjjP
+	483FJinPzLGEvH3NfW2eimeR6vOin7PsdPV599HmDzTVJ3N2jG687DOty8SnEiAr44UgH5OphM6
+	Pcm5QA3X0wmidPjKJ8pWGsymoagtRdYJwrSgDZ8K5mGLSEFh3i4lsHUX2K11E9bZw23UcS8GSdA
+	AqZl1jD9jxCrvEz/o/oOGKZo41KffT8x/jAptMCUy5JZPG6tA1uU51NS1Fq6zKB1bPFhW+z3GPI
+	oovpz1S9JbgX05HznoibfLrN7M
+X-Google-Smtp-Source: AGHT+IF3qwzBAX6fMwi+kTQzS94PxeyMpNh5glINk3hu98hkCYF7yoeLu5hs9WjReRTsg2GxRg4Jkw==
+X-Received: by 2002:a17:907:3d4c:b0:b83:7fb8:1f54 with SMTP id a640c23a62f3a-b8445357b42mr1845150866b.39.1768210864497;
+        Mon, 12 Jan 2026 01:41:04 -0800 (PST)
+Received: from [192.168.1.243] ([143.58.192.3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b870bcd342bsm410828766b.56.2026.01.12.01.41.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 01:41:03 -0800 (PST)
+From: Andre Carvalho <asantostc@gmail.com>
+Subject: [PATCH net-next v10 0/7] netconsole: support automatic target
+ recovery
+Date: Mon, 12 Jan 2026 09:40:51 +0000
+Message-Id: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] selftests/mm: add memory failure selftests
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- nao.horiguchi@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org
-References: <20260107093710.3928374-1-linmiaohe@huawei.com>
- <9413a995-9182-493e-a28a-6d2d3a17236b@kernel.org>
- <2ae04380-fd60-a8a1-6217-386454fec610@huawei.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <2ae04380-fd60-a8a1-6217-386454fec610@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23SzWrEIBAH8FdZPDdlHHWiPfU9Sg9+JSt0k2JC2
+ LLsu9cNtEjWo47zc/zjjS0xp7iwt9ON5bilJc1TWXB4OTF/ttMYuxTKBkNABZpTN8XVz9PS5bj
+ mNI4xd1YOSvZu8Jp6Vvq+cxzSdUc/WDleWq4r+yyVc1rWOf/st218r++uAdNwN95BJ2y0BqRB8
+ sP7eLHp69XPl13bsBKQtwQsgoWoJQCh6J8E8S9w3p5BFIGTkh41OBfpKMhKaKazySIoNODUwCV
+ 4PAqqFpozqCKg70OwBEqFpxmoEto5UBGMBzEoiy7QUw59LTRf0T9yCJqCs1o47o+CrgXdEnQRw
+ HnvBulJaHUUzJ9AwEG2BPP4D9pakiIgalEL9/v9FxFYnA/NAgAA
+X-Change-ID: 20250816-netcons-retrigger-a4f547bfc867
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768210863; l=5324;
+ i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
+ bh=D1nZ9kM/EuuYno+ZDSEcuEqHNLsDwCPEuHBego3wBFU=;
+ b=1afp2v24P7yuBbwAAnExTNyO1WOGF/SSGt8ULaCiEPvIup1BBSdm42w5whAQqdFDFR843w2R7
+ +2FCTRI72X0Awdb1+JbYSOZvrSTHnTnTsq0GosRsOHCpx/Qsy++SI0H
+X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
+ pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-On 1/12/26 10:19, Miaohe Lin wrote:
-> On 2026/1/9 21:45, David Hildenbrand (Red Hat) wrote:
->> On 1/7/26 10:37, Miaohe Lin wrote:
->>> Introduce selftests to validate the functionality of memory failure.
->>> These tests help ensure that memory failure handling for anonymous
->>> pages, pagecaches pages works correctly, including proper SIGBUS
->>> delivery to user processes, page isolation, and recovery paths.
->>>
->>> Currently madvise syscall is used to inject memory failures. And only
->>> anonymous pages and pagecaches are tested. More test scenarios, e.g.
->>> hugetlb, shmem, thp, will be added. Also more memory failure injecting
->>> methods will be supported, e.g. APEI Error INJection, if required.
->>
-> 
-> Thanks for test and report. :)
-> 
->> 0day reports that these tests fail:
->>
->> # # ------------------------
->> # # running ./memory-failure
->> # # ------------------------
->> # # TAP version 13
->> # # 1..6
->> # # # Starting 6 tests from 2 test cases.
->> # # #  RUN           memory_failure.madv_hard.anon ...
->> # # #            OK  memory_failure.madv_hard.anon
->> # # ok 1 memory_failure.madv_hard.anon
->> # # #  RUN           memory_failure.madv_hard.clean_pagecache ...
->> # # # memory-failure.c:166:clean_pagecache:Expected setjmp (1) == 0 (0)
->> # # # clean_pagecache: Test terminated by assertion
->> # # #          FAIL  memory_failure.madv_hard.clean_pagecache
->> # # not ok 2 memory_failure.madv_hard.clean_pagecache
->> # # #  RUN           memory_failure.madv_hard.dirty_pagecache ...
->> # # # memory-failure.c:207:dirty_pagecache:Expected unpoison_memory(self->pfn) (-16) == 0 (0)
->> # # # dirty_pagecache: Test terminated by assertion
->> # # #          FAIL  memory_failure.madv_hard.dirty_pagecache
->> # # not ok 3 memory_failure.madv_hard.dirty_pagecache
->> # # #  RUN           memory_failure.madv_soft.anon ...
->> # # #            OK  memory_failure.madv_soft.anon
->> # # ok 4 memory_failure.madv_soft.anon
->> # # #  RUN           memory_failure.madv_soft.clean_pagecache ...
->> # # # memory-failure.c:282:clean_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
->> # # # clean_pagecache: Test terminated by assertion
->> # # #          FAIL  memory_failure.madv_soft.clean_pagecache
->> # # not ok 5 memory_failure.madv_soft.clean_pagecache
->> # # #  RUN           memory_failure.madv_soft.dirty_pagecache ...
->> # # # memory-failure.c:319:dirty_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
->> # # # dirty_pagecache: Test terminated by assertion
->> # # #          FAIL  memory_failure.madv_soft.dirty_pagecache
->> # # not ok 6 memory_failure.madv_soft.dirty_pagecache
->> # # # FAILED: 2 / 6 tests passed.
->> # # # Totals: pass:2 fail:4 xfail:0 xpass:0 skip:0 error:0
->> # # [FAIL]
->> # not ok 71 memory-failure # exit=1
->>
->>
->> Can the test maybe not deal with running in certain environments (config options etc)?
-> 
-> To run the test, I think there should be:
->    1.CONFIG_MEMORY_FAILURE and CONFIG_HWPOISON_INJECT should be enabled.
->    2.Root privilege is required.
->    3.For dirty/clean pagecache testcases, the test file "./clean-page-cache-test-file" and
->      "./dirty-page-cache-test-file" are assumed to be created on non-memory file systems
->      such as xfs, ext4, etc.
-> 
-> Does your test environment break any of the above rules?
+This patchset introduces target resume capability to netconsole allowing
+it to recover targets when underlying low-level interface comes back
+online.
 
-It is 0day environment, so very likely yes. I suspect 1).
+The patchset starts by refactoring netconsole state representation in
+order to allow representing deactivated targets (targets that are
+disabled due to interfaces unregister).
 
-> Am I expected to add some code to
-> guard against this?
+It then modifies netconsole to handle NETDEV_REGISTER events for such
+targets, setups netpoll and forces the device UP. Targets are matched with
+incoming interfaces depending on how they were bound in netconsole
+(by mac or interface name). For these reasons, we also attempt resuming
+on NETDEV_CHANGENAME.
 
-Yes, at least some.
+The patchset includes a selftest that validates netconsole target state
+transitions and that target is functional after resumed.
 
-Checking for root privileges is not required. The tests are commonly run 
-from non-memory file systems, but, in theory, could be run from nfs etc.
+Signed-off-by: Andre Carvalho <asantostc@gmail.com>
+---
+Changes in v10:
+- Define wrappers around dynamic_netconsole_mutex lock/unlock and use
+  them on process_resume_target to avoid build failures and #ifdefs
+  inside callsite (suggested by Breno).
+- Refactored other dynamic_netconsole_mutex to use the wrappers for
+  consistency.
+- Ensure we cancel pending working during removal of dynamic targets,
+  which requires also holding dynamic_netconsole_mutex.
+- Introduce standalone workqueue to avoid potential leaks during module
+  cleanup, flushing all pending resume events before removing all
+  targets.
+- Link to v9: https://lore.kernel.org/r/20260104-netcons-retrigger-v9-0-38aa643d2283@gmail.com
 
-If you require special file systems, take a look at gup_longterm.o where 
-we test for some fileystsem types.
+Changes in v9:
+- Hold dynamic_netconsole_mutex on process_resume_target.
+- Cleanup dev_name as part of netconsole_process_cleanups_core to ensure
+  we correctly resume by mac (for targets bound by mac)
+- Link to v8: https://lore.kernel.org/r/20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com
 
-Regarding 1): tools/testing/selftests/mm/config includes the config 
-options we expect to be set for running MM tests. Extending that might 
-take a while until environments like 0day would pick up such changes. If 
-you require something else, make your test SKIP tests if the relevant 
-kernel support is not there (e.g., sense support and conditionally skip).
+Changes in v8:
+- Handle NETDEV_REGISTER/CHANGENAME instead of NETDEV_UP (and force the device
+  UP), to increase the chances of succesfully resuming a target. This
+  requires using a workqueue instead of inline in the event notifier as
+  we can't UP the device otherwise.
+- Link to v7: https://lore.kernel.org/r/20251126-netcons-retrigger-v7-0-1d86dba83b1c@gmail.com
 
+Changes in v7:
+- selftest: use ${EXIT_STATUS} instead of ${ksft_pass} to avoid
+  shellcheck warning
+- Link to v6: https://lore.kernel.org/r/20251121-netcons-retrigger-v6-0-9c03f5a2bd6f@gmail.com
+
+Changes in v6:
+- Rebase on top of net-next to resolve conflicts, no functional changes.
+- Link to v5: https://lore.kernel.org/r/20251119-netcons-retrigger-v5-0-2c7dda6055d6@gmail.com
+
+Changes in v5:
+- patch 3: Set (de)enslaved target as DISABLED instead of DEACTIVATED to prevent
+  resuming it.
+- selftest: Fix test cleanup by moving trap line to outside of loop and remove
+  unneeded 'local' keyword
+- Rename maybe_resume_target to resume_target, add netconsole_ prefix to
+  process_resumable_targets.
+- Hold device reference before calling __netpoll_setup.
+- Link to v4: https://lore.kernel.org/r/20251116-netcons-retrigger-v4-0-5290b5f140c2@gmail.com
+
+Changes in v4:
+- Simplify selftest cleanup, removing trap setup in loop.
+- Drop netpoll helper (__setup_netpoll_hold) and manage reference inside
+  netconsole.
+- Move resume_list processing logic to separate function.
+- Link to v3: https://lore.kernel.org/r/20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com
+
+Changes in v3:
+- Resume by mac or interface name depending on how target was created.
+- Attempt to resume target without holding target list lock, by moving
+  the target to a temporary list. This is required as netpoll may
+  attempt to allocate memory.
+- Link to v2: https://lore.kernel.org/r/20250921-netcons-retrigger-v2-0-a0e84006237f@gmail.com
+
+Changes in v2:
+- Attempt to resume target in the same thread, instead of using
+workqueue .
+- Add wrapper around __netpoll_setup (patch 4).
+- Renamed resume_target to maybe_resume_target and moved conditionals to
+inside its implementation, keeping code more clear.
+- Verify that device addr matches target mac address when target was
+setup using mac.
+- Update selftest to cover targets bound by mac and interface name.
+- Fix typo in selftest comment and sort tests alphabetically in
+  Makefile.
+- Link to v1:
+https://lore.kernel.org/r/20250909-netcons-retrigger-v1-0-3aea904926cf@gmail.com
+
+---
+Andre Carvalho (5):
+      netconsole: convert 'enabled' flag to enum for clearer state management
+      netconsole: clear dev_name for devices bound by mac
+      netconsole: introduce helpers for dynamic_netconsole_mutex lock/unlock
+      netconsole: resume previously deactivated target
+      selftests: netconsole: validate target resume
+
+Breno Leitao (2):
+      netconsole: add target_state enum
+      netconsole: add STATE_DEACTIVATED to track targets disabled by low level
+
+ drivers/net/netconsole.c                           | 305 ++++++++++++++++-----
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  35 ++-
+ .../selftests/drivers/net/netcons_resume.sh        |  97 +++++++
+ 4 files changed, 364 insertions(+), 74 deletions(-)
+---
+base-commit: 60d8484c4cec811f5ceb6550655df74490d1a165
+change-id: 20250816-netcons-retrigger-a4f547bfc867
+
+Best regards,
 -- 
-Cheers
+Andre Carvalho <asantostc@gmail.com>
 
-David
 
