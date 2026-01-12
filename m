@@ -1,170 +1,226 @@
-Return-Path: <linux-kselftest+bounces-48693-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8ED1D0FDFB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 22:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E4782D103B8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 02:10:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AE7A630456B6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Jan 2026 21:01:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7D9D7303ADDF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 01:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 248F317B505;
-	Sun, 11 Jan 2026 21:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3SBW3YI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2777215F7D;
+	Mon, 12 Jan 2026 01:10:49 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B489122836C
-	for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 21:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EE842A96;
+	Mon, 12 Jan 2026 01:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768165301; cv=none; b=UemnCqKD83DTmZFrH3eclFo1UfY56Bvf0Ml9b/i6++5gAVLR9kpvuxO3yepGp/wGVxWsQjUv9vgQTUBC0h+ZvYpqRFc1RTVICYW48ao8EIPrUTO1nn0vbIa8p/jjcEK8bwqclikY8Bu5gr/Yy9TRkE1TOj7MX4VEbL+qkR3AmGo=
+	t=1768180249; cv=none; b=Qtmrw37xn50yKgccrEoKtrZM1gMd0mXhjkImWqR67050YOLokUgKxwlAvH7jXbgMzSj/kk+hMeCB1oZDJIpVGXK0O2b6Cs+s6FZjc+VnexOKExoPfhyVeodHvm0jjXc2OUzAJrou0FkC2nZk7fEjuDcRg+tgD4QSvgt/cod/Jyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768165301; c=relaxed/simple;
-	bh=6qFY22b8wvd/fXgXqKI9d4C5kX/IWIOe0133W5ImOsE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WT/Nl79uaOWtFKOIERMrn4I+T5sYtQsShv8ZBCuelM5YJ3C9QeFRxEilDz6HOH/9ijY2FPNZhVvkg9iIi3uj3rl0PfszzMQZUuPaP7zKnuqxyBGmQBDQG2cTEqbopn4sbTV7WqmfpOQm5RzrxoIoDqc4+t6qN0tEtk3r49WhRLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O3SBW3YI; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-34c565c3673so2251308a91.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 11 Jan 2026 13:01:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768165299; x=1768770099; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CRvZMTzGCt2GTIRIoyLg6BepRg6W16l3+xTG2g/n4QA=;
-        b=O3SBW3YIEsLtOco7PtbUIpozzSxi1BoLT/NobuCYXpMpzJhfHvERKhJwiv+Bju8srM
-         FPdpE/d0svWaIO0WgthehAUFWg8iL9gNMS7BKz0UFjTnPYhcVLvArMpZQMr2uQu7kNld
-         HbCbmdRnKb9T2gv0gz0pz2hrA5Joaje/mZms8vqQHiFbF/6z+hkaEZAT+idxULVv2wA3
-         HcCCMX+21iW2oVfFpTlJcd+QOhF0GzJ+2f3IzutdbSspvxdK2PSrTqG3xwEvwLASmo0y
-         aNW2ygrJvqhFLi4Rh3+NTHd9GLRHtsOqAdycOuaaB9h3OS3nAku/GzT2SKx2s7J1EgWa
-         mRqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768165299; x=1768770099;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CRvZMTzGCt2GTIRIoyLg6BepRg6W16l3+xTG2g/n4QA=;
-        b=P/yxRDPBltdxZqJ9Vcd3kQlIdW0wqVb7XdNHtKfrMl7k7b/XjYbEQeALKMhovoxPPQ
-         v2muOW3OO0dD7KlBpYMCZl9t1q6c43hWaRe0m2f93Bn/7sh1im9SVKc1geqQkuFR0rft
-         16sPXO4+rGSsjWIdKNby25sO3xZb/Kp3QOfVDnuWExa7AAczbZFrNTCftVK4OZGJ6Wex
-         KNsEcIVsbwzKWEyxvbFPvQKGJCzOsO73ro2PwYuunXPtFo16WZD9yIaLgs2wQ6RcvMpd
-         ybQfqKpmNLpyo86VqP6XigSv6xHlm1/6c4rTFZ3JGfxcaI//KtkGmfvj3BRG8OQMIF8V
-         9McQ==
-X-Gm-Message-State: AOJu0YwkzaeuB5iEvnaYpDV2XbdrJXuBhyySUu8sEzmByZ3BcX8L5eyF
-	JUe+MH+s35oiL9xaiDQ0K13xyOyoKov9q766P9JQShq0u1Sx0IpsQeWR
-X-Gm-Gg: AY/fxX4smcrxIp8LI961QFpIWEnJqDvBE66OpybhWtJIsEolww0PgWOzMnhoUIuuDwg
-	m5SZbm/U9Tvj8zAA7RZcC6uz1zErASr2YVhHMwe6xAIF0sV9oMYGeKJxK5K/BUT0k01l40o4stl
-	j1+jKLzaC9OJ5z2QQIsNWSNqwzN8blkjoUGs2YbmRtufRjHKjuejRnHco6bEyi5OSBjT9PhEG5T
-	0y+jqcc4xNm/l5L7JRBAB4cJ/yMdXQTOdu+K74FZVgYNy2IBT6ZOaDB8bRoJHoD/AgO6BdoPBbB
-	ATd9CXdfTm3yI+qrYQpNLhhKObFVkWaCiFRR5miadqloxhhGIT6GgnnSXYpNmoXW5Blu7ZuS2Rj
-	qovAy6RL2YRBcDVjPTo2qm461T6MawqyQMvb+EwYKnB/IJZjZ6XkAPK31XDSxK1g/9OQHBjB4Oq
-	D27cUUKDoBiiSTaYdHeAmJ+iFPnzBLmW6kQRHWIdpI9cqKSKbXuYhy55rB7A==
-X-Google-Smtp-Source: AGHT+IG38rHBjvWA1hsOUf8/WhsXB2Bn2dOSDUZktYRHPtC8bdb38cHYDaPo1+Dthxs2Bi3nWRPK/Q==
-X-Received: by 2002:a17:90b:2dca:b0:34c:2f01:2262 with SMTP id 98e67ed59e1d1-34f5f831c80mr17064982a91.3.1768165298793;
-        Sun, 11 Jan 2026 13:01:38 -0800 (PST)
-Received: from neogulmanpassingby-IdeaPad-1-15AMN7.. ([121.148.108.47])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5fb64d68sm3346327a91.12.2026.01.11.13.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 13:01:38 -0800 (PST)
-From: UYeol Jo <jouyeol8739@gmail.com>
-To: x86@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	UYeol Jo <jouyeol8739@gmail.com>
-Subject: [PATCH v2] selftests/x86: clean up sysret_rip coding style
-Date: Mon, 12 Jan 2026 06:01:26 +0900
-Message-ID: <20260111210126.74752-1-jouyeol8739@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260111143956.70422-1-jouyeol8739@gmail.com>
-References: <20260111143956.70422-1-jouyeol8739@gmail.com>
+	s=arc-20240116; t=1768180249; c=relaxed/simple;
+	bh=1pQzOTwfMQIfuYIUNtNElPe+4MjbbYSkjiBUwA7Kbvg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ixvd1+tT97NkuVUHkN9aDabc50uZNwzk/VppSk216Gx6WJ/MAWKP0CoPmTpzIbChdTbgaHQkGmrZF4T+5h215+0UU3HpawjuDxG2p2edrpVe2NAx6qXl1Hl+c033WttR9JUxsqhx+Y0u/r6G1/TytoZ6eTe5VumAk4jOwlG3IYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dqDnx1blDzYQtjy;
+	Mon, 12 Jan 2026 09:10:29 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id B6FBD40574;
+	Mon, 12 Jan 2026 09:10:38 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgDHKPkNSmRp7hHxDQ--.1037S2;
+	Mon, 12 Jan 2026 09:10:38 +0800 (CST)
+Message-ID: <a3ad07c1-1b15-48f4-b81e-a459504558f9@huaweicloud.com>
+Date: Mon, 12 Jan 2026 09:10:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [cgroup/for-6.20 PATCH v2 2/4] cgroup/cpuset: Consistently
+ compute effective_xcpus in update_cpumasks_hier()
+To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ Sun Shaojie <sunshaojie@kylinos.cn>
+References: <20260101191558.434446-1-longman@redhat.com>
+ <20260101191558.434446-3-longman@redhat.com>
+ <758f42df-52c2-4660-8ef7-1cbacb9323d2@huaweicloud.com>
+ <f8539426-92b0-42f3-99c4-70962c2db96d@redhat.com>
+ <c17051c3-82ac-4ca5-8823-33327cadd073@huaweicloud.com>
+ <ec6e1ee4-b52e-417f-9413-3dfca0ec8eb3@redhat.com>
+ <d49cc8af-509b-44b8-ada4-f8bbdbd37f89@huaweicloud.com>
+ <f541b93b-7bbf-4530-bca6-dc5b5b1f481c@redhat.com>
+ <556672f7-b9b9-46a2-8a67-54ac615383d4@huaweicloud.com>
+ <0384dc28-bfff-4a74-9153-66d287888ce7@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <0384dc28-bfff-4a74-9153-66d287888ce7@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDHKPkNSmRp7hHxDQ--.1037S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFy8KFyxCFy3CF4kGryfJFb_yoWxKFWfpr
+	y8JF4UJrWUtr1rC3yUKF17Xry8tr4Dtw1DXw1DJF1rXFyDKF1jqr1jqws09r1UJr4kJr15
+	Ar1UXr47ZF1DArUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-Tidy up sysret_rip style (cast spacing, main(void), const placement).
-No functional change intended.
 
-Signed-off-by: UYeol Jo <jouyeol8739@gmail.com>
----
-v2:
-- Use real name in Signed-off-by (per feedback). No code changes.
 
- tools/testing/selftests/x86/sysret_rip.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+On 2026/1/10 4:15, Waiman Long wrote:
+> On 1/5/26 1:29 AM, Chen Ridong wrote:
+>>
+>> On 2026/1/5 12:06, Waiman Long wrote:
+>>> On 1/4/26 10:58 PM, Chen Ridong wrote:
+>>>> On 2026/1/5 11:50, Waiman Long wrote:
+>>>>> On 1/4/26 8:15 PM, Chen Ridong wrote:
+>>>>>> On 2026/1/5 5:25, Waiman Long wrote:
+>>>>>>> On 1/3/26 9:48 PM, Chen Ridong wrote:
+>>>>>>>> On 2026/1/2 3:15, Waiman Long wrote:
+>>>>>>>>> Since commit f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check()
+>>>>>>>>> & make update_cpumasks_hier() handle remote partition"), the
+>>>>>>>>> compute_effective_exclusive_cpumask() helper was extended to
+>>>>>>>>> strip exclusive CPUs from siblings when computing effective_xcpus
+>>>>>>>>> (cpuset.cpus.exclusive.effective). This helper was later renamed to
+>>>>>>>>> compute_excpus() in commit 86bbbd1f33ab ("cpuset: Refactor exclusive
+>>>>>>>>> CPU mask computation logic").
+>>>>>>>>>
+>>>>>>>>> This helper is supposed to be used consistently to compute
+>>>>>>>>> effective_xcpus. However, there is an exception within the callback
+>>>>>>>>> critical section in update_cpumasks_hier() when exclusive_cpus of a
+>>>>>>>>> valid partition root is empty. This can cause effective_xcpus value to
+>>>>>>>>> differ depending on where exactly it is last computed. Fix this by using
+>>>>>>>>> compute_excpus() in this case to give a consistent result.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>>>>>>>> ---
+>>>>>>>>>      kernel/cgroup/cpuset.c | 14 +++++---------
+>>>>>>>>>      1 file changed, 5 insertions(+), 9 deletions(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>>>>>>> index da2b3b51630e..37d118a9ad4d 100644
+>>>>>>>>> --- a/kernel/cgroup/cpuset.c
+>>>>>>>>> +++ b/kernel/cgroup/cpuset.c
+>>>>>>>>> @@ -2168,17 +2168,13 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks
+>>>>>>>>> *tmp,
+>>>>>>>>>              spin_lock_irq(&callback_lock);
+>>>>>>>>>              cpumask_copy(cp->effective_cpus, tmp->new_cpus);
+>>>>>>>>>              cp->partition_root_state = new_prs;
+>>>>>>>>> -        if (!cpumask_empty(cp->exclusive_cpus) && (cp != cs))
+>>>>>>>>> -            compute_excpus(cp, cp->effective_xcpus);
+>>>>>>>>> -
+>>>>>>>>>              /*
+>>>>>>>>> -         * Make sure effective_xcpus is properly set for a valid
+>>>>>>>>> -         * partition root.
+>>>>>>>>> +         * Need to compute effective_xcpus if either exclusive_cpus
+>>>>>>>>> +         * is non-empty or it is a valid partition root.
+>>>>>>>>>               */
+>>>>>>>>> -        if ((new_prs > 0) && cpumask_empty(cp->exclusive_cpus))
+>>>>>>>>> -            cpumask_and(cp->effective_xcpus,
+>>>>>>>>> -                    cp->cpus_allowed, parent->effective_xcpus);
+>>>>>>>>> -        else if (new_prs < 0)
+>>>>>>>>> +        if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
+>>>>>>>>> +            compute_excpus(cp, cp->effective_xcpus);
+>>>>>>>>> +        if (new_prs < 0)
+>>>>>>>>>                  reset_partition_data(cp);
+>>>>>>>>>              spin_unlock_irq(&callback_lock);
+>>>>>>>>>      
+>>>>>>>> The code resets partition data only for new_prs < 0. My understanding is that a partition is
+>>>>>>>> invalid
+>>>>>>>> when new_prs <= 0. Shouldn't reset_partition_data() also be called when new_prs = 0? Is there a
+>>>>>>>> specific reason to skip the reset in that case?
+>>>>>>> update_cpumasks_hier() is called when changes in a cpuset or hotplug affects other cpusets in
+>>>>>>> the
+>>>>>>> hierarchy. With respect to changes in partition state, it is either from valid to invalid or
+>>>>>>> vice
+>>>>>>> versa. It will not change from a valid partition to member. The only way new_prs = 0 is when
+>>>>>>> old_prs
+>>>>>>> = 0. Even if the affected cpuset is processed again in update_cpumask_hier(), any state change
+>>>>>>> from
+>>>>>>> valid partition to member (update_prstate()), reset_partition_data() should have been called
+>>>>>>> there.
+>>>>>>> That is why we only care about when new_prs != 0.
+>>>>>>>
+>>>>>> Thank you for your patience.
+>>>>>>
+>>>>>>> The code isn't wrong here. However I can change the condition to (new_prs <= 0) if it makes it
+>>>>>>> easier to understand.
+>>>>>>>
+>>>>>> I agree there's nothing wrong with the current logic. However, for clarity, I suggest changing
+>>>>>> the
+>>>>>> condition to (new_prs <= 0). This allows the function's logic to be fully self-consistent and
+>>>>>> focused on a single responsibility. This approach would allow us to simplify the code to:
+>>>>>>
+>>>>>>       if (new_prs > 0)
+>>>>>>           compute_excpus(cp, cp->effective_xcpus);
+>>>>>>       else
+>>>>>>           reset_partition_data(cp);
+>>>>>>
+>>>>>> Since reset_partition_data() already handles cases whether cp->exclusive_cpus is empty or not,
+>>>>>> this
+>>>>>> implementation would be more concise while correctly covering all scenarios.
+>>>>> effective_xcpus should be set when exclusive_cpus is not empty or when the cpuset is a valid
+>>>>> partition root. So just checking new_prs for compute_excpus() is not enough.
+>>>>>
+>>>> If we change the condition to (new_prs <= 0), it will reset the partition data even when we call
+>>>> compute_excpus (for !cpumask_empty(cp->exclusive_cpus)), so we should still get the same result,
+>>>> right?
+>>> Changing the condition to (new_prs <= 0) won't affect the result except for a bit of wasted cpu
+>>> cycles. That is why I am planning to make the change in the next version to make it easier to
+>>> understand.
+>>>
+>> Sorry, I should have been clearer. If we change the condition, the code would essentially be:
+>>
+>>     if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
+>>         compute_excpus(cp, cp->effective_xcpus);
+>>          if (new_prs <= 0)
+>>         reset_partition_data(cp);
+>>
+>> For cases where new_prs <= 0 && !cpumask_empty(cp->exclusive_cpus), both compute_excpus() and
+>> reset_partition_data() would be called.
+>>
+>> Is this functionally equivalent to:
+>>
+>>     if (new_prs > 0)
+>>         compute_excpus(cp, cp->effective_xcpus);
+>>          else (new_prs <= 0)
+>>         reset_partition_data(cp);
+> 
+> They are not equivalent because reset_partition_data() won't do a compute_excpus(). In fact, one of
+> the tests in test_cpuset_prs.sh will fail if we make this change.
+> 
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 5fb531e3ad7c..2e423a335e1c 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -31,7 +31,7 @@
- void test_syscall_ins(void);
- extern const char test_page[];
- 
--static void const *current_test_page_addr = test_page;
-+static const void *current_test_page_addr = test_page;
- 
- /* State used by our signal handlers. */
- static gregset_t initial_regs;
-@@ -40,7 +40,7 @@ static volatile unsigned long rip;
- 
- static void sigsegv_for_sigreturn_test(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
- 
- 	if (rip != ctx->uc_mcontext.gregs[REG_RIP]) {
- 		printf("[FAIL]\tRequested RIP=0x%lx but got RIP=0x%lx\n",
-@@ -56,7 +56,7 @@ static void sigsegv_for_sigreturn_test(int sig, siginfo_t *info, void *ctx_void)
- 
- static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
- 
- 	memcpy(&initial_regs, &ctx->uc_mcontext.gregs, sizeof(gregset_t));
- 
-@@ -69,8 +69,6 @@ static void sigusr1(int sig, siginfo_t *info, void *ctx_void)
- 	       ctx->uc_mcontext.gregs[REG_R11]);
- 
- 	sethandler(SIGSEGV, sigsegv_for_sigreturn_test, SA_RESETHAND);
--
--	return;
- }
- 
- static void test_sigreturn_to(unsigned long ip)
-@@ -84,7 +82,7 @@ static jmp_buf jmpbuf;
- 
- static void sigsegv_for_fallthrough(int sig, siginfo_t *info, void *ctx_void)
- {
--	ucontext_t *ctx = (ucontext_t*)ctx_void;
-+	ucontext_t *ctx = (ucontext_t *)ctx_void;
- 
- 	if (rip != ctx->uc_mcontext.gregs[REG_RIP]) {
- 		printf("[FAIL]\tExpected SIGSEGV at 0x%lx but got RIP=0x%lx\n",
-@@ -130,7 +128,7 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 	printf("[OK]\tWe survived\n");
- }
- 
--int main()
-+int main(void)
- {
- 	/*
- 	 * When the kernel returns from a slow-path syscall, it will
+Understood. If exclusive_cpus is non-empty, the effective_exclusive_cpus of a cpuset may remain
+non-empty even when the cpuset itself is not a valid root. reset_partition_data will only reset this
+effective list if the exclusive_cpus set is empty.
+
+Thank you very much.
+
 -- 
-2.43.0
+Best regards,
+Ridong
 
 
