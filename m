@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-48695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3188D103CD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 02:13:28 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71B1FD103F6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 02:25:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8C938300DC90
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 01:13:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 612C1301E98D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 01:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585A6218AAD;
-	Mon, 12 Jan 2026 01:13:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE01222566;
+	Mon, 12 Jan 2026 01:25:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1AF158538;
-	Mon, 12 Jan 2026 01:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD5047A6B;
+	Mon, 12 Jan 2026 01:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768180404; cv=none; b=BpWSE9MGBlcBOok1rtdRqZqwYaWFfKUi03AYe4cuG4IF1ch8+UkNs7KcmCOpXQ6xn8IHLECat2/5BhWVyvsWH/WouVw1hDPsiBp8YICcKLZK1zG6FrpHBUblkGi1yLp0YA84YJMpkcdcGzb6ol2K1FY2xGpQf0wMLyvAuF441v0=
+	t=1768181114; cv=none; b=EZV6N/m40S8WumkNcg6a+0GIROuImrsZQf29uQ5MDCyZBnXTrvRn0U6+p2/cDG2wOpaZMibetT0BZc0NyldRmdF1cZUJAvC47hUuyO+n50QEmcANl4lXgUqrRNvzyEoO42sL2Ux1EZ4xW4z7I5SEsqOsrrryY7fwugBzoGvwuC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768180404; c=relaxed/simple;
-	bh=HUfy8qYTgSm8Gnc9CbQXQlB0Tsvh+pVatzIRC9A0oEM=;
+	s=arc-20240116; t=1768181114; c=relaxed/simple;
+	bh=FGLXoDTdmFGJ1JvVvQqVhxwUBH4Eeu33O2Oi0KYjms0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YHGsIKSCBQHmgs3ssO/PPJ+PDuB2I6bSr4pd7lbTaf8lMBM9e03pMdAy5YU7TGKF7pxiktCV5Kcq0zBlaS5jU+zOjiBzV7VWwoqbvxcx75lsv847D8HwvD+WidwAYzjPAYayJjr51hodcRTIHDPLtTuvYjExHDkcWgC/wYlmmsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 In-Reply-To:Content-Type; b=AbPKrargYIuIEI7j+op39V0XxC0f5/FYkrPeiPnbQjJmBBoLhjOu/Dh3T8BCQcBZKEQazhP46LXmvkLc8DbdYn8U43Jj11HugjgGtCAcFIwIazy9lANvdX9db8adS9RRHFo/s8eE69jzxuuXWMLTS/xhP3WkDrEKpfuXIy10KHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dqDrG0Gh0zKHMMJ;
-	Mon, 12 Jan 2026 09:12:30 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dqF6f6sTDzYQtgh;
+	Mon, 12 Jan 2026 09:24:58 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 438DA40539;
-	Mon, 12 Jan 2026 09:13:18 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 7C70F40539;
+	Mon, 12 Jan 2026 09:25:08 +0800 (CST)
 Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgAniPitSmRpGkvxDQ--.48898S2;
-	Mon, 12 Jan 2026 09:13:18 +0800 (CST)
-Message-ID: <d26ede5b-3e2a-4faf-a29f-45620fc1088e@huaweicloud.com>
-Date: Mon, 12 Jan 2026 09:13:16 +0800
+	by APP4 (Coremail) with SMTP id gCh0CgD3pPVyTWRpYUfyDQ--.57454S2;
+	Mon, 12 Jan 2026 09:25:08 +0800 (CST)
+Message-ID: <d8f7d319-3b72-4531-ab25-a2505cdce828@huaweicloud.com>
+Date: Mon, 12 Jan 2026 09:25:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,8 +45,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH cgroup/for-6.20 v3 2/5] cgroup/cpuset: Consistently
- compute effective_xcpus in update_cpumasks_hier()
+Subject: Re: [PATCH cgroup/for-6.20 v3 3/5] cgroup/cpuset: Don't fail
+ cpuset.cpus change in v2
 To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
  Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
  <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
@@ -55,16 +55,16 @@ Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  Sun Shaojie <sunshaojie@kylinos.cn>
 References: <20260110013246.293889-1-longman@redhat.com>
- <20260110013246.293889-3-longman@redhat.com>
+ <20260110013246.293889-4-longman@redhat.com>
 Content-Language: en-US
 From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20260110013246.293889-3-longman@redhat.com>
+In-Reply-To: <20260110013246.293889-4-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgAniPitSmRpGkvxDQ--.48898S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KryxXrWrXryxuryrCFyUKFg_yoW8Kr1UpF
-	18Cw4avayYqr1rC39rK3ZF9r1Fga1vqF4qyw1Dtr4fXFy3C3Wv9r1DZanxXr1UGa1kGr15
-	AF98Zr4Sqas0y37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgD3pPVyTWRpYUfyDQ--.57454S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wr13WrWDXF48tr4rCrykZrb_yoW7Ar4fpF
+	WDC3W3KayYgF1UC3y5Kwn7WrsYgw40v3ZFyw15Jw1rZr9xGF12yrs5JwnxAFy3G3yfGa15
+	tFZay3yfW3Z0yrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
 	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
@@ -83,57 +83,119 @@ X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
 
 On 2026/1/10 9:32, Waiman Long wrote:
-> Since commit f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check()
-> & make update_cpumasks_hier() handle remote partition"), the
-> compute_effective_exclusive_cpumask() helper was extended to
-> strip exclusive CPUs from siblings when computing effective_xcpus
-> (cpuset.cpus.exclusive.effective). This helper was later renamed to
-> compute_excpus() in commit 86bbbd1f33ab ("cpuset: Refactor exclusive
-> CPU mask computation logic").
+> Commit fe8cd2736e75 ("cgroup/cpuset: Delay setting of CS_CPU_EXCLUSIVE
+> until valid partition") introduced a new check to disallow the setting
+> of a new cpuset.cpus.exclusive value that is a superset of a sibling's
+> cpuset.cpus value so that there will at least be one CPU left in the
+> sibling in case the cpuset becomes a valid partition root. This new
+> check does have the side effect of failing a cpuset.cpus change that
+> make it a subset of a sibling's cpuset.cpus.exclusive value.
 > 
-> This helper is supposed to be used consistently to compute
-> effective_xcpus. However, there is an exception within the callback
-> critical section in update_cpumasks_hier() when exclusive_cpus of a
-> valid partition root is empty. This can cause effective_xcpus value to
-> differ depending on where exactly it is last computed. Fix this by using
-> compute_excpus() in this case to give a consistent result.
+> With v2, users are supposed to be allowed to set whatever value they
+> want in cpuset.cpus without failure. To maintain this rule, the check
+> is now restricted to only when cpuset.cpus.exclusive is being changed
+> not when cpuset.cpus is changed.
+> 
+> The cgroup-v2.rst doc file is also updated to reflect this change.
 > 
 > Signed-off-by: Waiman Long <longman@redhat.com>
 > ---
->  kernel/cgroup/cpuset.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+>  Documentation/admin-guide/cgroup-v2.rst |  8 +++----
+>  kernel/cgroup/cpuset.c                  | 30 ++++++++++++-------------
+>  2 files changed, 19 insertions(+), 19 deletions(-)
 > 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 7f5b59d95fce..510df2461aff 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -2561,10 +2561,10 @@ Cpuset Interface Files
+>  	Users can manually set it to a value that is different from
+>  	"cpuset.cpus".	One constraint in setting it is that the list of
+>  	CPUs must be exclusive with respect to "cpuset.cpus.exclusive"
+> -	of its sibling.  If "cpuset.cpus.exclusive" of a sibling cgroup
+> -	isn't set, its "cpuset.cpus" value, if set, cannot be a subset
+> -	of it to leave at least one CPU available when the exclusive
+> -	CPUs are taken away.
+> +	and "cpuset.cpus.exclusive.effective" of its siblings.	Another
+> +	constraint is that it cannot be a superset of "cpuset.cpus"
+> +	of its sibling in order to leave at least one CPU available to
+> +	that sibling when the exclusive CPUs are taken away.
+>  
+>  	For a parent cgroup, any one of its exclusive CPUs can only
+>  	be distributed to at most one of its child cgroups.  Having an
 > diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index da2b3b51630e..894131f47f78 100644
+> index 894131f47f78..4819ab429771 100644
 > --- a/kernel/cgroup/cpuset.c
 > +++ b/kernel/cgroup/cpuset.c
-> @@ -2168,17 +2168,13 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->  		spin_lock_irq(&callback_lock);
->  		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
->  		cp->partition_root_state = new_prs;
-> -		if (!cpumask_empty(cp->exclusive_cpus) && (cp != cs))
-> -			compute_excpus(cp, cp->effective_xcpus);
-> -
->  		/*
-> -		 * Make sure effective_xcpus is properly set for a valid
-> -		 * partition root.
-> +		 * Need to compute effective_xcpus if either exclusive_cpus
-> +		 * is non-empty or it is a valid partition root.
->  		 */
-> -		if ((new_prs > 0) && cpumask_empty(cp->exclusive_cpus))
-> -			cpumask_and(cp->effective_xcpus,
-> -				    cp->cpus_allowed, parent->effective_xcpus);
-> -		else if (new_prs < 0)
-> +		if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
-> +			compute_excpus(cp, cp->effective_xcpus);
-> +		if (new_prs <= 0)
->  			reset_partition_data(cp);
->  		spin_unlock_irq(&callback_lock);
+> @@ -609,33 +609,31 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
 >  
+>  /**
+>   * cpus_excl_conflict - Check if two cpusets have exclusive CPU conflicts
+> - * @cs1: first cpuset to check
+> - * @cs2: second cpuset to check
+> + * @trial:	the trial cpuset to be checked
+> + * @sibling:	a sibling cpuset to be checked against
+> + * @xcpus_changed: set if exclusive_cpus has been set
+>   *
+>   * Returns: true if CPU exclusivity conflict exists, false otherwise
+>   *
+>   * Conflict detection rules:
+>   * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
+>   * 2. exclusive_cpus masks cannot intersect between cpusets
+> - * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
+> + * 3. The allowed CPUs of a sibling cpuset cannot be a subset of the new exclusive CPUs
+>   */
+> -static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+> +static inline bool cpus_excl_conflict(struct cpuset *trial, struct cpuset *sibling,
+> +				      bool xcpus_changed)
+>  {
+>  	/* If either cpuset is exclusive, check if they are mutually exclusive */
+> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+> -		return !cpusets_are_exclusive(cs1, cs2);
+> +	if (is_cpu_exclusive(trial) || is_cpu_exclusive(sibling))
+> +		return !cpusets_are_exclusive(trial, sibling);
+>  
+>  	/* Exclusive_cpus cannot intersect */
+> -	if (cpumask_intersects(cs1->exclusive_cpus, cs2->exclusive_cpus))
+> +	if (cpumask_intersects(trial->exclusive_cpus, sibling->exclusive_cpus))
+>  		return true;
+>  
+> -	/* The cpus_allowed of one cpuset cannot be a subset of another cpuset's exclusive_cpus */
+> -	if (!cpumask_empty(cs1->cpus_allowed) &&
+> -	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
+> -		return true;
+> -
+> -	if (!cpumask_empty(cs2->cpus_allowed) &&
+> -	    cpumask_subset(cs2->cpus_allowed, cs1->exclusive_cpus))
+> +	/* The cpus_allowed of a sibling cpuset cannot be a subset of the new exclusive_cpus */
+> +	if (xcpus_changed && !cpumask_empty(sibling->cpus_allowed) &&
+> +	    cpumask_subset(sibling->cpus_allowed, trial->exclusive_cpus))
+>  		return true;
+>  
+>  	return false;
+> @@ -672,6 +670,7 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
+>  {
+>  	struct cgroup_subsys_state *css;
+>  	struct cpuset *c, *par;
+> +	bool xcpus_changed;
+>  	int ret = 0;
+>  
+>  	rcu_read_lock();
+> @@ -728,10 +727,11 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
+>  	 * overlap. exclusive_cpus cannot overlap with each other if set.
+>  	 */
+>  	ret = -EINVAL;
+> +	xcpus_changed = !cpumask_equal(cur->exclusive_cpus, trial->exclusive_cpus);
+>  	cpuset_for_each_child(c, css, par) {
+>  		if (c == cur)
+>  			continue;
+> -		if (cpus_excl_conflict(trial, c))
+> +		if (cpus_excl_conflict(trial, c, xcpus_changed))
+>  			goto out;
+>  		if (mems_excl_conflict(trial, c))
+>  			goto out;
 
-Looks good to me.
-
-Reviewed-by: chenridong<huawei@.com>
+Reviewed-by: Chen Ridong <chenridong@huawei.com>
 
 -- 
 Best regards,
