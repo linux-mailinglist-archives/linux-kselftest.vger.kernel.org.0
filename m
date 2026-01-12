@@ -1,179 +1,127 @@
-Return-Path: <linux-kselftest+bounces-48743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48744-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 189FDD12957
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 13:44:49 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A6A5D12C84
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 14:27:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8E53130574CF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 12:44:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D504A3002848
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 13:27:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A2B357A49;
-	Mon, 12 Jan 2026 12:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503A13590B7;
+	Mon, 12 Jan 2026 13:27:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Gn9sgPDM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFq+3KXl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 816DE357A39;
-	Mon, 12 Jan 2026 12:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F4A3590A3;
+	Mon, 12 Jan 2026 13:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768221863; cv=none; b=H2OcAeqOTKfgem20sFGokUQXdrCvWUs9KDqoOTTS6Rb8xl66VjpT07q4C0yhhO8H2ucaEArsQHHDdUlnp6k4QQxBoTdsHWYTnetwoSKI2xh5qrpP5ldEPIv/MACR1Ao7UxZ6fy3mUl6b61DBTXjWCzKIG9swply5W9FrQXuCPPs=
+	t=1768224449; cv=none; b=duVb41EoNYedE2ySSnPmFvUcJvOlt/x99+98ggXXRxrdFy/gqiZLc1PJ3XYLvtgBFjzTIeJqYLLRINr1Su1BsnB4qLcF+CBhSCoqvwPlmun1x0poKs6PqtpdrMmkUz8t5w48uQvgWIPGuGcF3Wt2r3gVuxsY546l/XslM8oiAVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768221863; c=relaxed/simple;
-	bh=s0iQagkhLJMFUg2Zx/Y6QCc3ESwUoeWsGJCdZDpKQHA=;
-	h=Subject:From:To:CC:References:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=euz9AfJapmzCMGc9iY+LgjVAbJT4enjrCeKK/kqGSTPKQm7hZFO+HEra+7g+PQWNN17BfzX2nn3qfCj4k2yb26H7KH8nQqVyPaKIgNkDlgnLloeN2kRigUk8wUsLcVAUIAaT7GGuG8IR90HJ69JsD5KuDq4iRmnsmnq7uJsfX2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Gn9sgPDM; arc=none smtp.client-ip=113.46.200.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=s0iQagkhLJMFUg2Zx/Y6QCc3ESwUoeWsGJCdZDpKQHA=;
-	b=Gn9sgPDMy5jrw6VYcQISMYC0dpUMKp7RohF0dA7k3ltqZORpqFIRxvmw4GMnbm2kYZwpa5KHs
-	ViQG3ZuFrFpsNXOJbZRb5RRlDDeFyBg7NX2u8to/SzZTeBpoiCCE9Zbp0UwDKY/H70m2JxKX+hG
-	82dHj449yocmt8K8yaHUucA=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4dqX6h3Qr6z1cyPY;
-	Mon, 12 Jan 2026 20:41:00 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7137040363;
-	Mon, 12 Jan 2026 20:44:18 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 12 Jan 2026 20:44:18 +0800
-Received: from [10.173.125.37] (10.173.125.37) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 12 Jan 2026 20:44:17 +0800
-Subject: Re: [PATCH 0/3] selftests/mm: add memory failure selftests
-From: Miaohe Lin <linmiaohe@huawei.com>
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>
-CC: <lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
-	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>,
-	<nao.horiguchi@gmail.com>, <linux-mm@kvack.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<akpm@linux-foundation.org>, <shuah@kernel.org>
-References: <20260107093710.3928374-1-linmiaohe@huawei.com>
- <9413a995-9182-493e-a28a-6d2d3a17236b@kernel.org>
- <2ae04380-fd60-a8a1-6217-386454fec610@huawei.com>
- <693dc9aa-cf86-48c7-be9c-ec554f9da855@kernel.org>
- <d958d80a-8412-6107-e144-975b8d545568@huawei.com>
-Message-ID: <b258b6c0-7af1-4443-bd81-2722dec610f7@huawei.com>
-Date: Mon, 12 Jan 2026 20:44:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1768224449; c=relaxed/simple;
+	bh=L2Nn/rFs+RlJ6rgf4HFcLnQumCrLx6SGdVUMvPTDb4U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YpdNdG1EvBdXmwC7HAFSxkTFCFc9/ge5sNyUfGaEmZhLjmDXvjVDNPv9dgrBZugFMyuNG5ZWhIpGNU9dux4vxfJBhv6EFwn2qJ0LtVWTF6y63zibQLQqoaypLC6cn3tXlltfnvZmmxjwJm8z0EKh2jNg/nQoBWWFYrAUl/pUTq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFq+3KXl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969DAC16AAE;
+	Mon, 12 Jan 2026 13:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768224448;
+	bh=L2Nn/rFs+RlJ6rgf4HFcLnQumCrLx6SGdVUMvPTDb4U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TFq+3KXlA78iDGw1F5Bajo8t7XjXnnc4kzGGXyNlI0xIeCfSDq34uE+qXmjcE/tTf
+	 WB9FpTPU28Wvsu6BxY+OGuD3KZsDXLTxwfaNSt4sTtaOtKkqgT8aMDtTWGV4xXYnNR
+	 +k90qD5gvoqlG1sxaghZ+wIPVHrCu3U/HOGM00CkjLSpIqhm9/+zBFmqLPOmfhnZxf
+	 Ls62qcIDfD7JuPO1Poc8MuSqDbTUiOtiiTiqCzxXUDfnhu6cq40YLNNhG8oTXv3pV2
+	 vap+a0YG6Cxtug5VvVQGqPCzQnBd1/fbodfp0JFxi212YMLHz35ScbAVTR/mDOn95t
+	 BF0kpa9ahS1sA==
+Date: Mon, 12 Jan 2026 13:27:21 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Fuad Tabba <tabba@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v9 14/30] KVM: arm64: Implement SME vector length
+ configuration
+Message-ID: <96efc90e-bf1f-4b87-ab7b-0e24970eb967@sirena.org.uk>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
+ <20251223-kvm-arm64-sme-v9-14-8be3867cb883@kernel.org>
+ <CA+EHjTw-6-BFcr60+tgDzOE-OfcetD7yQtbNMkqr7BgiMXfeJA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <d958d80a-8412-6107-e144-975b8d545568@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="RBS2qpD2qI92kXAR"
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTw-6-BFcr60+tgDzOE-OfcetD7yQtbNMkqr7BgiMXfeJA@mail.gmail.com>
+X-Cookie: Surprise due today.  Also the rent.
 
-On 2026/1/12 19:33, Miaohe Lin wrote:
-> On 2026/1/12 17:40, David Hildenbrand (Red Hat) wrote:
->> On 1/12/26 10:19, Miaohe Lin wrote:
->>> On 2026/1/9 21:45, David Hildenbrand (Red Hat) wrote:
->>>> On 1/7/26 10:37, Miaohe Lin wrote:
->>>>> Introduce selftests to validate the functionality of memory failure.
->>>>> These tests help ensure that memory failure handling for anonymous
->>>>> pages, pagecaches pages works correctly, including proper SIGBUS
->>>>> delivery to user processes, page isolation, and recovery paths.
->>>>>
->>>>> Currently madvise syscall is used to inject memory failures. And only
->>>>> anonymous pages and pagecaches are tested. More test scenarios, e.g.
->>>>> hugetlb, shmem, thp, will be added. Also more memory failure injecting
->>>>> methods will be supported, e.g. APEI Error INJection, if required.
->>>>
->>>
->>> Thanks for test and report. :)
->>>
->>>> 0day reports that these tests fail:
->>>>
->>>> # # ------------------------
->>>> # # running ./memory-failure
->>>> # # ------------------------
->>>> # # TAP version 13
->>>> # # 1..6
->>>> # # # Starting 6 tests from 2 test cases.
->>>> # # #  RUN           memory_failure.madv_hard.anon ...
->>>> # # #            OK  memory_failure.madv_hard.anon
->>>> # # ok 1 memory_failure.madv_hard.anon
->>>> # # #  RUN           memory_failure.madv_hard.clean_pagecache ...
->>>> # # # memory-failure.c:166:clean_pagecache:Expected setjmp (1) == 0 (0)
->>>> # # # clean_pagecache: Test terminated by assertion
->>>> # # #          FAIL  memory_failure.madv_hard.clean_pagecache
->>>> # # not ok 2 memory_failure.madv_hard.clean_pagecache
->>>> # # #  RUN           memory_failure.madv_hard.dirty_pagecache ...
->>>> # # # memory-failure.c:207:dirty_pagecache:Expected unpoison_memory(self->pfn) (-16) == 0 (0)
->>>> # # # dirty_pagecache: Test terminated by assertion
->>>> # # #          FAIL  memory_failure.madv_hard.dirty_pagecache
->>>> # # not ok 3 memory_failure.madv_hard.dirty_pagecache
->>>> # # #  RUN           memory_failure.madv_soft.anon ...
->>>> # # #            OK  memory_failure.madv_soft.anon
->>>> # # ok 4 memory_failure.madv_soft.anon
->>>> # # #  RUN           memory_failure.madv_soft.clean_pagecache ...
->>>> # # # memory-failure.c:282:clean_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
->>>> # # # clean_pagecache: Test terminated by assertion
->>>> # # #          FAIL  memory_failure.madv_soft.clean_pagecache
->>>> # # not ok 5 memory_failure.madv_soft.clean_pagecache
->>>> # # #  RUN           memory_failure.madv_soft.dirty_pagecache ...
->>>> # # # memory-failure.c:319:dirty_pagecache:Expected variant->inject(self, addr) (-1) == 0 (0)
->>>> # # # dirty_pagecache: Test terminated by assertion
->>>> # # #          FAIL  memory_failure.madv_soft.dirty_pagecache
->>>> # # not ok 6 memory_failure.madv_soft.dirty_pagecache
->>>> # # # FAILED: 2 / 6 tests passed.
->>>> # # # Totals: pass:2 fail:4 xfail:0 xpass:0 skip:0 error:0
->>>> # # [FAIL]
->>>> # not ok 71 memory-failure # exit=1
->>>>
->>>>
->>>> Can the test maybe not deal with running in certain environments (config options etc)?
->>>
->>> To run the test, I think there should be:
->>>    1.CONFIG_MEMORY_FAILURE and CONFIG_HWPOISON_INJECT should be enabled.
->>>    2.Root privilege is required.
->>>    3.For dirty/clean pagecache testcases, the test file "./clean-page-cache-test-file" and
->>>      "./dirty-page-cache-test-file" are assumed to be created on non-memory file systems
->>>      such as xfs, ext4, etc.
->>>
->>> Does your test environment break any of the above rules?
->>
->> It is 0day environment, so very likely yes. I suspect 1).
 
-Hi David,
+--RBS2qpD2qI92kXAR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After taking a more close look, I think CONFIG_MEMORY_FAILURE and CONFIG_HWPOISON_INJECT should have been
-enabled in 0day environment or testcase memory_failure.madv_hard.anon should fail. memory_failure.madv_hard.anon
-will inject memory failure and expects seeing a SIGBUG signal.
+On Fri, Jan 09, 2026 at 03:59:00PM +0000, Fuad Tabba wrote:
+> On Tue, 23 Dec 2025 at 01:22, Mark Brown <broonie@kernel.org> wrote:
 
->>
->>> Am I expected to add some code to
->>> guard against this?
->>
->> Yes, at least some.
->>
->> Checking for root privileges is not required. The tests are commonly run from non-memory file systems, but, in theory, could be run from nfs etc.
->>
->> If you require special file systems, take a look at gup_longterm.o where we test for some fileystsem types.
+> > +
+> > +#define vcpu_cur_sve_vl(vcpu) (vcpu_in_streaming_mode(vcpu) ? \
+> > +                              vcpu_sme_max_vl(vcpu) : vcpu_sve_max_vl(vcpu))
 
-And I think the cause of failures of testcases memory_failure.madv_hard.clean_pagecache and memory_failure.madv_hard.dirty_pagecache
-is they running on memory filesystems. The error pages are kept in page cache in that case while memory_failure.madv_hard.clean_pagecache
-expects to see the error page truncated.
+> nit: This isn't really the current VL, but the current max VL. That
+> said, I don't think 'cur_max` is a better name. Maybe a comment or
+> something?
 
-But I have no idea why memory_failure.madv_soft.dirty_pagecache and memory_failure.madv_soft.clean_pagecache return -1(-EPERM?) when try
-to inject memory error through madvise syscall. It could be really helpful if more information can be provided.
+It is the current VL for the hypervisor and what we present to
+userspace, EL1 can reduce the VL that it sees to something lower if the
+hardware supports that but as far as the hypervisor is concerned the VL
+is always whatever is configured at EL2.  We can obviously infer what
+the guest is doing internally but we never really interact with it.  The
+existing code doesn't really have a concept of current VL since with SVE
+only the hypervisor set VL is always the SVE VL, it often refers to the
+maximum VL when it means the VL the hypervisor works with.
 
-Thanks!
-.
+> > +       if (WARN_ON(vcpu->arch.sve_state || vcpu->arch.sme_state))
+> > +               return -EINVAL;
+> > +
+
+> Can this ever happen? kvm_arm_vcpu_vec_finalized() is checked above,
+> and vcpu->arch.{sve,sme}_state are only assigned in
+> kvm_vcpu_finalize_vec() immediately before setting the finalized flag.
+
+I don't expect it to, hence why it's a WARN_ON.
+
+--RBS2qpD2qI92kXAR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlk9rgACgkQJNaLcl1U
+h9A2Dwf/azWkcrVrUODdNtqy170zbkUyq/kjAmL6y71Ep+9LW2Dwr9LGdow7/YUY
+L23/xb3tTdT1jBA+vncQEbaotf1dKG0f7n2z7+f4AR/C8d8tFcPLsiDlk1W7axjl
+6trxwIzWJ9ALOdJJ1ZAV906PWNnauRMZJ4S4d6J8B6GYM/g6hos1Zob4HUSTWNr0
+YrtZWIUlcPX4b86MKLocEvm8TbgNmpH2/roaXKxnonYU4ZpiHpWsMOjGxkcWe5cM
+CRPF7d8g56cHcCLQg1K2TYwGeVdpvfnahrQ4fhYa0/asAxpy+i3TXUlWQaymDCAQ
+rnNgtS6mcPyMYMmARC9h+Bn0JnCubg==
+=5u+f
+-----END PGP SIGNATURE-----
+
+--RBS2qpD2qI92kXAR--
 
