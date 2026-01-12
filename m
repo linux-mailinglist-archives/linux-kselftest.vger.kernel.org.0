@@ -1,160 +1,222 @@
-Return-Path: <linux-kselftest+bounces-48791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6526D15220
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 20:55:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7918D15237
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 20:56:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CBECD3018329
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 19:55:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E69EF3016AFF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 19:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330AB326D70;
-	Mon, 12 Jan 2026 19:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD89328623;
+	Mon, 12 Jan 2026 19:56:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="HwaP2ws8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JfXGBlJr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7A9324B2A;
-	Mon, 12 Jan 2026 19:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66B5237180
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 19:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768247735; cv=none; b=S1PfKzuK3B5RvTPk3q87PpaSPjbmRwL+NIXStuqdRNvdPahIX68EpcBbSk5/vjhgfP5M/i5Uv2ZIF4yOuZdTh7Whuti/QCNDxuIaMnBdMCtUYvySk0NAlTty6CreMfMv7aufCUY/HnqO9/HV1pN4tLHU5kLLjCP7wWxCVfYRAOY=
+	t=1768247799; cv=none; b=E1IJnSmxxAjRMDRLVd46KyE9028ntiof74E8FqB7FUmlbq86rMTHe85OBpfPZDQy7frrrg/cd9czgn0yWCR2eiNHSjeuyf3KmKFdIv+EgIBv0ICBkn7llW+ZH12XkXH/PWgtZew1E6Myp6bHooJOZQ+qL4QrJcd/ztdiQat19RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768247735; c=relaxed/simple;
-	bh=XE/p0KG71dvRivmx1HE0U30vS0lzaT2ZOja8t/WsClk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=rwCpxW8eGaGyVZRXZjCnQm7XBZ/cJ1qjqDyuCOxEtGFjoV2vTQKWlo4J3zE3wtgcXr+mvUEIzBT5vEsTz8BpVMEo9iRRgHMB8kwS4pKU/782eHH5sdhQ7rVRPcdY91WpQifiXSOXnLp29unv4ckJqC8PgQK3+1fscTsN8qs23AU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=HwaP2ws8; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1768247713; x=1768852513; i=markus.elfring@web.de;
-	bh=XE/p0KG71dvRivmx1HE0U30vS0lzaT2ZOja8t/WsClk=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=HwaP2ws8PbYLTQvIj0rDK9suAxaiIS6Zs24dYr0oMo63P4j1y6cbshRT4OyEsuhf
-	 aKscFpU0DSoluEGA5g7W9V9LC0xL5sEX9OHbPXXrOQUr5Pi/KLSBXo5n16kEweThT
-	 Mis7NZDpLEHXKyDayo4rtVYT4bJLItIbuyb51Dy/y3iGtvt+ToGPf+Wt+mjbcXdLc
-	 UMsJv1Bg3AReUlVa6Bk5xtC9NhlRc5Qqk7NikdZ/HpH7cn+fJAindnqiov/ZKffjB
-	 /xiNb+btKIyWAXT/QAT+Kf+0ViTT/56+HflE6NmlQldqPsx1pqnmQfiFzIfJ19Atl
-	 EE50DqV2MKxvT5tbpQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.92.241]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MZSBQ-1vInDD0DDS-00MIpJ; Mon, 12
- Jan 2026 20:55:13 +0100
-Message-ID: <4bdd89fe-914a-4baa-a9b5-a6e15168ba52@web.de>
-Date: Mon, 12 Jan 2026 20:55:10 +0100
+	s=arc-20240116; t=1768247799; c=relaxed/simple;
+	bh=M31+Y79zuoXr1vFVcVS4+r+feGloqOn2T9Swnz4nHtA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d/KbsspeRrJc8jumKsYiu+GtI4lUMae1lN+SvyZIF8YaHv8JEhXWXSX6SyvsGi1b28yqgMHNAOjRCeR9lHgpUa1QFn+JxrcC58DQQikWUFWSBBRikADetAHCX5uF3JM0LyYb2oTfOsIsAGCzi1oNH/AR6UzmxYq3QdY54Dhhp+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JfXGBlJr; arc=none smtp.client-ip=74.125.224.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-6420c08f886so9489467d50.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 11:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768247796; x=1768852596; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KH869nzXNgoUvJaMyA9BtLsL3ZEwdxgmckhbEXHR+og=;
+        b=JfXGBlJr2osxbGCfOatR5NPxF/H8VMPOSfZ9C13U+SqbZ8hRSf7IpFZ5vVZZZDvYy+
+         2VSYW+xuO9Bi0KdQQnnXccSV51JR2vcgKPJFjSAlJ0mpQSEBEmC2x87Vomfoyg1OUrb0
+         eUpgCWAHD10emPytH3FHapE0liSihz2Qj34/ht62jJUcnctbeBSiitrQwmQTvbhTXwr3
+         uazflyT+HRwx5fjoj3Xrb+nPgejigD+oJwC8xPgaflNl5yKfA0QQD92+xlRKPuwcKfOD
+         1Bvtzq6S9S2SfotgpV6P+ZOSzP61PwYVK8gkBBYcA6/AJSGj140dh34N/VQVWs7JOYyN
+         uhIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768247796; x=1768852596;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KH869nzXNgoUvJaMyA9BtLsL3ZEwdxgmckhbEXHR+og=;
+        b=fbBMzZMyeZbziz/4S6XhNMrwRQ1zuHieQpkwBiGebCc4+29QXmlzfWNydlgCYNEjL5
+         4LOLX5zzxnamvUsLBDi7boPDmVmd6l8OYWSOMTFgtTOppZszxsmiVZXtiH3iHB1j02ga
+         /yuIrZTzT3xkHZA1vTrVg5uWEAUbOR/288SMiD4OfGCsntXgVbZzH3E1Vsiasu/WL46u
+         S5V6M863kJB+Vhs4l8NUuIRJ7ygcMdkekt705jlTv+f11dxD8Vcp8orPDXcwrOu3Z/bW
+         tzscQt7I6/6yyJxSfV00EvGi9JvmBCAiChRRt/McgnRhppNeQTnooWZXPtIb4bXZmIGU
+         YgKg==
+X-Forwarded-Encrypted: i=1; AJvYcCXLvCGbdOtPmR9C89LnefT34R7t2uf/9LwpyYyTdI/P0NVEChsfaaQTpj4t5b1wpn5ILk15zwd4xKcI2Wui7ts=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdcaGQr0lBASDVZCi0hdUstz/6fFyFTqAJp56XMzatzZhp17hl
+	gd6OjCahkLB5vzBRpifeA14BHiiaOqdavHW5uwX1negEdMu61zbCXmBM
+X-Gm-Gg: AY/fxX6hErX7oBxpefzelMcQWZueySZbxHsbHs6XqroBRS4N9OnCr6p3gxnPX9H+eXz
+	jIVjs3WZLPqvRZdxzOPTB8IWDkvjsLiDEQxdLwu/iLHdqed67MYaomLfVXMtI2f1ePUmX/c7hPI
+	/N5eSZ94Ymz06l0Ev+sCzk1Xfc/Ut04JpFyU0ILfKS5nZIuJHs8OPkwq9RHNVC4yzaQm0pA+85Q
+	y28XB+HeehrG0ZIQGrXZRFUgG7dTHzbjwi+zBf6BUksSxzUVHaHXCy2yp8XCXgz8l3EdOD/NCg8
+	CzTsvmxbEcJX/Ux+rAzIinvXcjgF5w4i6pRLrTeDNJ9Rv75qmo0KwTLFaF7spyNB60fnJqNdC8+
+	riZzLz1EnsDd0zv/eGQQNMjiBabkRSQ0eCbrOzeKn6jB9hIUY8hHhjsOaFgy9ydHbOp2/gZ1lBh
+	U4XQYQ0oCjnyim13QXvLmYKrkhtHjsSCp26+8=
+X-Google-Smtp-Source: AGHT+IHgu2lOJznxq2Oiaq3vnKy3dA5EnBV3x7HgHsvKXwndIU+C6LqpkznWacQVy1guDmkfDk9/Ng==
+X-Received: by 2002:a05:690e:1348:b0:63f:baef:c4f with SMTP id 956f58d0204a3-64716c5a848mr15226065d50.63.1768247795824;
+        Mon, 12 Jan 2026 11:56:35 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:4d::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d7f76desm8366862d50.3.2026.01.12.11.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 11:56:35 -0800 (PST)
+Date: Mon, 12 Jan 2026 11:56:33 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v9 5/5] selftests: drv-net: devmem: add
+ autorelease test
+Message-ID: <aWVR8U54fLB+mA/4@devvm11784.nha0.facebook.com>
+References: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-0-8042930d00d7@meta.com>
+ <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-5-8042930d00d7@meta.com>
+ <CAHS8izMy_CPHRhzwGMV57hgNnp70Niwvru2WMENPmEJaRfRq5Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Yohei Kojima <yk@y-koj.net>, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Simon Horman <horms@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <60dc3da1f913aa9625e864ea862c23c401e7bc6e.1768207347.git.yk@y-koj.net>
-Subject: Re: [PATCH net-next 2/2] selftests: net: improve error handling in
- passive TFO test
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <60dc3da1f913aa9625e864ea862c23c401e7bc6e.1768207347.git.yk@y-koj.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:aDAlOIIIUSkoiUgevWgJHV3CET5fRF8yqna/UZI+TMG0SHgW9rl
- MfW6nvIzr50UmSWTj8c36TdwJuzluGXCNG48YasaYR95QoxHOOlEaepnHxx+3U7EENc/DFI
- M0ZtOtyYJ3BzTU4wD5EEpmOwmTp453RyOD36WOMgcRRzO7wRZDWpY9Tud8gwvvNpTNmfSM0
- 7xTED/P2GSRtj37va2pug==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:10RPEaApqos=;SGA3ag9GSic7h2qmqCn9h0qdS7F
- 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
- +qVSzWAY=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izMy_CPHRhzwGMV57hgNnp70Niwvru2WMENPmEJaRfRq5Q@mail.gmail.com>
 
-> This commit improves the error handling in =E2=80=A6
+On Sun, Jan 11, 2026 at 11:16:37AM -0800, Mina Almasry wrote:
+> On Fri, Jan 9, 2026 at 6:19 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
+> >
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> >
+> > Add test case for autorelease.
+> >
+> > The test case is the same as the RX test, but enables autorelease.  The
+> > original RX test is changed to use the -a 0 flag to disable autorelease.
+> >
+> > TAP version 13
+> > 1..4
+> > ok 1 devmem.check_rx
+> > ok 2 devmem.check_rx_autorelease
+> > ok 3 devmem.check_tx
+> > ok 4 devmem.check_tx_chunks
+> >
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> Can you add a test for the problematic/weird scenario I comment on patch 3?
+> 
+> 1. User does bind (autorelease on or off)
+> 2. Data is received.
+> 3. User does unbind.
+> 4. User calls recevmsg()
+> 5. User calls dontneed on the frags obtained in 4.
+> 
+> This should work with autorelease=on or off, or at least emit a clean
+> error message (kernel must not splat).
 
-See also once more:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.19-rc4#n94
+IIUC, this looks something like (psuedo-code):
 
-Regards,
-Markus
+ncdevmem.c:
+
+do_server(...) {
+
+	client_fd = accept(...);
+
+	if (check_premature_unbind) {
+		/* wait for data but don't recvmsg yet */
+		epoll(client_fd, ...);
+
+		/* unbind */
+		ynl_sock_destroy(ys);
+		
+		while (1) {
+			ret = recvmsg(client_fd, &msg, MSG_SOCK_DEVMEM);
+			/* check ret */
+
+			ret = setsockopt(client_fd, SOL_SOCKET, SO_DEVMEM_DONTNEED, ...)
+			/* check ret */
+		}
+	} else { ... }
+}
+
+... then devmem.py checks dmesg?
+
+> 
+> I realize a made a suggestion in patch 3 that may make this hard to
+> test (i.e. put the kernel in autorelease on/off mode for the boot
+> session on the first unbind). If we can add a test while making that
+> simplification great, if not, lets not make the simplification I
+> guess.
+
+I think we can do both the simplification and this test, but in general
+we would have to skip any test when rx bind fails due to the test's new
+mode not matching. Not sure if that is desired.
+
+I tend to like the simplification because I really dislike having to
+track the RX binding count, but I'm not sure if there is a good way to
+do that with making our tests locked into a single mode.
+
+Maybe a debugfs reset option that rejects when rx_bindings_count is
+non-zero? That way we can remove all the program logic around
+rx_bindings_count and make it's inc/dec wrapper functions no-ops in
+production (CONFIG_DEBUG_NET_DEVMEM=n), but still test both modes?
+
+
+The handler would look something like (approx.):
+
+#ifdef CONFIG_DEBUG_NET_DEVMEM
+static ssize_t devmem_reset_write(struct file *file, const char __user *buf,
+				  size_t count, loff_t *ppos)
+{
+	int ret = count;
+
+	mutex_lock(&devmem_ar_lock);
+
+	if (net_devmem_rx_bindings_count_read() != 0) {
+		ret = -EBUSY;
+		goto unlock;
+	}
+
+	/* enable setting the key again via bind_rx) */
+	tcp_devmem_ar_locked = false;
+
+	static_branch_disable(&tcp_devmem_ar_key);
+
+unlock:
+	mutex_unlock(&devmem_ar_lock);
+	return ret;
+}
+[...]
+#endif
+
+
+... but I couldn't find a good precedent for this in the current
+selftests. 
+
+Best,
+Bobby
 
