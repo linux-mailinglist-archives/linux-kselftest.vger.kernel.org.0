@@ -1,42 +1,42 @@
-Return-Path: <linux-kselftest+bounces-48719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2805ED11579
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 09:53:16 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 115F4D1158B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 09:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 25751301F9E8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 08:53:00 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 867463026189
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 08:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AED28346AC6;
-	Mon, 12 Jan 2026 08:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6BC3469E4;
+	Mon, 12 Jan 2026 08:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="CWsK1CrV"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="qhVfuhwP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster2-host6-snip4-1.eps.apple.com [57.103.78.34])
+Received: from outbound.st.icloud.com (p-east2-cluster2-host11-snip4-9.eps.apple.com [57.103.78.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F4D3375C3
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 08:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2632345CAA
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 08:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768207973; cv=none; b=imXTMv4ebtmr0digSQsgrJaFPN40kD3SSSMhBs2Aiz0rOLFrRMdohavIMYN2M6jRsVr26zjCgwu5H8kdriFFIxfSmhtD74rYEO0XIMoqBzBfV4P6URh72rhIbDmxOfUka1lNlCUHn98egoW33FYD904N490NcAhRDuvKPo/2a3M=
+	t=1768207979; cv=none; b=M5lpWAw78wfvwOKdwyYP4A62sIik4KklQIIcCet9ZJVpKqJ2H4tZHXMsOgTEn2XeNCm4qqJYbqpMQqZAkoB9uOqoeVHd81NZkM0+sd6gdEd6lVrUGHfKGL9NQK0HOntC2aQ2HRGIoQpDkQKOgkvwgyEFo70479HEST8dRXgcKjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768207973; c=relaxed/simple;
-	bh=8jzkVNyIzEY2OeZAG2tyS95Rn7p59gwHlKarlepS/QM=;
+	s=arc-20240116; t=1768207979; c=relaxed/simple;
+	bh=HP+XBvzAZZe6ZDdctV1mJaps2CvpOUXtmq5bhKKyrhM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q5QBySMf9nPJug9v0mfltv52C3wIxiunu2Ym9Y2yH+0tHM/RKVV9mRKIgyM6BsBMwy0J6Zw1D/ShcFQD8Yoew2LuN3JJ0agW8Kljz9JM1Pyhpq9QYxb6u815eeLudLO26oA3I3MiIhblmk6Z2bmF/3dR7btGCmVlbIpa96RyGX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=CWsK1CrV reason="key not found in DNS"; arc=none smtp.client-ip=57.103.78.34
+	 MIME-Version; b=p6AJqEOxHEdqp8QiiGPHfq1nFOVtsOc+ffosSgxJ93hlK+Wa8it8yZZz6LVeARrtZBK35MAoR2O3b1KewB7Yw/aRg/bKc3A0tDi2rnceD6LxMEUV8SRa4mMtrh3B5y221qPYijwcTlgxqeqFzmKBmlIEJdZem0lLTJ/u5PQj4Y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=qhVfuhwP reason="key not found in DNS"; arc=none smtp.client-ip=57.103.78.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
 Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-2 (Postfix) with ESMTPS id 3941318000A5;
-	Mon, 12 Jan 2026 08:52:48 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=iBw/jihR12dcfjegs0/lwJ1bWrYhtdrmwFgkaFDJvfg=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=CWsK1CrVTrihV+354ULBWdrCHj9WsBY3RQhxDTHjEqkne3ydiDbTApucy1bOmgpLbzsU76x2eO75i3ZWUpsjZfBMROO8ci7OlKOz0eubmctotwiDcn1rRDI5Z4xHOMzoFFDzm9sNpH8Nw1vDZUK2kswEPb6yEmG39ivV4ogldp8e56TgiHLG1q2kPn6EfES90MK2mPxsKDz8otMWARvQbeHMfZNPqAPNfwTci8D+gCs/sQ7HOLjooh6pY9WHzYOUTFGsrLTQQhQVBgv6mgjh3Ulg2+fCoY7skdEbCW4rmA8PvPIjqIAxfW1fUVMnDJIxwE6ryYUhJ5Jiq2W1xfdF+w==
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-2 (Postfix) with ESMTPS id 08A1D1800176;
+	Mon, 12 Jan 2026 08:52:53 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=7GMNJGoWv7q+yUAaMvgB+dlAPnp9uN5GEATgw8djXug=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=qhVfuhwP5mIfryREsOYMsAkg2aFMrtH8lUU3zylUOVK+V4Xk0nzv1qEMFhQxzGfQZUd6PzDCAcOX0mbQuysdVJiW/agJuNNZWM/IjD5shM91gBFxWygZWIVGzJeJYmSxoZhq/Qn7y9iLjTg2v86o/wpyy3ZTSFl1JxhcR51hyW3558MwQ3hp0mlLO76UWZlbMiKbUkMIELR5MjKiV6D/XW4XsLLbXEFAejKZ9pk4f7F1C8vNg9buQD39BdoV8YjUcgMbfCxoPkW87Yjc9irP5L7g3sc/VntagtE41zVEwj4obvW0N7sQPWUrLCjq2p3p6gs+1lDg0NDIIDLck9GodQ==
 mail-alias-created-date: 1719758601013
 Received: from desktop.tail809fd.ts.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-2 (Postfix) with ESMTPSA id A0DF21800150;
-	Mon, 12 Jan 2026 08:52:45 +0000 (UTC)
+	by p00-icloudmta-asmtp-us-east-1a-100-percent-2 (Postfix) with ESMTPSA id 6D7C51800308;
+	Mon, 12 Jan 2026 08:52:51 +0000 (UTC)
 From: Yohei Kojima <yk@y-koj.net>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -48,9 +48,9 @@ Cc: Yohei Kojima <yk@y-koj.net>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 1/2] selftests: net: fix passive TFO test to fail if child processes failed
-Date: Mon, 12 Jan 2026 17:51:43 +0900
-Message-ID: <19d12f125d3f4df8fe8e8f2267b182a877ea672c.1768207347.git.yk@y-koj.net>
+Subject: [PATCH net-next 2/2] selftests: net: improve error handling in passive TFO test
+Date: Mon, 12 Jan 2026 17:51:44 +0900
+Message-ID: <60dc3da1f913aa9625e864ea862c23c401e7bc6e.1768207347.git.yk@y-koj.net>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1768207347.git.yk@y-koj.net>
 References: <cover.1768207347.git.yk@y-koj.net>
@@ -61,74 +61,69 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 6zE-PBl1VhKYaHGNlB3t723L41My0dnK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEyMDA2OSBTYWx0ZWRfX0s8E4ktXI3yi
- wQAsTZ7i2UPrJpAmuS4yE3oJCSdTY9x7piAEmR99LECd53JR/Vz9ckAuQ9qxB0+6iYgjJrgXXtR
- EZ+8igWq6jwC0VtGTv8OUGVUKCT+/lDJm8UDqYEjkhS1oKxpT2GbsrokfLOdUZUlcaddD/IrfDX
- dg3vGU03bKmGytc/39/Hr7JCPhSFM4HKnechXzMudzwO7ooPI+ji6xqlMjYTu3SLu4Rk+ioxKKd
- 2DRQjduzjdXuztmdEARRCkfRYBAIVYdSj96nER14S/LgQchfHm+oWNFqtKP0VRUeQzKaLLLcgMf
- JnyXjLl+jX1WRCgrYLd
-X-Proofpoint-GUID: 6zE-PBl1VhKYaHGNlB3t723L41My0dnK
-X-Authority-Info: v=2.4 cv=GI0F0+NK c=1 sm=1 tr=0 ts=6964b661
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEyMDA2OSBTYWx0ZWRfXwzaD7X2qOaH+
+ XalJjAGHZbgoMnPpOT8f8jcCpH2yzEiUsN9UEFIuW6WDjSiVYuwalK3nDKG11VxDeHajNUoSNrB
+ UhjVEORBay72OYDFWsU1C94d23qoBkT4rh+YX8IaeYfzh2lfQgg/bbeLxVANkaXWQcUQvvtui5d
+ 5sBdcdoUVMaSNcfJuhYEmJ1inqRIKXIz96mpQ436JpbmHA338UB1kBZTPusBNqT1VYfFIhYbdx/
+ GI1F4qzGmunw80el0RPGYVLJpBgAoGbDYwr3yUzwxZahAbbSZhaNrmelc/L6KrPRG2BMV+6u5hy
+ e7EhhLB1f++Ljx6Gp4Q
+X-Proofpoint-ORIG-GUID: uHRBUSwWjHH81w3tcoV1-u084S6X_gXw
+X-Authority-Info: v=2.4 cv=d5X4CBjE c=1 sm=1 tr=0 ts=6964b666
  cx=c_apl:c_apl_out:c_pps a=YrL12D//S6tul8v/L+6tKg==:117
  a=YrL12D//S6tul8v/L+6tKg==:17 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jnl5ZKOAAAAA:8 a=DMn0v-ajJ4USD0-U4hgA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
+ a=jnl5ZKOAAAAA:8 a=ycCnPHV353GAyiuBZJ8A:9 a=RNrZ5ZR47oNZP8zBN2PD:22
+X-Proofpoint-GUID: uHRBUSwWjHH81w3tcoV1-u084S6X_gXw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-12_02,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- bulkscore=0 mlxlogscore=965 clxscore=1030 spamscore=0 mlxscore=0 phishscore=0
- suspectscore=0 malwarescore=0 classifier=spam authscore=0 adjust=0 reason=mlx
- scancount=1 engine=8.22.0-2510240001 definitions=main-2601120069
-X-JNJ: AAAAAAAB0inQ/87hTFQ6Cj85yNi71cidjtAtEFtSnp8IdOCionP1nuT+V4/1DA0xdINQGFvjh+5WGGEIkT7VmjSNGtXjhwBrs+zB0CjnWeD+XlA86VqiuDWpsR6nt15eJdGF6aBdY00s4Pf3NCTnjxnU8+wJxwp2W/75Isyio3m8wazSQS+g4P2Q55fxxSUyrClDNvayQ6R+k0XLlnyGO0VeakInzD1PNjMd/jGmo9fJHnV6XIMBsPAaUA/6auoHSC8av7JzxuoqZXq0NQ6mVSpx/CAvXdeDhqEkp28wYCa7tftAosctoDTLrRtm8GTwXan9KtwUiQYs+RCUUcVbtD0PUa5Mt3PGXMrwckEMu5wvA9PBifw7V0n+SAXc/a5FSx7Jzs/hXClbxiZYt9ZnTIpBDjcf8ENfqZXIUg5mM0V2K9Gpy4yVpgJ4fBVvbCLNtn3bWqxAkS2GnKbgUDuOW9f7FWb4BWpR4I211jnH+8zObhIItf/8jZYorA6i6V8UUyn08RvQydtdkFFUMtdmu2j2oIigPwoQf0Q3c3vDpwE+HVAmZznqoYXTHYDiM0guLqhtS+Nj6nRE48DuuvQWeorvHAdsUHYT+VCoIEVIvSxT2DrK5dDyLHLYGxuFpya7slJkXUZA/n2y+cYVthySftVC7CnUvKTIS6ITDOjNN6yIxLIbIGabAJ95z6dhaEZoBBs60sgueI3ZgHUrefrRUymsku5LNRozP7okz8P5mfQ3eyemiYhma4TfSfXOLz0=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ mlxscore=0 phishscore=0 spamscore=0 clxscore=1030 bulkscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 classifier=spam authscore=0 adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2601120069
+X-JNJ: AAAAAAAB8MtWQLSH1n/5K7FNnv3+ElpBVMEyMv7p92eaJEU6EN/RYVhdWWaAjTgLe+09K3KFWqUAe3HurXYp8d5grQNmiurQ4NB6eDOmYsyyNtoJCpCs2pxWueAy9goBOrB5h+cXDsJqL54xkG1QimkJ9p3OC6CsOXLexWjyzrBpTWG6OJL4aDldYWEBmH90xG79Q0lOICRGnyb7LsIJsFcHLH7m7QcI+ehkQp5PjN8qYQWhv2AiAoOOeX10llZaqhZq5VpwvJ15/ZE5kYlvH5xSpMLLQ1ePLys+GmN+NrOj/T3jjz912EIEW7fAEWP3eiPZWvB4LbIqN4lgdhuTFx9w1wgoKrY1+WUKi73I/fAaKxd3OG/ZTZamFMOmGJplSYdds7lKQp+FHlhmaSeBWhVdAH+ze1yuBIjzJBFshnwdp2r8YN0XfaFIEvITsnyVZXgt+xPj52b1VIlI6Frgl5OzhPV3UgN8CcvrtgiP7tk8dvuGtHd65GKmkISXGLUwW2smqH+q1w6vX9wWcwSX1524bg9jBjcF99Xg7r4bMeXcLQ9s7y5Vfexo/DDbUJ7+X6shR5z1G2VuRFwnUeu2UJ+Es1SkbewVMtXgZcSKR5n4PiTAbo9UsF9vKIgPcycibAN8NXwlg2cKBqxpqTUGL9VLcxGXqbBaq0rVIaY5k3yGfBM+7SZQf1jnPUWqPPADuIP5fENLAiUSScjjcbh8vpKyweXwzXE4Qqz74rD7jZsyLHWkuNhR
 
-This commit improves the passive TFO test to report failure if the
-server or the cliend timed out or exited with non-zero status.
-
-Before this commit, TFO test didn't fail even if exit(EXIT_FAILURE) is
-added to the first line of the run_server() and run_client() functions.
+This commit improves the error handling in passive TFO test to check the
+return value from sendto(), and  to fail if read() failed.
 
 Signed-off-by: Yohei Kojima <yk@y-koj.net>
 ---
- tools/testing/selftests/net/tfo_passive.sh | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/tfo.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tfo_passive.sh b/tools/testing/selftests/net/tfo_passive.sh
-index a4550511830a..f116f888b794 100755
---- a/tools/testing/selftests/net/tfo_passive.sh
-+++ b/tools/testing/selftests/net/tfo_passive.sh
-@@ -85,12 +85,15 @@ timeout -k 1s 30s ip netns exec nssv ./tfo        \
- 				-s                \
- 				-p ${SERVER_PORT} \
- 				-o ${out_file}&
-+server_pid="$!"
+diff --git a/tools/testing/selftests/net/tfo.c b/tools/testing/selftests/net/tfo.c
+index 8d82140f0f76..4572eb9b8968 100644
+--- a/tools/testing/selftests/net/tfo.c
++++ b/tools/testing/selftests/net/tfo.c
+@@ -82,7 +82,8 @@ static void run_server(void)
+ 		error(1, errno, "getsockopt(SO_INCOMING_NAPI_ID)");
  
- wait_local_port_listen nssv ${SERVER_PORT} tcp
- 
- ip netns exec nscl ./tfo -c -h ${SERVER_IP} -p ${SERVER_PORT}
-+client_exit_status="$?"
- 
--wait
-+wait "$server_pid"
-+server_exit_status="$?"
- 
- res=$(cat $out_file)
- rm $out_file
-@@ -101,6 +104,14 @@ if [ "$res" = "0" ]; then
- 	exit 1
- fi
- 
-+if [ "$client_exit_status" -ne 0 ] || [ "$server_exit_status" -ne 0 ]; then
-+	# Note: timeout(1) exits with 124 if it timed out
-+	echo "client exited with ${client_exit_status}"
-+	echo "server exited with ${server_exit_status}"
-+	cleanup_ns
-+	exit 1
-+fi
+ 	if (read(connfd, buf, 64) < 0)
+-		perror("read()");
++		error(1, errno, "read()");
 +
- echo "$NSIM_SV_FD:$NSIM_SV_IFIDX" > $NSIM_DEV_SYS_UNLINK
+ 	fprintf(outfile, "%d\n", opt);
  
- echo $NSIM_CL_ID > $NSIM_DEV_SYS_DEL
+ 	fclose(outfile);
+@@ -92,14 +93,17 @@ static void run_server(void)
+ 
+ static void run_client(void)
+ {
+-	int fd;
++	int fd, ret;
+ 	char *msg = "Hello, world!";
+ 
+ 	fd = socket(AF_INET6, SOCK_STREAM, 0);
+ 	if (fd == -1)
+ 		error(1, errno, "socket()");
+ 
+-	sendto(fd, msg, strlen(msg), MSG_FASTOPEN, (struct sockaddr *)&cfg_addr, sizeof(cfg_addr));
++	ret = sendto(fd, msg, strlen(msg), MSG_FASTOPEN,
++		     (struct sockaddr *)&cfg_addr, sizeof(cfg_addr));
++	if (ret < 0)
++		error(1, errno, "sendto()");
+ 
+ 	close(fd);
+ }
 -- 
 2.52.0
 
