@@ -1,81 +1,81 @@
-Return-Path: <linux-kselftest+bounces-48731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B480AD11933
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 10:45:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6DC9D118C2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 10:41:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E79623103186
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 09:41:26 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C969A300BA25
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 09:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C526C34C811;
-	Mon, 12 Jan 2026 09:41:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B1F034CFD2;
+	Mon, 12 Jan 2026 09:41:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdIela76"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k4Rg5gtr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB5134A3DB
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 09:41:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09AB4349B1E
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 09:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768210877; cv=none; b=GmtKaDlUVI3N4ewtDliL976/D7//LSkGYFfruKPuCewfNbRvT3Pl/yS0G1HwjbZNKuZAPIhD2kzh55NpNtYlpmPzRB02H+v8lHuGfGOS6E/+qnmblAFIMtucsgX/EUSjhXg5qSknP2nKEf5c9tOKugQRvCQE8PyBaRFeb4ouiCA=
+	t=1768210879; cv=none; b=ZYi3WJppGBlafF86Zqn6l0jhNKAgzIdlvF7LpVb00gsEJ5hTjAYpmM7Q98Xaxlsyyj2huK2tWZPCMSE/kBhgkGB507CJcGVMqy/wdQ2l/j/s+HAmQ4A0JOv4B26Huwb+j4W5XuOT2cDnStp4kINsycXYgSYpNoulXBTmpVJKkz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768210877; c=relaxed/simple;
-	bh=r1PE8fDi2fMuVloDtOFpaMYOvsXBjkenyxTGboQyEIM=;
+	s=arc-20240116; t=1768210879; c=relaxed/simple;
+	bh=KSC8Nj3DiK31fDmZ4/PzcbAzUlQgw1PwPAvmb/6l8Os=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D5UDjLFlJMTSv31Fh/QsWf+V8GDUqPnqQfd2czugkcavgFgLFeEzMIIeHVvbuLH2ke/4CZ/D9CXNKF/PUv+J7ge/WDKv4bgpzbb6t3NiCsdtHD1pwtLfngAnmEs0m6xqRzdMQQWL5xbar+tknPGHmDKjcQak3VMYUGVNSfoRxH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdIela76; arc=none smtp.client-ip=209.85.218.50
+	 In-Reply-To:To:Cc; b=Aw6YMG7fIVvauTxzUWWnG2vg50bbv5SU/RNIs2GUcoWJ5T0g764W3cgI7JJ+bJpgpm42rs9IpCG//uo6TMPp61ixLNDYQJcZFdWdMyWHEBjai3wSgH9h7VQ2cbLCcXreYfu+WdwilJDAiJsqtRGxwH8gNpD5Sp9brkEQrKPD/yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k4Rg5gtr; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b86ed375d37so234229966b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 01:41:13 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b7cf4a975d2so1014133866b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 01:41:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768210872; x=1768815672; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768210874; x=1768815674; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qpQJfNEVMidDJUe69qz1mLAVV7hXmHzYrjKAzwHkdw4=;
-        b=MdIela76AAT2CYlBY7Do6dqoG1sGrlbHvVwKqjsGpEEFWWL2ec/guT9pvBZLlHmFvW
-         HqREKgrZpCuJA0lpfRyBJFA3kW7w2dS97I1QHHSaq2xeD0xEcQj3hcGvsqUNLPIUANhs
-         OH2TomNRQapWIKHehocVcqazrRwyanuqquVAEpRxXCyX15NnwtjrpR/A2wv2XbXyPc2t
-         o9kD9b8OtOV9uQFQhJxvd0Xmg8D2N4N3VvP7tK0ng/XHp3WxgQ+ubRUudO+7feb9GpDA
-         JKT5NRcqtCqUGGSFOfYSR4dLOJCL7eUPXT1L+6Lm2VCz9kyW4spGP6dM45T7vuXMU6Da
-         hI/A==
+        bh=2RFEABt6Iiak9nuJmj7Wxw5Z8I9sCXd9qm2gCXqcVTA=;
+        b=k4Rg5gtrQzZNDFwPEua/3PteELL8IOfQ76OrcxIPrd7hmF3EMtSTW93tIpL+OaBmXl
+         8HL3DUkpewKwM0YM4jx6YxsVegRMX+MxxhNxM3FTlw71JjFCGxMj3lhd2mhsyOg8EfdL
+         Xk2kFp3j4LX47D/v33R/bpeYOwKp7BJDgWgKWGTo5cLd6VqGk1JtdbGCZs39nzjiBBrc
+         RW3speVSWuV45YO0jW+2suJT3b9O7TCsirkbsCuzUney+jq6YXtuRZIlyWESpEBm2I1l
+         JCVXfkdS+d6dQPDh9upvynPl4VfKZLSjTJtCbfKLWiP9+Ox7m4KsvvulkmXGTp4ASwIH
+         SdcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768210872; x=1768815672;
+        d=1e100.net; s=20230601; t=1768210874; x=1768815674;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=qpQJfNEVMidDJUe69qz1mLAVV7hXmHzYrjKAzwHkdw4=;
-        b=xH5MeElJFCl03/ki8wO4Eht1y1dTXy9TwqIrABZSfzfj0Bn4LCoKLhWLhL79Kkg38k
-         0S4fvlNlfD4wTakFEo0Gfj8RDewWL9BYX4sGSODz9fRgz0SHTOAi00QBDr7X/3euRBe6
-         GNhQoVHGK/Xh95r4lddTNDwJIF4hYiNSYtpf0HHLzOTFgY457VomhlztYHgH5WLK8zlB
-         Z+UT49+IZUflIQ/tL1U3d2qMj9qbDPR5AgL0uXosN/gGVTAsE3IcVA0f4MqktJBI691U
-         2ASReegPry/qgEzUcRrtrtS3DeoWIjI+UJxLfq1oXlcUcdZyk5ahhf5AGicxhtBh6zx/
-         UnCg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0rbJjIf4VOJfM/HqoEog6ngrWPzMPBfg1igClKb44kNjegBhtrJACzS1WgeVltZEIBA76Fc1HUt/QT+l6mms=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOND7wo2bUFWMpDmDROB52ej48NO5r7cu7/Sy1TnhKj4f57+3F
-	3/iaIFm4KqF9ke5yZ/9GxKeUOjG+csQy9kWVJT7d32g7utOtJnVcF//1
-X-Gm-Gg: AY/fxX7+RpC8NGrE1mHJSRyovNIWTuH63HY+5lTdl7c+ho7L2Ilj5J/qPgdQassHa3J
-	lD0XwkPoc6LsOy3CJw3qX/orbX+mhM0QTa06jsdS67943FpEMQqwSEv4PsvxN0nfzmTKXlet1xd
-	MiVw/HcUqKSD3eu3MQTcI3Tz8kVOKtlb3KWFF8M36456VOa2LpGFyLpesDxkJy82P/Hi99vFdH4
-	5jA/xROxDhp0z/aelaOxNVBB+PkR9NwU0FayAgzkkl/5LJdFSzfT/k+2ReES8d/VyZQseLdKiOQ
-	l3dqnFo1qbYkKVhaDHpGVsv6a5ULcXwORL2nTUCGlmXnEVn941hGxbVGzWKpPQcr9FBOHTgXfks
-	GqojQdUiAyPXPt5Ur3l1p75Xy82u33TQ19U7pgDyvWH2OQ4SkN8tcyOdD8uDRqOubEVSR6A6452
-	zO1Aqkj00GxRJ+Ew==
-X-Google-Smtp-Source: AGHT+IElBQj5xgjZNMo/SofYr/1zC1dX3E6h9qPiSNrkW8u9b+CtK0Wwh85R4DKfzUJZlEY4evhbpA==
-X-Received: by 2002:a17:907:7296:b0:b87:19af:3e4d with SMTP id a640c23a62f3a-b8719af3f43mr222160266b.22.1768210872003;
-        Mon, 12 Jan 2026 01:41:12 -0800 (PST)
+        bh=2RFEABt6Iiak9nuJmj7Wxw5Z8I9sCXd9qm2gCXqcVTA=;
+        b=cncyth5FfM1LZSFM8XZ0s7dptPa8A00/1wdkYNt8xae2mmuZ43mwfgXV3IL04DiDEF
+         ZSnZJpqXhp7hylCm/hkiqMnEfkd0BV6Im3/DTT/XDS8aIjQ6ulbwJjLMpZ1LoXIQtE7R
+         hvkpkQk/kJ41SKtoMGW/ci+6Zz2LyR/I1rMeakdmSly7muHidJ6eZG95su99XmM8sMaS
+         0H9ZHS1msraYr/rbKDnVBNubIK4Y5Lf4ipPSJKYHrOmCit6cG1BhhuRlhxNDNRELONLQ
+         ltdKfzacS4cBFOpATxCmeBjOmJ0CfErg9V5uSAgy+9LCH8g98IsnVJH5kQBV2KzQqWqZ
+         aUvw==
+X-Forwarded-Encrypted: i=1; AJvYcCVDkwPTl7jdFdg6vOlP6dhyOEUzRIbTIOhJMFfDMyx6BuHppZpZ2voOEEFSMMDGUyXl20BMMn2z4K4MaMrzH9o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJmBU0xaW/XhlBs8JcoMwVBQhkVHnGYATRqJGIKtUhDHZ5qF13
+	rmCVrIEGT2kf+zU6fzZtbQPpUxKimN8aSFR6Pcv587CClhPJ1+jlMnb6
+X-Gm-Gg: AY/fxX5kcKdeq6lVjDTvQF3K1mq77j8WImehGke8NRIDHkl7enn3d2xoJj0gEaa9n2M
+	XKwHWjM2sQ5jVZ1g6QI4AaEqYfQBF15h772ImoUh6X+h/HQ+rUFpEhBdv8HpHi9KjfPwWeP4FZu
+	xN+K8taHgIpVIsmc15Pbhun1Hb8Cs4m2gnlXghfexY5qQgMgDUhXybprG1yMt7i7OAaTzu9J/+E
+	CIoVuJHVRqUtZ2RGnisiesN1BvAmCm98MYI1SJpqK22ydpQccCjKCtj9tIjv4ic0xlfzzx3i5wI
+	SSTB+ufDwQNsKub0xXXcdgHKYQmPBNk5qOOWhXaEn3EpR0A3ognDnnc9CSYkDQckDkkg2CiEO2X
+	qK2CYBUWbg79hpzV1wFpG/Qh2O5AYaRr86CJy8tdU6djKwOe1R3IHeipQ4o/knc1Sa3cvT+8t0Q
+	/vgXG8RjyGLa5ep5G/TqXdbylw
+X-Google-Smtp-Source: AGHT+IE3wiOXJvIMJw8ueQ9HmSpunkUpmolMVZVGfJsiMnps0ap0V1WAk3+kWd4HECoGsMIKWUcuqw==
+X-Received: by 2002:a17:907:86a5:b0:b87:6d0:df2a with SMTP id a640c23a62f3a-b8706d0e1e9mr437193266b.40.1768210873498;
+        Mon, 12 Jan 2026 01:41:13 -0800 (PST)
 Received: from [192.168.1.243] ([143.58.192.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b870bcd342bsm410828766b.56.2026.01.12.01.41.11
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b870bcd342bsm410828766b.56.2026.01.12.01.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 01:41:11 -0800 (PST)
+        Mon, 12 Jan 2026 01:41:12 -0800 (PST)
 From: Andre Carvalho <asantostc@gmail.com>
-Date: Mon, 12 Jan 2026 09:40:57 +0000
-Subject: [PATCH net-next v10 6/7] netconsole: resume previously deactivated
- target
+Date: Mon, 12 Jan 2026 09:40:58 +0000
+Subject: [PATCH net-next v10 7/7] selftests: netconsole: validate target
+ resume
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260112-netcons-retrigger-v10-6-d82ebfc2503e@gmail.com>
+Message-Id: <20260112-netcons-retrigger-v10-7-d82ebfc2503e@gmail.com>
 References: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
 In-Reply-To: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
 To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -94,291 +94,208 @@ To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768210863; l=9836;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768210863; l=6537;
  i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
- bh=r1PE8fDi2fMuVloDtOFpaMYOvsXBjkenyxTGboQyEIM=;
- b=tykV62ht+/NiUPNuK/wlUckVAa0RQviGHV/WkPVe4u48D/s+YWg1B9nXIYN2GmqgkfDVaS32h
- Y2P853khVqeA/P1AgbM6gR77O8MH5vX45ikblNlYA393q3X5EDq9Ewx
+ bh=KSC8Nj3DiK31fDmZ4/PzcbAzUlQgw1PwPAvmb/6l8Os=;
+ b=yT390LC8bW9NHpfY3TcipbMrxZ1ISAJCIIideT52vdpL2kwc0ZJtpmUDb7SyZ6EhSZKrh9A56
+ kiD5h+lpd5OCA7yQCr9if1+60dgN/t+nBN+mVJu0b4/kjEelQ209O4m
 X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
  pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-Attempt to resume a previously deactivated target when the associated
-interface comes back (NETDEV_REGISTER) or when it changes name
-(NETDEV_CHANGENAME) by calling netpoll_setup on the device.
+Introduce a new netconsole selftest to validate that netconsole is able
+to resume a deactivated target when the low level interface comes back.
 
-Depending on how the target was setup (by mac or interface name), the
-corresponding field is compared with the device being brought up. Targets
-that match the incoming device, are scheduled for resume on a workqueue.
+The test setups the network using netdevsim, creates a netconsole target
+and then remove/add netdevsim in order to bring the same interfaces
+back. Afterwards, the test validates that the target works as expected.
 
-Resuming happens on a workqueue as we can't execute netpoll_setup in the
-context of the netdev event. A standalone workqueue (as opposed to the
-global one) is used to allow for proper cleanup process during
-netconsole module cleanup as we need to be able to flush all pending
-work before traversing the target list given that targets are temporarily
-removed from the list during resume_target.
+Targets are created via cmdline parameters to the module to ensure that
+we are able to resume targets that were bound by mac and interface name.
 
-Target transitions to STATE_DISABLED in case of failures resuming it to
-avoid retrying the same target indefinitely.
-
+Reviewed-by: Breno Leitao <leitao@debian.org>
 Signed-off-by: Andre Carvalho <asantostc@gmail.com>
 ---
- drivers/net/netconsole.c | 127 ++++++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 120 insertions(+), 7 deletions(-)
+ tools/testing/selftests/drivers/net/Makefile       |  1 +
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 35 ++++++--
+ .../selftests/drivers/net/netcons_resume.sh        | 97 ++++++++++++++++++++++
+ 3 files changed, 128 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 46d990f3d904..82c232f9ede2 100644
---- a/drivers/net/netconsole.c
-+++ b/drivers/net/netconsole.c
-@@ -39,6 +39,7 @@
- #include <linux/u64_stats_sync.h>
- #include <linux/utsname.h>
- #include <linux/rtnetlink.h>
-+#include <linux/workqueue.h>
- 
- MODULE_AUTHOR("Matt Mackall <mpm@selenic.com>");
- MODULE_DESCRIPTION("Console driver for network interfaces");
-@@ -85,6 +86,8 @@ static DEFINE_SPINLOCK(target_list_lock);
- /* This needs to be a mutex because netpoll_cleanup might sleep */
- static DEFINE_MUTEX(target_cleanup_list_lock);
- 
-+static struct workqueue_struct *netconsole_wq;
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index f5c71d993750..3eba569b3366 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -19,6 +19,7 @@ TEST_PROGS := \
+ 	netcons_cmdline.sh \
+ 	netcons_fragmented_msg.sh \
+ 	netcons_overflow.sh \
++	netcons_resume.sh \
+ 	netcons_sysdata.sh \
+ 	netcons_torture.sh \
+ 	netpoll_basic.py \
+diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+index ae8abff4be40..b6093bcf2b06 100644
+--- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
++++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
+@@ -203,19 +203,21 @@ function do_cleanup() {
+ function cleanup_netcons() {
+ 	# delete netconsole dynamic reconfiguration
+ 	# do not fail if the target is already disabled
+-	if [[ ! -d "${NETCONS_PATH}" ]]
++	local TARGET_PATH=${1:-${NETCONS_PATH}}
 +
- /*
-  * Console driver for netconsoles.  Register only consoles that have
-  * an associated target of the same type.
-@@ -138,10 +141,14 @@ enum target_state {
-  * @stats:	Packet send stats for the target. Used for debugging.
-  * @state:	State of the target.
-  *		Visible from userspace (read-write).
-- *		We maintain a strict 1:1 correspondence between this and
-- *		whether the corresponding netpoll is active or inactive.
-+ *		From a userspace perspective, the target is either enabled or
-+ *		disabled. Internally, although both STATE_DISABLED and
-+ *		STATE_DEACTIVATED correspond to inactive targets, the latter is
-+ *		due to automatic interface state changes and will try
-+ *		recover automatically, if the interface comes back
-+ *		online.
-  *		Also, other parameters of a target may be modified at
-- *		runtime only when it is disabled (state == STATE_DISABLED).
-+ *		runtime only when it is disabled (state != STATE_ENABLED).
-  * @extended:	Denotes whether console is extended or not.
-  * @release:	Denotes whether kernel release version should be prepended
-  *		to the message. Depends on extended console.
-@@ -155,6 +162,7 @@ enum target_state {
-  *		local_mac	(read-only)
-  *		remote_mac	(read-write)
-  * @buf:	The buffer used to send the full msg to the network stack
-+ * @resume_wq:	Workqueue to resume deactivated target
-  */
- struct netconsole_target {
- 	struct list_head	list;
-@@ -177,6 +185,7 @@ struct netconsole_target {
- 	struct netpoll		np;
- 	/* protected by target_list_lock */
- 	char			buf[MAX_PRINT_CHUNK];
-+	struct work_struct	resume_wq;
- };
- 
- #ifdef	CONFIG_NETCONSOLE_DYNAMIC
-@@ -267,6 +276,70 @@ static bool bound_by_mac(struct netconsole_target *nt)
- 	return is_valid_ether_addr(nt->np.dev_mac);
++	if [[ ! -d "${TARGET_PATH}" ]]
+ 	then
+ 		# in some cases this is called before netcons path is created
+ 		return
+ 	fi
+-	if [[ $(cat "${NETCONS_PATH}"/enabled) != 0 ]]
++	if [[ $(cat "${TARGET_PATH}"/enabled) != 0 ]]
+ 	then
+-		echo 0 > "${NETCONS_PATH}"/enabled || true
++		echo 0 > "${TARGET_PATH}"/enabled || true
+ 	fi
+ 	# Remove all the keys that got created during the selftest
+-	find "${NETCONS_PATH}/userdata/" -mindepth 1 -type d -delete
++	find "${TARGET_PATH}/userdata/" -mindepth 1 -type d -delete
+ 	# Remove the configfs entry
+-	rmdir "${NETCONS_PATH}"
++	rmdir "${TARGET_PATH}"
  }
  
-+/* Attempts to resume logging to a deactivated target. */
-+static void resume_target(struct netconsole_target *nt)
-+{
-+	if (netpoll_setup(&nt->np)) {
-+		/* netpoll fails setup once, do not try again. */
-+		nt->state = STATE_DISABLED;
-+		return;
-+	}
+ function cleanup() {
+@@ -377,6 +379,29 @@ function check_netconsole_module() {
+ 	fi
+ }
+ 
++function wait_target_state() {
++	local TARGET=${1}
++	local STATE=${2}
++	local TARGET_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
++	local ENABLED=0
 +
-+	nt->state = STATE_ENABLED;
-+	pr_info("network logging resumed on interface %s\n", nt->np.dev_name);
++	if [ "${STATE}" == "enabled" ]
++	then
++		ENABLED=1
++	fi
++
++	if [ ! -d "$TARGET_PATH" ]; then
++		echo "FAIL: Target does not exist." >&2
++		exit "${ksft_fail}"
++	fi
++
++	local CHECK_CMD="grep \"$ENABLED\" \"$TARGET_PATH/enabled\""
++	slowwait 2 sh -c "test -n \"\$($CHECK_CMD)\"" || {
++		echo "FAIL: ${TARGET} is not ${STATE}." >&2
++		exit "${ksft_fail}"
++	}
 +}
 +
-+/* Checks if a deactivated target matches a device. */
-+static bool deactivated_target_match(struct netconsole_target *nt,
-+				     struct net_device *ndev)
-+{
-+	if (nt->state != STATE_DEACTIVATED)
-+		return false;
+ # A wrapper to translate protocol version to udp version
+ function wait_for_port() {
+ 	local NAMESPACE=${1}
+diff --git a/tools/testing/selftests/drivers/net/netcons_resume.sh b/tools/testing/selftests/drivers/net/netcons_resume.sh
+new file mode 100755
+index 000000000000..383ad1149271
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/netcons_resume.sh
+@@ -0,0 +1,97 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+	if (bound_by_mac(nt))
-+		return !memcmp(nt->np.dev_mac, ndev->dev_addr, ETH_ALEN);
-+	return !strncmp(nt->np.dev_name, ndev->name, IFNAMSIZ);
++# This test validates that netconsole is able to resume a target that was
++# deactivated when its interface was removed when the interface is brought
++# back up.
++#
++# The test configures a netconsole target and then removes netdevsim module to
++# cause the interface to disappear. Targets are configured via cmdline to ensure
++# targets bound by interface name and mac address can be resumed.
++# The test verifies that the target moved to disabled state before adding
++# netdevsim and the interface back.
++#
++# Finally, the test verifies that the target is re-enabled automatically and
++# the message is received on the destination interface.
++#
++# Author: Andre Carvalho <asantostc@gmail.com>
++
++set -euo pipefail
++
++SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++
++source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
++
++modprobe netdevsim 2> /dev/null || true
++rmmod netconsole 2> /dev/null || true
++
++check_netconsole_module
++
++function cleanup() {
++	cleanup_netcons "${NETCONS_CONFIGFS}/cmdline0"
++	do_cleanup
++	rmmod netconsole
 +}
 +
-+/* Process work scheduled for target resume. */
-+static void process_resume_target(struct work_struct *work)
-+{
-+	struct netconsole_target *nt;
-+	unsigned long flags;
++trap cleanup EXIT
 +
-+	nt = container_of(work, struct netconsole_target, resume_wq);
++# Run the test twice, with different cmdline parameters
++for BINDMODE in "ifname" "mac"
++do
++	echo "Running with bind mode: ${BINDMODE}" >&2
++	# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
++	echo "6 5" > /proc/sys/kernel/printk
 +
-+	dynamic_netconsole_mutex_lock();
++	# Create one namespace and two interfaces
++	set_network
 +
-+	spin_lock_irqsave(&target_list_lock, flags);
-+	/* Check if target is still deactivated as it may have been disabled
-+	 * while resume was being scheduled.
-+	 */
-+	if (nt->state != STATE_DEACTIVATED) {
-+		spin_unlock_irqrestore(&target_list_lock, flags);
-+		goto out_unlock;
-+	}
++	# Create the command line for netconsole, with the configuration from
++	# the function above
++	CMDLINE=$(create_cmdline_str "${BINDMODE}")
 +
-+	/* resume_target is IRQ unsafe, remove target from
-+	 * target_list in order to resume it with IRQ enabled.
-+	 */
-+	list_del_init(&nt->list);
-+	spin_unlock_irqrestore(&target_list_lock, flags);
++	# The content of kmsg will be save to the following file
++	OUTPUT_FILE="/tmp/${TARGET}-${BINDMODE}"
 +
-+	resume_target(nt);
++	# Load the module, with the cmdline set
++	modprobe netconsole "${CMDLINE}"
++	# Expose cmdline target in configfs
++	mkdir "${NETCONS_CONFIGFS}/cmdline0"
 +
-+	/* At this point the target is either enabled or disabled and
-+	 * was cleaned up before getting deactivated. Either way, add it
-+	 * back to target list.
-+	 */
-+	spin_lock_irqsave(&target_list_lock, flags);
-+	list_add(&nt->list, &target_list);
-+	spin_unlock_irqrestore(&target_list_lock, flags);
++	# Target should be enabled
++	wait_target_state "cmdline0" "enabled"
 +
-+out_unlock:
-+	dynamic_netconsole_mutex_unlock();
-+}
++	# Remove low level module
++	rmmod netdevsim
++	# Target should be disabled
++	wait_target_state "cmdline0" "disabled"
 +
- /* Allocate and initialize with defaults.
-  * Note that these targets get their config_item fields zeroed-out.
-  */
-@@ -289,6 +362,7 @@ static struct netconsole_target *alloc_and_init(void)
- 	nt->np.remote_port = 6666;
- 	eth_broadcast_addr(nt->np.remote_mac);
- 	nt->state = STATE_DISABLED;
-+	INIT_WORK(&nt->resume_wq, process_resume_target);
- 
- 	return nt;
- }
-@@ -1353,13 +1427,29 @@ static struct config_group *make_netconsole_target(struct config_group *group,
- static void drop_netconsole_target(struct config_group *group,
- 				   struct config_item *item)
- {
--	unsigned long flags;
- 	struct netconsole_target *nt = to_target(item);
-+	unsigned long flags;
++	# Add back low level module
++	modprobe netdevsim
++	# Recreate namespace and two interfaces
++	set_network
++	# Target should be enabled again
++	wait_target_state "cmdline0" "enabled"
 +
-+	dynamic_netconsole_mutex_lock();
- 
- 	spin_lock_irqsave(&target_list_lock, flags);
-+	/* Disable deactivated target to prevent races between resume attempt
-+	 * and target removal.
-+	 */
-+	if (nt->state == STATE_DEACTIVATED)
-+		nt->state = STATE_DISABLED;
- 	list_del(&nt->list);
- 	spin_unlock_irqrestore(&target_list_lock, flags);
- 
-+	dynamic_netconsole_mutex_unlock();
++	# Listen for netconsole port inside the namespace and destination
++	# interface
++	listen_port_and_save_to "${OUTPUT_FILE}" &
++	# Wait for socat to start and listen to the port.
++	wait_local_port_listen "${NAMESPACE}" "${PORT}" udp
++	# Send the message
++	echo "${MSG}: ${TARGET}" > /dev/kmsg
++	# Wait until socat saves the file to disk
++	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}"
++	# Make sure the message was received in the dst part
++	# and exit
++	validate_msg "${OUTPUT_FILE}"
 +
-+	/* Now that the target has been marked disabled no further work
-+	 * can be scheduled. Existing work will skip as targets are not
-+	 * deactivated anymore. Cancel any scheduled resume and wait for
-+	 * completion.
-+	 */
-+	cancel_work_sync(&nt->resume_wq);
++	# kill socat in case it is still running
++	pkill_socat
++	# Cleanup & unload the module
++	cleanup
 +
- 	/*
- 	 * The target may have never been enabled, or was manually disabled
- 	 * before being removed so netpoll may have already been cleaned up.
-@@ -1461,13 +1551,14 @@ static int prepare_sysdata(struct netconsole_target *nt)
- static int netconsole_netdev_event(struct notifier_block *this,
- 				   unsigned long event, void *ptr)
- {
--	unsigned long flags;
--	struct netconsole_target *nt, *tmp;
- 	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
-+	struct netconsole_target *nt, *tmp;
- 	bool stopped = false;
-+	unsigned long flags;
- 
- 	if (!(event == NETDEV_CHANGENAME || event == NETDEV_UNREGISTER ||
--	      event == NETDEV_RELEASE || event == NETDEV_JOIN))
-+	      event == NETDEV_RELEASE || event == NETDEV_JOIN ||
-+	      event == NETDEV_REGISTER))
- 		goto done;
- 
- 	mutex_lock(&target_cleanup_list_lock);
-@@ -1496,6 +1587,13 @@ static int netconsole_netdev_event(struct notifier_block *this,
- 				stopped = true;
- 			}
- 		}
-+		if ((event == NETDEV_REGISTER || event == NETDEV_CHANGENAME) &&
-+		    deactivated_target_match(nt, dev))
-+			/* Schedule resume on a workqueue as it will attempt
-+			 * to UP the device, which can't be done as part of this
-+			 * notifier.
-+			 */
-+			queue_work(netconsole_wq, &nt->resume_wq);
- 		netconsole_target_put(nt);
- 	}
- 	spin_unlock_irqrestore(&target_list_lock, flags);
-@@ -1964,6 +2062,7 @@ static struct netconsole_target *alloc_param_target(char *target_config,
- /* Cleanup netpoll for given target (from boot/module param) and free it */
- static void free_param_target(struct netconsole_target *nt)
- {
-+	cancel_work_sync(&nt->resume_wq);
- 	netpoll_cleanup(&nt->np);
- #ifdef	CONFIG_NETCONSOLE_DYNAMIC
- 	kfree(nt->userdata);
-@@ -2018,6 +2117,12 @@ static int __init init_netconsole(void)
- 		}
- 	}
- 
-+	netconsole_wq = alloc_workqueue("netconsole", WQ_UNBOUND, 0);
-+	if (!netconsole_wq) {
-+		err = -ENOMEM;
-+		goto fail;
-+	}
++	echo "${BINDMODE} : Test passed" >&2
++done
 +
- 	err = register_netdevice_notifier(&netconsole_netdev_notifier);
- 	if (err)
- 		goto fail;
-@@ -2040,6 +2145,8 @@ static int __init init_netconsole(void)
- fail:
- 	pr_err("cleaning up\n");
- 
-+	if (netconsole_wq)
-+		flush_workqueue(netconsole_wq);
- 	/*
- 	 * Remove all targets and destroy them (only targets created
- 	 * from the boot/module option exist here). Skipping the list
-@@ -2050,6 +2157,9 @@ static int __init init_netconsole(void)
- 		free_param_target(nt);
- 	}
- 
-+	if (netconsole_wq)
-+		destroy_workqueue(netconsole_wq);
-+
- 	return err;
- }
- 
-@@ -2063,6 +2173,7 @@ static void __exit cleanup_netconsole(void)
- 		unregister_console(&netconsole);
- 	dynamic_netconsole_exit();
- 	unregister_netdevice_notifier(&netconsole_netdev_notifier);
-+	flush_workqueue(netconsole_wq);
- 
- 	/*
- 	 * Targets created via configfs pin references on our module
-@@ -2076,6 +2187,8 @@ static void __exit cleanup_netconsole(void)
- 		list_del(&nt->list);
- 		free_param_target(nt);
- 	}
-+
-+	destroy_workqueue(netconsole_wq);
- }
- 
- /*
++trap - EXIT
++exit "${EXIT_STATUS}"
 
 -- 
 2.52.0
