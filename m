@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-48763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 518B5D13DB5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 17:02:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E5C4D13E0C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 17:04:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B6CBA3027A71
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 16:01:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1F61D3052474
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 16:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CAA363C5E;
-	Mon, 12 Jan 2026 16:01:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AB036402A;
+	Mon, 12 Jan 2026 16:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hcDf+Pbo"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y34roi5B"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BDE736403D
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 16:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B572C029C
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Jan 2026 16:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768233674; cv=none; b=l1Ki3l9bXwFvz2AArGFUGPNVFt6/biK2hby0UPQxSkVbp0qtaLWaU/G5hwGSWAZpbPf7TW+g9NqoLGyyjV2KgbxUOe+2se8/df8+pI/KOfxJoP461pBjqi0bfLkkTJBun371tjWZCn5AJ+jL9kuXYtKB3Bnq2DXEhcQtG4H2aV0=
+	t=1768233714; cv=none; b=OmwKF4DitFab0OFhbxCqnamO6G0SuDE+TVcyAr0Eh7bycvSZ1jrbkzv2OxY6BnWU4gfI1quykEq37RYZ6m+dcxAga85QweD/smEjLnzYkLBb4F1IIl39h1e7IRBy/E+Zxb5rZaXCfeRvx+lDj7D3zBahhxetnfC3XkR9ofK0a4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768233674; c=relaxed/simple;
-	bh=/Hr5td0q2fKUO8L0UFsfzO/yV0xkttzaHGLMqqbjcaA=;
+	s=arc-20240116; t=1768233714; c=relaxed/simple;
+	bh=6LulNGCavc+yLdN4iqeRSLWPIkycrl6AeyWZ5TlwY/Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u1HERIIjbzJbjakOCJ3FpYnJQB2PkAgqzqoxk0SE3iIn1uwyAn6+XWZqtYG4T3hb3DfWS2W049RquCzNQQCTpoWE1gL0eowjJCt4YYzUbKy7TCwEq8g4RJHGDmK0m6PlTaVJ3U89xcO29jJETpNtOigz3ytHiQ7O0yzWDDuLDIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hcDf+Pbo; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=MY3cn+cmjhV/crOsqBal2pwnzhwLtVRT5Tjhw/STd8mcy3SJGQptFIgtEy0MpbOFbaQ7pvlPhFAf+gw7cxYyTpLUw4GzGH0qPWqgZrnQpgoQ2a9Nfj6MfTAF6knFg113ExUrsEedLszAiAr2jjU8rnwlDwkI3BFiNPFhmuzUgO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y34roi5B; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768233669;
+	s=mimecast20190719; t=1768233712;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=B2dX1nduvd1Y2+YZKFwl6uVgXF8yg4bmyS1EUMGzFdk=;
-	b=hcDf+PbobhrYDZXkUfBhWkRxmjHMwSOUr8McHwHrI3xgL8hVSL6F6UANdXSGivyV71xPop
-	ziU+NJ/MMOn7f3bWZQ76KaIcs5SR/4j3bH5jVagZcFsFCz2Odh2zu+FFcy85HTIHdKQX4S
-	rqBFd+b/iuSop3G/e8XyNNxJ7fSRnm4=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=HwdXpgUBm2FrvWy3bWrjnHVwbNhC3pc6fLx1+G89qs8=;
+	b=Y34roi5Bz3mBcoI8mghd2mIgZDu3Q5kEd5Cz+HmA8X0CWHHLgZWgScTKJh6es7wAFNciO+
+	KNw1z/Ycbmjd7Dj7M4uySI3efd8OlwTwdVauM1DlehGrCLcr9aPPBAON1RfZT+r+Uo5QcG
+	SEcbHiAEzaRL8yXzHxR3nWZMcUeD/6Y=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-75-adJYnnBANv61u0nF6HBMIw-1; Mon,
- 12 Jan 2026 11:01:05 -0500
-X-MC-Unique: adJYnnBANv61u0nF6HBMIw-1
-X-Mimecast-MFC-AGG-ID: adJYnnBANv61u0nF6HBMIw_1768233663
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-482-0E7jcu3UOUmshcBvmAQIHg-1; Mon,
+ 12 Jan 2026 11:01:13 -0500
+X-MC-Unique: 0E7jcu3UOUmshcBvmAQIHg-1
+X-Mimecast-MFC-AGG-ID: 0E7jcu3UOUmshcBvmAQIHg_1768233668
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 398D51955E8C;
-	Mon, 12 Jan 2026 16:01:01 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B9F218D95DE;
+	Mon, 12 Jan 2026 16:01:04 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.89.95])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3A13619560B2;
-	Mon, 12 Jan 2026 16:00:58 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 732BC19560BA;
+	Mon, 12 Jan 2026 16:01:01 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -69,9 +69,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Chen Ridong <chenridong@huaweicloud.com>,
 	Waiman Long <longman@redhat.com>,
 	Chen Ridong <chenridong@huawei.com>
-Subject: [PATCH cgroup/for-6.20 v5 1/5] cgroup/cpuset: Streamline rm_siblings_excl_cpus()
-Date: Mon, 12 Jan 2026 11:00:17 -0500
-Message-ID: <20260112160021.483561-2-longman@redhat.com>
+Subject: [PATCH cgroup/for-6.20 v5 2/5] cgroup/cpuset: Consistently compute effective_xcpus in update_cpumasks_hier()
+Date: Mon, 12 Jan 2026 11:00:18 -0500
+Message-ID: <20260112160021.483561-3-longman@redhat.com>
 In-Reply-To: <20260112160021.483561-1-longman@redhat.com>
 References: <20260112160021.483561-1-longman@redhat.com>
 Precedence: bulk
@@ -83,63 +83,54 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-If exclusive_cpus is set, effective_xcpus must be a subset of
-exclusive_cpus. Currently, rm_siblings_excl_cpus() checks both
-exclusive_cpus and effective_xcpus consecutively. It is simpler
-to check only exclusive_cpus if non-empty or just effective_xcpus
-otherwise.
+Since commit f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check()
+& make update_cpumasks_hier() handle remote partition"), the
+compute_effective_exclusive_cpumask() helper was extended to
+strip exclusive CPUs from siblings when computing effective_xcpus
+(cpuset.cpus.exclusive.effective). This helper was later renamed to
+compute_excpus() in commit 86bbbd1f33ab ("cpuset: Refactor exclusive
+CPU mask computation logic").
 
-No functional change is expected.
+This helper is supposed to be used consistently to compute
+effective_xcpus. However, there is an exception within the callback
+critical section in update_cpumasks_hier() when exclusive_cpus of a
+valid partition root is empty. This can cause effective_xcpus value to
+differ depending on where exactly it is last computed. Fix this by using
+compute_excpus() in this case to give a consistent result.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
-Reviewed-by: Chen Ridong<chenridong@huawei.com>
+Reviewed-by: Chen Ridong <chenridong@huawei.com>
 ---
- kernel/cgroup/cpuset.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ kernel/cgroup/cpuset.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
 diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 221da921b4f9..da2b3b51630e 100644
+index da2b3b51630e..894131f47f78 100644
 --- a/kernel/cgroup/cpuset.c
 +++ b/kernel/cgroup/cpuset.c
-@@ -1355,23 +1355,29 @@ static int rm_siblings_excl_cpus(struct cpuset *parent, struct cpuset *cs,
- 	int retval = 0;
+@@ -2168,17 +2168,13 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
+ 		spin_lock_irq(&callback_lock);
+ 		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
+ 		cp->partition_root_state = new_prs;
+-		if (!cpumask_empty(cp->exclusive_cpus) && (cp != cs))
+-			compute_excpus(cp, cp->effective_xcpus);
+-
+ 		/*
+-		 * Make sure effective_xcpus is properly set for a valid
+-		 * partition root.
++		 * Need to compute effective_xcpus if either exclusive_cpus
++		 * is non-empty or it is a valid partition root.
+ 		 */
+-		if ((new_prs > 0) && cpumask_empty(cp->exclusive_cpus))
+-			cpumask_and(cp->effective_xcpus,
+-				    cp->cpus_allowed, parent->effective_xcpus);
+-		else if (new_prs < 0)
++		if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
++			compute_excpus(cp, cp->effective_xcpus);
++		if (new_prs <= 0)
+ 			reset_partition_data(cp);
+ 		spin_unlock_irq(&callback_lock);
  
- 	if (cpumask_empty(excpus))
--		return retval;
-+		return 0;
- 
- 	/*
--	 * Exclude exclusive CPUs from siblings
-+	 * Remove exclusive CPUs from siblings
- 	 */
- 	rcu_read_lock();
- 	cpuset_for_each_child(sibling, css, parent) {
-+		struct cpumask *sibling_xcpus;
-+
- 		if (sibling == cs)
- 			continue;
- 
--		if (cpumask_intersects(excpus, sibling->exclusive_cpus)) {
--			cpumask_andnot(excpus, excpus, sibling->exclusive_cpus);
--			retval++;
--			continue;
--		}
--		if (cpumask_intersects(excpus, sibling->effective_xcpus)) {
--			cpumask_andnot(excpus, excpus, sibling->effective_xcpus);
-+		/*
-+		 * If exclusive_cpus is defined, effective_xcpus will always
-+		 * be a subset. Otherwise, effective_xcpus will only be set
-+		 * in a valid partition root.
-+		 */
-+		sibling_xcpus = cpumask_empty(sibling->exclusive_cpus)
-+			      ? sibling->effective_xcpus
-+			      : sibling->exclusive_cpus;
-+
-+		if (cpumask_intersects(excpus, sibling_xcpus)) {
-+			cpumask_andnot(excpus, excpus, sibling_xcpus);
- 			retval++;
- 		}
- 	}
 -- 
 2.52.0
 
