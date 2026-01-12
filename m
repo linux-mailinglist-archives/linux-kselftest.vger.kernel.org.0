@@ -1,90 +1,85 @@
-Return-Path: <linux-kselftest+bounces-48794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E503D155EC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 22:03:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA15AD157F3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 22:53:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 474B53025DAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 21:01:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 528DC3009264
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Jan 2026 21:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD123612F6;
-	Mon, 12 Jan 2026 21:01:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD2C3446A4;
+	Mon, 12 Jan 2026 21:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsLCPUDu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZGAGjpk5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3C6340A6C;
-	Mon, 12 Jan 2026 21:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA33340A43;
+	Mon, 12 Jan 2026 21:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768251671; cv=none; b=d1VT0DXFB7n5fvcpzldhNNNviP9eVaJUJJMWy2VIcz0N7j69BRSHI5sjFql1AkSRW7qsDrbFeMiegVtXhkekeznb6+0lJgbf+3RGQz+U413iUYh5XbAJLmEMiSOMAFt/nqU/EJXtu8xtF7GPvrPvBzL1BvRwiOWj96Xoxh9UYTI=
+	t=1768254808; cv=none; b=jBKUTb5uZst3a0YvDbY90ljuWs62f/KCOs5IJU4SY9DCN1w7BLajOFqG/gyaJbDJiNri5xBMkG2sCepxMNddrPRFXJ4PBS1od0/WjX8P2bhl1tiQYGju4DRKFN1t/6NKSOvih63zAjIGSbX9pRW0xh7ykS8P7kuEezpzBYRx0K4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768251671; c=relaxed/simple;
-	bh=zJmzqUAKVRmQQrSuIJa+yM//vnVtzmCQhnM2U7EzW+k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bbVOYeS3TihrDGp0Y80yqJu72sjpHjVnJGV32dg9F5d0e0wvn7h+kJhTBFQYUbNuyHVybkoXyb8N3fQ2c7zWJ5cQRjC5bxTZNNI29Snik69lFOk+pJTZycnNdK4zn4nTr7f34HCHxhYp+fyqO5jLwlAu8SrlyPhpmBYOjmL69R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsLCPUDu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99461C116D0;
-	Mon, 12 Jan 2026 21:01:10 +0000 (UTC)
+	s=arc-20240116; t=1768254808; c=relaxed/simple;
+	bh=bONbbeDRrFb8TPKJZAoc0eVUmaD8m9rNRWxknsAZ/ts=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sbOdnCJRsZEcRfLx+Ag7RqqKAhzPpLo0wjyHdMf5PUB4m2WlDULrDpzPQcXSKANog91ZE5eRD7HheXqBxpimKJS6hJ81hO4tdwXOfyo4FdtA0zMkluIEQ9BN0+eTCWFlwba5umH8aWGHc0Vse8dDqYsLLEAx9AMtB19jhaZbxUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZGAGjpk5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A163C116D0;
+	Mon, 12 Jan 2026 21:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768251670;
-	bh=zJmzqUAKVRmQQrSuIJa+yM//vnVtzmCQhnM2U7EzW+k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=JsLCPUDuZxTcKcaC6V8IAqTMUDZJetzhRWqgmzrQUY21ujr2HgbZp8KZPm5Oi325+
-	 AwlytYHeFMK47v8ocBQoMjYbuWdlPQ4yl8WTbW/l2pU6ikmScXIGU889VMuBAspsz1
-	 ZeAYdYZhD5bwSyDt1HcQd/7EL80vud5rvdUc++673Re3Ir0ncW/vQwDJeD11aXFWG0
-	 c/eECmB7bV9DZjLqC4fyveucrZS2IYU+7wK69Jov85qM+WNno6KGjEgy28RqRDzI1x
-	 eB1xpFPdxdz0JsEyfu7zl6xrxFG1emJ7MUQjEAhOHGtkewVtXd3kFdZ8m1HSoNLtTV
-	 dk3rKSqNjZqYQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B618D380CFD5;
-	Mon, 12 Jan 2026 20:57:45 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1768254807;
+	bh=bONbbeDRrFb8TPKJZAoc0eVUmaD8m9rNRWxknsAZ/ts=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZGAGjpk5j5S9f0bNrvrmsFjin9rqLISsQZOJCSCgPvSCHwu8ruiy0ajZMTT24Dk1n
+	 y/qQYU44xPYcWCS9q+IwKyjnMwYWInr78ZmCNeE5kYaSd6CPxG8Gmhz6ricl/utiKM
+	 NeMwYUNi3ekE/H5QvlgLM37qf5WLKHVWBcf2xPE86cQ21PZmjNN1fBC3FC85hRiqmV
+	 r9b8rwlKETvw26Vg9uZ7MHSL/JCNKU4xzd21syCXIRWy9cmgGUccs0Ok4Avq2jnaYK
+	 MAAWUByvLKcmI1xt5XfIR2L1ZXBrvoQ0/0fAq6sqqUvtIsV1VHj0dKKUAIOKMS1OZ7
+	 TXhpT40kr0maQ==
+Date: Mon, 12 Jan 2026 13:53:26 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Andre Carvalho <asantostc@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v10 7/7] selftests: netconsole: validate target
+ resume
+Message-ID: <20260112135326.7ce71119@kernel.org>
+In-Reply-To: <aWVarVD7DQ4uG8YZ@archlinux>
+References: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
+	<20260112-netcons-retrigger-v10-7-d82ebfc2503e@gmail.com>
+	<20260112061642.7092437c@kernel.org>
+	<uzrkzwqpy2mf5je44xz2xtody5ajfw54v7kqb2prfib3kz7gvj@wtsjtgde5thb>
+	<aWVarVD7DQ4uG8YZ@archlinux>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/1] PSP self test improvements
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176825146428.1092878.13183078035784367751.git-patchwork-notify@kernel.org>
-Date: Mon, 12 Jan 2026 20:57:44 +0000
-References: <20260109110851.2952906-1-cratiu@nvidia.com>
-In-Reply-To: <20260109110851.2952906-1-cratiu@nvidia.com>
-To: Cosmin Ratiu <cratiu@nvidia.com>
-Cc: netdev@vger.kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- cjubran@nvidia.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 9 Jan 2026 13:08:50 +0200 you wrote:
-> Changes since v1:
-> - Used ifindex in psp_responder to select the PSP device
-> - Merged the two patches since they started overlapping too much.
+On Mon, 12 Jan 2026 20:49:02 +0000 Andre Carvalho wrote:
+> > Also, do you know why we got:
+> > 
+> > 	/srv/vmksft/testing/wt-18/tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or directory
+> > 
+> > after the test failed?  
 > 
-> Cosmin Ratiu (1):
->   selftests: drv-net: psp: Better control the used PSP dev
-> 
-> [...]
+> I think this might be caused by a change[2] in run_kselftest.sh/runner.sh which
+> seems to cause runner.sh to fail when a test failed and runner.sh was not called
+> from run_kselftest.sh.
 
-Here is the summary with links:
-  - [net-next,v2,1/1] selftests: drv-net: psp: Better control the used PSP dev
-    https://git.kernel.org/netdev/net-next/c/9086984ff52e
+Yes! FWIW we see it in all tests in netdev :( 
+Who tests the test infra, right?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+It's not actually causing any functional issues for use so
+I haven't followed up on this, but would be awesome to get it fixed..
 
