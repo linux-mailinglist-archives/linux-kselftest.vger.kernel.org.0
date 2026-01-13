@@ -1,550 +1,921 @@
-Return-Path: <linux-kselftest+bounces-48890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 075DAD1B442
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 21:43:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF0DD1B942
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 23:21:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 07D17303EB47
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 20:43:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DD167300D424
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 22:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F7C3148C6;
-	Tue, 13 Jan 2026 20:43:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FA113563ED;
+	Tue, 13 Jan 2026 22:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JJclDuSq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EdIV41/a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6D4311977
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 20:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768336988; cv=pass; b=K/rq6B2okkPAWyMVDUeY44FpvFNOWvcDQlpoxLgPwK9sTyQbPo0nOgsJKL3JDXpbZKWcl/zzFm2MtPp2sHWn6U5WuJoDzewiygcBIutxXRQG3sRiPh9PztiAKYKoSoI0wYgbJHmDbu6yCfa2WWAZv54ulB5N/52tVo/xqpwnnKc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768336988; c=relaxed/simple;
-	bh=hSf3R/YVk//+ujbhyN+bD/qV4nruZvODNEYfVDWxeb4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m1XxSKypa5L3NMd+Wr7fZjmtX/p63BDnmWPtFWQ2XE9w7PYNJBcuuLXwS9Nps7qY3ILxtAqvZqQLL82ckzaAUIaMzYmReOlfADGZ0NvCiZZNbtmrZXz1ZpLliBErb8xr364IEvbrYddIcwnAepY0kMUtgERNyeQbvkvZocma3xE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JJclDuSq; arc=pass smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b78649941so248e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 12:43:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768336984; cv=none;
-        d=google.com; s=arc-20240605;
-        b=f8GYNuCgw5g4notad/e7/zPeLvq/ig4kepRRn5nw+VpIAzZZmeuBy+8tzp0EpG+WHU
-         OBo+U7zkt0U422qIpj/zQOT897COJTCWxXd1G1dFEb7nmUS3dRB1VA0oXwUAwcVNPPkt
-         MAXuHewR36sHzBGZ4tdroj6/O6m7chtph26z8UkcoKo2NisqRBlP/X82GRVPm0I+dg6A
-         /BvA1Ry1L22Z4DYzvR6prDSnsQ2WvpvbacrZWUqw0GrvSg7Ca/kZSMYPFFPAPFVNHxzi
-         ik8nIdavNE/gT/6apv9GC2zsugMy3X/JTtjskycT8uoeMiymqvGdz9U77rTtJT2Mka8X
-         QnGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=x7rZQoaFWDVZHnj6smUs01byVX9zqt9iWxrOQ24b43U=;
-        fh=gmci3aJ3lEvUphvxxdNeBnryEmx2xEzIqhW9i0sJbOc=;
-        b=RyeTsHye32q/tq1PesMsezJXAsWdm62kjZWklDZM9Ku3Ni5P5h9IYNuMw9+yJF/8VK
-         spPACDxXXk9N2Ol0jeZwdty7jITfnKE1754Fs/ktdJCGICPElufAPKZsKdIeMieksb+v
-         mQtFJkNDuWCA8RKEg55nYRg8dnHd3nuV9dULx4hl85AYxhbKehMhc5FQtiW4nG4DZw0X
-         Jw/EpwpZodQ+P9zOh1tiE9Qsps3KjKCE2DbETJQJXhenQt5hF8Dyg6YuXx11tCvlg37A
-         SaCAFtZTAYD4CaVj41siY1+6n/dPi46vDUuTzuiu5Hou+gexY6AGftb4S4E+zM640I1n
-         B18A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E692D3559C8
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 22:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768342915; cv=none; b=DVjyTN5lee9EIjQ6q0OEJhgLKGMPmOQ7kk45mJXzQE2q+25XBVBNKkvXgZCfnjkVPBCOnYZqI37id5lZJEoESM/PE10QKwtW6sc5bzut5bSP1UH/YufhDomzrH81BZw77jeoeF8i0YWbsSdhQhoRrPOzP2khmkdWYRneiSy1J3s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768342915; c=relaxed/simple;
+	bh=0cyedPbILAtAUo5QpXqN719WxCQR77k1MFVcsLaQa4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dUOb7fXgFjFCQqDhAO8Av2rltEgiXA3mRkAfJ5lpxRx7ZB2fXWOx60NHByP+eEf19NNp73jZlV3FhOAai/AglcHe27WPS061hlfrG4PNCOrA7ZM2XTFEA+6ZE65KDZOYU1BHMLomg/EKzz0nFxhenlVeSB2TqKRnyHxs08JUBc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EdIV41/a; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4ed66b5abf7so2978941cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 14:21:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768336984; x=1768941784; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x7rZQoaFWDVZHnj6smUs01byVX9zqt9iWxrOQ24b43U=;
-        b=JJclDuSqvR0pHlmRizqPmASUySRZo0wIIfHwKMK687d6kT6b8o1i94GahusEYD7CjN
-         Jv6lhOWIcbjZVabFGYowp6laShlXLoksYDtxlIQr3kC9D1JqPcJSdqftnvEPa29Jg1Je
-         xIuvOo76W1Kyf3oSmFWNCjGBNdBG+HyHVEh48tg/leNKswtl3tN/NDQLFIfXvQHyH2bj
-         oF1GsOPaAZj8GBJptA3Lj1vJEM/I860tfrPZM1Onwmx93UiUuRnC1jWGVr9nstLhmufI
-         FhVKsk+kBXntYy4u2y2LVroojde6dG2dnnPPqTvCCwxJepOePAwns+hQMFMy7GbYiHQq
-         IGqg==
+        d=gmail.com; s=20230601; t=1768342912; x=1768947712; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BlTnv2JFH+RcSVIoKLYGIW/w8vZ0xxX9tpNwSIHZP6s=;
+        b=EdIV41/a3NaF6NN9lEHCUZqPDYMv7rFOAV08nY7gX9modLsjIwboUifrcU8D6M7jgK
+         auNzY5CnrowbhBPptefGj0cRxtKgwZk6OLK6e43Ft7lV7VSMILhYwAIiS+sjv0R4BH2H
+         80t3o5aHu1WEFRGmY5pjvGB65VKf0yMQnDBtZ6tvjKtBYD15YltilcmmNlS+PqOTaiw5
+         GL73bCto+rNlsQa7XWVqN7or5+d1aOc1Xe5z1P2+YS4ynFAd8xOsqz/8NF7H2/e3Wlqf
+         FP1kNIiX0fr1Ylum8A80OzUUQ+a8w91MSXCg2qItENlAxPS/ziZJzTx0NeoHIpFMjTJA
+         Ay/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768336984; x=1768941784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x7rZQoaFWDVZHnj6smUs01byVX9zqt9iWxrOQ24b43U=;
-        b=tAjABE+rz0DiA9RpPZprFkmFKBW1ywjxWkGW5lU/anosrvS90rex3qsK8l2yHfjwKy
-         tKKl14YrjPdY8qQ054DQQ9JXGfoNa7RXjhfojdI7KsZEpK2fj2WS9Ygf87u9ffbWK+ui
-         SRCoD1WaqjBHfhCQWVwa+G4WeiEStATceGD+uBH4arEfXG2o+Q1Kew92ZIfHP8Z1wl20
-         N5vUCKRkE/MzAumcsoPBD6ZlKhSiehcjOc3YUa22hDi463PxoFw425+FgHbOycpMap0q
-         eAQUdS7kzZTBY3hs6PNDu8X4erTmiWJTICaYafff4oGlCduiXMLYFSuhJqkp9imoibZC
-         Fcbg==
-X-Forwarded-Encrypted: i=1; AJvYcCWgNXJnGhXPJ0vSmyCojdz2RipGXqoxuMAMBi/RJJGsG5dYrwTTHOmqZmLCG1cSb/twC/S0ao2SwhwDAQbxUuA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoYra0f/0+HFxjCJuJly6VvDlWtnHgRXzFl1nbN5jgyJY0Lnic
-	d4QzdZVBW9hDFE9Hn1QbGysd8pm1BSkKwWX2fha+/Uq2lMXqnAt1GxgLS9DgwCqQLq8PHKaS/Wq
-	NFJ6E8MHqeR1lmdd+9+PR71sAFT7B93FAW7Qwv94T
-X-Gm-Gg: AY/fxX70f3Tuyvew3ReBNmgriEn9DWjr3E10LXIO3X7gd5hUJWaA6BKcoUbPzaQ8ehg
-	ZTj8KkPLdWDFPo/bLbTqqfc/Ie/Dj3f0yhvN9o1PxM0ilvgnMo+cZ3TuxhMLjiZeSDPdHyzekgo
-	2nROn4krhik+RVcZ8wptlMMj+4XxTGh/3Vqsno6o2YTHd7refGE1f4ZaBjcOm47gSvcQxmE6umT
-	sGvdCrNfslNvRd+/O6wUzZLiozjtCFmaAvdxe1Qfwov3vh+zzCbxGB3ljyX3a1KLgaSiCGeYQ/Q
-	+edDSNlmwe6GuoJay31R1Q/rQC4LLiNQADI=
-X-Received: by 2002:a05:6512:1c6:b0:595:7664:56b with SMTP id
- 2adb3069b0e04-59ba0c12542mr23823e87.11.1768336983053; Tue, 13 Jan 2026
- 12:43:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768342912; x=1768947712;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BlTnv2JFH+RcSVIoKLYGIW/w8vZ0xxX9tpNwSIHZP6s=;
+        b=BfuCHd+dLUOreW7W/WgaWokwZsCz/ikJYskF1HGhpRgubw2EBqAej/fAWpwJweXFJG
+         H0IeciYghhYxXIQe1O/na0+vu0NlNcq/Je3QGwByoqrQCWligdCIJ8Wb2bhX8a+bLGGd
+         4XEtImT6Bugp0auH7xl+hP+590iM3+qe9lU67S/tQ1erT7qu3RNtkobVuDjVsjUQUfIY
+         j15Pr1++FuHeo1uhlFVypFp/kPzC3PIHVgG/EEBJtZGi8JUewVig9sGyJmGiCmDF3y95
+         BoaHZF8DpQzcejaGlJh/ogxBQjNvlkIrcp06dKdl5YE2uWoF75yrHdhA860NGZGqphtk
+         bpWA==
+X-Forwarded-Encrypted: i=1; AJvYcCWok3Dims89GSepjfzy0Z6elJ5qg+RRxqeFhTx9mIbg4WwJvyUcYXVDDz0syGnmjnK5LnHHYIiz0r9+tstTCkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI+CMq5na74R0rwh05jePuPS+y82y8XTpRqxJkGRPmjvaj/Sf0
+	76fJcSw4ZEp00oQAjgBAFblH7ScrJ/jV5xSusHQuNqX87eYz5K1/xKbkbdg28g==
+X-Gm-Gg: AY/fxX4Fhl/MgzRy5ukLx7sEKSOrtGI7SvtbEiOisT3CF6V2JQ/8gaJxVz87IECam4f
+	Mj/BEM23T/lpCsGcDB0/G2KQ1NrwJfbYsZaGYMAyS9ewQK+xQsj15Q7kCuYONqnL9SD0DQV6CmA
+	zE3qp73kL0brS2wQiwmCsdtXJ5a8MQPhqq+QrfOkztipAn1mgOxfX3RBh7ComGNPYrrQsI+FJ27
+	Rof+ZTZibbXcsIgNDvIVxtdD1G7qjMeiZCaz1qGsi/23/96Wp9DFqX/fQ+He5XDNGLmOt/EAlR0
+	8e1CLv5B05V0eTetI0fDcKkYjtQd6+2H7iNgd+CF3R/N04wkGFRbABgvr0C9RIwK52GEgPPDCMy
+	vF3h+2AYbnPejeYB7gPjBIlA3YY07erLyVD6vdQY6lurXo419ni/OqA3796/C6pJNART+I6m/Pc
+	Y+iyNz+JSAuUshmwU3uPQaMdbmQqspOckAIQ==
+X-Received: by 2002:a05:690c:10c:b0:78f:8a3f:c7d3 with SMTP id 00721157ae682-7938d42c2fdmr39277697b3.4.1768335863424;
+        Tue, 13 Jan 2026 12:24:23 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:d::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7916d24ae23sm57105457b3.0.2026.01.13.12.24.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jan 2026 12:24:23 -0800 (PST)
+Date: Tue, 13 Jan 2026 12:24:21 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>,
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+	netdev@vger.kernel.org, kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v14 01/12] vsock: add netns to vsock core
+Message-ID: <aWap9cOdhMAg2KPZ@devvm11784.nha0.facebook.com>
+References: <20260112-vsock-vmtest-v14-0-a5c332db3e2b@meta.com>
+ <20260112-vsock-vmtest-v14-1-a5c332db3e2b@meta.com>
+ <aWYrwU__c895PymJ@sgarzare-redhat>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-0-8042930d00d7@meta.com>
- <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-3-8042930d00d7@meta.com>
- <CAHS8izO=kddnYW_Z7s=zgbV5vJyc1A0Aqbx4pnkAz=dtbstWNw@mail.gmail.com>
- <aWUgNd6nOzZY3JCJ@devvm11784.nha0.facebook.com> <CAHS8izMfw_m4ajVK-VHy-a4H4FXx45m33fP=vquHLGTJMX7aYA@mail.gmail.com>
- <aWar7n5vOptzQpeC@devvm11784.nha0.facebook.com>
-In-Reply-To: <aWar7n5vOptzQpeC@devvm11784.nha0.facebook.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 13 Jan 2026 12:42:50 -0800
-X-Gm-Features: AZwV_QhxzKVuyytHoPIBscDcgUiz1NX8yMIvNyoCUU6iZ0ewG1voO5edpP3yUTA
-Message-ID: <CAHS8izOjORbGYYtVxcQ6ycN6LXP241qSLmgKddEZvopGO7pKqA@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 3/5] net: devmem: implement autorelease token management
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, 
-	Donald Hunter <donald.hunter@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aWYrwU__c895PymJ@sgarzare-redhat>
 
-On Tue, Jan 13, 2026 at 12:32=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmai=
-l.com> wrote:
->
-> On Tue, Jan 13, 2026 at 11:27:38AM -0800, Mina Almasry wrote:
-> > On Mon, Jan 12, 2026 at 8:24=E2=80=AFAM Bobby Eshleman <bobbyeshleman@g=
-mail.com> wrote:
-> > >
-> > > On Sun, Jan 11, 2026 at 11:12:19AM -0800, Mina Almasry wrote:
-> > > > On Fri, Jan 9, 2026 at 6:19=E2=80=AFPM Bobby Eshleman <bobbyeshlema=
-n@gmail.com> wrote:
-> > > > >
-> > > > > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > > > >
-> > > > > Add support for autorelease toggling of tokens using a static bra=
-nch to
-> > > > > control system-wide behavior. This allows applications to choose =
-between
-> > > > > two memory management modes:
-> > > > >
-> > > > > 1. Autorelease on: Leaked tokens are automatically released when =
-the
-> > > > >    socket closes.
-> > > > >
-> > > > > 2. Autorelease off: Leaked tokens are released during dmabuf unbi=
-nd.
-> > > > >
-> > > > > The autorelease mode is requested via the NETDEV_A_DMABUF_AUTOREL=
-EASE
-> > > > > attribute of the NETDEV_CMD_BIND_RX message. Having separate mode=
-s per
-> > > > > binding is disallowed and is rejected by netlink. The system will=
- be
-> > > > > "locked" into the mode that the first binding is set to. It can o=
-nly be
-> > > > > changed again once there are zero bindings on the system.
-> > > > >
-> > > > > Disabling autorelease offers ~13% improvement in CPU utilization.
-> > > > >
-> > > > > Static branching is used to limit the system to one mode or the o=
-ther.
-> > > > >
-> > > > > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > > > > ---
-> > > > > Changes in v9:
-> > > > > - Add missing stub for net_devmem_dmabuf_binding_get() when NET_D=
-EVMEM=3Dn
-> > > > > - Add wrapper around tcp_devmem_ar_key accesses so that it may be
-> > > > >   stubbed out when NET_DEVMEM=3Dn
-> > > > > - only dec rx binding count for rx bindings in free (v8 did not e=
-xclude
-> > > > >   TX bindings)
-> > > > >
-> > > > > Changes in v8:
-> > > > > - Only reset static key when bindings go to zero, defaulting back=
- to
-> > > > >   disabled (Stan).
-> > > > > - Fix bad usage of xarray spinlock for sleepy static branch switc=
-hing,
-> > > > >   use mutex instead.
-> > > > > - Access pp_ref_count via niov->desc instead of niov directly.
-> > > > > - Move reset of static key to __net_devmem_dmabuf_binding_free() =
-so that
-> > > > >   the static key can not be changed while there are outstanding t=
-okens
-> > > > >   (free is only called when reference count reaches zero).
-> > > > > - Add net_devmem_dmabuf_rx_bindings_count because tokens may be a=
-ctive
-> > > > >   even after xa_erase(), so static key changes must wait until al=
-l
-> > > > >   RX bindings are finally freed (not just when xarray is empty). =
-A
-> > > > >   counter is a simple way to track this.
-> > > > > - socket takes reference on the binding, to avoid use-after-free =
-on
-> > > > >   sk_devmem_info.binding in the case that user releases all token=
-s,
-> > > > >   unbinds, then issues SO_DEVMEM_DONTNEED again (with bad token).
-> > > > > - removed some comments that were unnecessary
-> > > > >
-> > > > > Changes in v7:
-> > > > > - implement autorelease with static branch (Stan)
-> > > > > - use netlink instead of sockopt (Stan)
-> > > > > - merge uAPI and implementation patches into one patch (seemed le=
-ss
-> > > > >   confusing)
-> > > > >
-> > > > > Changes in v6:
-> > > > > - remove sk_devmem_info.autorelease, using binding->autorelease i=
-nstead
-> > > > > - move binding->autorelease check to outside of
-> > > > >   net_devmem_dmabuf_binding_put_urefs() (Mina)
-> > > > > - remove overly defensive net_is_devmem_iov() (Mina)
-> > > > > - add comment about multiple urefs mapping to a single netmem ref=
- (Mina)
-> > > > > - remove overly defense netmem NULL and netmem_is_net_iov checks =
-(Mina)
-> > > > > - use niov without casting back and forth with netmem (Mina)
-> > > > > - move the autorelease flag from per-binding to per-socket (Mina)
-> > > > > - remove the batching logic in sock_devmem_dontneed_manual_releas=
-e()
-> > > > >   (Mina)
-> > > > > - move autorelease check inside tcp_xa_pool_commit() (Mina)
-> > > > > - remove single-binding restriction for autorelease mode (Mina)
-> > > > > - unbind always checks for leaked urefs
-> > > > >
-> > > > > Changes in v5:
-> > > > > - remove unused variables
-> > > > > - introduce autorelease flag, preparing for future patch toggle n=
-ew
-> > > > >   behavior
-> > > > >
-> > > > > Changes in v3:
-> > > > > - make urefs per-binding instead of per-socket, reducing memory
-> > > > >   footprint
-> > > > > - fallback to cleaning up references in dmabuf unbind if socket l=
-eaked
-> > > > >   tokens
-> > > > > - drop ethtool patch
-> > > > >
-> > > > > Changes in v2:
-> > > > > - always use GFP_ZERO for binding->vec (Mina)
-> > > > > - remove WARN for changed binding (Mina)
-> > > > > - remove extraneous binding ref get (Mina)
-> > > > > - remove WARNs on invalid user input (Mina)
-> > > > > - pre-assign niovs in binding->vec for RX case (Mina)
-> > > > > - use atomic_set(, 0) to initialize sk_user_frags.urefs
-> > > > > - fix length of alloc for urefs
-> > > > > ---
-> > > > >  Documentation/netlink/specs/netdev.yaml |  12 ++++
-> > > > >  include/net/netmem.h                    |   1 +
-> > > > >  include/net/sock.h                      |   7 ++-
-> > > > >  include/uapi/linux/netdev.h             |   1 +
-> > > > >  net/core/devmem.c                       | 104 ++++++++++++++++++=
-++++++++++----
-> > > > >  net/core/devmem.h                       |  27 ++++++++-
-> > > > >  net/core/netdev-genl-gen.c              |   5 +-
-> > > > >  net/core/netdev-genl.c                  |  10 ++-
-> > > > >  net/core/sock.c                         |  57 +++++++++++++++--
-> > > > >  net/ipv4/tcp.c                          |  76 ++++++++++++++++++=
------
-> > > > >  net/ipv4/tcp_ipv4.c                     |  11 +++-
-> > > > >  net/ipv4/tcp_minisocks.c                |   3 +-
-> > > > >  tools/include/uapi/linux/netdev.h       |   1 +
-> > > > >  13 files changed, 269 insertions(+), 46 deletions(-)
-> > > > >
-> > > > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentat=
-ion/netlink/specs/netdev.yaml
-> > > > > index 596c306ce52b..7cbe9e7b9ee5 100644
-> > > > > --- a/Documentation/netlink/specs/netdev.yaml
-> > > > > +++ b/Documentation/netlink/specs/netdev.yaml
-> > > > > @@ -562,6 +562,17 @@ attribute-sets:
-> > > > >          type: u32
-> > > > >          checks:
-> > > > >            min: 1
-> > > > > +      -
-> > > > > +        name: autorelease
-> > > > > +        doc: |
-> > > > > +          Token autorelease mode. If true (1), leaked tokens are=
- automatically
-> > > > > +          released when the socket closes. If false (0), leaked =
-tokens are only
-> > > > > +          released when the dmabuf is unbound. Once a binding is=
- created with a
-> > > > > +          specific mode, all subsequent bindings system-wide mus=
-t use the same
-> > > > > +          mode.
-> > > > > +
-> > > > > +          Optional. Defaults to false if not specified.
-> > > > > +        type: u8
-> > > > >
-> > > > >  operations:
-> > > > >    list:
-> > > > > @@ -769,6 +780,7 @@ operations:
-> > > > >              - ifindex
-> > > > >              - fd
-> > > > >              - queues
-> > > > > +            - autorelease
-> > > > >          reply:
-> > > > >            attributes:
-> > > > >              - id
-> > > > > diff --git a/include/net/netmem.h b/include/net/netmem.h
-> > > > > index 9e10f4ac50c3..80d2263ba4ed 100644
-> > > > > --- a/include/net/netmem.h
-> > > > > +++ b/include/net/netmem.h
-> > > > > @@ -112,6 +112,7 @@ struct net_iov {
-> > > > >         };
-> > > > >         struct net_iov_area *owner;
-> > > > >         enum net_iov_type type;
-> > > > > +       atomic_t uref;
-> > > > >  };
-> > > > >
-> > > > >  struct net_iov_area {
-> > > > > diff --git a/include/net/sock.h b/include/net/sock.h
-> > > > > index aafe8bdb2c0f..9d3d5bde15e9 100644
-> > > > > --- a/include/net/sock.h
-> > > > > +++ b/include/net/sock.h
-> > > > > @@ -352,7 +352,7 @@ struct sk_filter;
-> > > > >    *    @sk_scm_rights: flagged by SO_PASSRIGHTS to recv SCM_RIGH=
-TS
-> > > > >    *    @sk_scm_unused: unused flags for scm_recv()
-> > > > >    *    @ns_tracker: tracker for netns reference
-> > > > > -  *    @sk_user_frags: xarray of pages the user is holding a ref=
-erence on.
-> > > > > +  *    @sk_devmem_info: the devmem binding information for the s=
-ocket
-> > > > >    *    @sk_owner: reference to the real owner of the socket that=
- calls
-> > > > >    *               sock_lock_init_class_and_name().
-> > > > >    */
-> > > > > @@ -584,7 +584,10 @@ struct sock {
-> > > > >         struct numa_drop_counters *sk_drop_counters;
-> > > > >         struct rcu_head         sk_rcu;
-> > > > >         netns_tracker           ns_tracker;
-> > > > > -       struct xarray           sk_user_frags;
-> > > > > +       struct {
-> > > > > +               struct xarray                           frags;
-> > > > > +               struct net_devmem_dmabuf_binding        *binding;
-> > > > > +       } sk_devmem_info;
-> > > > >
-> > > > >  #if IS_ENABLED(CONFIG_PROVE_LOCKING) && IS_ENABLED(CONFIG_MODULE=
-S)
-> > > > >         struct module           *sk_owner;
-> > > > > diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/net=
-dev.h
-> > > > > index e0b579a1df4f..1e5c209cb998 100644
-> > > > > --- a/include/uapi/linux/netdev.h
-> > > > > +++ b/include/uapi/linux/netdev.h
-> > > > > @@ -207,6 +207,7 @@ enum {
-> > > > >         NETDEV_A_DMABUF_QUEUES,
-> > > > >         NETDEV_A_DMABUF_FD,
-> > > > >         NETDEV_A_DMABUF_ID,
-> > > > > +       NETDEV_A_DMABUF_AUTORELEASE,
-> > > > >
-> > > > >         __NETDEV_A_DMABUF_MAX,
-> > > > >         NETDEV_A_DMABUF_MAX =3D (__NETDEV_A_DMABUF_MAX - 1)
-> > > > > diff --git a/net/core/devmem.c b/net/core/devmem.c
-> > > > > index 05a9a9e7abb9..05c16df657c7 100644
-> > > > > --- a/net/core/devmem.c
-> > > > > +++ b/net/core/devmem.c
-> > > > > @@ -11,6 +11,7 @@
-> > > > >  #include <linux/genalloc.h>
-> > > > >  #include <linux/mm.h>
-> > > > >  #include <linux/netdevice.h>
-> > > > > +#include <linux/skbuff_ref.h>
-> > > > >  #include <linux/types.h>
-> > > > >  #include <net/netdev_queues.h>
-> > > > >  #include <net/netdev_rx_queue.h>
-> > > > > @@ -28,6 +29,19 @@
-> > > > >
-> > > > >  static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_=
-ALLOC1);
-> > > > >
-> > > > > +/* If the user unbinds before releasing all tokens, the static k=
-ey must not
-> > > > > + * change until all tokens have been released (to avoid calling =
-the wrong
-> > > > > + * SO_DEVMEM_DONTNEED handler). We prevent this by making static=
- key changes
-> > > > > + * and binding alloc/free atomic with regards to each other, usi=
-ng the
-> > > > > + * devmem_ar_lock. This works because binding free does not occu=
-r until all of
-> > > > > + * the outstanding token's references on the binding are dropped=
-.
-> > > > > + */
-> > > > > +static DEFINE_MUTEX(devmem_ar_lock);
-> > > > > +
-> > > > > +DEFINE_STATIC_KEY_FALSE(tcp_devmem_ar_key);
-> > > > > +EXPORT_SYMBOL(tcp_devmem_ar_key);
-> > > > > +static int net_devmem_dmabuf_rx_bindings_count;
-> > > > > +
-> > > > >  static const struct memory_provider_ops dmabuf_devmem_ops;
-> > > > >
-> > > > >  bool net_is_devmem_iov(struct net_iov *niov)
-> > > > > @@ -60,6 +74,14 @@ void __net_devmem_dmabuf_binding_free(struct w=
-ork_struct *wq)
-> > > > >
-> > > > >         size_t size, avail;
-> > > > >
-> > > > > +       if (binding->direction =3D=3D DMA_FROM_DEVICE) {
-> > > > > +               mutex_lock(&devmem_ar_lock);
-> > > > > +               net_devmem_dmabuf_rx_bindings_count--;
-> > > > > +               if (net_devmem_dmabuf_rx_bindings_count =3D=3D 0)
-> > > > > +                       static_branch_disable(&tcp_devmem_ar_key)=
-;
-> > > > > +               mutex_unlock(&devmem_ar_lock);
-> > > > > +       }
-> > > > > +
-> > > >
-> > > > I find this loging with devmem_ar_lock and
-> > > > net_devmem_dmabuf_rx_bindigs_count a bit complicated. I wonder if w=
-e
-> > > > can do another simplification here? Can we have it such that the fi=
-rst
-> > > > binding sets the system in autorelease on or autorelease off mode, =
-and
-> > > > all future bindings maintain this state? We already don't support
-> > > > autorelease on/off mix.
-> > >
-> > > I think that would greatly simplify things. We would still need a loc=
-k
-> > > to make the static branch change and first release mode setting atomi=
-c WRT
-> > > each other, but the other parts (like the one above) can be
-> > > removed.
-> > >
-> > > >
-> > > >
-> > > > >         gen_pool_for_each_chunk(binding->chunk_pool,
-> > > > >                                 net_devmem_dmabuf_free_chunk_owne=
-r, NULL);
-> > > > >
-> > > > > @@ -116,6 +138,24 @@ void net_devmem_free_dmabuf(struct net_iov *=
-niov)
-> > > > >         gen_pool_free(binding->chunk_pool, dma_addr, PAGE_SIZE);
-> > > > >  }
-> > > > >
-> > > > > +static void
-> > > > > +net_devmem_dmabuf_binding_put_urefs(struct net_devmem_dmabuf_bin=
-ding *binding)
-> > > > > +{
-> > > > > +       int i;
-> > > > > +
-> > > > > +       for (i =3D 0; i < binding->dmabuf->size / PAGE_SIZE; i++)=
- {
-> > > > > +               struct net_iov *niov;
-> > > > > +               netmem_ref netmem;
-> > > > > +
-> > > > > +               niov =3D binding->vec[i];
-> > > > > +               netmem =3D net_iov_to_netmem(niov);
-> > > > > +
-> > > > > +               /* Multiple urefs map to only a single netmem ref=
-. */
-> > > > > +               if (atomic_xchg(&niov->uref, 0) > 0)
-> > > > > +                       WARN_ON_ONCE(!napi_pp_put_page(netmem));
-> > > > > +       }
-> > > > > +}
-> > > > > +
-> > > > >  void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *=
-binding)
-> > > > >  {
-> > > > >         struct netdev_rx_queue *rxq;
-> > > > > @@ -143,6 +183,7 @@ void net_devmem_unbind_dmabuf(struct net_devm=
-em_dmabuf_binding *binding)
-> > > > >                 __net_mp_close_rxq(binding->dev, rxq_idx, &mp_par=
-ams);
-> > > > >         }
-> > > > >
-> > > > > +       net_devmem_dmabuf_binding_put_urefs(binding);
-> > > >
-> > > > Sigh, I think what you're trying to do here is very complicated. Yo=
-u
-> > > > need to think about this scenario:
-> > > >
-> > > > 1. user binds dmabuf and opens a autorelease=3Doff socket.
-> > > > 2. Data arrives on these sockets, and sits in the receive queues,
-> > > > recvmsg has not been called yet by the user.
-> > > > 3. User unbinds the dma-buff, netmems are still in the receive queu=
-es.
-> > > > 4. User calls recvmsg on one of these sockets, which obtains a uref=
- on
-> > > > the netmems in the receive queues.
-> > > > 5. user closes the socket.
-> > > >
-> > > > With autorelease=3Don, this works, because the binding remains aliv=
-e
-> > > > until step 5 (even though it's unbound from the queue,
-> > > > ..._binding_free has not been called yet) and step 5 cleans up all
-> > > > references, even if the binding is unbound but alive, and
-> > > >
-> > > > calling net_devmem_dmabuf_binding_put_urefs here is weird.
-> > > > Autorelease=3Doff implies the user must clean their urefs themselve=
-s,
-> > > > but we have this here in the unbind path, and it doesn't even
-> > > > guarantee that the urefs are free at this point because it may race
-> > > > with a recvmsg.
-> > > >
-> > > > Should we delete this uref cleanup here, and enforce that
-> > > > autorelease=3Doff means that the user cleans up the references (the
-> > > > kernel never cleans them up on unbind or socket close)? The dontnee=
-d
-> > > > path needs to work whether the binding is active or unbound.
-> > > >
-> > >
-> > > I agree, I think we can do away with the "unbind drops references" id=
-ea.
-> > > A counter argument could be that it introduces the ability for one
-> > > process to interfere with another, but in fact that is already possib=
-le
-> > > with autorelease=3Don by not issuing dontneed and starving the other =
-of
-> > > tokens.
-> > >
-> >
-> > On second thought I don't think we can remove the references drop
-> > completely. AFAIU if the userspace misbehaves and doens't dontneed the
-> > netmems in this setup, then the binding will leak forever, which is
-> > really not great.
-> >
-> > I think what may work is having a refcount on the binding for each
-> > rxqueue it's bound to and each socket that's using it. Once that
-> > refcount drops to 0, then we can be sure that the urefs in the binding
-> > are not in use anymore, and we can drop the urefs, which should make
-> > the binding refcount to hit 0 and the _binding_free() function to be
-> > called.
-> >
->
-> That checks out. I guess a reasonable name to differentiate with
-> binding->ref might be binding->users?
->
+On Tue, Jan 13, 2026 at 03:37:15PM +0100, Stefano Garzarella wrote:
+> On Mon, Jan 12, 2026 at 07:11:10PM -0800, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Add netns logic to vsock core. Additionally, modify transport hook
+> > prototypes to be used by later transport-specific patches (e.g.,
+> > *_seqpacket_allow()).
+> > 
+> > Namespaces are supported primarily by changing socket lookup functions
+> > (e.g., vsock_find_connected_socket()) to take into account the socket
+> > namespace and the namespace mode before considering a candidate socket a
+> > "match".
+> > 
+> > This patch also introduces the sysctl /proc/sys/net/vsock/ns_mode to
+> > report the mode and /proc/sys/net/vsock/child_ns_mode to set the mode
+> > for new namespaces.
+> > 
+> > Add netns functionality (initialization, passing to transports, procfs,
+> > etc...) to the af_vsock socket layer. Later patches that add netns
+> > support to transports depend on this patch.
+> > 
+> > dgram_allow(), stream_allow(), and seqpacket_allow() callbacks are
+> > modified to take a vsk in order to perform logic on namespace modes. In
+> > future patches, the net will also be used for socket
+> > lookups in these functions.
+> > 
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> > Changes in v14:
+> > - include linux/sysctl.h in af_vsock.c
+> > - squash patch 'vsock: add per-net vsock NS mode state' into this patch
+> >  (prior version can be found here):
+> >  https://lore.kernel.org/all/20251223-vsock-vmtest-v13-1-9d6db8e7c80b@meta.com/)
+> > 
+> > Changes in v13:
+> > - remove net_mode and replace with direct accesses to net->vsock.mode,
+> >  since this is now immutable.
+> > - update comments about mode behavior and mutability, and sysctl API
+> > - only pass NULL for net when wanting global, instead of net_mode ==
+> >  VSOCK_NET_MODE_GLOBAL. This reflects the new logic
+> >  of vsock_net_check_mode() that only requires net pointers (not
+> >  net_mode).
+> > - refactor sysctl string code into a re-usable function, because
+> >  child_ns_mode and ns_mode both handle the same strings.
+> > - remove redundant vsock_net_init(&init_net) call in module init because
+> >  pernet registration calls the callback on the init_net too
+> > 
+> > Changes in v12:
+> > - return true in dgram_allow(), stream_allow(), and seqpacket_allow()
+> >  only if net_mode == VSOCK_NET_MODE_GLOBAL (Stefano)
+> > - document bind(VMADDR_CID_ANY) case in af_vsock.c (Stefano)
+> > - change order of stream_allow() call in vmci so we can pass vsk
+> >  to it
+> > 
+> > Changes in v10:
+> > - add file-level comment about what happens to sockets/devices
+> >  when the namespace mode changes (Stefano)
+> > - change the 'if (write)' boolean in vsock_net_mode_string() to
+> >  if (!write), this simplifies a later patch which adds "goto"
+> >  for mutex unlocking on function exit.
+> > 
+> > Changes in v9:
+> > - remove virtio_vsock_alloc_rx_skb() (Stefano)
+> > - remove vsock_global_dummy_net, not needed as net=NULL +
+> >  net_mode=VSOCK_NET_MODE_GLOBAL achieves identical result
+> > 
+> > Changes in v7:
+> > - hv_sock: fix hyperv build error
+> > - explain why vhost does not use the dummy
+> > - explain usage of __vsock_global_dummy_net
+> > - explain why VSOCK_NET_MODE_STR_MAX is 8 characters
+> > - use switch-case in vsock_net_mode_string()
+> > - avoid changing transports as much as possible
+> > - add vsock_find_{bound,connected}_socket_net()
+> > - rename `vsock_hdr` to `sysctl_hdr`
+> > - add virtio_vsock_alloc_linear_skb() wrapper for setting dummy net and
+> >  global mode for virtio-vsock, move skb->cb zero-ing into wrapper
+> > - explain seqpacket_allow() change
+> > - move net setting to __vsock_create() instead of vsock_create() so
+> >  that child sockets also have their net assigned upon accept()
+> > 
+> > Changes in v6:
+> > - unregister sysctl ops in vsock_exit()
+> > - af_vsock: clarify description of CID behavior
+> > - af_vsock: fix buf vs buffer naming, and length checking
+> > - af_vsock: fix length checking w/ correct ctl_table->maxlen
+> > 
+> > Changes in v5:
+> > - vsock_global_net() -> vsock_global_dummy_net()
+> > - update comments for new uAPI
+> > - use /proc/sys/net/vsock/ns_mode instead of /proc/net/vsock_ns_mode
+> > - add prototype changes so patch remains compilable
+> > ---
+> > MAINTAINERS                             |   1 +
+> > drivers/vhost/vsock.c                   |   6 +-
+> > include/linux/virtio_vsock.h            |   4 +-
+> > include/net/af_vsock.h                  |  53 +++++-
+> > include/net/net_namespace.h             |   4 +
+> > include/net/netns/vsock.h               |  17 ++
+> > net/vmw_vsock/af_vsock.c                | 297 +++++++++++++++++++++++++++++---
+> > net/vmw_vsock/hyperv_transport.c        |   7 +-
+> > net/vmw_vsock/virtio_transport.c        |   9 +-
+> > net/vmw_vsock/virtio_transport_common.c |   6 +-
+> > net/vmw_vsock/vmci_transport.c          |  26 ++-
+> > net/vmw_vsock/vsock_loopback.c          |   8 +-
+> > 12 files changed, 394 insertions(+), 44 deletions(-)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 6737aad729d6..f4aa476427c8 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -27522,6 +27522,7 @@ L:	netdev@vger.kernel.org
+> > S:	Maintained
+> > F:	drivers/vhost/vsock.c
+> > F:	include/linux/virtio_vsock.h
+> > +F:	include/net/netns/vsock.h
+> > F:	include/uapi/linux/virtio_vsock.h
+> > F:	net/vmw_vsock/virtio_transport.c
+> > F:	net/vmw_vsock/virtio_transport_common.c
+> > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> > index 552cfb53498a..647ded6f6ea5 100644
+> > --- a/drivers/vhost/vsock.c
+> > +++ b/drivers/vhost/vsock.c
+> > @@ -407,7 +407,8 @@ static bool vhost_transport_msgzerocopy_allow(void)
+> > 	return true;
+> > }
+> > 
+> > -static bool vhost_transport_seqpacket_allow(u32 remote_cid);
+> > +static bool vhost_transport_seqpacket_allow(struct vsock_sock *vsk,
+> > +					    u32 remote_cid);
+> > 
+> > static struct virtio_transport vhost_transport = {
+> > 	.transport = {
+> > @@ -463,7 +464,8 @@ static struct virtio_transport vhost_transport = {
+> > 	.send_pkt = vhost_transport_send_pkt,
+> > };
+> > 
+> > -static bool vhost_transport_seqpacket_allow(u32 remote_cid)
+> > +static bool vhost_transport_seqpacket_allow(struct vsock_sock *vsk,
+> > +					    u32 remote_cid)
+> > {
+> > 	struct vhost_vsock *vsock;
+> > 	bool seqpacket_allow = false;
+> > diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+> > index 0c67543a45c8..1845e8d4f78d 100644
+> > --- a/include/linux/virtio_vsock.h
+> > +++ b/include/linux/virtio_vsock.h
+> > @@ -256,10 +256,10 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
+> > 
+> > u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
+> > bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
+> > -bool virtio_transport_stream_allow(u32 cid, u32 port);
+> > +bool virtio_transport_stream_allow(struct vsock_sock *vsk, u32 cid, u32 port);
+> > int virtio_transport_dgram_bind(struct vsock_sock *vsk,
+> > 				struct sockaddr_vm *addr);
+> > -bool virtio_transport_dgram_allow(u32 cid, u32 port);
+> > +bool virtio_transport_dgram_allow(struct vsock_sock *vsk, u32 cid, u32 port);
+> > 
+> > int virtio_transport_connect(struct vsock_sock *vsk);
+> > 
+> > diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+> > index d40e978126e3..10c2846fcc58 100644
+> > --- a/include/net/af_vsock.h
+> > +++ b/include/net/af_vsock.h
+> > @@ -10,6 +10,7 @@
+> > 
+> > #include <linux/kernel.h>
+> > #include <linux/workqueue.h>
+> > +#include <net/netns/vsock.h>
+> > #include <net/sock.h>
+> > #include <uapi/linux/vm_sockets.h>
+> > 
+> > @@ -124,7 +125,7 @@ struct vsock_transport {
+> > 			     size_t len, int flags);
+> > 	int (*dgram_enqueue)(struct vsock_sock *, struct sockaddr_vm *,
+> > 			     struct msghdr *, size_t len);
+> > -	bool (*dgram_allow)(u32 cid, u32 port);
+> > +	bool (*dgram_allow)(struct vsock_sock *vsk, u32 cid, u32 port);
+> > 
+> > 	/* STREAM. */
+> > 	/* TODO: stream_bind() */
+> > @@ -136,14 +137,14 @@ struct vsock_transport {
+> > 	s64 (*stream_has_space)(struct vsock_sock *);
+> > 	u64 (*stream_rcvhiwat)(struct vsock_sock *);
+> > 	bool (*stream_is_active)(struct vsock_sock *);
+> > -	bool (*stream_allow)(u32 cid, u32 port);
+> > +	bool (*stream_allow)(struct vsock_sock *vsk, u32 cid, u32 port);
+> > 
+> > 	/* SEQ_PACKET. */
+> > 	ssize_t (*seqpacket_dequeue)(struct vsock_sock *vsk, struct msghdr *msg,
+> > 				     int flags);
+> > 	int (*seqpacket_enqueue)(struct vsock_sock *vsk, struct msghdr *msg,
+> > 				 size_t len);
+> > -	bool (*seqpacket_allow)(u32 remote_cid);
+> > +	bool (*seqpacket_allow)(struct vsock_sock *vsk, u32 remote_cid);
+> > 	u32 (*seqpacket_has_data)(struct vsock_sock *vsk);
+> > 
+> > 	/* Notification. */
+> > @@ -216,6 +217,11 @@ void vsock_remove_connected(struct vsock_sock *vsk);
+> > struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr);
+> > struct sock *vsock_find_connected_socket(struct sockaddr_vm *src,
+> > 					 struct sockaddr_vm *dst);
+> > +struct sock *vsock_find_bound_socket_net(struct sockaddr_vm *addr,
+> > +					 struct net *net);
+> > +struct sock *vsock_find_connected_socket_net(struct sockaddr_vm *src,
+> > +					     struct sockaddr_vm *dst,
+> > +					     struct net *net);
+> > void vsock_remove_sock(struct vsock_sock *vsk);
+> > void vsock_for_each_connected_socket(struct vsock_transport *transport,
+> > 				     void (*fn)(struct sock *sk));
+> > @@ -256,4 +262,45 @@ static inline bool vsock_msgzerocopy_allow(const struct vsock_transport *t)
+> > {
+> > 	return t->msgzerocopy_allow && t->msgzerocopy_allow();
+> > }
+> > +
+> > +static inline enum vsock_net_mode vsock_net_mode(struct net *net)
+> > +{
+> 
+> What about moving here the check about NULL namespace?
+> (adding the comment we have later)
+> 
+> I mean just adding a
+> 	if (!net)
+> 		return VSOCK_NET_MODE_GLOBAL;
+> 
+> Or using the ternary operator, as you prefer.
+> 
 
-I was turning that exact same question in my head. It would be nice to
-reuse binding->ref somehow, but without deep thinking I'm not sure
-that's possible. It seems that binding->ref should guard
-*_binding_free() being called when the binding is not used by anything
-(remember that each netmem allocated from the binding has effectively
-a ref on the page_pool it belong too, and the page_pool has a ref on
-the binding, so effectively the binding never goes away until all the
-netmems are returned to the pool).
+SGTM!
 
-and seemingly binding->users should guard *_put_urefs() being called
-when we're user there is no userspace refs outstanding (no sockets
-open and no rx queues active).
+> 
+> > +	return READ_ONCE(net->vsock.mode);
+> > +}
+> > +
+> > +static inline void vsock_net_set_child_mode(struct net *net,
+> > +					    enum vsock_net_mode mode)
+> > +{
+> > +	WRITE_ONCE(net->vsock.child_ns_mode, mode);
+> > +}
+> > +
+> > +static inline enum vsock_net_mode vsock_net_child_mode(struct net *net)
+> > +{
+> > +	return READ_ONCE(net->vsock.child_ns_mode);
+> > +}
+> > +
+> > +/* Return true if two namespaces pass the mode rules. Otherwise, return false.
+> > + *
+> > + * A NULL namespace is treated as VSOCK_NET_MODE_GLOBAL.
+> > + *
+> > + * Read more about modes in the comment header of net/vmw_vsock/af_vsock.c.
+> > + */
+> > +static inline bool vsock_net_check_mode(struct net *ns0, struct net *ns1)
+> > +{
+> > +	enum vsock_net_mode mode0, mode1;
+> > +
+> > +	/* Any vsocks within the same network namespace are always reachable,
+> > +	 * regardless of the mode.
+> > +	 */
+> > +	if (net_eq(ns0, ns1))
+> > +		return true;
+> > +
+> > +	mode0 = ns0 ? vsock_net_mode(ns0) : VSOCK_NET_MODE_GLOBAL;
+> > +	mode1 = ns1 ? vsock_net_mode(ns1) : VSOCK_NET_MODE_GLOBAL;
+> 
+> So we can avoid duplicating code here and maybe in other places where
+> vsock_net_mode() is used.
+> 
+> About them, in all transports we use that in this way:
+> 
+> net/vmw_vsock/hyperv_transport.c:       if (vsock_net_mode(sock_net(sk_vsock(vsk))) != VSOCK_NET_MODE_GLOBAL)
+> net/vmw_vsock/virtio_transport.c:       return vsock_net_mode(sock_net(sk_vsock(vsk))) == VSOCK_NET_MODE_GLOBAL;
+> net/vmw_vsock/virtio_transport.c:       if (vsock_net_mode(sock_net(sk_vsock(vsk))) != VSOCK_NET_MODE_GLOBAL)
+> net/vmw_vsock/vmci_transport.c: if (vsock_net_mode(sock_net(sk_vsock(vsk))) != VSOCK_NET_MODE_GLOBAL)
+> net/vmw_vsock/vmci_transport.c: if (vsock_net_mode(sock_net(sk_vsock(vsk))) != VSOCK_NET_MODE_GLOBAL)
+> net/vmw_vsock/vsock_loopback.c: return vsock_net_mode(sock_net(sk_vsock(vsk))) == VSOCK_NET_MODE_GLOBAL;
+> 
+> So, I'm thinking if we should provide some `vsock_net_mode_global(vsk)` that
+> can be used there, but not a strong opinion at all.
 
+Sounds good!
 
---=20
-Thanks,
-Mina
+> 
+> > +
+> > +	/* Different namespaces are only reachable if they are both
+> > +	 * global mode.
+> > +	 */
+> > +	return mode0 == VSOCK_NET_MODE_GLOBAL && mode0 == mode1;
+> > +}
+> > #endif /* __AF_VSOCK_H__ */
+> > diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
+> > index cb664f6e3558..66d3de1d935f 100644
+> > --- a/include/net/net_namespace.h
+> > +++ b/include/net/net_namespace.h
+> > @@ -37,6 +37,7 @@
+> > #include <net/netns/smc.h>
+> > #include <net/netns/bpf.h>
+> > #include <net/netns/mctp.h>
+> > +#include <net/netns/vsock.h>
+> > #include <net/net_trackers.h>
+> > #include <linux/ns_common.h>
+> > #include <linux/idr.h>
+> > @@ -196,6 +197,9 @@ struct net {
+> > 	/* Move to a better place when the config guard is removed. */
+> > 	struct mutex		rtnl_mutex;
+> > #endif
+> > +#if IS_ENABLED(CONFIG_VSOCKETS)
+> > +	struct netns_vsock	vsock;
+> > +#endif
+> > } __randomize_layout;
+> > 
+> > #include <linux/seq_file_net.h>
+> > diff --git a/include/net/netns/vsock.h b/include/net/netns/vsock.h
+> > new file mode 100644
+> > index 000000000000..e2325e2d6ec5
+> > --- /dev/null
+> > +++ b/include/net/netns/vsock.h
+> > @@ -0,0 +1,17 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef __NET_NET_NAMESPACE_VSOCK_H
+> > +#define __NET_NET_NAMESPACE_VSOCK_H
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +enum vsock_net_mode {
+> > +	VSOCK_NET_MODE_GLOBAL,
+> > +	VSOCK_NET_MODE_LOCAL,
+> > +};
+> > +
+> > +struct netns_vsock {
+> > +	struct ctl_table_header *sysctl_hdr;
+> > +	enum vsock_net_mode mode;
+> > +	enum vsock_net_mode child_ns_mode;
+> > +};
+> > +#endif /* __NET_NET_NAMESPACE_VSOCK_H */
+> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > index a3505a4dcee0..9d614e4a4fa5 100644
+> > --- a/net/vmw_vsock/af_vsock.c
+> > +++ b/net/vmw_vsock/af_vsock.c
+> > @@ -83,6 +83,42 @@
+> >  *   TCP_ESTABLISHED - connected
+> >  *   TCP_CLOSING - disconnecting
+> >  *   TCP_LISTEN - listening
+> > + *
+> > + * - Namespaces in vsock support two different modes configured
+> > + *   through /proc/sys/net/vsock/ns_mode. The modes are "local" and "global".
+> 
+> IIUC `/proc/sys/net/vsock/ns_mode` is read-only so "two different modes
+> configured through /proc/sys/net/vsock/ns_mode" is not really clear IMO.
+
+Oh good call, this is stale.
+
+> 
+> > + *   Each mode defines how the namespace interacts with CIDs.
+> > + *   /proc/sys/net/vsock/ns_mode is read-only and inherited from the
+> > + *   parent namespace's /proc/sys/net/vsock/child_ns_mode at creation
+> > + *   time and is immutable thereafter. The default is "global".
+> 
+> Here too, it is not clear to me that child_ns_mode is used to manage new
+> children. What do you think about clarifying the situation a little in this
+> way:
+> 
+>    * - Namespaces in vsock support two different modes: "local" and "global".
+>    *   Each mode defines how the namespace interacts with CIDs.
+>    *   Each namespace exposes two sysctl files:
+>    *   - /proc/sys/net/vsock/ns_mode (read-only) reports the current namespace's
+>    *     mode, which is set at namespace creation and immutable thereafter.
+>    *   - /proc/sys/net/vsock/child_ns_mode (writable) controls what mode future
+>    *     child namespaces will inherit when created. The default is "global".
+>    *   Changing child_ns_mode only affects newly created namespaces, not the
+>    *   current namespace or existing children. At namespace creation, ns_mode
+>    *   is inherited from the parent's child_ns_mode.
+> 
+
+That sounds good to me, a good clarification.
+
+> > + *
+> > + *   The modes affect the allocation and accessibility of CIDs as follows:
+> > + *
+> > + *   - global - access and allocation are all system-wide
+> > + *      - all CID allocation from global namespaces draw from the same
+> > + *        system-wide pool.
+> > + *      - if one global namespace has already allocated some CID, another
+> > + *        global namespace will not be able to allocate the same CID.
+> > + *      - global mode AF_VSOCK sockets can reach any VM or socket in any global
+> > + *        namespace, they are not contained to only their own namespace.
+> > + *      - AF_VSOCK sockets in a global mode namespace cannot reach VMs or
+> > + *        sockets in any local mode namespace.
+> > + *   - local - access and allocation are contained within the namespace
+> > + *     - CID allocation draws only from a private pool local only to the
+> > + *       namespace, and does not affect the CIDs available for allocation in any
+> > + *       other namespace (global or local).
+> > + *     - VMs in a local namespace do not collide with CIDs in any other local
+> > + *       namespace or any global namespace. For example, if a VM in a local mode
+> > + *       namespace is given CID 10, then CID 10 is still available for
+> > + *       allocation in any other namespace, but not in the same namespace.
+> > + *     - AF_VSOCK sockets in a local mode namespace can connect only to VMs or
+> > + *       other sockets within their own namespace.
+> > + *     - sockets bound to VMADDR_CID_ANY in local namespaces will never resolve
+> > + *       to any transport that is not compatible with local mode. There is no
+> > + *       error that propagates to the user (as there is for connection attempts)
+> > + *       because it is possible for some packet to reach this socket from
+> > + *       a different transport that *does* support local mode. For
+> > + *       example, virtio-vsock may not support local mode, but the socket
+> > + *       may still accept a connection from vhost-vsock which does.
+> >  */
+> 
+> So, compared to the previous implementation, now there is no way to specify
+> the mode of `init_net` right?
+> 
+> At this point, it will always be global IIUC.
+> 
+> Should we provide something for init_net? Module parameter, kernel cmdline.
+> I mean something that can be decided before af_vsock is loaded, so we don't
+> have the previous problem of having sockets with different modes within the
+> same namespace.
+
+True, I hadn't considered inet_net. Those two options sound good to me,
+but I'll wait for Paolo's thoughts.
+
+> 
+> @Paolo any suggestion?
+> 
+> > 
+> > #include <linux/compat.h>
+> > @@ -100,20 +136,31 @@
+> > #include <linux/module.h>
+> > #include <linux/mutex.h>
+> > #include <linux/net.h>
+> > +#include <linux/proc_fs.h>
+> > #include <linux/poll.h>
+> > #include <linux/random.h>
+> > #include <linux/skbuff.h>
+> > #include <linux/smp.h>
+> > #include <linux/socket.h>
+> > #include <linux/stddef.h>
+> > +#include <linux/sysctl.h>
+> > #include <linux/unistd.h>
+> > #include <linux/wait.h>
+> > #include <linux/workqueue.h>
+> > #include <net/sock.h>
+> > #include <net/af_vsock.h>
+> > +#include <net/netns/vsock.h>
+> > #include <uapi/linux/vm_sockets.h>
+> > #include <uapi/asm-generic/ioctls.h>
+> > 
+> > +#define VSOCK_NET_MODE_STR_GLOBAL "global"
+> > +#define VSOCK_NET_MODE_STR_LOCAL "local"
+> > +
+> > +/* 6 chars for "global", 1 for null-terminator, and 1 more for '\n'.
+> > + * The newline is added by proc_dostring() for read operations.
+> > + */
+> > +#define VSOCK_NET_MODE_STR_MAX 8
+> > +
+> > static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
+> > static void vsock_sk_destruct(struct sock *sk);
+> > static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+> > @@ -235,33 +282,42 @@ static void __vsock_remove_connected(struct vsock_sock *vsk)
+> > 	sock_put(&vsk->sk);
+> > }
+> > 
+> > -static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > +static struct sock *__vsock_find_bound_socket_net(struct sockaddr_vm *addr,
+> > +						  struct net *net)
+> > {
+> > 	struct vsock_sock *vsk;
+> > 
+> > 	list_for_each_entry(vsk, vsock_bound_sockets(addr), bound_table) {
+> > -		if (vsock_addr_equals_addr(addr, &vsk->local_addr))
+> > -			return sk_vsock(vsk);
+> > +		struct sock *sk = sk_vsock(vsk);
+> > +
+> > +		if (vsock_addr_equals_addr(addr, &vsk->local_addr) &&
+> > +		    vsock_net_check_mode(sock_net(sk), net))
+> > +			return sk;
+> > 
+> > 		if (addr->svm_port == vsk->local_addr.svm_port &&
+> > 		    (vsk->local_addr.svm_cid == VMADDR_CID_ANY ||
+> > -		     addr->svm_cid == VMADDR_CID_ANY))
+> > -			return sk_vsock(vsk);
+> > +		     addr->svm_cid == VMADDR_CID_ANY) &&
+> > +		     vsock_net_check_mode(sock_net(sk), net))
+> > +			return sk;
+> > 	}
+> > 
+> > 	return NULL;
+> > }
+> > 
+> > -static struct sock *__vsock_find_connected_socket(struct sockaddr_vm *src,
+> > -						  struct sockaddr_vm *dst)
+> > +static struct sock *
+> > +__vsock_find_connected_socket_net(struct sockaddr_vm *src,
+> > +				  struct sockaddr_vm *dst, struct net *net)
+> > {
+> > 	struct vsock_sock *vsk;
+> > 
+> > 	list_for_each_entry(vsk, vsock_connected_sockets(src, dst),
+> > 			    connected_table) {
+> > +		struct sock *sk = sk_vsock(vsk);
+> > +
+> > 		if (vsock_addr_equals_addr(src, &vsk->remote_addr) &&
+> > -		    dst->svm_port == vsk->local_addr.svm_port) {
+> > -			return sk_vsock(vsk);
+> > +		    dst->svm_port == vsk->local_addr.svm_port &&
+> > +		    vsock_net_check_mode(sock_net(sk), net)) {
+> > +			return sk;
+> > 		}
+> > 	}
+> > 
+> > @@ -304,12 +360,13 @@ void vsock_remove_connected(struct vsock_sock *vsk)
+> > }
+> > EXPORT_SYMBOL_GPL(vsock_remove_connected);
+> > 
+> > -struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > +struct sock *vsock_find_bound_socket_net(struct sockaddr_vm *addr,
+> > +					 struct net *net)
+> > {
+> > 	struct sock *sk;
+> > 
+> > 	spin_lock_bh(&vsock_table_lock);
+> > -	sk = __vsock_find_bound_socket(addr);
+> > +	sk = __vsock_find_bound_socket_net(addr, net);
+> > 	if (sk)
+> > 		sock_hold(sk);
+> > 
+> > @@ -317,15 +374,22 @@ struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > 
+> > 	return sk;
+> > }
+> > +EXPORT_SYMBOL_GPL(vsock_find_bound_socket_net);
+> > +
+> 
+> Can we document this and the _net version to make it clear to transports
+> when using `vsock_find_bound_socket_net()` or `vsock_find_bound_socket()`?
+> 
+> > +struct sock *vsock_find_bound_socket(struct sockaddr_vm *addr)
+> > +{
+> > +	return vsock_find_bound_socket_net(addr, NULL);
+> > +}
+> > EXPORT_SYMBOL_GPL(vsock_find_bound_socket);
+> > 
+> > -struct sock *vsock_find_connected_socket(struct sockaddr_vm *src,
+> > -					 struct sockaddr_vm *dst)
+> > +struct sock *vsock_find_connected_socket_net(struct sockaddr_vm *src,
+> > +					     struct sockaddr_vm *dst,
+> > +					     struct net *net)
+> > {
+> > 	struct sock *sk;
+> > 
+> > 	spin_lock_bh(&vsock_table_lock);
+> > -	sk = __vsock_find_connected_socket(src, dst);
+> > +	sk = __vsock_find_connected_socket_net(src, dst, net);
+> > 	if (sk)
+> > 		sock_hold(sk);
+> > 
+> > @@ -333,6 +397,13 @@ struct sock *vsock_find_connected_socket(struct sockaddr_vm *src,
+> > 
+> > 	return sk;
+> > }
+> > +EXPORT_SYMBOL_GPL(vsock_find_connected_socket_net);
+> > +
+> 
+> Ditto about docuementation.
+> 
+> > +struct sock *vsock_find_connected_socket(struct sockaddr_vm *src,
+> > +					 struct sockaddr_vm *dst)
+> > +{
+> > +	return vsock_find_connected_socket_net(src, dst, NULL);
+> > +}
+> > EXPORT_SYMBOL_GPL(vsock_find_connected_socket);
+> > 
+> > void vsock_remove_sock(struct vsock_sock *vsk)
+> > @@ -528,7 +599,7 @@ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk)
+> > 
+> > 	if (sk->sk_type == SOCK_SEQPACKET) {
+> > 		if (!new_transport->seqpacket_allow ||
+> > -		    !new_transport->seqpacket_allow(remote_cid)) {
+> > +		    !new_transport->seqpacket_allow(vsk, remote_cid)) {
+> > 			module_put(new_transport->module);
+> > 			return -ESOCKTNOSUPPORT;
+> > 		}
+> > @@ -676,6 +747,7 @@ static void vsock_pending_work(struct work_struct *work)
+> > static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > 				    struct sockaddr_vm *addr)
+> > {
+> > +	struct net *net = sock_net(sk_vsock(vsk));
+> > 	static u32 port;
+> > 	struct sockaddr_vm new_addr;
+> > 
+> > @@ -695,7 +767,7 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > 
+> > 			new_addr.svm_port = port++;
+> > 
+> > -			if (!__vsock_find_bound_socket(&new_addr)) {
+> > +			if (!__vsock_find_bound_socket_net(&new_addr, net)) {
+> > 				found = true;
+> > 				break;
+> > 			}
+> > @@ -712,7 +784,7 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+> > 			return -EACCES;
+> > 		}
+> > 
+> > -		if (__vsock_find_bound_socket(&new_addr))
+> > +		if (__vsock_find_bound_socket_net(&new_addr, net))
+> > 			return -EADDRINUSE;
+> > 	}
+> > 
+> > @@ -1314,7 +1386,7 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
+> > 		goto out;
+> > 	}
+> > 
+> > -	if (!transport->dgram_allow(remote_addr->svm_cid,
+> > +	if (!transport->dgram_allow(vsk, remote_addr->svm_cid,
+> > 				    remote_addr->svm_port)) {
+> > 		err = -EINVAL;
+> > 		goto out;
+> > @@ -1355,7 +1427,7 @@ static int vsock_dgram_connect(struct socket *sock,
+> > 	if (err)
+> > 		goto out;
+> > 
+> > -	if (!vsk->transport->dgram_allow(remote_addr->svm_cid,
+> > +	if (!vsk->transport->dgram_allow(vsk, remote_addr->svm_cid,
+> > 					 remote_addr->svm_port)) {
+> > 		err = -EINVAL;
+> > 		goto out;
+> > @@ -1585,7 +1657,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr_unsized *addr,
+> > 		 * endpoints.
+> > 		 */
+> > 		if (!transport ||
+> > -		    !transport->stream_allow(remote_addr->svm_cid,
+> > +		    !transport->stream_allow(vsk, remote_addr->svm_cid,
+> > 					     remote_addr->svm_port)) {
+> > 			err = -ENETUNREACH;
+> > 			goto out;
+> > @@ -2662,6 +2734,183 @@ static struct miscdevice vsock_device = {
+> > 	.fops		= &vsock_device_ops,
+> > };
+> > 
+> > +static int __vsock_net_mode_string(const struct ctl_table *table, int write,
+> > +				   void *buffer, size_t *lenp, loff_t *ppos,
+> > +				   enum vsock_net_mode mode,
+> > +				   enum vsock_net_mode *new_mode)
+> > +{
+> > +	char data[VSOCK_NET_MODE_STR_MAX] = {0};
+> > +	struct ctl_table tmp;
+> > +	int ret;
+> > +
+> > +	if (!table->data || !table->maxlen || !*lenp) {
+> > +		*lenp = 0;
+> > +		return 0;
+> > +	}
+> > +
+> > +	tmp = *table;
+> > +	tmp.data = data;
+> > +
+> > +	if (!write) {
+> > +		const char *p;
+> > +
+> > +		switch (mode) {
+> > +		case VSOCK_NET_MODE_GLOBAL:
+> > +			p = VSOCK_NET_MODE_STR_GLOBAL;
+> > +			break;
+> > +		case VSOCK_NET_MODE_LOCAL:
+> > +			p = VSOCK_NET_MODE_STR_LOCAL;
+> > +			break;
+> > +		default:
+> > +			WARN_ONCE(true, "netns has invalid vsock mode");
+> > +			*lenp = 0;
+> > +			return 0;
+> > +		}
+> > +
+> > +		strscpy(data, p, sizeof(data));
+> > +		tmp.maxlen = strlen(p);
+> > +	}
+> > +
+> > +	ret = proc_dostring(&tmp, write, buffer, lenp, ppos);
+> 
+> nit:
+> 	if (ret || !write)
+> 		return ret;
+> 
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (!write)
+> > +		return 0;
+> > +
+> > +	if (*lenp >= sizeof(data))
+> > +		return -EINVAL;
+> > +
+> > +	if (!strncmp(data, VSOCK_NET_MODE_STR_GLOBAL, sizeof(data)))
+> > +		*new_mode = VSOCK_NET_MODE_GLOBAL;
+> > +	else if (!strncmp(data, VSOCK_NET_MODE_STR_LOCAL, sizeof(data)))
+> > +		*new_mode = VSOCK_NET_MODE_LOCAL;
+> > +	else
+> > +		return -EINVAL;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int vsock_net_mode_string(const struct ctl_table *table, int write,
+> > +				 void *buffer, size_t *lenp, loff_t *ppos)
+> > +{
+> > +	struct net *net;
+> > +
+> > +	if (write)
+> > +		return -EPERM;
+> > +
+> > +	net = current->nsproxy->net_ns;
+> > +
+> > +	return __vsock_net_mode_string(table, write, buffer, lenp, ppos,
+> > +				       vsock_net_mode(net), NULL);
+> > +}
+> > +
+> > +static int vsock_net_child_mode_string(const struct ctl_table *table, int write,
+> > +				       void *buffer, size_t *lenp, loff_t *ppos)
+> > +{
+> > +	enum vsock_net_mode new_mode;
+> > +	struct net *net;
+> > +	int ret;
+> > +
+> > +	net = current->nsproxy->net_ns;
+> > +
+> > +	ret = __vsock_net_mode_string(table, write, buffer, lenp, ppos,
+> > +				      vsock_net_child_mode(net), &new_mode);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (write)
+> > +		vsock_net_set_child_mode(net, new_mode);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static struct ctl_table vsock_table[] = {
+> > +	{
+> > +		.procname	= "ns_mode",
+> > +		.data		= &init_net.vsock.mode,
+> > +		.maxlen		= VSOCK_NET_MODE_STR_MAX,
+> > +		.mode		= 0444,
+> > +		.proc_handler	= vsock_net_mode_string
+> > +	},
+> > +	{
+> > +		.procname	= "child_ns_mode",
+> > +		.data		= &init_net.vsock.child_ns_mode,
+> > +		.maxlen		= VSOCK_NET_MODE_STR_MAX,
+> > +		.mode		= 0644,
+> > +		.proc_handler	= vsock_net_child_mode_string
+> > +	},
+> > +};
+> > +
+> > +static int __net_init vsock_sysctl_register(struct net *net)
+> > +{
+> > +	struct ctl_table *table;
+> > +
+> > +	if (net_eq(net, &init_net)) {
+> > +		table = vsock_table;
+> > +	} else {
+> > +		table = kmemdup(vsock_table, sizeof(vsock_table), GFP_KERNEL);
+> > +		if (!table)
+> > +			goto err_alloc;
+> > +
+> > +		table[0].data = &net->vsock.mode;
+> > +		table[1].data = &net->vsock.child_ns_mode;
+> > +	}
+> > +
+> > +	net->vsock.sysctl_hdr = register_net_sysctl_sz(net, "net/vsock", table,
+> > +						       ARRAY_SIZE(vsock_table));
+> > +	if (!net->vsock.sysctl_hdr)
+> > +		goto err_reg;
+> > +
+> > +	return 0;
+> > +
+> > +err_reg:
+> > +	if (!net_eq(net, &init_net))
+> > +		kfree(table);
+> > +err_alloc:
+> > +	return -ENOMEM;
+> > +}
+> > +
+> > +static void vsock_sysctl_unregister(struct net *net)
+> > +{
+> > +	const struct ctl_table *table;
+> > +
+> > +	table = net->vsock.sysctl_hdr->ctl_table_arg;
+> > +	unregister_net_sysctl_table(net->vsock.sysctl_hdr);
+> > +	if (!net_eq(net, &init_net))
+> > +		kfree(table);
+> > +}
+> > +
+> > +static void vsock_net_init(struct net *net)
+> > +{
+> > +	if (net_eq(net, &init_net))
+> > +		net->vsock.mode = VSOCK_NET_MODE_GLOBAL;
+> 
+> Right here, I mean, do we always have to use VSOCK_NET_MODE_GLOBAL or make
+> it configurable somehow?
+
+I think I prefer kernel cmdline. Will wait for further comment from Paolo
+before next rev though.
+
+> 
+> The rest LGTM.
+> 
+> Stefano
+> 
+
+Thanks!
+
+-Bobby
 
