@@ -1,174 +1,173 @@
-Return-Path: <linux-kselftest+bounces-48866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A4CD198B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E9C2ED198DA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:42:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 34D00306D28B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 14:38:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 08F1E30942E1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 14:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125942882D0;
-	Tue, 13 Jan 2026 14:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2C42BF00D;
+	Tue, 13 Jan 2026 14:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H082tutc";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="s2E2NNak"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3Kfo9pME"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9231C2BE632
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 14:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768315085; cv=none; b=sCnOxCB3O6KBAKyup9UEL3qD0vlAHLGYxIetgMo2UOcohLdBwSrnNL9f5qtOwKNQ5aNTl+iqhdtmk4PwACIiVNicAjbzbkxxLutwF5qYG92erjjfYCfw1mZRBqkTi4bIQ2qjf34aCzovB6bFMDN6SFI42wvyJ9FHydR/9BalKhk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768315085; c=relaxed/simple;
-	bh=E5/n+gp4oJScjwiNqhRtlKeTPug5EnnZg1wflCdJ81E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uOKkbSQgTy97M62d4srWNUeaoW+CwLYpBrRpnGjy2f9NEDQx6LCaNzsInTwqv9GXptsIhhYpV6MbdoESYoCBa9QwnRiow5yMyHnDeBoYklV1O9dnAyyrmcL0wiX1Y7kU90dSNVa39LVuNnVeLd4ERFjQT53vZUZzDLO7p5rZe60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H082tutc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=s2E2NNak; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768315079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9LgnqaJM+XpiwDFJ8HhQp/PFSeMXCj9ObUTssbWH+C8=;
-	b=H082tutcl6OzTNk1i4B3qBcU3KBJ7/9O7VEZzIGRBIYlWtIiJwSfqrvsh/pCQmW6Ch/oW6
-	PK+3pDFP7tMAHucc9jRwajJcrPQZLNLTms01r8PrI6EvE9z2cI0B24t6My+HEuaM1KOgQF
-	thcsCr2ir89eZeAfwvueCOM+LX+W20g=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-655-obggjqztP-KZmxa38Tz8Ew-1; Tue, 13 Jan 2026 09:37:55 -0500
-X-MC-Unique: obggjqztP-KZmxa38Tz8Ew-1
-X-Mimecast-MFC-AGG-ID: obggjqztP-KZmxa38Tz8Ew_1768315074
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4325aa61c6bso4829509f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 06:37:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B465A287254
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 14:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768315118; cv=pass; b=PIHcjqlY9r2HL17nunP3tQisB84glnJ+o2zfliz79evkR7p1PZbyhaXLMgLSCPNWzD1Y+6e6H29OMqi0isNnmTc0KDuOHwm4bOTcOXWtiLsK14mf50jvs0GiQ3aOPYP/QK7ZOay1tEGyUV0pCKVPc3D4Ghitn1qyHImQHq9/Kgk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768315118; c=relaxed/simple;
+	bh=HCdvS5NkY0vXw8KWKY8kVRjAzF9gX4xS/N5ZGLvpz88=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E7tqU0k5sUcN9DmIAhRxw2LZEqF2lN2tRxNtCtgbwfR41Htm5TQVXnuE2YizGEtcP5cUN6HPnmNst61cHW9x0Fm02H7wIVQNi6quKKCuYtkMeCKg3eRJZkUR9aMXfuXlt8+I+yYWIcJcNyTLiiQVtguTTjgHC2SmCUpaMqke7Rw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3Kfo9pME; arc=pass smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ee147baf7bso320881cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 06:38:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768315116; cv=none;
+        d=google.com; s=arc-20240605;
+        b=AxR56B8D/wLhFDe0qK9yZMGSYF5TmgCttTunolVNd8TN4Z2a4x9InIHeGYX6rjLa4K
+         yXecBQCs1kdMWss52NzhYFYJZy+RTS47ro9kvAE09ISyW9iC/7ewsM7H1w8+a5zR0/6q
+         n9gP4sjhKsz51Df5iATTA1Jz4VRDvn/fD+js/bd8MYLihx/Kn9Gl+IYVj3jYA5CmGKVA
+         /Uod1BPQkaSe+3ZsBGVMDN+VFwxgFviknxYJRG2AwhNaVuQ+pG0eX6WLiNpx6mGHjjgf
+         eLZ8MUMG4Ib+IRYKcMa5W6QYfww8sDHwdY3P3xSryQTM41N0A1ghVtXrJZ6or8WP6oK3
+         BFpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=z0SrzDaVUXRmKWRvPdSPBpUEx4WP+XB1ix/xiAgEPgg=;
+        fh=pDcUDK5UsLXNLXjmlwXvK9vKvlYc0I+HHa4PJvCq/w8=;
+        b=gQzNYb1ZE1n65X3ybRMhcwdQBY4zdHyBOZu8BKbV2E4qS/Id8i7jlyde5jJq+0k1MA
+         Wj13yMmTk/3pVSRU7gA50YfpOLDo1FuKyMfuN09+65mJcs6fVNLBvPGbExSSjEzjYTtj
+         4NUlmjkKqqD2Zir3OcYHw8krq8K0fjdgjb8kQ6LHTwjoIxFoH4pE09A1VJgLQ4vfEEPM
+         a3se2N8hiRDE7ZR1dopa+1ps4H6dK6dDzsB/3pTGicGjSqlLPp6akFJW0SYWL7MUpw9u
+         olXgaK7XG51tk1jBoCbGyelL8hH6wKulueP//wqthqspNFsRLgqTQpIfslFlKvINsUPw
+         IyOQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768315074; x=1768919874; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9LgnqaJM+XpiwDFJ8HhQp/PFSeMXCj9ObUTssbWH+C8=;
-        b=s2E2NNakzQc7podiTgkDwSS5JrrpBYsAzaBHukJI9cqCG7upriReWrViXdTo2VMN0z
-         LotNkZzHizyLR6li7dHoBMGiiQktpC9CIZB4UiXf2olFdiLvJEc0pXtYNTFWgKr88uMC
-         zsoEMY9hDitlVZlhniO4dU6uiBM2o4qVMrz4pKwXfK8mbOGW8K0kye5K4gxlFkfeGNyP
-         G34PO3NqjWoj1l/j4KV6sy1YTr17HPyKQnGPTRmTjH+7oFmeyDjJ9EGQIpjGdJEq5REf
-         0aFvAal+JDajv63n8AotnK7fETt5wITk/BS0xsHAwCUBMsxEQ/fm100YlBmnLWlbTYDP
-         MElg==
+        d=google.com; s=20230601; t=1768315116; x=1768919916; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=z0SrzDaVUXRmKWRvPdSPBpUEx4WP+XB1ix/xiAgEPgg=;
+        b=3Kfo9pMEuU9AQPTMSP7KjhmahlErlXGn4E0euTU7WbUvjOk/93PI8BCBzWMJZdcMSX
+         wHbxi88+CFd/plzvNFD5w9P/AXMhwLqveoVYT+y4ept78PTtXfYbreWsBsKUj9qhduHa
+         M47aloV5zJIb7N0fYJz9ni7W1nwlyh04eZqiOXk0KK44AEXykqudsH9XkZ5vvI3hbPnq
+         aSrt65yS6yKgBlHWYt7iZtldd5aD/d7F+7ivB7Jj91UP+BGAws/rknP1Hc/E5HU8eV7H
+         XeVEXO6/tPY0tV1/sfe+X0nbsOxAZtGcJJav/dCtmdiIgFZFAgT7UJAAC/AeZGHSyG/q
+         hoSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768315074; x=1768919874;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9LgnqaJM+XpiwDFJ8HhQp/PFSeMXCj9ObUTssbWH+C8=;
-        b=cc7zHr8F/N+z/Fr4kpJhuaG09cWP/O2qyvsT1YoyyjkGQZ3stDSnf/51kUZISVVEhn
-         hx14UJFi8E+ZsC7F9MT/VtNutTXQSvuc98hJDgw953MwG5y/SpTA9CA5gvl+jwUdS/Jm
-         FayYpAKypcLPpCw9Qt80VpMp0M7BSGiuJzrDpKM2tb6CVEd1IYRXdhqj7C+s0/nUxX+C
-         5/I4jsRF5yqSwbUydqSb6LUd2Fe6rGZddQAoH3iXMH8Eh2Tqm+0Wf3Xys/lMFc/bEFrZ
-         sqL59V82I6x7jNaJmy81NknonD9yZ/RiLCOZD2MsUVqR9/YKC48v+9bCI/1E0w1SMh7k
-         CATg==
-X-Forwarded-Encrypted: i=1; AJvYcCXQxZ8q29h9ytX0pmilJ936YPUOYndhOqoxGsKoxJcPnVxZbeILBaeI72AXcp0hFmqa9FIN5INUuLt75HaW5gs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3g6byfkqmYCIMK/7EOGXmsfNSXqI5XrtSvnnIKndssGqcJF4d
-	nFr82n09FzDjAAORE1ikpnr3dnZS7TJBfZCq5Ip1GVSPDcysPMEqNWx0ZuEm0jkg8B1gxisi+Xv
-	6cRUc8TIyINJsRMJ2N5XsrguVTp6a2XqxU83hAH+wfwTGBUK1Jm4vmbS+6QMJtfwBy+Ae5Q==
-X-Gm-Gg: AY/fxX60JNv0vygYLEeiz54/KUQ5auUmL84kDjbEe1ZDzZcwD/FlvRNYKrlwpgzp4/B
-	8CcXlFgNg6afwSnCQQy5RfXGX1qRhAw46buxUf46/wH2sszaM4g2k7PQa0rqXUborLNry3RXCnX
-	R1wueofBGaErYV/Bqdj52BRwNoEgEgHqihJCwmhGW/iik6T9wuW3xBjnFK6VyJZw9Grs/2Pd57w
-	j2FPmGpwAzZcAP63F3XKXbhpCuDUJI5ZekPsDCb9syVgSovkvcUy67jgWAQTKiMxMagCW3LgMc8
-	d7WFhnVr3tYMjs/iO+tgpG7KQX4h6CUo1MuuTTf/4svdnlWJcnhdHebhYkmud1jpX6jLm5+gPFy
-	2VhE5e9JihkwRwXjiXXs1Rxe5YRoWSk7ODk5a9yHW/PGGoeHG+TUMoMaSONaLXA==
-X-Received: by 2002:a05:6000:2512:b0:430:f58d:40e5 with SMTP id ffacd0b85a97d-432c374ff28mr26117971f8f.30.1768315074296;
-        Tue, 13 Jan 2026 06:37:54 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEaDijBjyQACs7Ec+s3xS5LP+GgM+l6sMs4Twqit+l71cMf1frrOWuoQfHaWNAhM1zfLnP+kg==
-X-Received: by 2002:a05:6000:2512:b0:430:f58d:40e5 with SMTP id ffacd0b85a97d-432c374ff28mr26117921f8f.30.1768315073807;
-        Tue, 13 Jan 2026 06:37:53 -0800 (PST)
-Received: from sgarzare-redhat (host-87-12-25-233.business.telecomitalia.it. [87.12.25.233])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e17aasm45089151f8f.15.2026.01.13.06.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 06:37:53 -0800 (PST)
-Date: Tue, 13 Jan 2026 15:37:50 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>, 
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v14 03/12] vsock: add netns support to virtio
- transports
-Message-ID: <aWZSeBAdiVs89wz7@sgarzare-redhat>
-References: <20260112-vsock-vmtest-v14-0-a5c332db3e2b@meta.com>
- <20260112-vsock-vmtest-v14-3-a5c332db3e2b@meta.com>
+        d=1e100.net; s=20230601; t=1768315116; x=1768919916;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z0SrzDaVUXRmKWRvPdSPBpUEx4WP+XB1ix/xiAgEPgg=;
+        b=Nmj9/ZvENF1+qX1TRX4Y1+fX6yeVWBswQ0bN+iA093ROpHPCxcWgNzrAJRO4d1mlkr
+         DIlD2bRuLU14woYZqLEBmP/0LSMhZ9/JOYuaF2Lw5sh9Zx4bvQ9ZlT4xdltbn16UfKyH
+         lQcPzLFx78MP7jlp7qUqUlBpt12ebYUjA+MYuZtAJqafEjm9j/actvdeCEekHhwwv0hj
+         HXltcBhyLS1pET50hkiF2bVeFOk2MUJAMf/Uksne2YlPZY6EP3OP8Smx8KVnhM+95yyv
+         rS3AaxB3UZz7aluyTk7E2A9iKMeU8bStwtJGhW36T3Q4yvbL0SWnQXJ3RmU04XQ/s7Gz
+         viUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUkR/sehicQDDldpqZdrlcY5oO8zP3lgmZias9k2Oz1CMU7beIOaotoF1kYuRjFqQrr1KgfVEkt7s4K5sQ9JK8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzI0/t99Doh4+NjMdyGcClow+Q/11K8uf9ek42qMeTjIHZhQ56t
+	/O78m3e4K7mRIagaip87kpHk+p1Tf4Zd9UkbfpRXS65bZg//cVoQIo86y0Ms56XfPJqKxmhfRrs
+	kbFRTRPH5jTlFw0tAJMMotLAu1uKJgFvB4ijtQoZ9
+X-Gm-Gg: AY/fxX7A0H6uQjR0qcl1RXCRu1sfRSeearfWJA8HkNAkQK+Lw3/oqiKn9fn8MYY2tB5
+	fK6OVhaEaF668S/Rrbu50OYoHCmtOHkXaVD05xVYYQjQFvyUWG8rnEq0bGkpt0FFli190ODgB1o
+	mu25UYj+UMXqzNoEJ6JIiQlVH+aikVdUaIeIMbT82SODCZNFQ/TSXGxI9O2+sWaPzPFvH51Y7kB
+	ZNSaLAGy/P+8RsVLPomFmGIEWAEJ4+oxGqVrjluWofZqFuey8JnZVqsYus9iCBeCH+rG1MVD1NP
+	wR6K3eh4nPj3pNWyVZCAyZjBMw==
+X-Received: by 2002:a05:622a:90:b0:501:19ce:5bdd with SMTP id
+ d75a77b69052e-5013a21b63dmr4606041cf.6.1768315114958; Tue, 13 Jan 2026
+ 06:38:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260112-vsock-vmtest-v14-3-a5c332db3e2b@meta.com>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org> <20251223-kvm-arm64-sme-v9-25-8be3867cb883@kernel.org>
+In-Reply-To: <20251223-kvm-arm64-sme-v9-25-8be3867cb883@kernel.org>
+From: Fuad Tabba <tabba@google.com>
+Date: Tue, 13 Jan 2026 14:37:57 +0000
+X-Gm-Features: AZwV_Qi2DCwvCxhy1IBJRUhKVRAZLawBqR0npBrkyjREHFYNX_l_ocigtzC7uIo
+Message-ID: <CA+EHjTwZCcMFT6gAM2oaQz5V_vqEBmVuggFBbABbXPvC+U919Q@mail.gmail.com>
+Subject: Re: [PATCH v9 25/30] KVM: arm64: Expose SME to nested guests
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>, 
+	Mark Rutland <mark.rutland@arm.com>, Ben Horgan <ben.horgan@arm.com>, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Peter Maydell <peter.maydell@linaro.org>, 
+	Eric Auger <eric.auger@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Jan 12, 2026 at 07:11:12PM -0800, Bobby Eshleman wrote:
->From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Tue, 23 Dec 2025 at 01:23, Mark Brown <broonie@kernel.org> wrote:
 >
->Add netns support to loopback and vhost. Keep netns disabled for
->virtio-vsock, but add necessary changes to comply with common API
->updates.
+> With support for context switching SME state in place allow access to SME
+> in nested guests.
 >
->This is the patch in the series when vhost-vsock namespaces actually
->come online.
+> The SME floating point state is handled along with all the other floating
+> point state, SME specific floating point exceptions are directed into the
+> same handlers as other floating point exceptions with NV specific handling
+> for the vector lengths already in place.
 >
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
->Changes in v14:
->- fixed merge conflicts in drivers/vhost/vsock.c
+> TPIDR2_EL0 is context switched along with the other TPIDRs as part of the
+> main guest register context switch.
 >
->Changes in v13:
->- do not store or pass the mode around now that net->vsock.mode is
->  immutable
->- move virtio_transport_stream_allow() into virtio_transport.c
->  because virtio is the only caller now
+> SME priority support is currently masked from all guests including nested
+> ones.
 >
->Changes in v12:
->- change seqpacket_allow() and stream_allow() to return true for
->  loopback and vhost (Stefano)
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kvm/nested.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 >
->Changes in v11:
->- reorder with the skb ownership patch for loopback (Stefano)
->- toggle vhost_transport_supports_local_mode() to true
+> diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
+> index cdeeb8f09e72..a0967ca8c61e 100644
+> --- a/arch/arm64/kvm/nested.c
+> +++ b/arch/arm64/kvm/nested.c
+> @@ -1534,14 +1534,13 @@ u64 limit_nv_id_reg(struct kvm *kvm, u32 reg, u64 val)
+>                 break;
 >
->Changes in v10:
->- Splitting patches complicates the series with meaningless placeholder
->  values that eventually get replaced anyway, so to avoid that this
->  patch combines into one. Links to previous patches here:
->  - Link: https://lore.kernel.org/all/20251111-vsock-vmtest-v9-3-852787a37bed@meta.com/
->  - Link: https://lore.kernel.org/all/20251111-vsock-vmtest-v9-6-852787a37bed@meta.com/
->  - Link: https://lore.kernel.org/all/20251111-vsock-vmtest-v9-7-852787a37bed@meta.com/
->- remove placeholder values (Stefano)
->- update comment describe net/net_mode for
->  virtio_transport_reset_no_sock()
->---
-> drivers/vhost/vsock.c                   | 38 ++++++++++++++++-------
-> include/linux/virtio_vsock.h            |  5 +--
-> net/vmw_vsock/virtio_transport.c        | 13 ++++++--
-> net/vmw_vsock/virtio_transport_common.c | 54 +++++++++++++++++++--------------
-> net/vmw_vsock/vsock_loopback.c          | 14 +++++++--
-> 5 files changed, 84 insertions(+), 40 deletions(-)
+>         case SYS_ID_AA64PFR1_EL1:
+> -               /* Only support BTI, SSBS, CSV2_frac */
+> +               /* Only support BTI, SME, SSBS, CSV2_frac */
+>                 val &= ~(ID_AA64PFR1_EL1_PFAR           |
+>                          ID_AA64PFR1_EL1_MTEX           |
+>                          ID_AA64PFR1_EL1_THE            |
+>                          ID_AA64PFR1_EL1_GCS            |
+>                          ID_AA64PFR1_EL1_MTE_frac       |
+>                          ID_AA64PFR1_EL1_NMI            |
+> -                        ID_AA64PFR1_EL1_SME            |
 
-LGTM!
+Should we also limit this to SME2, i.e.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
++ val = ID_REG_LIMIT_FIELD_ENUM(val, ID_AA64PFR1_EL1, SME, SME2);
 
+That said, we don't do anything similar to SVE, but it might also be
+worth doing that there.
+
+Reviewed-by: Fuad Tabba <tabba@google.com>
+
+Cheers,
+/fuad
+
+>                          ID_AA64PFR1_EL1_RES0           |
+>                          ID_AA64PFR1_EL1_MPAM_frac      |
+>                          ID_AA64PFR1_EL1_MTE);
+>
+> --
+> 2.47.3
+>
 
