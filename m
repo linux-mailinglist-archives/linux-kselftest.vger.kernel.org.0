@@ -1,135 +1,109 @@
-Return-Path: <linux-kselftest+bounces-48861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD503D1955A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:13:42 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EDF3D197BD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:33:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6A54C30118C1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 14:13:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3EA15303515F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 14:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA14B392829;
-	Tue, 13 Jan 2026 14:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE8029AB15;
+	Tue, 13 Jan 2026 14:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="rX9j2+et"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="kniYjxpI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster1-host4-snip4-10.eps.apple.com [57.103.76.23])
+Received: from outbound.st.icloud.com (p-east2-cluster4-host11-snip4-2.eps.apple.com [57.103.78.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840AD392B64
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 14:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.76.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A353728FFFB
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 14:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768313599; cv=none; b=syjwIKdKgSQZ/K7qTnj5DiB5c4jaTSd/HJvjWiI4inFlJiyMlyc6pLYEuKOXl/GzzwvExv+K01VxKIFVqqP9Xaq9kVzEHJjHtfGz1LY2QvKET86rtQqJP6IrldizNgZL+/803iCkNPpMsRq37ThpTdOqiNylUCK3F6keiN//oGw=
+	t=1768314141; cv=none; b=OA9PBJJim85NJ9sbcaw5nAFkKEB4FtPzbIfg77Bw8erK27lMmZOaCqV3pndmQ4lUeNYq0YJ8+C6uRBqbMZG/fm9ZIcyAJvMJd+hUg5WjC+WqgEIluHw0IKpidUGl4W/TJoLCsmPFdRWeee0HC8M24LE8ODHvrjnZsBBHRo7zUKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768313599; c=relaxed/simple;
-	bh=Ic05N38IwE/4wqD5ZXjgmQwte1DpIEy/9ZTMntimdac=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cx4DVIkGO/z8Y5ptj9v9GyH+Bsbx35DU0HCeEvPl03EP/nbMtFUcVrelNdCbwon5oQU+KQ6JzTYci7TWRd0+5gZNf5XphbwLzBiQFb78u9vILWLeq3Ber4ZHynJuHtH2db86zTS83X3bq7qHfs2VE48U7BpFqpaZ7mWKuUuQMlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=rX9j2+et reason="key not found in DNS"; arc=none smtp.client-ip=57.103.76.23
+	s=arc-20240116; t=1768314141; c=relaxed/simple;
+	bh=So/GytmIyFefKTETm6v5F3X/wbvcCdhrK9s43Pcqp88=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A/O9DQoEjnPMlqn0uMJ6oQb4OlV31vkM0HyFu5H94/vr8Shrb1/wVHFksyjfvuAb6ApXgZgpavxW0dP+6VE5wn4eTLtVvkcrlNmn5UjQUGROARBQPyM3T08YJpGAICOh8sZmnwvHhS0jCiGQ61W/L/hQEo9qWrGnu08JLF97DjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=kniYjxpI reason="key not found in DNS"; arc=none smtp.client-ip=57.103.78.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
 Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-1 (Postfix) with ESMTPS id 30FD51801879;
-	Tue, 13 Jan 2026 14:13:13 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=afH/Mj5H8vualGKTm+xW5vFpaHkJrNlaQy6ZQfrpBls=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=rX9j2+et4LuWX+Oyoyf7al7vaLWFCKUQvtowmCj1P+wT/EKrK0z+LfPxXspqCPfslzlwufsuOP3ZKXDJbMvRv2xiubmbh2IFKdC8JmASNlHD4AAD86dgEThH+69TNTm2Lr+RzJdqjQQAtjmV3cUKX8PvvcVXfl+Ty88EzpLTWCkNGsivQRC9qj4NzBhi6JVQDGgNaMA1NyXmS/rxm4jaqHHYR5MW1vY8Hm32+oEnLDYDydhDPqdb0VvWksHUIxbTiaLkmW2wu5+u+sUsIgfTToBCP3B5HRk2OlWodFwmOQ5cQ093ITWQqL0mp8hzDaYbrUp5TA2vgjz/Xw5BD7qWqA==
+	by p00-icloudmta-asmtp-us-east-1a-60-percent-8 (Postfix) with ESMTPS id 6052B1801503;
+	Tue, 13 Jan 2026 14:22:18 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=fmxsnE/L7NFB0ejvFSKTM8y9Gw52rQC2a6j27SV3+Gw=; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:x-icloud-hme; b=kniYjxpIcw+W0Ypplo5vQFdrd5zf3UO2//+/avcKMnS8R3U0IWeHZM7eAJA3jV68j8c5bLBj4qQp7A7Yyss2Tc0MnBRHWqZK8f1qP/tUbJI4TdjBQrsouIGOaB43oOtTgKGEQG2K2nZ0u7+jburBkItlfAC0addONr47vdUdIwNLH0CapHL0QiqeLU7DV4c67NJZDitgPdMDojGyBNmIYMxKYs16AQN7Q53QbQgdLOebo798xKPg5SbeLGW5iv7AheugF9Td0nmbssdSMD/uQURohEsU4pqf/KkQLvcAOdlMHBIPOzPEGoZ9k2oP0fIXqOLw3mCb4RobcMTStECOAg==
 mail-alias-created-date: 1719758601013
-Received: from desktop.tail809fd.ts.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-100-percent-1 (Postfix) with ESMTPSA id EB11118000A5;
-	Tue, 13 Jan 2026 14:13:10 +0000 (UTC)
+Received: from desktop.y-koj.net (unknown [17.42.251.67])
+	by p00-icloudmta-asmtp-us-east-1a-60-percent-8 (Postfix) with ESMTPSA id 27BB91801534;
+	Tue, 13 Jan 2026 14:22:16 +0000 (UTC)
+Date: Tue, 13 Jan 2026 23:22:13 +0900
 From: Yohei Kojima <yk@y-koj.net>
-To: "David S. Miller" <davem@davemloft.net>,
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Yohei Kojima <yk@y-koj.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Markus Elfring <Markus.Elfring@web.de>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 2/2] selftests: net: improve error handling in passive TFO test
-Date: Tue, 13 Jan 2026 23:11:55 +0900
-Message-ID: <24707c8133f7095c0e5a94afa69e75c3a80bf6e7.1768312014.git.yk@y-koj.net>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1768312014.git.yk@y-koj.net>
-References: <cover.1768312014.git.yk@y-koj.net>
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 2/2] selftests: net: improve error handling in
+ passive TFO test
+Message-ID: <aWZVFRrhENOk_l6z@desktop.y-koj.net>
+References: <60dc3da1f913aa9625e864ea862c23c401e7bc6e.1768207347.git.yk@y-koj.net>
+ <88ead962-fec5-4834-88af-c478ee2bf023@web.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 8I63Zms5JlcKjlKZnZbK1Q8jV10IbCj3
-X-Authority-Info: v=2.4 cv=TMZIilla c=1 sm=1 tr=0 ts=696652fb
+In-Reply-To: <88ead962-fec5-4834-88af-c478ee2bf023@web.de>
+X-Authority-Info: v=2.4 cv=Kv9AGGWN c=1 sm=1 tr=0 ts=6966551a
  cx=c_apl:c_apl_out:c_pps a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jnl5ZKOAAAAA:8 a=ZXA9zuh9vTPPph4ZHScA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDEyMCBTYWx0ZWRfXxqO8yJsRA3IS
- 3FXVhX1fknG+LTCk371Hi0OBWEv8LziqqqPyOC3MzDW2eGpWZ8ZVL6t7ZwgYWDZA/sYezgddDzL
- 3MZOGhSpqpyRgZsy0NwivfQvDlCvzv8xCIWx0f1jGg1b3j2gskBBeUgG6cuHI6hBzLC3i9WhVat
- aI20RIPnDrjyOeRjOtPc5yPZfH9/MHZYObIRhU/0Q/Jtr7zaAySx6jE35XuiHBhIOSHv/0OCkbu
- Wii/bsUCxwKN52PkwNOu5GmH+p+BTyiOEsWL09T3Zhv++wHYY/TSf7nlqd9DbyRz/3piEPCOgYl
- xhnZ0jvyJbE3FO87/tM
-X-Proofpoint-GUID: 8I63Zms5JlcKjlKZnZbK1Q8jV10IbCj3
+ a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=P-IC7800AAAA:8 a=sMBj6sIwAAAA:8 a=VwQbUJbxAAAA:8
+ a=jnl5ZKOAAAAA:8 a=OB2aahCY2n3uGOuFrBcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=3o_l8myHFtgA:10 a=zgiPjhLxNE0A:10 a=d3PnA9EDa4IxuAV0gXij:22
+ a=RNrZ5ZR47oNZP8zBN2PD:22
+X-Proofpoint-ORIG-GUID: IX-QzqVa4XBnGw_bD4KU7-oq8BiSfyfv
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDEyMSBTYWx0ZWRfX1oxpEhxr4QYx
+ eFz77APdkQdxdkbG+I13uv88jCWdRXZ59PFC7aydLJNhyhCoQ6gNKHDCgEiy70+ZAFUdBVL+hKq
+ Lomq2RM0NHqV0oDR3qIusvTe1Y2+E3CODlzzFMOyny7WvLkIJQEnHU0m9uYbB+u/ZwUvNbZzyGw
+ jKC7InWSZZ+edQ/5wh7Z1lsYb3YhDKfvnf/EvTxBkRTP09jYfHDrZ2ZvhDn3uGFC4nlAz9C/6n0
+ VyrrnMF0QtLTidCIk36qdAZ5DQMUlgnVpMvkAN5YqeYBh7JV1NPsU6uI1QletJtoYim/RDuQa2G
+ FzDkjwcDWtpv1mdKWYQ
+X-Proofpoint-GUID: IX-QzqVa4XBnGw_bD4KU7-oq8BiSfyfv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-13_03,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- bulkscore=0 clxscore=1030 adultscore=0 phishscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 spamscore=0 classifier=spam authscore=0 adjust=0 reason=mlx
- scancount=1 engine=8.22.0-2510240001 definitions=main-2601130120
-X-JNJ: AAAAAAABWgyav4S6S7kZZlib5W7u9EWETIhk5XKz/IHVv5bojkzQ5weesz5OVdXAcO8cIuGJ7LvEE54K36khk5UidX+sgOdsvVQZEr6uqUS1FAiMxBznXUWJu5POdYyutms3hbAQUeT4TsZIiqJTOfadg3IiX+Ja4FPXpepK1lkpkXhAtxigZEAVCWTDfgi9ykSuzeJJMqw+1rb87edZYpl1e/S/0cK97SbfF+Zl7Z3+BvS+XEPqSJMqTJoywX1L5VCVBKAdT7txBYT3jLGHjrA/pIBKsNfWcO73/94rEoKSwg85yfvCgI6F6ekCjwYMnrG6lHyLVXYguOMa5P0cqRla3+05gqwaCDl7HdhrvGeH+V2nnWHdQpZL0IA60e5h4DdzLB5Tk15Wr3RZkTr3q4Em+8DfWB9qEkcDOsz1BsPZgEHGvW6px+ut59cuXdQ0b1z7Cu1K5uwbweGQ7QIOHDolcdFI8kHKii2QDhbigQyDRS/KmekiKACKigwgjwv2efYaz0DT7BKg6mauBytAKpbM/aBg9v8PBY4aHc3SKQu2T2HsbMI2OZwpxczBWUxpctoiw0DmCnY8Devq3Ll9ljZYHUW5in6Kj+5v6gtlYnBsAt5BMDvaB6oqjMJkUAojZz0mv37NKrjHLeqmddAG252MkNrF0ffnjDQvRds9hdayzRcHyeB4dOZ6vnBhSmRk1q0kachgwiwAX9e7zPI6zOWY3wIOHCJ9IWwOBmfEK75E6Usq10/DHMZM+/vkKp8NJDJDswy/f6O21L/Zjytsb3zbs+5tlh5XBXcoqS3OZg==
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ phishscore=0 adultscore=0 suspectscore=0 bulkscore=0 mlxscore=0 clxscore=1030
+ malwarescore=0 mlxlogscore=999 classifier=spam authscore=0 adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2601130121
+X-JNJ: AAAAAAABkxOfaRosJ03tVZJfoO7SWg4Ois74AQlyHGfy/1l9Wkq1pEpjLXxMarCdtU5pu3SPPWWko+AoVAZ6EGBahdPkQvj6hpJtbyRrUyHM56ZVlMvV4sGbyJMXTyAlJHlMcoWSXtoxF7NzBCvpJ6XopTeDJVQhcOJvGPevdpetwvDzpR+BR/GPrz3oysPxxeALKgKugMu9NAsm966Iu2Yi2lUwRJMujkY/1Z1ggYkxOskRvjPMTJLUw2uY5EtRF0UQRJL/R8kyaGBx46bIZDHTf/WyvwptaptiAKHiV9/1qnbrOBZ/E6PJYdIAF/UDgPTPLF2NzKVK9eGsID2ApOXAKOOqCtbr3/G9KGTTfvT5Q3D/hZmvuGwsqGLpsSgmxo3w2v0dntLrh5OLBXa69GF6DFJTHVVVLKV9XJnY9okFx7gDG04c+1vzUW6zKdfLu2flwhyG3R6p77jSUnpD+gpPSdNemy0pCQno9pcl2redO2C87A8TdWZ5YBwO6omUJk+AJ1OtUZ+YshZ0x9CbsWnI9yh1cqWp8uG5c2z4bDze6rt/7GP2SJGizd1dDr7BBQNSCRzFtNQ8v6999M3A0Lr12R+KJ5qKzywaLE9A8tRxGzWGk/9eCqNngI82s2Q8OINoiWa2XppzDqTmRsYsHhtP83ppP5OIAPegO+PUqu+3J6yQFQZl+q2DjObRz18WufDTPcIOLlc2bCwLwffYsIH9jOPrE6MNBCQqvaoHIA==
 
-Improve the error handling in passive TFO test to check the return value
-from sendto(), and to fail if read() or fprintf() failed.
+On Tue, Jan 13, 2026 at 10:46:10AM +0100, Markus Elfring wrote:
+> > This commit improves the error handling in passive TFO test to check the
+> > return value from … and  to fail if read() failed.
+> 
+> Would any developers and system testers like to care more also for data output failures?
+> https://elixir.bootlin.com/linux/v6.19-rc4/source/tools/testing/selftests/net/tfo.c#L86-L88
+> https://cwe.mitre.org/data/definitions/252.html
 
-Signed-off-by: Yohei Kojima <yk@y-koj.net>
----
- tools/testing/selftests/net/tfo.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+That's right. Although we can assume that fprintf() usually succeeds,
+it worth checking its return value as tfo_passive.sh relies on the
+content of the output.
 
-diff --git a/tools/testing/selftests/net/tfo.c b/tools/testing/selftests/net/tfo.c
-index 8d82140f0f76..3b1ee2d3d417 100644
---- a/tools/testing/selftests/net/tfo.c
-+++ b/tools/testing/selftests/net/tfo.c
-@@ -82,8 +82,10 @@ static void run_server(void)
- 		error(1, errno, "getsockopt(SO_INCOMING_NAPI_ID)");
- 
- 	if (read(connfd, buf, 64) < 0)
--		perror("read()");
--	fprintf(outfile, "%d\n", opt);
-+		error(1, errno, "read()");
-+
-+	if (fprintf(outfile, "%d\n", opt) < 0)
-+		error(1, errno, "fprintf()");
- 
- 	fclose(outfile);
- 	close(connfd);
-@@ -92,14 +94,17 @@ static void run_server(void)
- 
- static void run_client(void)
- {
--	int fd;
-+	int fd, ret;
- 	char *msg = "Hello, world!";
- 
- 	fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (fd == -1)
- 		error(1, errno, "socket()");
- 
--	sendto(fd, msg, strlen(msg), MSG_FASTOPEN, (struct sockaddr *)&cfg_addr, sizeof(cfg_addr));
-+	ret = sendto(fd, msg, strlen(msg), MSG_FASTOPEN,
-+		     (struct sockaddr *)&cfg_addr, sizeof(cfg_addr));
-+	if (ret < 0)
-+		error(1, errno, "sendto()");
- 
- 	close(fd);
- }
--- 
-2.52.0
+I posted the v2 series adding fprintf() error handling here:
+https://lore.kernel.org/netdev/cover.1768312014.git.yk@y-koj.net/
 
+Thank you,
+Yohei
+
+> 
+> Regards,
+> Markus
 
