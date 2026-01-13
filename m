@@ -1,219 +1,166 @@
-Return-Path: <linux-kselftest+bounces-48898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97ADD1BABE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 00:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1225D1BBFB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 00:48:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CB24E302E3D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 23:13:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 70A7C300D33A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 23:48:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FF034EF06;
-	Tue, 13 Jan 2026 23:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840DC2D5944;
+	Tue, 13 Jan 2026 23:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="ggUe5AZi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nCzrI/qd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78FC626B74A;
-	Tue, 13 Jan 2026 23:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6DD2773FC
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 23:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768346032; cv=none; b=Tpbn1M8VLWMAp+Deg6zNq/FL/Opl46Q6o9h0dYkNocz7mxy3kUZz1+25Gy6sGhnqy3pozjGMxS/4YzZhbIiLaz6fUo45LqbD2C43EmE09IwCpxwG3SoEqx5IvnnPgkONt7tCZWuWOq+boqvDzyXk1aUXodbiFFdlMNsPYO50pAY=
+	t=1768348106; cv=none; b=I8YYd8ZVKI0MBYxVPxjqxuU7F+OuuiJcOqJLOQdAxstV/N8IN39ekFYTQFG/N1YavT8F5hYoCkIwI0P/QawEU+vvst53Mb3NXr7q/GvF3lxT/8UPmjRypHx51W7vn6xw79qGHtfgRyuVmSyGovCMO2e/4ugRfB4RnGhJs3CqkyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768346032; c=relaxed/simple;
-	bh=pL6O0xc9qxnlWkXFaYtPJbO1YELosPyh9YQ4IOndaXQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m0UMEKJ3HRVh3mxxV2CA0TIoupQFHfITJyflUD6oUmMyLclcEgmwkwdk498gCb8Z0eIHkLy8i+dGh3ony03+GmEZn0JpLb+DK39tG9T7fZyr0QmPukUe5ldJMsPVV40S4avRyA3xJK8f1nqCltq/egHQf7zAs4KzZ8fH4vlOFV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=ggUe5AZi; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60DJdo4X3597538;
-	Tue, 13 Jan 2026 15:13:14 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=6b8lhji3oxV30DYJl9hk8PPRW00E8IBcoZn7eC/2TZ0=; b=ggUe5AZiRPYJ
-	M5Ht6Qu+EbaTJTqAcfGlNPDca8SGxU6MU7GhWm6lm6ZewM9R9nnjfnX5xZP5WOoa
-	jUGkKFNIEghdQuCPqhFZdH5mlPP/AWFbU6Zl6ImP2U3xsqpXotxbrGj93ke/Bqsq
-	lx5BJ6EXIPFE2tRKAt5eMwz4fZLsjuAGjugTsKC0E17iGNsGNSP5ZJy6TWvZqHpZ
-	CuihkxRZUjjC6vLbbdyM8RMNdmT8vC1gqxp2zbCSzoM0nJxk4wNefdtkdVH0GWVt
-	jt//M7N/POX8bCqn0BvU/eGc9OjOqWgTPOOQh2rcIiubinbgeFHQZ+ASUwftJQaY
-	I6qeLCODHA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bnqktmu4q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 13 Jan 2026 15:13:13 -0800 (PST)
-Received: from devbig003.atn7.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Tue, 13 Jan 2026 23:13:11 +0000
-From: Chris Mason <clm@meta.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-CC: Chris Mason <clm@meta.com>, Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
-        "Liam
- R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Masami
- Hiramatsu" <mhiramat@kernel.org>,
-        Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>,
-        Jann Horn <jannh@google.com>, Pedro Falcato
-	<pfalcato@suse.de>,
-        Zi Yan <ziy@nvidia.com>, Baolin Wang
-	<baolin.wang@linux.alibaba.com>,
-        Nico Pache <npache@redhat.com>, Ryan Roberts
-	<ryan.roberts@arm.com>,
-        Dev Jain <dev.jain@arm.com>, Barry Song
-	<baohua@kernel.org>,
-        Lance Yang <lance.yang@linux.dev>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-trace-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v4 5/9] mm: introduce copy-on-fork VMAs and make VM_MAYBE_GUARD one
-Date: Tue, 13 Jan 2026 15:12:55 -0800
-Message-ID: <20260113231257.3002271-1-clm@meta.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <5d41b24e7bc622cda0af92b6d558d7f4c0d1bc8c.1763460113.git.lorenzo.stoakes@oracle.com>
-References:
+	s=arc-20240116; t=1768348106; c=relaxed/simple;
+	bh=/3nEZHruNblgDoS195XRf5u7JVjr67KdR83C5VowS9Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=REnygxwe5NcTfhYLjf1hs3vl0RzQ58Vfagcj2nMTmUhL7QqyqGdL0RDatKyygQe0ylJhZTO/PMxlDhEMXVtb6L8u6MVNzVQQBiDImoFqRf0pii9RQSm2Z0F9uMNk1DENGTF+zDurzmhCEn+PA9uVLpjR27ISjVtepcingvjVZB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nCzrI/qd; arc=none smtp.client-ip=209.85.217.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-5ee99dec212so2056781137.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 15:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768348104; x=1768952904; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sVWLNrdwIQNBKBOwJy78In7uUpvJppqCzymGUhTOU5w=;
+        b=nCzrI/qd2XChWascNusYWBbbJ0/LTp8VqDkYaycSBvUrYLEXFlue2RIWiLid3jTXe8
+         1WyxAyq3Yv3djLD+U9W0CnrNGsezCLLfoDwYPuxi2XGfVmJ4NOZx+/akKAYbaGXRmB2k
+         suETMjDzWspF78UIbKwu0Cl+MUzwK6P8dl53QORhLK+ugC7gted9PqGkidTpRDnQBE0C
+         9OcwupbP9kuX+YC7P9lDjvnTClfsp6maxwAQxNDSmpFJlNjiJTc0gEzSj0TM3gtLCVMW
+         kNFxRBLPUaSUsqQ+uET0O0CwvW45NlRB9lgwv450tWplYurWgOmEzEm6PHqWYnHGWOde
+         /VdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768348104; x=1768952904;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sVWLNrdwIQNBKBOwJy78In7uUpvJppqCzymGUhTOU5w=;
+        b=qyvPYrqWtznSN0lVZbY3sEYaeCQHZoJRysJcuMU+X+TkBQX50NZbTiNf+CTXieuLpZ
+         J/Tv6ufwzWY/LUgVg3rTTUyXe9xj3LZWotp7uBhX3M0Mkb+a4+VSxz81Q2qEW2Zbl/LE
+         IOkoLLQ6z9V8nUD90lTuFandEs/Dl+z1DoqZ9lblibB5Gb+IjhzheD7HE7syTbhDRvBj
+         N6IYw4H9RIfGI6uE3K5DvWKCOgHRFC64s5MVEO1PhkIhnpFIG/pkU2K6U9JxPNISGEi/
+         DWvkw1OEPK6KomLmQ6rTbBRua+Agg+dIHwt7ngGTOp0K5Ib66pkr1W65CI9oZIOCVnG3
+         /OqA==
+X-Forwarded-Encrypted: i=1; AJvYcCWcXhOvMOkQSN1YWhk6S7tzuZYNOz1HXMMmIzoul3mlUX4fuk5I8GnKb18F1l9MhC8PcaNlqAcqCTGJJnS1Cwo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE81HnpkySFFwXpyelV3XX2hwp/tXpqKKCdFz1488dpjfKpchb
+	r0FnpHBh/WVM/0abx/L8UuC31fBRejSB+sNSNWQ5IS5CIUUgfyYQZ/5sPcAmdf+DchQRXyPnlIi
+	obDfebxALWFUq5ILjorPssKy68BZaINu5G0ndcYjb
+X-Gm-Gg: AY/fxX7DWpmVUf7/QD78yJfB0EhSLiDt2BCwlTK2MHwsAIF8xESizfIOpkCbVjXyWea
+	XNtW80n+SSY0kTVQHzAFpQbC+f9+L0oCB+ZFfgxmFqvbgGFLCZlZ8BwsuPmS8DVmFfvoqNwaNL7
+	Qvn/XZEmpJY8rYtTjfUEXUBVDRLk1SIOmK4z407cCXff+SwsJgq/zZx8gIMh1mJHBo2deVA8hhJ
+	tJdFDmBbsOvVxEhm8atBUQar3iyu/kPHXVa4iUNqq593QDszV8pM0KtOhI0bZet+nUR3RXF
+X-Received: by 2002:a05:6102:3f09:b0:5e5:672a:b19 with SMTP id
+ ada2fe7eead31-5f17f419d9fmr365708137.4.1768348103587; Tue, 13 Jan 2026
+ 15:48:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=M89A6iws c=1 sm=1 tr=0 ts=6966d189 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
- a=K3mAnt_iSIqV1N-OikAA:9
-X-Proofpoint-GUID: 5-CcFQBuNngsaUgw3TgiRUAET30XzMDq
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDE4OCBTYWx0ZWRfX2DhGmdnpVK4A
- LH9faNP4/xk97+1ec61zl/gKesEZTMzKwF6k//6ncpB1RaeYymPjCSpxJ2jEETu4T6gnYwJtU54
- dCwogLU/Q5/xmR5fK6UN4t2MiJawyueXAkZxe2JhOIpCHtoLoChUAEp1Q978J5aUsRTT54fXXCb
- t//mqC+Wss6Uei+7zmlvdgyGai3YYItrHWylZL6bWh93e1NzYhgcrC8OwtP0uc4YaVy0xk0E/ew
- 5lMnpZ5m1uEStBT0eIYFluWR8uKtLQGQZEljmswk8De8/R0v817ts8rGwdem4EtuzHqnXZpGUZt
- hJ2a+EgsGXYZ9brFHP5PkXFK9nJ55WexMz96w3yMLDjEJuyuVLlFzxoi3+ZP2CLDcdGo2YG543E
- vGDTJ5RNMtJMQcwkxZzJAqV3L09aYdLn+a2xisbuVVTHDsD2f7m1SCWF9PeLUo6Ka6XaKaNnEG/
- nKjXIdXrS1R7qgsJg0Q==
-X-Proofpoint-ORIG-GUID: 5-CcFQBuNngsaUgw3TgiRUAET30XzMDq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-13_04,2026-01-09_02,2025-10-01_01
+References: <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com> <20260108141044.GC545276@ziepe.ca>
+ <20260108084514.1d5e3ee3@shazbot.org> <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
+ <20260108183339.GF545276@ziepe.ca> <aWAhuSgEQzr_hzv9@google.com>
+ <20260109003621.GG545276@ziepe.ca> <aWBPNHOsaP1sNvze@google.com>
+ <20260109005440.GH545276@ziepe.ca> <CALzav=cBGkhbbyggkfaYh3wfqodxRHZKXTNdnmjoXOgwMouBuA@mail.gmail.com>
+ <20260109180153.GI545276@ziepe.ca> <20260109143830.176dc279@shazbot.org>
+In-Reply-To: <20260109143830.176dc279@shazbot.org>
+From: David Matlack <dmatlack@google.com>
+Date: Tue, 13 Jan 2026 15:47:53 -0800
+X-Gm-Features: AZwV_QjdcFsJsgt85dNhSC_YTux420gKxRVuQRmmDpaV4k1qPluDDfAJcne_NFU
+Message-ID: <CALzav=cE4SQbbcWL9-bhHPEjCq3DPOWnGZnqrHcvR5mYB_t3cA@mail.gmail.com>
+Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
+To: Alex Williamson <alex@shazbot.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Alex Mastro <amastro@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 18 Nov 2025 10:17:47 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
-
-> Gather all the VMA flags whose presence implies that page tables must be
-> copied on fork into a single bitmap - VM_COPY_ON_FORK - and use this
-> rather than specifying individual flags in vma_needs_copy().
-> 
-> We also add VM_MAYBE_GUARD to this list, as it being set on a VMA implies
-> that there may be metadata contained in the page tables (that is - guard
-> markers) which would will not and cannot be propagated upon fork.
-> 
-> This was already being done manually previously in vma_needs_copy(), but
-> this makes it very explicit, alongside VM_PFNMAP, VM_MIXEDMAP and
-> VM_UFFD_WP all of which imply the same.
-> 
-> Note that VM_STICKY flags ought generally to be marked VM_COPY_ON_FORK too
-> - because equally a flag being VM_STICKY indicates that the VMA contains
-> metadat that is not propagated by being faulted in - i.e.  that the VMA
-> metadata does not fully describe the VMA alone, and thus we must propagate
-> whatever metadata there is on a fork.
-> 
-> However, for maximum flexibility, we do not make this necessarily the case
-> here.
-> 
-
-Hi Lorenzo, one more from the review automation:
-
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index fea113d1d723c..af2904aeb1631 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -555,6 +555,32 @@ extern unsigned int kobjsize(const void *objp);
->  */
-> #define VM_IGNORE_MERGE (VM_SOFTDIRTY | VM_STICKY)
+On Fri, Jan 9, 2026 at 1:38=E2=80=AFPM Alex Williamson <alex@shazbot.org> w=
+rote:
 >
-> +/*
-> + * Flags which should result in page tables being copied on fork. These are
-> + * flags which indicate that the VMA maps page tables which cannot be
-> + * reconsistuted upon page fault, so necessitate page table copying upon
-> + *
-> + * VM_PFNMAP / VM_MIXEDMAP - These contain kernel-mapped data which cannot be
-> + *                           reasonably reconstructed on page fault.
-> + *
-> + *              VM_UFFD_WP - Encodes metadata about an installed uffd
-> + *                           write protect handler, which cannot be
-> + *                           reconstructed on page fault.
-> + *
-> + *                           We always copy pgtables when dst_vma has uffd-wp
-                                                           ^^^^^^^
-The comment says "dst_vma" but the new code in vma_needs_copy() checks
-src_vma->vm_flags. Is this intentional?
+> On Fri, 9 Jan 2026 14:01:53 -0400
+> Jason Gunthorpe <jgg@ziepe.ca> wrote:
+>
+> > On Fri, Jan 09, 2026 at 09:04:30AM -0800, David Matlack wrote:
+> > > > If you really want to test TYPE1 you need to test what makes it
+> > > > unique, which is that you can map any VMA and then unmap any slice =
+of
+> > > > it. Including within what should otherwise be a 1G page.
+> > > >
+> > > > But I doubt anyone cares enough to fix this, so just exclude
+> > > > VFIO_TYPE1_IOMMU from this test?
+> > >
+> > > Ah, ok, thanks for the explanation. So VFIO_TYPE1_IOMMU should always
+> > > use 4K mappings regardless of backend (VFIO or iommufd) so that unmap
+> > > can work as intended.
+> >
+> > IDK, I think you should just ignore testing TYPE1v0. The actual real
+> > semantics that it had are quite confusing and iommufd provides an
+> > emulation that is going to be functionally OK (indeed, functionally
+> > more capable) but is not the exactly the same.
+> >
+> > The old comment here is sort of enlightening:
+> >
+> > +        * vfio-iommu-type1 (v1) - User mappings were coalesced togethe=
+r to
+> > +        * avoid tracking individual mappings.  This means that the gra=
+nularity
+> > +        * of the original mapping was lost and the user was allowed to=
+ attempt
+> > +        * to unmap any range.  Depending on the contiguousness of phys=
+ical
+> > +        * memory and page sizes supported by the IOMMU, arbitrary unma=
+ps may
+> > +        * or may not have worked.  We only guaranteed unmap granularit=
+y
+> > +        * matching the original mapping; even though it was untracked =
+here,
+> > +        * the original mappings are reflected in IOMMU mappings.  This
+> > +        * resulted in a couple unusual behaviors.  First, if a range i=
+s not
+> > +        * able to be unmapped, ex. a set of 4k pages that was mapped a=
+s a
+> > +        * 2M hugepage into the IOMMU, the unmap ioctl returns success =
+but with
+> > +        * a zero sized unmap.  Also, if an unmap request overlaps the =
+first
+> > +        * address of a hugepage, the IOMMU will unmap the entire hugep=
+age.
+> > +        * This also returns success and the returned unmap size reflec=
+ts the
+> > +        * actual size unmapped.
+> >
+> > iommufd does not try to do this "returned unmap size reflects the
+> > actual size unmapped" part, it always unmaps exactly what was
+> > requested, because it disables huge pages.
+>
+> I think there was also some splitting code in the IOMMU drivers that
+> has since been removed that may have made the v1 interface slightly
+> more sane.  It certainly never restricted mappings to PAGE_SIZE in
+> order to allow arbitrary unmaps, it relied on users to do sane things
+> and examine the results.  Those "sane things" sort of became the v2
+> interface.
+>
+> In any case, we've had v2 for a long time and if IOMMUFD compat make v1
+> more bloated and slow such that users realize they're using an old,
+> crappy interface, that's probably for the best.  Examining what page
+> size is used for v1 is probably not worthwhile though.  Thanks,
 
-The old code checked userfaultfd_wp(dst_vma), which tests whether the
-child VMA has VM_UFFD_WP set. After dup_userfaultfd() clears VM_UFFD_WP
-from the child when !UFFD_FEATURE_EVENT_FORK, the old code would skip
-page table copying since the child no longer needs uffd-wp protection.
-
-The new code checks src_vma->vm_flags & VM_COPY_ON_FORK, which includes
-VM_UFFD_WP. Since the parent VMA still has VM_UFFD_WP set, this will now
-force page table copying even when the child has had VM_UFFD_WP cleared.
-
-For file-backed VMAs (e.g., shmem) with uffd-wp but !UFFD_FEATURE_EVENT_FORK,
-this appears to cause unnecessary page table copying where the old code
-would have allowed the child to fault pages in fresh.
-
-The call chain is:
-
-    dup_mmap()
-      -> vm_area_dup(mpnt)                  // child gets same flags
-      -> dup_userfaultfd(tmp, &uf)          // may clear VM_UFFD_WP from child
-      -> copy_page_range(tmp, mpnt)
-           -> vma_needs_copy(dst_vma=tmp, src_vma=mpnt)
-
-> + *                           enabled even if it's file-backed
-> + *                           (e.g. shmem). Because when uffd-wp is enabled,
-> + *                           pgtable contains uffd-wp protection information,
-> + *                           that's something we can't retrieve from page cache,
-> + *                           and skip copying will lose those info.
-> + *
-> + *          VM_MAYBE_GUARD - Could contain page guard region markers which
-> + *                           by design are a property of the page tables
-> + *                           only and thus cannot be reconstructed on page
-> + *                           fault.
-> + */
-> +#define VM_COPY_ON_FORK (VM_PFNMAP | VM_MIXEDMAP | VM_UFFD_WP | VM_MAYBE_GUARD)
-
-[ ... ]
-
-> diff --git a/mm/memory.c b/mm/memory.c
-> index d1728d0538d64..27bc457b32c2e 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1463,25 +1463,15 @@ copy_p4d_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
-> static bool
-> vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
-> {
-> +	if (src_vma->vm_flags & VM_COPY_ON_FORK)
-        ^^^^^^^^
-Was the change from checking dst_vma to src_vma for VM_UFFD_WP intentional?
-
-The old code was:
-
-    if (userfaultfd_wp(dst_vma))
-        return true;
-
-which expanded to:
-
-    if (dst_vma->vm_flags & VM_UFFD_WP)
-        return true;
-
+Ack. I'll send a patch to skip the page size checks for v1.
 
