@@ -1,156 +1,145 @@
-Return-Path: <linux-kselftest+bounces-48891-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1331D1B7DF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 22:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 339FED1BA82
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 00:09:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 55E753037532
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 21:56:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BF134300B937
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 23:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D13344055;
-	Tue, 13 Jan 2026 21:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272D3352C41;
+	Tue, 13 Jan 2026 23:09:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YwC3e0Gr"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="g6gP1emt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7B22DC34E
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 21:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F1C284883;
+	Tue, 13 Jan 2026 23:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768341409; cv=none; b=CgvO3JntPVdx4F5hN4H4iKlpmp3MV+EiMpOgEIeD3ZrdlkkQRTEhmSxjWLk9d6Hw41JVOUGxobqD2AXXQfTnyRYY9+I49itCgiXtLB8I+8DgAErzyN1Mz61wN8v3Ngq46hq+BnuXy+f60iIR1+7Z9ply1AcCWeSLtJdH32xuTnk=
+	t=1768345766; cv=none; b=GC3okzQaZ2aRXSvvkcyBxoVvYRoVVJaeQhZUXVi+s+vjusmKs6X5osX2O7MoCIuYkTz/8xjmHbx9LTsOWMzuMlLi/Edgno2zjbr+emo12F4BpeiWvfUPvhvadN4UpHxJIIEghETwCghwMmSNRiGA+gLHG/uPO0VcR5LqHhgbAdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768341409; c=relaxed/simple;
-	bh=h+UznknjOhsgpxn2WvyaKZdy+E01z3xst2FqiSOZMS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=leKGxJn9bm4+4eFE/LyGpP9WOU+5znjjTm/N+6+p+uZvRQIk9l/e7UM5T+m8Yj4hOwmTWsGfY8TB+afGJ0vXedY/AWDgci0lW7Lr0FWLK9jEsbT28iQ0h771CC1RLVBBCVdZui/6D762qTC9z9UzfO7QVOthbrXIUlxhUIWoVeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YwC3e0Gr; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4f1ab2ea5c1so117834831cf.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 13:56:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768341407; x=1768946207; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzIlW73SYpRCgsFT6C0OFykRPA/kKAr4bQkErotYYOY=;
-        b=YwC3e0GraTiusnRlyQel0BOD9K3rc/ufCalMnHnKkfrwncll5uge/TCKEFex7iJs2C
-         MWz35tI3ZusBFOESEpfamHn4rI1d2RUgOmRXmGgypCb1KApJVJPr7EuQ28ngWiuunBXo
-         CeHG8rWDLo/rV0kaV/jyYUSHK9SAwq8AT86N+ziSWGK84UPIcwYZzqZwRb9pPZCvWEsM
-         ROIm7CDDEUWn/wydMqNV9PsnwKeGoUC1gg8LLO7tVkW/esh/oQP0377XTzbsbtAlTUok
-         /Ulbsx7+951QoNaE7w3uMXpAMd4TBhGrGkVn8Pp1vbJasFbqxWmVr4zwr5SpSIjshemT
-         meUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768341407; x=1768946207;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QzIlW73SYpRCgsFT6C0OFykRPA/kKAr4bQkErotYYOY=;
-        b=Hdd5P16U7Bfx7JBOmOuUsHx1qydFOWqgz0y48T86ODeJD//g3sBrnvThIYuPUCYPUu
-         y1Ua09+YKJHk5Mb7wKSd7ZqSeVCBYvpZa7CVMgDpf2cBnJR3Q0WMxEOGHVmbm2zhPtnx
-         p6JWdEJaQbX+08UYbNQZaGZfOJ3DvqylRaGGfAg0OGNJLd7OrLVV9SzGB+0roAMOLnFS
-         avNu1VRtH4D3HneXIVATlYRnb8QScUL7B0uULO+CL8fIDupl6fcQFIDGDW2vzilfEgnD
-         M/LvTRrPGnzQkOkTGNCrXghVXakxXB3Vbc/8xyHZoOW3KqhPr75MSSgQJV9DpLm6YReR
-         ufOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVZqqZEtcRJzBhI6tifzF/eZIE+x+EmLfuzGpFxaEfBA9I7pKFWX7ihnaZGeDoivmJH6gHmGpVv1FZZqP9E6R4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3/JN/HXXDR1b6QQOkAwbSiI8AoxAmyBw9eLx5vvtkCmPu8y4V
-	T7YtR1MWaB9nQyWCwaRIk7XsaDVJSbDHu7A+qSl7dbIktZ0ma1/OU7PjNZcz3Q==
-X-Gm-Gg: AY/fxX6Q6S6n1KBw4XDsAkp2xr1W07wNHzJhGiMG4sMEDNVLM3CCEp6AWItPrea+xCg
-	iz1kYHRB1oVXRNEZHmgZfZtwJdBT/3pwv7mBx477fql5jsylQLE9pQ3u/QtKcI6JbIxbBj44fan
-	UUFdPFZ/Xjr3neZIIUVI4KVOSYLibxLJKFHptV72mKL6xXPrgi+TrY671SAqMpEirR2uY+3jZhy
-	NuZp9LBge6M63/EO5HX0jXeCkmdNvZrP8+W5WpNys1b9WiUBPNdnsZL7PNwu4+pildnW9wMVNyR
-	IwHvdTWPoxayX6wpgBoICwr8c5aHSxd2/QLAOl/AnPOkQVdpDH2kk0vBkvoCBPuZWw1bZ72SwsK
-	mEwFnV/dfOzrEKQBEpfptnBC3DYcp35I3UYAeLBcL04FejsTVuDWtZmr5sIx6fognUcczW53cXY
-	D5hliB7tF/FWl35cJebT1tzbixtaAaOQVl08Q=
-X-Received: by 2002:a05:690c:c85:b0:78f:f3e2:35e0 with SMTP id 00721157ae682-793a1d4bad1mr1649307b3.42.1768336120080;
-        Tue, 13 Jan 2026 12:28:40 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:4a::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-790b1be88dcsm77661627b3.47.2026.01.13.12.28.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 12:28:39 -0800 (PST)
-Date: Tue, 13 Jan 2026 12:28:38 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	netdev@vger.kernel.org, kvm@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v14 01/12] vsock: add netns to vsock core
-Message-ID: <aWaq9vbBJGqg9+DU@devvm11784.nha0.facebook.com>
-References: <20260112-vsock-vmtest-v14-0-a5c332db3e2b@meta.com>
- <20260112-vsock-vmtest-v14-1-a5c332db3e2b@meta.com>
- <20260113024503-mutt-send-email-mst@kernel.org>
+	s=arc-20240116; t=1768345766; c=relaxed/simple;
+	bh=REHwvtrmLyZuAaxApX3wcixqfcyBfRteHzbYHon1TIo=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=i5O+7ShVxZc+C5x7446CXIUv4OO8JZm2zDVPeucgEK7XO9jWdbkBQtaiB/F4RQPyflzEhiCQmd7a7HFIry89URGwLcOeWkQ4o5sSjwUt6R6Pw4uUCOzYthVpKqVgHK33RanpPh8/tLw6AEaMvR/kJoEbU1RtFDZalvAYVo6RSno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=g6gP1emt; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60DN6m624099591;
+	Tue, 13 Jan 2026 15:09:16 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=7G3zwVcKtjRGGwwLj5
+	p1Gbl98yDMOgEESiN4hDwPoYU=; b=g6gP1emt9isAad7wGKAVS0kMRm/RMB7csL
+	X1BDsFvTL1AMyB/vEeMt3rYcbzbH2wPPo2V4kEeugVwPo2ZTpsE85kIRR73xbQyT
+	iGpRPsKwwXSP4vW51ti1hizzAHseODoVItWGIlVZUwXU8jZiJWk08/qhMAm4PI8T
+	Xwio+8FowYfviBEUnecLYVFWm1QjTrNKFIaMOCF5ZVdQHlD8v3S8ZhjTzgKZnRWV
+	581BZn0VXNS0CUuLtB/olsZqTRwc2LgppsdsGEQXAYNDgXyWBjcxgm7gfTJ+y8E9
+	7dNKSOXuoiU7ThfiiEGnEA2xLJzBrWAb8JXjoZ2r1HoXYTNN32uQ==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bnyeh80r2-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Tue, 13 Jan 2026 15:09:16 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Tue, 13 Jan 2026 23:09:03 +0000
+From: Alex Mastro <amastro@fb.com>
+Subject: [PATCH v2 0/3] vfio: selftests: Add MMIO DMA mapping test
+Date: Tue, 13 Jan 2026 15:08:35 -0800
+Message-ID: <20260113-map-mmio-test-v2-0-e6d34f09c0bb@fb.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260113024503-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHTQZmkC/03NMQ6DMAyF4augzHWVRLQ0nbhH1cEYBzKEICdCl
+ RB3b9qJ8R/e93aVWQJn9Wx2JbyFHNJSw14aRTMuE0MYayur7V0bYyHiCjGGBIVzgaHlluzoTId
+ O1c0q7MPn773etb2kCGUWxpOiO8gkWGgGjJiLJNh8FceIP34Ny3S62AwY0MR0Y8f0cEPvhyulq
+ I7jC6/b9rq+AAAA
+To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
+        Shuah Khan <shuah@kernel.org>
+CC: Peter Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Jason Gunthorpe
+	<jgg@ziepe.ca>, Alex Mastro <amastro@fb.com>
+X-Mailer: b4 0.13.0
+X-Proofpoint-ORIG-GUID: aZoN6HpOVsMyfxUeN-0viIITJY5Tzkyw
+X-Authority-Analysis: v=2.4 cv=brZBxUai c=1 sm=1 tr=0 ts=6966d09c cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=3j4BkbkPAAAA:8 a=r1p2_3pzAAAA:8 a=1XWaLZrsAAAA:8
+ a=20KFwNOVAAAA:8 a=9jRdOu3wAAAA:8 a=FOH2dFAWAAAA:8 a=fzhw-T1NQbm0UE1rqVgA:9
+ a=QEXdDO2ut3YA:10 a=r_pkcD-q9-ctt7trBg_g:22 a=ZE6KLimJVUuLrTuGpvhn:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDE4NyBTYWx0ZWRfX8+UqDTtpQre2
+ MGlbQBZLSK/wnY6bSmer9N9Ikrp4EjHORcQ5557dtcDmGQp8ecgkluD+u+16js69MnKJnajr7bu
+ eCFX4mpHXue4N9XtevdgJsR2SrUyZsxlz+KwwnFbU51zkdxb6Zo1Zmd0SQC7jaJW5zHYVEkw2K0
+ 0yWBoPxgW/XI4rTw8n1U/C3dMiH7PkQ9uprqBCQ8KVYPj2uxljPZPWLH6PEJCzQ06zSlnmZit4X
+ he1Xp+8RHbWXsD+o2DIxT0cwVNRC8hXdHoxk2BONgc10/fp6kvr2GsgKLC29VPqzQcMVu72uC+4
+ D6spem6eBlYDEDq340t57jJekqQtYWDGNgkbPJ/+BS9FwVz5vxF9SskuDQ5Ls/HIlKP5mJ3Rvar
+ ob0AEizWwtz1iXmCxgDAtjSGZbpx1uRd+jrc9U4PQdaMVwHIsKkOAXRuof8b4B+h04zl00DBFKA
+ lb8f54BzkxPDuwvMD3Q==
+X-Proofpoint-GUID: aZoN6HpOVsMyfxUeN-0viIITJY5Tzkyw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-13_04,2026-01-09_02,2025-10-01_01
 
-On Tue, Jan 13, 2026 at 02:45:32AM -0500, Michael S. Tsirkin wrote:
-> On Mon, Jan 12, 2026 at 07:11:10PM -0800, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > Add netns logic to vsock core. Additionally, modify transport hook
-> > prototypes to be used by later transport-specific patches (e.g.,
-> > *_seqpacket_allow()).
-> > 
-> > Namespaces are supported primarily by changing socket lookup functions
-> > (e.g., vsock_find_connected_socket()) to take into account the socket
-> > namespace and the namespace mode before considering a candidate socket a
-> > "match".
-> > 
-> > This patch also introduces the sysctl /proc/sys/net/vsock/ns_mode to
-> > report the mode and /proc/sys/net/vsock/child_ns_mode to set the mode
-> > for new namespaces.
-> > 
-> > Add netns functionality (initialization, passing to transports, procfs,
-> > etc...) to the af_vsock socket layer. Later patches that add netns
-> > support to transports depend on this patch.
-> > 
-> > dgram_allow(), stream_allow(), and seqpacket_allow() callbacks are
-> > modified to take a vsk in order to perform logic on namespace modes. In
-> > future patches, the net will also be used for socket
-> > lookups in these functions.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> > Changes in v14:
-> > - include linux/sysctl.h in af_vsock.c
-> > - squash patch 'vsock: add per-net vsock NS mode state' into this patch
-> >   (prior version can be found here):
-> >   https://lore.kernel.org/all/20251223-vsock-vmtest-v13-1-9d6db8e7c80b@meta.com/)
-> 
-> So, about the static port, are you going to address it in
-> the next version then?
+Test IOMMU mapping the BAR mmaps created during vfio_pci_device_setup().
 
-Yes, just wanted to get the rebase out to unblock review of the
-child_ns_mode changes.
+All IOMMU modes are tested: vfio_type1 variants are expected to succeed,
+while non-type1 modes are expected to fail. iommufd compat mode can be
+updated to expect success once kernel support lands; native iommufd will
+not support mapping vaddrs backed by MMIO (it will support dma-buf based
+MMIO mapping instead).
 
-I should have mentioned the static port was a known issue and still
-under discussion.
+To: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
 
-- Bobby
+Changes in v2:
+- Split into patch series
+- Factor out mmap_aligned() for vaddr alignment
+- Align BAR mmaps to improve hugepage IOMMU mapping efficiency
+- Centralize MODE_* string definitions
+- Add is_power_of_2() assertion for BAR size
+- Simplify align calculation to min(size, 1G)
+- Add map_bar_misaligned test case
+- Link to v1: https://lore.kernel.org/all/aWA4GKp5ld92sY6e@devgpu015.cco6.facebook.com
+
+Signed-off-by: Alex Mastro <amastro@fb.com>
+---
+Alex Mastro (3):
+      vfio: selftests: Centralize IOMMU mode name definitions
+      vfio: selftests: Align BAR mmaps for efficient IOMMU mapping
+      vfio: selftests: Add vfio_dma_mapping_mmio_test
+
+ tools/testing/selftests/vfio/Makefile              |   1 +
+ tools/testing/selftests/vfio/lib/include/libvfio.h |   9 ++
+ .../selftests/vfio/lib/include/libvfio/iommu.h     |   6 +
+ tools/testing/selftests/vfio/lib/iommu.c           |  12 +-
+ tools/testing/selftests/vfio/lib/libvfio.c         |  25 ++++
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c |  24 +++-
+ .../selftests/vfio/vfio_dma_mapping_mmio_test.c    | 144 +++++++++++++++++++++
+ .../testing/selftests/vfio/vfio_dma_mapping_test.c |   2 +-
+ 8 files changed, 215 insertions(+), 8 deletions(-)
+---
+base-commit: d721f52e31553a848e0e9947ca15a49c5674aef3
+change-id: 20260112-map-mmio-test-b4e4c2d917a9
+
+Best regards,
+-- 
+Alex Mastro <amastro@fb.com>
+
 
