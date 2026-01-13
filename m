@@ -1,81 +1,38 @@
-Return-Path: <linux-kselftest+bounces-48853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FFBED182AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 11:48:53 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90E1AD18415
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 11:58:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 78D323033DDB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 10:48:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DA817302F028
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 10:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EE837FF7A;
-	Tue, 13 Jan 2026 10:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GRXR/S1S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C659338A71E;
+	Tue, 13 Jan 2026 10:53:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563F22C0F89
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 10:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC51E3806DD;
+	Tue, 13 Jan 2026 10:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768301316; cv=none; b=YNiVjHakE/wg58FcTHyvcmRu380E6SoU0mljL6V23WYMdeca12vYFRWRZN/h+D8jCY9BjOQwjqbmR0enktzPNkS32UFQDIk9zsZuB9NhyRayExrRuP598DW7+3CxjLBwzY+YvCHVn3JplF2VmLbiZXiaYqtPWZm8dT4cZL0cxQI=
+	t=1768301584; cv=none; b=Aac6RN4vgrPMwqsjSdbGYPUiiNkqVJAmL1/L+uaO0tS6mU5pXVUO6IKhk9Q5PPZOC5OGpytiUpf+3+BdSF08QWeKGNkZRrVWZ0Jhrb/7+zmCYqezOQ41Gw0PvMmZtJzXi8bw9PAUcK2cfn0r8IZLcgK/NLFKGZDnCp9TapWz7/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768301316; c=relaxed/simple;
-	bh=HVWq/nMqCWEx4KqTDxex3BJqfz0Jbfe3bSlD+3srwzk=;
+	s=arc-20240116; t=1768301584; c=relaxed/simple;
+	bh=4ud7s/x//wWO9M9VSXwDrnbrgUVZaWyUIXKR42pioi8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ggTx6IC0KgzRnNuIv/AiKlrQ0CuvpAKEPd7vbxHROdUv2xb8GrMQlGtDxXO4XbsGMQspSuoZO+4uZ80XE7LJl9nv8XZIpvkBD6J4UnzMLqARkRDUzfpN7XXCbxyA14qmFjfP25TtLLDeqFLwZomJzlg3SZC0Cf46Ld0GA93IAiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GRXR/S1S; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-432dc56951eso2448408f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 02:48:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768301312; x=1768906112; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JIXnem9PesbM4LOcpc3aqv8ZBT0fEVIpmQqCM7UApXg=;
-        b=GRXR/S1S6o/2Ranq5ayXSyqhYVV8bg4+5JdPrIphjLLTHJFc1O2JOq2VCNapLtAJQC
-         N6ew3TpIyyO0Juxx46/LTt67OuI1/+NPG1PDDhXfr4KXRCWs5VHyDH0eFMJO14Q1EJ1K
-         nA/u5cGuLJJtr/IQRu4mxaqHAkiHxEMXyADjg1C0uBBWKI2C3KgQio/nU57qEgxlICp5
-         x1ME/NRHAPxue8p5TkkuxhWLz3oiK+AKebPlqbFYY6SUCxgHo24GC+iLEQJT67FNUJEm
-         ky1cwJd3rMdxvzzegaCRGwttKArdIByIKP9ze+XzGknlHB/zXf/+VCbUBBs7dw0PhnL5
-         qDtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768301312; x=1768906112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JIXnem9PesbM4LOcpc3aqv8ZBT0fEVIpmQqCM7UApXg=;
-        b=Othq44Y3+a3Nhl3sqdve80l1Hh0y+K2X7rocovG7r5Q/Nf20t24MCOOYp9IvnimJ5h
-         sIy+t8F4VuuwsPthWJ96Oe7c1Filu2fiQ1dtX51+dphCqbuA9R/lfRvV/tQhtGB51YW1
-         WPEV77yZY8CowplvkGYCbjfDEbpnC+Z5WicuvwZduYsJ5M05/5cOi1TEbel6oT+L3SYJ
-         Fu4TbAnJ+cl5vBqvhl3lhrvQgSI30Py2VizhnZ1eviPr8kzalZPGeSbjaAOloXDeEgO7
-         4kUsvb2h+GPoMPfW5Iu3UtxBwrD+XigeWDccjAktaWwyJnuJNAOtrfZKk9LP6eJEk0w8
-         uLUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXgsehjTXGdCEe5La+4Vl2N39d9yJMtK0rf054OLcGi8278mnwaWw7rF5AMop+RfsdQDXO8Q/9UoGJDQ7JG4RQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyg1v2wz8AxMuNDW7NsE8NDIc2HIG+FzQq7d30AQQnZ6iaJ0c7l
-	uyCue8XtTsEeteE7T4k2FyU3+LBmNkxpcjnR7m93Spbfr0tLO2B08L7J
-X-Gm-Gg: AY/fxX7ZbEEcVCqNH5WYGIj1PctA1lOyU9EEgLpQVvu55+1trWezMV9lWyJMw1ULScp
-	iAwIrGgHONfFeh6pLYbfRX/X5wmodL9Y2+P+Qo5mrXC9Hl1lRDpVDckZrAMQ88BG3qkiWyahZ1o
-	t0bFOS6jADeD9vHDG1bX7D4J3j9DdfkhpP19EtY/1JRdaWU+s64z6DVsNfgyIqDEU3LYM9iKtbr
-	m6xk/v2K/UcNVXhd2qHDDLek2hdA8X9tBbK6O6sync/c1sOrJ3F//bj6VwNFn8+EtivlJod1uq3
-	CDCjxj7XAg/SCWuayD9VnogkIco3Iyxa0fdbpks+F5McMuZ+okGPCT6pYIiCZznb33Tl+sOP0Wz
-	WVkQpxhr67tQMYP7cgN899gnjuHDJlQaFNgmKNQUhvWt0Tfi343IueGWMVCPq/Luix/dHAuMrmO
-	ZUuTE1HZx5oRqDJfySu7MaSYXH8sSEQvjvYTbTwIu3ZxEmBNt07rLoNO+t+3IfjoAucypmU1Zjq
-	xf5iuv8DwhEBwnrz942aeV+oKL5B75q+JiqMjdfbJp+AVi2UUK9l24OoF0LBe2ZYA==
-X-Google-Smtp-Source: AGHT+IGJu2DfHIhwL2Wsz6KoyIUAUdvyVOnU75RxhvIHwpjQxcQz5RKKCJsMOQA4l3p4Bbb6eGcwyg==
-X-Received: by 2002:a5d:5d81:0:b0:430:fd9f:e6e2 with SMTP id ffacd0b85a97d-432c378a9b2mr22136397f8f.9.1768301311656;
-        Tue, 13 Jan 2026 02:48:31 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0dade5sm43860084f8f.9.2026.01.13.02.48.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 02:48:30 -0800 (PST)
-Message-ID: <a3b10677-a159-48dd-b45c-b78aed94f354@gmail.com>
-Date: Tue, 13 Jan 2026 10:48:25 +0000
+	 In-Reply-To:Content-Type; b=jnr4s0bzFAg/ZUOHTNrQaokF/0maCukABjfC9ENCBYa6Avq6rCXCBtVLk1Twj+Xu3H7tj6iLVtwXL1IZm5srCxp9ZPDRCU7rgskWEbfRvhJyjbB7153bBRY/XpJMDj8siaTzRlWPLyGAnIDs3Wwlx4DvoGZovTkoMrhMLwYJMWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6D8BD497;
+	Tue, 13 Jan 2026 02:52:55 -0800 (PST)
+Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E56233F5A1;
+	Tue, 13 Jan 2026 02:52:58 -0800 (PST)
+Message-ID: <75ea1f3d-7589-4946-bffe-406459ee77d2@arm.com>
+Date: Tue, 13 Jan 2026 10:52:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,73 +40,187 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v8 8/9] selftests: iou-zcrx: test large chunk
- sizes
-To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Joshua Washington <joshwash@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Alexander Duyck <alexanderduyck@fb.com>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, Shuah Khan
- <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>,
- Ankit Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>,
- Alok Tiwari <alok.a.tiwari@oracle.com>, Ziwei Xiao <ziweixiao@google.com>,
- John Fraker <jfraker@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Mohsin Bashir <mohsin.bashr@gmail.com>, Joe Damato <joe@dama.to>,
- Mina Almasry <almasrymina@google.com>,
- Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Kuniyuki Iwashima <kuniyu@google.com>,
- Samiullah Khawaja <skhawaja@google.com>, Ahmed Zaki <ahmed.zaki@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>, David Wei
- <dw@davidwei.uk>, Yue Haibing <yuehaibing@huawei.com>,
- Haiyue Wang <haiyuewa@163.com>, Jens Axboe <axboe@kernel.dk>,
- Simon Horman <horms@kernel.org>, Vishwanath Seshagiri <vishs@fb.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, dtatulea@nvidia.com,
- io-uring@vger.kernel.org
-References: <cover.1767819709.git.asml.silence@gmail.com>
- <bb51fe4e6f30b0bd2335bfc665dc3e30b8de7acb.1767819709.git.asml.silence@gmail.com>
- <6d4941fd-9807-4288-a385-28b699972637@redhat.com>
+Subject: Re: [PATCH v9 28/30] KVM: arm64: selftests: Skip impossible invalid
+ value tests
+To: Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+ Joey Gouly <joey.gouly@arm.com>, Catalin Marinas <catalin.marinas@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>,
+ Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
+ Mark Rutland <mark.rutland@arm.com>, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Peter Maydell <peter.maydell@linaro.org>, Eric Auger <eric.auger@redhat.com>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
+ <20251223-kvm-arm64-sme-v9-28-8be3867cb883@kernel.org>
+From: Ben Horgan <ben.horgan@arm.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <6d4941fd-9807-4288-a385-28b699972637@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20251223-kvm-arm64-sme-v9-28-8be3867cb883@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 1/13/26 10:34, Paolo Abeni wrote:
-> On 1/9/26 12:28 PM, Pavel Begunkov wrote:
->> @@ -65,6 +83,8 @@ static bool cfg_oneshot;
->>   static int cfg_oneshot_recvs;
->>   static int cfg_send_size = SEND_SIZE;
->>   static struct sockaddr_in6 cfg_addr;
->> +static unsigned cfg_rx_buf_len;
-> 
-> Checkpatch prefers 'unsigned int' above
-> 
->> @@ -132,6 +133,42 @@ def test_zcrx_rss(cfg) -> None:
->>           cmd(tx_cmd, host=cfg.remote)
->>   
->>   
->> +def test_zcrx_large_chunks(cfg) -> None:
-> 
-> pylint laments the lack of docstring. Perhaps explicitly silencing the
-> warning?
+Hi Mark,
 
-fwiw, I left it be because all other functions in the file
-have exactly the same problem.
+On 12/23/25 01:21, Mark Brown wrote:
+> The set_id_regs test currently assumes that there will always be invalid
+> values available in bitfields for it to generate but this may not be the
+> case if the architecture has defined meanings for every possible value for
+> the bitfield. An assert added in commit bf09ee918053e ("KVM: arm64:
+> selftests: Remove ARM64_FEATURE_FIELD_BITS and its last user") refuses to
+> run for single bit fields which will show the issue most readily but there
+> is no reason wider ones can't show the same issue.
+> 
+> Rework the tests for invalid value to check if an invalid value can be
+> generated and skip the test if not, removing the assert.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/arm64/set_id_regs.c | 58 ++++++++++++++++++++-----
+>  1 file changed, 46 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+> index 322cd13b9352..641194c5005a 100644
+> --- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
+> +++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+> @@ -318,11 +318,12 @@ uint64_t get_safe_value(const struct reg_ftr_bits *ftr_bits, uint64_t ftr)
+>  }
+>  
+>  /* Return an invalid value to a given ftr_bits an ftr value */
+> -uint64_t get_invalid_value(const struct reg_ftr_bits *ftr_bits, uint64_t ftr)
+> +uint64_t get_invalid_value(const struct reg_ftr_bits *ftr_bits, uint64_t ftr,
+> +			   bool *skip)
+>  {
+>  	uint64_t ftr_max = ftr_bits->mask >> ftr_bits->shift;
+>  
+> -	TEST_ASSERT(ftr_max > 1, "This test doesn't support single bit features");
+> +	*skip = false;
+>  
+>  	if (ftr_bits->sign == FTR_UNSIGNED) {
+>  		switch (ftr_bits->type) {
+> @@ -330,42 +331,72 @@ uint64_t get_invalid_value(const struct reg_ftr_bits *ftr_bits, uint64_t ftr)
+>  			ftr = max((uint64_t)ftr_bits->safe_val + 1, ftr + 1);
 
--- 
-Pavel Begunkov
+Don't you want the check you've got in the signed case here to deal with
+safe_val or ftr being equal to ftr_max. In the 1 bit case we there won't
+be any invalid values if the safe_val and ftr are different.
+
+>  			break;
+>  		case FTR_LOWER_SAFE:
+> +			if (ftr == ftr_max)
+> +				*skip = true;
+>  			ftr++;
+>  			break;
+>  		case FTR_HIGHER_SAFE:
+> +			if (ftr == 0)
+> +				*skip = true;
+>  			ftr--;
+>  			break;
+>  		case FTR_HIGHER_OR_ZERO_SAFE:
+> -			if (ftr == 0)
+> +			switch (ftr) {
+> +			case 0:
+>  				ftr = ftr_max;
+> -			else
+> +				break;
+> +			case 1:
+> +				*skip = true;
+> +				break;
+> +			default:
+>  				ftr--;
+> -			break;
+> +				break;
+> +			}
+
+Missing break for the outer switch statement.
+
+>  		default:
+> +			*skip = true;
+>  			break;
+>  		}
+>  	} else if (ftr != ftr_max) {
+>  		switch (ftr_bits->type) {
+>  		case FTR_EXACT:
+>  			ftr = max((uint64_t)ftr_bits->safe_val + 1, ftr + 1);
+> +			if (ftr > ftr_max)
+> +				*skip = true;
+>  			break;
+>  		case FTR_LOWER_SAFE:
+> -			ftr++;
+> +			if (ftr == ftr_max)
+> +				*skip = true;
+
+This is the opposite condition of the enclosing else if.
+
+> +			else
+> +				ftr++;
+>  			break;
+>  		case FTR_HIGHER_SAFE:
+> -			ftr--;
+> -			break;
+> -		case FTR_HIGHER_OR_ZERO_SAFE:
+>  			if (ftr == 0)
+> -				ftr = ftr_max - 1;
+> +				*skip = true;
+
+Isn't ftr_max, -1, invalid in FTR_HIGHER_SAFE case when ftr is 0. Also,
+need to check for the actual highest.
+
+>  			else
+>  				ftr--;
+>  			break;
+> +		case FTR_HIGHER_OR_ZERO_SAFE:
+> +			switch (ftr) {
+> +			case 0:
+> +				if (ftr_max > 1)
+> +					ftr = ftr_max - 1;
+> +				else
+> +					*skip = true;
+> +				break;
+> +			case 1:
+> +				*skip = true;
+> +				break;
+> +			default:
+> +				ftr--;
+> +				break;
+> +			break;
+> +			}
+>  		default:
+> +			*skip = true;
+>  			break;
+>  		}
+>  	} else {
+> -		ftr = 0;
+> +		*skip = true;
+
+Why do we always skip when signed and ftr is -1? Wouldn't 0 be an
+invalid in the FTR_LOWER_SAFE case.
+
+>  	}
+>  
+>  	return ftr;
+> @@ -400,12 +431,15 @@ static void test_reg_set_fail(struct kvm_vcpu *vcpu, uint64_t reg,
+>  	uint8_t shift = ftr_bits->shift;
+>  	uint64_t mask = ftr_bits->mask;
+>  	uint64_t val, old_val, ftr;
+> +	bool skip;
+>  	int r;
+>  
+>  	val = vcpu_get_reg(vcpu, reg);
+>  	ftr = (val & mask) >> shift;
+>  
+> -	ftr = get_invalid_value(ftr_bits, ftr);
+> +	ftr = get_invalid_value(ftr_bits, ftr, &skip);
+> +	if (skip)
+> +		return;
+>  
+>  	old_val = val;
+>  	ftr <<= shift;
+> 
+
+
+Thanks,
+
+Ben
 
 
