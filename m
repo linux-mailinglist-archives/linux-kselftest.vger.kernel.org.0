@@ -1,43 +1,44 @@
-Return-Path: <linux-kselftest+bounces-48799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 450F6D15EDC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 01:07:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 364BBD15EFB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 01:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BD545300AAEF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 00:07:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CB47F3043F0B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 00:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2128A13AD05;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B7615C158;
 	Tue, 13 Jan 2026 00:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Undion0u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5NKtTXS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FB96FBF;
-	Tue, 13 Jan 2026 00:07:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCB43B1BD;
+	Tue, 13 Jan 2026 00:07:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768262867; cv=none; b=Utsve/TNV1AaLXN7js4agrKmKGFoyqy6j3QZFIWpgvPu39ytw9/yK1Nc64CKuEFhOPv7oW/giTiHhT5dADeXBcsdExvxRV3WmhZ6M+3wLXqEPbohtmcMUi/ZMroDbxeUH7eHy5o0kN+SEkMdonupTbVGA+3JvEX6uC/JrKFtPw4=
+	t=1768262867; cv=none; b=P50p+88WPKvPjv4wyhQbIF4g9u8dh41MEeX9Y6hF+RVwmOHKcvGQx9StmImcqpLSYGWR3Zgunzic+SXoWALsoi4sjZqqYQ6V/HymeSfUfrewtwIaXTj3cT+sjuCD/EMuoUKFj/Ty5Ic0PBLdS7N1p6Vg+whtbDYSg05rjPiqPSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768262867; c=relaxed/simple;
-	bh=oI/Calb0jtNmfVLjaSxuZjGEjQBQevOqBHXo8sW/hgA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NXFImvkyvfnjxw/0nY+1LJc+YO7ujPe6g+efpNXPITUwej7YnhQ403xnTmvbKCi1V/xz9TLlDA7h5irumVU7maC98DyoEC8w8DD7cEBtSe7iU3sqCzOOC8nHDfantZvSPajvEzv8h05nSIQYxTgDpQ/jKq+da8owYW1oLx2ZmiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Undion0u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CCF6C19421;
+	bh=Bg0DSDtbxrsikheB1ysqAuXP4vBBKGEfSHi4y4G54Ds=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eMMp5EwzRKa41wcBzkWn0VhJTNxDgPvpkZL45erLPRZ3CTUhbx1jTKr4qQEbi+lgG7Jj0lFDhL1E4ua8SUSAWceMBgN1sRx+IsCI2P64DCh8Dh02G5RGyoXZugKCCSTj8EgadG5bDo2/KeluCDF8jBGIRgosKwf5ujC56NQ9kNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5NKtTXS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3698C2BC86;
 	Tue, 13 Jan 2026 00:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768262866;
-	bh=oI/Calb0jtNmfVLjaSxuZjGEjQBQevOqBHXo8sW/hgA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Undion0u3CnwotyOFv3zsS3HtqNSTB3qnnnL1iBa0Ct84E32DngXW4LP9/NJAF7pa
-	 j/Y7n1paRh2me0yWVNkhohUOmR9Xpmca6wflF29xXdRiKz35bZ+/4CNs3pbaNisomE
-	 paVqkDECEdKTX/kCp6JPt+zmryRlknJOxEW+qnaiv4N6ZdaJqwNcQ2EdWjGjzoahE6
-	 +E9IkE+830xZPUtmcd4n3EABf8Fc0VwGlrzCvkbYreVhQu6GL/+0/Tpwtjy+GPnK7G
-	 2s88tG/JUsU6+r1gYzCUvwkkxApKQtw6IMjGXnTOKcAPP2nhBbOeEdvS9WruohF/uh
-	 F3C7f/KD6eTtQ==
+	s=k20201202; t=1768262867;
+	bh=Bg0DSDtbxrsikheB1ysqAuXP4vBBKGEfSHi4y4G54Ds=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=a5NKtTXSmOZ/sJ2B4FxLYKCVsLMjmhXqusvvoh8b+G19JUDEuDW6SrM+0Yc+MRsNP
+	 QELXZ0W/5Dps4wrCTJRBCxcyZBtN+qZKSrWX4MAA6ufkNFIPs26mOb5VSVsLlB0ti1
+	 Zipi8iajgkP+gfDmZ6Ig5qto+lK/2CLhTNvJzYPkPulAWqBgKKG7YhWLV3BSKJD0lB
+	 gxZ9S+/tDY9oTyfcji+YZo2QZPxVgK+Z/y/rWVkzTfO3tcKRxVNrixiXlhhYLLAYxE
+	 VYI4AzV2q0ueyGQ6Gb3Tf6SXSJ4lr3EXF9dUKxaW3sq8Se2esCOOlJWEhJ2Xifrxqt
+	 UYCaGkO2uKVAA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -51,10 +52,12 @@ Cc: netdev@vger.kernel.org,
 	willemb@google.com,
 	petrm@nvidia.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v3 0/6] selftests: drv-net: gro: enable HW GRO and LRO testing
-Date: Mon, 12 Jan 2026 16:07:34 -0800
-Message-ID: <20260113000740.255360-1-kuba@kernel.org>
+Subject: [PATCH net-next v3 1/6] selftests: net: py: teach ksft_pr() multi-line safety
+Date: Mon, 12 Jan 2026 16:07:35 -0800
+Message-ID: <20260113000740.255360-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260113000740.255360-1-kuba@kernel.org>
+References: <20260113000740.255360-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,40 +66,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add support for running our existing GRO test against HW GRO
-and LRO implementation. The first 3 patches are just ksft lib
-nice-to-haves, and patch 4 cleans up the existing gro Python.
+Make printing multi-line logs easier by automatically prefixing
+each line in ksft_pr(). Make use of this when formatting exceptions.
 
-Patches 5 and 6 are of most practical interest. The support
-reconfiguring the NIC to disable SW GRO and enable HW GRO and LRO.
-Additionally last patch breaks up the existing GRO cases to
-track HW compliance at finer granularity.
+Reviewed-by: Petr Machata <petrm@nvidia.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/net/lib/py/ksft.py | 29 ++++++++++++++--------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
 
-v3:
- - patch 4 - s/tso/tcp-segmentation-offload/ for ethtool feature names
- - patch 5 - explicitly skip LRO on netdevsim, it lies about support
- - patch 6 - add enum for the flush_id test configs
-v2: https://lore.kernel.org/20260110005121.3561437-1-kuba@kernel.org
- - fix restoring all features
- - apply the generic XDP hack selectively (print a msg when it happens)
- - a lot of small tweaks and 4 extra patches
-v1: https://lore.kernel.org/20251128005242.2604732-1-kuba@kernel.org
-
-Jakub Kicinski (6):
-  selftests: net: py: teach ksft_pr() multi-line safety
-  selftests: net: py: teach cmd() how to print itself
-  selftests: drv-net: gro: use cmd print
-  selftests: drv-net: gro: improve feature config
-  selftests: drv-net: gro: run the test against HW GRO and LRO
-  selftests: drv-net: gro: break out all individual test cases
-
- tools/testing/selftests/drivers/net/gro.c     | 433 ++++++++++--------
- tools/testing/selftests/drivers/net/gro.py    | 163 ++++++-
- .../selftests/drivers/net/lib/py/env.py       |   7 +-
- tools/testing/selftests/net/lib/py/ksft.py    |  29 +-
- tools/testing/selftests/net/lib/py/utils.py   |  23 +
- 5 files changed, 439 insertions(+), 216 deletions(-)
-
+diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+index 0a96f88bb60a..6cdfb8afccb5 100644
+--- a/tools/testing/selftests/net/lib/py/ksft.py
++++ b/tools/testing/selftests/net/lib/py/ksft.py
+@@ -32,8 +32,23 @@ KSFT_DISRUPTIVE = True
+ 
+ 
+ def ksft_pr(*objs, **kwargs):
++    """
++    Print logs to stdout.
++
++    Behaves like print() but log lines will be prefixed
++    with # to prevent breaking the TAP output formatting.
++
++    Extra arguments (on top of what print() supports):
++      line_pfx - add extra string before each line
++    """
++    sep = kwargs.pop("sep", " ")
++    pfx = kwargs.pop("line_pfx", "")
++    pfx = "#" + (" " + pfx if pfx else "")
+     kwargs["flush"] = True
+-    print("#", *objs, **kwargs)
++
++    text = sep.join(str(obj) for obj in objs)
++    prefixed = f"\n{pfx} ".join(text.split('\n'))
++    print(pfx, prefixed, **kwargs)
+ 
+ 
+ def _fail(*args):
+@@ -170,9 +185,7 @@ KSFT_DISRUPTIVE = True
+             entry.exec_only()
+         except Exception:
+             ksft_pr(f"Exception while handling defer / cleanup (callback {i} of {qlen_start})!")
+-            tb = traceback.format_exc()
+-            for line in tb.strip().split('\n'):
+-                ksft_pr("Defer Exception|", line)
++            ksft_pr(traceback.format_exc(), line_pfx="Defer Exception|")
+             KSFT_RESULT = False
+ 
+ 
+@@ -331,9 +344,7 @@ KsftCaseFunction = namedtuple("KsftCaseFunction",
+             cnt_key = 'xfail'
+         except BaseException as e:
+             stop |= isinstance(e, KeyboardInterrupt)
+-            tb = traceback.format_exc()
+-            for line in tb.strip().split('\n'):
+-                ksft_pr("Exception|", line)
++            ksft_pr(traceback.format_exc(), line_pfx="Exception|")
+             if stop:
+                 ksft_pr(f"Stopping tests due to {type(e).__name__}.")
+             KSFT_RESULT = False
+@@ -343,9 +354,7 @@ KsftCaseFunction = namedtuple("KsftCaseFunction",
+         try:
+             ksft_flush_defer()
+         except BaseException as e:
+-            tb = traceback.format_exc()
+-            for line in tb.strip().split('\n'):
+-                ksft_pr("Exception|", line)
++            ksft_pr(traceback.format_exc(), line_pfx="Exception|")
+             if isinstance(e, KeyboardInterrupt):
+                 ksft_pr()
+                 ksft_pr("WARN: defer() interrupted, cleanup may be incomplete.")
 -- 
 2.52.0
 
