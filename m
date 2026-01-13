@@ -1,48 +1,77 @@
-Return-Path: <linux-kselftest+bounces-48835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C6BD16782
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 04:23:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B2AFD16947
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 05:01:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D487A302515F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 03:23:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A6FFB30133AE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 04:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3202E0401;
-	Tue, 13 Jan 2026 03:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D35034F24D;
+	Tue, 13 Jan 2026 04:01:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBRM2nhi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i1TDpylX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D301EB9FA;
-	Tue, 13 Jan 2026 03:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671B621773F;
+	Tue, 13 Jan 2026 04:01:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768274613; cv=none; b=Qhrqq7sccbSrAvL72gR/zOreNO3PZlMzsLvjC3Uv1MggLxPlEjmBXzcW47TWcaaCUbPJCGEWjLE+j93ravzW5DysNuc4Y4mg7BK+IRdQFl0LlabIDAZkfcmI0mjfJhegPar64pkEVt2YQpY7Xe0QiVMCP+u7GZ9IdZHQ5/ns4ig=
+	t=1768276868; cv=none; b=XDkboXnRW+DezBtP7Y6N5Ydv9qD05fSv89eS36kKsN3o2TgC0Rh5IZ+WI17ELsrMmHHGPmWJiPmrUwYnBmSl40sTfLzuSwVF2BxYhzTf7n+dVJXg14X20uDpLy0KHxsgaRKxzK0e7NPO93uDLAjUu5aV3mSMU/TV5tyWe+/otis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768274613; c=relaxed/simple;
-	bh=SElF49LXQ3hpsrTW7SDT9hB1fHjz0BDxbIERkUlQVrg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=neSsovJScf2fr8vUVTBEY2t00N5pD9YIEwyMXB4cMjcdtDq3zNtuhybKNcihQys8Xf5cBQnXIjTJvT/vs3YUHGHpxc6NXEYdgLXteriO9NYjQ0nn1DjvF2CdoP2+Wh965v6GZyKFHKRg7q2ImZA2bQk61svECaVs4F3d51hSft8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBRM2nhi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B53C116D0;
-	Tue, 13 Jan 2026 03:23:33 +0000 (UTC)
+	s=arc-20240116; t=1768276868; c=relaxed/simple;
+	bh=zeKl7hyNxZwIHJcgtp1F5TMvGZu6CxehegF23qeqIqo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D38ebNNG2a6Gw9lxPtEOV7ojePx6wuTFWJIfDIEoKPEV5yEnqGD5tNbPx8MXEjvTtJ9DKF9soXVgNz7jRRfqn/4kvRPWwdNKTtGv8R9Y69WXHyiibvSPziZjgQSufNQNzMyXr4WKWc8w6G5jqNNNi7g4dBAJmmNeCGZj2uBai3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i1TDpylX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65DEC116C6;
+	Tue, 13 Jan 2026 04:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768274613;
-	bh=SElF49LXQ3hpsrTW7SDT9hB1fHjz0BDxbIERkUlQVrg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=UBRM2nhiMnQWuZMoYbHR+Doglf/5krBcquTa2h6497bz49UzvT3Dl1HRrxtpDcZnQ
-	 niedU3wEafQFXJPB4pgAF4+Ubk+wF6ZLuDCSj47wfTGvQ4oxiPtop81MSrWBUmN5a3
-	 U383EDglSwALWp3g1KTMOrCedZGjGnZT77lvVY+sLQlUkAPLvxZ3VArmqAHeXoOYmb
-	 NQczV4O6GoWcGVNFQE6EbIckKEV9OG6fhnxu//4xotHPDzsmiOPx4gGQlWfTy3sz6y
-	 CaaS4KYTJIwSQX0r4R/DcA6eh6DW2JVBx4mBB21UoayZAMui1kii4zbKfK9tTLAt5I
-	 mHM6AFVM7pEog==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3B93E380CFE0;
-	Tue, 13 Jan 2026 03:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1768276867;
+	bh=zeKl7hyNxZwIHJcgtp1F5TMvGZu6CxehegF23qeqIqo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=i1TDpylXu6DyoRUGdArfaYVao79IWJYNZvr3gvJxT608pHMK2CLlDLAgtY7k2P7yw
+	 q6bhzQGINdxS/gTQ9Ze/g30RcCmh9/xyHzcuyzRJLSOphbYRtwHjgK7pM0BO8OwGCP
+	 Gby9KdMrotoUWeeMilkOPBfe4oBqiXlf7nloc4lYG23eQkbCDS8enrdkq5gJzzZ0Nd
+	 rSRwLwQyBPe7x3kplpHpPhIyhsUr3Xd3BH1lHQVhqUz7zJWTLZVnvqaqJ9CYcf43wm
+	 ugeEaazyF+qjhgkQkqCud0N08zeuSmaMTd7EJKyJKnoThNWKiBaH41HhXqJNoqz39G
+	 g3PvVi4qpCJUg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: bobbyeshleman@gmail.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	horms@kernel.org,
+	linux-arch@vger.kernel.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	davem@davemloft.net,
+	linux-doc@vger.kernel.org,
+	donald.hunter@gmail.com,
+	matttbe@kernel.org,
+	linux-kernel@vger.kernel.org,
+	asml.silence@gmail.com,
+	arnd@arndb.de,
+	netdev@vger.kernel.org,
+	almasrymina@google.com,
+	linux-kselftest@vger.kernel.org,
+	skhawaja@google.com,
+	bobbyeshleman@meta.com,
+	ncardwell@google.com,
+	andrew+netdev@lunn.ch,
+	kuniyu@google.com,
+	edumazet@google.com,
+	sdf@fomichev.me,
+	corbet@lwn.net,
+	dsahern@kernel.org,
+	shuah@kernel.org
+Subject: Re: [net-next,v9,3/5] net: devmem: implement autorelease token management
+Date: Mon, 12 Jan 2026 20:00:27 -0800
+Message-ID: <20260113040027.409308-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-3-8042930d00d7@meta.com>
+References: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-3-8042930d00d7@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,46 +79,92 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND net-next] selftests/net/ipsec: Fix variable size
- type
- not at the end of struct
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176827440704.1656603.13670649593819877503.git-patchwork-notify@kernel.org>
-Date: Tue, 13 Jan 2026 03:20:07 +0000
-References: <20260109152201.15668-1-ankitkhushwaha.linux@gmail.com>
-In-Reply-To: <20260109152201.15668-1-ankitkhushwaha.linux@gmail.com>
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, gustavoars@kernel.org
 
-Hello:
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least pausible.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+net: devmem: implement autorelease token management
 
-On Fri,  9 Jan 2026 20:52:01 +0530 you wrote:
-> The "struct alg" object contains a union of 3 xfrm structures:
-> 
-> 	union {
-> 		struct xfrm_algo;
-> 		struct xfrm_algo_aead;
-> 		struct xfrm_algo_auth;
-> 	}
-> 
-> [...]
+This commit adds autorelease mode toggling for devmem tokens using a
+static branch. The system is locked into the mode set by the first
+binding and can only change when all bindings are released.
 
-Here is the summary with links:
-  - [RESEND,net-next] selftests/net/ipsec: Fix variable size type not at the end of struct
-    https://git.kernel.org/netdev/net-next/c/088f35ab9fd4
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index 05a9a9e7abb9..05c16df657c7 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
 
-You are awesome, thank you!
+[ ... ]
+
+> @@ -292,25 +333,62 @@ net_devmem_bind_dmabuf(struct net_device *dev,
+
+[ ... ]
+
+> +	mutex_lock(&devmem_ar_lock);
+> +
+> +	if (direction == DMA_FROM_DEVICE) {
+> +		if (net_devmem_dmabuf_rx_bindings_count > 0) {
+> +			bool mode;
+> +
+> +			mode = static_key_enabled(&tcp_devmem_ar_key);
+> +
+> +			/* When bindings exist, enforce that the mode does not
+> +			 * change.
+> +			 */
+> +			if (mode != autorelease) {
+> +				NL_SET_ERR_MSG_FMT(extack,
+> +						   "System already configured with autorelease=%d",
+> +						   mode);
+> +				err = -EINVAL;
+> +				goto err_unlock_mutex;
+> +			}
+> +		} else if (autorelease) {
+> +			/* First binding with autorelease enabled sets the
+> +			 * mode.  If autorelease is false, the key is already
+> +			 * disabled by default so no action is needed.
+> +			 */
+> +			static_branch_enable(&tcp_devmem_ar_key);
+> +		}
+> +
+> +		net_devmem_dmabuf_rx_bindings_count++;
+> +	}
+> +
+> +	err = xa_alloc_cyclic(&net_devmem_dmabuf_bindings, &binding->id,
+> +			      binding, xa_limit_32b, &id_alloc_next,
+> +			      GFP_KERNEL);
+> +	if (err < 0)
+> +		goto err_dec_binding_count;
+> +
+> +	mutex_unlock(&devmem_ar_lock);
+> +
+> +	list_add(&binding->list, &priv->bindings);
+> +
+> +	return binding;
+> +
+> +err_dec_binding_count:
+> +	if (direction == DMA_FROM_DEVICE)
+> +		net_devmem_dmabuf_rx_bindings_count--;
+                ^^^
+
+If xa_alloc_cyclic() fails after the first binding with autorelease=true,
+the static branch tcp_devmem_ar_key remains enabled even though
+net_devmem_dmabuf_rx_bindings_count is decremented back to zero. Should
+the error path also call static_branch_disable() when the count returns
+to zero, similar to what __net_devmem_dmabuf_binding_free() does?
+
+This appears to leave the system in an inconsistent state where a
+subsequent binding with autorelease=false would succeed (since count is
+zero) but the static branch is still enabled from the failed attempt.
+The SO_DEVMEM_DONTNEED handler would then call the wrong function
+(autorelease path instead of manual release path).
+
+> +
+> +err_unlock_mutex:
+> +	mutex_unlock(&devmem_ar_lock);
+
+[ ... ]
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
 
