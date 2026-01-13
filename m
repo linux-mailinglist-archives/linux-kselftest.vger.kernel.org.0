@@ -1,128 +1,149 @@
-Return-Path: <linux-kselftest+bounces-48881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832F4D1A0A8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 16:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BBCAD1A1C9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 17:11:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3DEC23014A3F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:57:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF7DC30652B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 16:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5861340D98;
-	Tue, 13 Jan 2026 15:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8959A387366;
+	Tue, 13 Jan 2026 16:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="SvxzNM+o"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTYaz+xn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster2-host11-snip4-10.eps.apple.com [57.103.78.93])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2297E283FEF
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 15:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.78.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657E336C0D0;
+	Tue, 13 Jan 2026 16:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768319864; cv=none; b=FpN46KdLF4+X7mKdof8zN2gBD0eNxEpw2Oki1+aathWd6UAA+Y6hbjVaBxit0ZFLGztkzmvrBTUgK7DkmdeV67mQbFIoeCCBjKGJeEK7YYMl5zppL08AVa8iEtMcdvcy3ocd204h6OLWQzyGjm2U2ckAdZF8IljOeLrMkgRqPeQ=
+	t=1768320660; cv=none; b=f5pbVW0DvDAFufQ8J3d3Pdgmyrp9mAZ0yw6wDFPJDVH27xDFBdLt18Hfdhf0r/AXCVxBc5aEXBpiIfKVUeXxfWh5CxpL8CUCPdKpRJ3yYrehKypHu+pPRX7V+OOvCLmXDzUPcq60KSRhYdFfYT3K4UlFfsXgLwhdPDzdXkPa4tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768319864; c=relaxed/simple;
-	bh=0vkdgA6r80mxKpfAZplIxC5l8+NyKcyQL7sxtbuQ5wg=;
+	s=arc-20240116; t=1768320660; c=relaxed/simple;
+	bh=/dUbmRww4cHamievMVwgGH9rnRn2MYlwRxvkGfxfk3w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f81pIWI0P6iIRKuO9T3bT4syRXwSv/gnC0ldZmXgJ50Gn2h3Y07tFXOq751xDrPK8krKqkczgoY1bJvnVH0acIHeWEtvFmyAs1ZtBmVtj2px8ykgMfobOeIwdw9AoHCBsuZ5LxPrgtaoNr01+zxEsif4jtwgSJm0vvPjfqO+fSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=SvxzNM+o reason="key not found in DNS"; arc=none smtp.client-ip=57.103.78.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-10-percent-3 (Postfix) with ESMTPS id 193E51800295;
-	Tue, 13 Jan 2026 15:57:38 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=iDyf4DVmjcKyNW0ewJj9vMN4f3ffdtug7yHxKcn/nWI=; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:x-icloud-hme; b=SvxzNM+oWtPMtF2uKbra/P9zes1HfLC51jCRSpi5r9ebeYNJ0Ig8pWQOz7zaa8TDOAwcaCC+EGUC494Lz8UsCsaPrWq8mEH5sN+xJPEq2o/uqEEafQhEGoOjuPkB7I7ZVkBKT+vGuRpsqEJdH+XCSygCjXiL843mVNmhFRrAcwYXw/mwYOgUbjo+RXpP0AVBb18sLhByuuIROskjRvkuuo8jxc35rNRl5bZeAwaR6DAaKx45xV7Be4wJaCwrnGOEoeFulheK/nOQmXOOTS1DWrmMxuUi4AlqQGEDCMP/HnXs+/daMjXL3Qzg5H2IUXKsXUqjjVasVcB1F/x1VhORCQ==
-mail-alias-created-date: 1719758601013
-Received: from desktop.y-koj.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-10-percent-3 (Postfix) with ESMTPSA id 2DBD318006DC;
-	Tue, 13 Jan 2026 15:57:36 +0000 (UTC)
-Date: Wed, 14 Jan 2026 00:57:33 +0900
-From: Yohei Kojima <yk@y-koj.net>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH net-next v2 2/2] selftests: net: improve error handling
- in passive TFO test
-Message-ID: <aWZrbRhat5mw1tnl@desktop.y-koj.net>
-References: <cover.1768312014.git.yk@y-koj.net>
- <24707c8133f7095c0e5a94afa69e75c3a80bf6e7.1768312014.git.yk@y-koj.net>
- <607a0338-5e84-4aaf-b705-18dcd4aca05f@web.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=crt2RyFHqiywv1LQj9d2Ljy8Pz0+EByH+t43nKfWppGvKPKx5/Fi9N1em5px7ndCcFaVIcqv7WNAW7Zof0XajhY0rpO4Taf+VNMEYnCD6NhqyZUYn/NLQtljWUUqDSU/poQ+bkDF/RRljCCeDptdck0i/Bv7FJsMk/U3X5nlJ8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTYaz+xn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AD7C19421;
+	Tue, 13 Jan 2026 16:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768320659;
+	bh=/dUbmRww4cHamievMVwgGH9rnRn2MYlwRxvkGfxfk3w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VTYaz+xnWdrALVx1BxBiXwa4OzIIiSKaxfrsMgztr6B2NHaC5uRTXhbCNgeYFt1ja
+	 Y6/6pz2GQxm0hdFh+EZxaxm07rnaR7QRgTgR+sauZ7aIDQwajWWl0AHiDOnl/tA2V6
+	 IXi6u4n/5DURYfljzI0irevQo1TOGgt7Xqr6tJR2VwSjFKMngL+lD5Fe3Wf5KzJian
+	 PjrFomT3c4G9FvTrJWnHC/fjXTWC/fEafQ2Bo20mk0+lT5MBJR4dP0PiZd92EPFBGF
+	 Nk5/XtaUrV5ZgbgHJyF06xjCQ7vVFjxwNb+khJ+nFU8OkesI61zj6SgvMdw9NuQpJB
+	 oGNltgC6Vxw7g==
+Date: Tue, 13 Jan 2026 16:10:53 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Fuad Tabba <tabba@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v9 00/30] KVM: arm64: Implement support for SME
+Message-ID: <30488f61-3233-4cf3-995d-717436de60f6@sirena.org.uk>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
+ <CA+EHjTxOKDZ+gc9Ru=HpcRb8O-AvRm9UJaWM1fZeoqSz0bLK=g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="cbkFj6fysNdPk5Ht"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <607a0338-5e84-4aaf-b705-18dcd4aca05f@web.de>
-X-Authority-Info: v=2.4 cv=PN0COPqC c=1 sm=1 tr=0 ts=69666b74
- cx=c_apl:c_apl_out:c_pps a=YrL12D//S6tul8v/L+6tKg==:117
- a=YrL12D//S6tul8v/L+6tKg==:17 a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=uZvujYp8AAAA:8 a=nPUG_8v1aTBAjSS_qAYA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=-gmKWNR2uOgA:10
- a=SLzB8X_8jTLwj6mN0q5r:22
-X-Proofpoint-ORIG-GUID: 8P5KFWalA--lY3sIqN8O-ciaPhoMwZtx
-X-Proofpoint-GUID: 8P5KFWalA--lY3sIqN8O-ciaPhoMwZtx
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTEzMDEzMyBTYWx0ZWRfXzE9BXl7XQanw
- AF89VUuuXxtf7nkOrMnjxE+YcnZV2kwJlGoJibuuCqW1dHsJmbxQPOz/GM4j0UREGNncfLOgbKK
- E32K7dxbVJDFEmXDO3H0B8Q8wpyCKQOlsVG4+/IVzRZpN7z36jLnG9fI3niIv2h8wb0DG/eS3Bp
- +979Amo7PRkPdOy+n5+eSwN6yz8f1lJsSNMahV7pP+p/ahrjCzRNKSfSzAYlF2KDUVWc6rWu0eB
- Sbx30CNES+8TXjLMIjDnaNMc6+akP+hWzHLWF4EC1eVwy/fUHC8f/o3TSnBRBMa7lKApd8oPTr6
- 3BU4HO84suNlP1Y9vAN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-13_03,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
- bulkscore=0 suspectscore=0 spamscore=0 clxscore=1030 malwarescore=0
- adultscore=0 mlxlogscore=854 phishscore=0 classifier=spam authscore=0
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2601130133
-X-JNJ: AAAAAAABEotqHbVajvSgoEhTB8ZHlQ066JYL27IyhwhN9FPZDXZjJxRxdH0qL/A0jLkIKAMUZRsx6/BAmsFPHR2F6RkV51rIAA7l5HqhtIhQoWucsNbCBCf8/HKj4xXW+6LwRhNZ7joY+8ihKD2mvPNEyZmkqzou0sRBH8ZU5B9gErHHDNWpJIHouX6NOpQrcJpk+Qp+CtDl1N7l5qJ4wmm93F48/7+z5OJRyKqbUPphircK6C51qicrN/Qxsz/6+kqLAYkbtpkysm6JZsGUTpodZTvo9IzDGKGwfrhAwGyNyenKUZ1pcelbkYPTAySipN/h713EP6IQNJ/tzjRGvBuozPeGNVe4ma5+P+WfjTSILevXQJS8ynYlFOXk6J2BykRtp73ruHU5GFeXxc1BU3wEsy83qRReJLZ1gGXHmn2JilS5m8P7PAbNAYHGteH39hk5wYxvYBpAIPGLb22nP2hsIcC3/qoK1hmlN8M22LKKkzkO5W+dRYLwylfVSdnxv318HmR8BKRzgYjTE8kXAKYSaEpD1p+46fojkmObUqp8ZuwXDIeqRgyhHJovJCJcZkM46S2hFN+s5LyLWxBcTBwJVzg2jsQCWMVpo6pdTKiVnP/4dGpVhoNiQI6QOC2vkduLNTulALfGSIDizEhFlTYP8I3SaCKeX9WDdS/FF/6tKUbw9d7J9KE8EFuh1CghX+006cJHxZTjhWGTYRRcC9RDaOoe36yP+aN18yw4ukjv2qMWtvcF71q4Ol1rHSS4HRYuv+QYJ6DG
+In-Reply-To: <CA+EHjTxOKDZ+gc9Ru=HpcRb8O-AvRm9UJaWM1fZeoqSz0bLK=g@mail.gmail.com>
+X-Cookie: All models over 18 years of age.
 
-On Tue, Jan 13, 2026 at 03:48:11PM +0100, Markus Elfring wrote:
-> …
-> > +++ b/tools/testing/selftests/net/tfo.c
-> > @@ -82,8 +82,10 @@ static void run_server(void)
-> …
-> >  	if (read(connfd, buf, 64) < 0)
-> > -		perror("read()");
-> > -	fprintf(outfile, "%d\n", opt);
-> > +		error(1, errno, "read()");
-> > +
-> > +	if (fprintf(outfile, "%d\n", opt) < 0)
-> > +		error(1, errno, "fprintf()");
-> >  
-> >  	fclose(outfile);
-> >  	close(connfd);
-> …
-> 
-> Why was error detection omitted for close() calls here so far?
 
-Because I believe that checking the return value of fclose() would not
-provide additional value in this test case, which is focused on testing
-the behavior of passive TFO.
+--cbkFj6fysNdPk5Ht
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I understand that fclose() could fail there, but considering the
-trade-off between test reliability and code complexity (which increases
-review and maintenance costs), I think checking the return value there
-does not provide benefits to justify the added complexity. In fact, as
-far as I can see, none of the existing tests in selftests/net check the
-fclose() return value.
+On Tue, Jan 13, 2026 at 02:58:37PM +0000, Fuad Tabba wrote:
+> On Tue, 23 Dec 2025 at 01:21, Mark Brown <broonie@kernel.org> wrote:
 
-Thank you,
-Yohei
+> > Changing the value of SVCR.SM will result in the contents of
+> > the Z, P and FFR registers being reset to 0.  When restoring the
+> > values of these registers for a VM with SME support it is
+> > important that SVCR.SM be configured first.
 
-> 
-> https://pubs.opengroup.org/onlinepubs/9799919799/functions/fclose.html
-> 
-> Regards,
-> Markus
+> However, the order returned by kvm_arm_copy_reg_indices() is core,
+> sve, fw, then system. So this means that the VMM will need to hardcode
+> this order, rather than rely on KVM_GET_REG_LIST. It _is_ documented,
+> but it is tricky and it's easy to miss.
+
+> Looking at copy_sve_reg_indices(), there's a special case for
+> KVM_REG_ARM64_SVE_VLS, which forces it to appear before the other SVE
+> registers. So I wonder if we need to do something at the level of
+> kvm_arm_copy_reg_indices(), or do some sort of post-processing to the
+> list, to avoid this problem.
+
+That makes sense.  The whole ordering dependency thing is obviously a
+landmine so if we can do something to make it more likely that things
+will go right then that seems helpful.
+
+> >  - The userspace ABI, in particular:
+> >   - The vector length used for the SVE registers, access to the SVE
+> >     registers and access to ZA and (if available) ZT0 depending on
+> >     the current state of PSTATE.{SM,ZA}.
+
+> One issue I see here, from a VMM's perspective, is that the amount of
+> data transferred via KVM_GET_ONE_REG/KVM_SET_ONE_REG depends on the
+> guest's current architectural mode. So now the VMM needs to first
+> figure out what that is, before being able to SET/GET when
+> saving/restoring a VM state.
+
+> Before this series, SVE just assumed a maximum amount of data and
+> zero-pad the rest. SME state is bigger, but in practice, do we expect
+> many cases where the VL sizes between modes would be drastically
+> different that it would make a difference in terms of storage?
+
+I would expect it to be very common for the forseeable future that the
+SME vector length will be several times that for SVE with no overlap.
+
+> Other than that, I think the asymmetry of VLs might be a painpoint for
+> users. The problem is that there is no guarantee that the set of
+> vector lengths supported for SME match or the set supported for SVE.
+> But I wonder if there's something we can do to help. Maybe a discovery
+> IOCTL that returns the entire matrix of supported configurations (SVE
+> VLs, SME VLs, and their intersection) to simplify VMM decision-making?
+
+I'm thinking such discovery might be better assisted with a userspace
+library, as well as KVM VMMs it's also an issue for things like
+debuggers and trying to design something nice that's also an ioctl()
+feels a lot harder to get right.
+
+--cbkFj6fysNdPk5Ht
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlmbowACgkQJNaLcl1U
+h9BXxgf/Re82kuN/C9D1N1jAvlefDx4tWyo4Yej5K2x+aab7UB8c1wIAHsQZZn+y
+q7tQCcfBt9JS2ZO5KODPc42OkcUMlSGfsNCOU0nQMJiDBO2SWwNjqFwxlGObU5Al
+nVBHLBX3DVeh9nZ0f5otYXTMFyXLYldhRUYCIMPGuV/B4rKCceh4VNXtV8jIzCj2
+J22qiEjUCGsi90zxMYPO7ajbhtzOIWDNifx5n/Mrxk1uDROqRVSNPWW98cK/wmW2
+F+bue7qvlbeI7sOmYWPqNTcu+pMKBHtKsbvQsrf9ZUCKQ10da2Z6CVk5OJbccJyG
+gPk7wK+qCqB4amr6IlNKqK1tjgwriQ==
+=6Ghr
+-----END PGP SIGNATURE-----
+
+--cbkFj6fysNdPk5Ht--
 
