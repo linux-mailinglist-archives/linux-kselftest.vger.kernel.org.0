@@ -1,286 +1,150 @@
-Return-Path: <linux-kselftest+bounces-48877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87D24D19F4E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 16:39:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E4B6D19F69
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 16:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 504AB301E681
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:37:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DB8053024D41
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 15:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 743B13939A2;
-	Tue, 13 Jan 2026 15:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 636343939A8;
+	Tue, 13 Jan 2026 15:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YgpQfwqX"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VBwl8Ahy";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="JrmS9Uxv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8912D392C26
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 15:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4EDD2C15AC
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 15:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768318672; cv=none; b=LCwVv1XvPOSks/cm3lHjXqvjAazV4MMn4//HQC6/4S/aV8OnDR5+KINBT+QOoDQKiKozibEl/Gx98JCcac4DMBQClFjSuWr5ef36/aImpUVmr8WHKw7u00P/KvW2KYGp3YRcnkc+OEdA2bqxSHO32Oz2EUOZZdSuQJpwSVCsbfc=
+	t=1768318940; cv=none; b=IO3HNEMIGglocCgOTlaYTdVFB0PPOgy3gTRk6xIy3f7LJjQu3sCMApuNwngCWgZNXLCoAcS8DPi8ure+Ni+7gyla+imkrlAacr8k/Dfwuy2pFnMLS+y72SVIGqIMT6cc/4nEmbD9Xhe/cD4UosikS6wWwp33KaXj6u+FXFyAkj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768318672; c=relaxed/simple;
-	bh=GDXfWHnos7u19NmPu4/CLffdDu9GAUaL542SerC6adQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=l0RYAofRL0HKk/zmBw596m9faVR6UVXg47Er1yzs2ih6LNJ20UtHOeiISCF+xsmQVjMntaq8178MzvnKShSHzSRCa7uL8q0PZqmWofHE4WWj3ihoMEgRk81WNA36JD5HUfPBxjcCg2a1CmhsdmwW/oCudPLK9BcMe3Q3IhQujvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YgpQfwqX; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47edffe5540so3912055e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 07:37:50 -0800 (PST)
+	s=arc-20240116; t=1768318940; c=relaxed/simple;
+	bh=z0ktrf9THh1+HjKG5G+Ar30QQHeNINGUrFDEbpyqHsg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ww1DOMMc2mQHGzXcG66x0CoJBCYgGCVHUvuKTD40S6TKE0Zo19g/6ILtbplv20078/DgJWe+MVVl1/UZoGR1VBYgNAfOej7UT+UIaojqBL6+FZo7uUQX56HiuetgiWWLIRBS0r7GSmOFUBRnBsNKxieuqXLAphbiabB+/Y+4yOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VBwl8Ahy; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=JrmS9Uxv; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768318937;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VJEPhbiWRGNl7Jboc5mq3GBmXz9jBXvM23UB3dUFjRY=;
+	b=VBwl8AhyOMQBDmI0szaR2ecWm5UqIs8eYGza4Up2dnS/XY3E69U2poOmcMccfLd3DVx9CA
+	OomfVKL7tgUnXHArXu+eilkCMZVDDClHSA9bEqzwr8ptZ2UnKWF/KWtogZhbcAWmqJqUeV
+	fzxXabDM3rLuwutsQZ8MrvFRRDtkzBA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-671-jFxGbh0uP4aBw17eyyh92A-1; Tue, 13 Jan 2026 10:42:16 -0500
+X-MC-Unique: jFxGbh0uP4aBw17eyyh92A-1
+X-Mimecast-MFC-AGG-ID: jFxGbh0uP4aBw17eyyh92A_1768318935
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-477a11d9e67so51460785e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 07:42:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1768318669; x=1768923469; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PviygXDwFF6j06NM3itllXQSNFJErjj8x+gM1Sairpo=;
-        b=YgpQfwqXLcyQZfYcgSFHTZRbYJUw7Q4QpTTRxtnvPxLDEVrXi/w9ukUgDK5WILZzDO
-         QwUivQ5O2OAcp56Qj46Bpyi4hBmqBQAeniVdF7cjxxLNSP4kWnKllDNonvtOgfBeuvkJ
-         LjDL6AdBZw0mjWhxK3PQfYdX6FHcRciOsntMGfkW9g9hahJRcbFImgyZJiGcw3bjQnDu
-         r2okk4OUrlTF9zzshPFu9ZqYG7ht1pYpqk5FVf/UnG0o8tlVgaid4/HQGOOj/KL6fYEP
-         HME2NqGQYfpFRtCn/7Ugs3zaCYQQelSwsSZlhTt0AXlofiorVckgsxx4o+SN+F9K3n/6
-         8afA==
+        d=redhat.com; s=google; t=1768318935; x=1768923735; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJEPhbiWRGNl7Jboc5mq3GBmXz9jBXvM23UB3dUFjRY=;
+        b=JrmS9UxvNExe9f0SxaMLZoIqNBf7wtmAt8LITJYbNiw8wcDm6muI6r2os8ZOKn0Ca6
+         6WO9MVzG9DOZulAg4srR9tXLbN3f9YohQoXAZ9nBFl8dVw20k1mSwxkOX8w0dTQMliaC
+         sOypnMmVoneA9NqPRZEPqV4c3JRZ+QQpTqFsh3Ve7qzdbEvI0ubsOpaDN6KWOxd1mKfa
+         k0+ns9Tv3H9VxsrLEMWAUjj5fJt4fdvlxq/kUgGWGhzMPjPS4qxw3rNwXYBqtiGEFRt5
+         7o39St8tnHHvicCO5whiI7kF/E/yOR5la0T2nmv3ZTyZhdr4B9mZZNQj7KcyVnk6qM6V
+         5NdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768318669; x=1768923469;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PviygXDwFF6j06NM3itllXQSNFJErjj8x+gM1Sairpo=;
-        b=OUEO9UysY7GDhPmMDdMBURPN7oHOfYlyFoQPwBZfKSoLN8tZicv6NWWhlZN7kMZxpq
-         vFFVZQ+bj6m1Lo/bIX53XHecAMsygtfEOOxducfwCRf+DLfri00fTpcUFreyJwiwfZHG
-         O9wTm9to4TgpTYUGTzf/8fNMvNxdVYXKPHiXRjo9iiQM78604PvrArBOoOs+lqeoJNxj
-         Le+vbp6ulKRjjiK2fGVUOInKT61R1CLd0KVRF41Br2apO5jQzp5udw7E+JZ6OW5Ngq2T
-         zBybAlGPQX8vTCpsw/KEeu8p3vc893yD4YBmeV8CZuf1DMEjxJIJe+hYhOT9AR1moVB2
-         xswA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2YFV89BS1nHQ62+6q/OkwogG2nL/8yQovNGPvCSBUcdyL5s93dfe1e3pdqez+eUJUvpEeXA+OXZcDXY/paMc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMaacn4iPQ4SeNDHJkW6H/pU2BGmcqaZ90EOP3CeQtEWEuErbU
-	PjYx6Iopxi9oChFMcbrOacvtG6toO8zxTEKuwKNXoU7tI3hmo87eaQ9ryLBuR2InM2A=
-X-Gm-Gg: AY/fxX62lTjU1xHrqgHjVBFQJ9RFRaeE5FuTdvXCPKpoFoe4Y29kIK3o2pE6mvfdlYn
-	P3fnxaUoR4IsujRc6vIbhehRSpgWlz/Ipm12x2eM2r9A0MhBWMn3MxKjkSfUHZBZ97avmsh1Oqd
-	BA/kZV4jH7arQIYUIhw5mclJ/VUfRRlZTBcMoUBrCN70dra1DfUGbvhj4MYlxk+LrOk3GNcjfi9
-	7KBJmG9v1RfuP++Sz2LUFnR/9E0ZtR4E9X7e5/mETMq3T4Q3gNm1lDtr+wwOASGKAIhAPcQ7Vhr
-	LCSddHb05fDEDKAZSi4/orD3oLoKUianZPu6hjSAy2LiAONqhb3MRM5jyBjRuA8cpDkhdgqjChq
-	BA2czRtLAA8B/SA9DVrxClwQhWBWLbeuqIMl9u0/aPg7OJ1Rg53+KiILoCHPFPgCdukzruCW07D
-	RpQtP8a9XGpMGP8Iw71x5Qtnq3ubLO/M3azObY+68/
-X-Google-Smtp-Source: AGHT+IH0KhNeJ74dpkbL66O3xTO4CaL+qK6+yBOKCa4diNwDUTPZtNVoaCzmax9mtzhFWlZ1/qAQlA==
-X-Received: by 2002:a05:600c:4f53:b0:477:7991:5d1e with SMTP id 5b1f17b1804b1-47d84b3860fmr225612095e9.25.1768318668864;
-        Tue, 13 Jan 2026 07:37:48 -0800 (PST)
-Received: from localhost (201-1-159-113.dsl.telesp.net.br. [201.1.159.113])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-563995311fbsm1787948e0c.11.2026.01.13.07.37.47
+        d=1e100.net; s=20230601; t=1768318935; x=1768923735;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VJEPhbiWRGNl7Jboc5mq3GBmXz9jBXvM23UB3dUFjRY=;
+        b=eaUPp6Mrq2l2XNufaXlhXsAkcXhxWH1juiNLQOD6CoeGQNjguJDdkdjP6yGHDlz3El
+         ypTZPKHctzCHC12pmGOSh7QnG0IZaYl+zjfxOgQEWz+hio3Y7eTNqJ6T58xesH1yZn9v
+         a8zVyupJ0AznQdT7wl+TqyXY+cgB9vCNQyaSrOW1frYD68qRwzTPVhY8IsigKj6gZTVG
+         VjHc+o2XDdeCrfrPugU1PDklXDEdiOCy2lT2yHrp9KBXdCO71Gl9Ub81jCWQKUmvl9XA
+         b8k/5VzRDkhb3+eCisoWMeWme4PWT10KU9Wao6V+N9zPrrEl8DLsQGuGpd1OV9CpcCA1
+         y1Iw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAwJ6eIt64uSpDJuVqzI5SF5czFmeuZc7RBcDp5kFJup5WrZqJdcnMFN75h9EFMB2stQVTOXcfXZfIBcCxni4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgKkpkGD44Vw7RHu9uVON2Jt8D/8VRO3y4EA0egrNeTqpgHYpS
+	scHb1FlvI+qUWSfq54PL/zunRws7tvhRME7OYYsjwaWhBRr9qeaAt7IePeM7+hHcotsC/xn+VQW
+	eLyrDRc/HnhAYNj+HvxMePG6QJKjuSIM+MjUbXu+JjZiqLT3NqKXpOAPZzjLUIzGSWrfaMA==
+X-Gm-Gg: AY/fxX65/cJqht9iQhAXRZQqIfirvua1EnAEReZvJ69Ma+vnPTFMQwvmlZJD4pRrt70
+	YszxclYQD6TL6Ue+8ska3B3tWrqkO8iqhX1+i8ReNXaMCYW0apubqeOI1yrYqRb0fYv3YPaeyVv
+	Md0hNdNfYVzBLWF5dQbKAVHkkd5hI/xhU6TagnhgBAXk5HmYWk0fvRSpRMDjCyWSUzWhJCdzVP4
+	sv8Wlb5p9Wt6vF3fIiXG8Y5fIP2t0bQNlrn3o4J7kpUjFmdRNHYR/ICnVVY2AOfe/ydwCl+3pHT
+	pgOASuDwy6HvyOlQN8lt+QSDcaZBjFHnv2rl7FVhbH/uQjaAkg5DOyjfyffwe9z/QMxRt5dEj06
+	TsRsmrk1xY5TmUA5tlz9lP9SZ8NG7E6T3+uUjV0mtd42o+cZMcEuPakql1aYZxw==
+X-Received: by 2002:a05:600c:620c:b0:46e:33b2:c8da with SMTP id 5b1f17b1804b1-47d84b3be47mr241263045e9.32.1768318935387;
+        Tue, 13 Jan 2026 07:42:15 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH4paz0040d/vitY+T5rv1eo5WHxtcQ4X4vPvSUCFKLot5Wf40qNTKU1VjGBirJbB8u4247Wg==
+X-Received: by 2002:a05:600c:620c:b0:46e:33b2:c8da with SMTP id 5b1f17b1804b1-47d84b3be47mr241262525e9.32.1768318934958;
+        Tue, 13 Jan 2026 07:42:14 -0800 (PST)
+Received: from sgarzare-redhat (host-87-12-25-233.business.telecomitalia.it. [87.12.25.233])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e1adbsm45281481f8f.17.2026.01.13.07.42.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 07:37:48 -0800 (PST)
-From: =?utf-8?B?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Date: Tue, 13 Jan 2026 12:37:44 -0300
-Subject: [PATCH net v2] selftests: net: fib-onlink-tests: Convert to use
- namespaces by default
+        Tue, 13 Jan 2026 07:42:14 -0800 (PST)
+Date: Tue, 13 Jan 2026 16:42:07 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>, 
+	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v14 04/12] selftests/vsock: increase timeout to
+ 1200
+Message-ID: <aWZnnHxzaV9pgwzb@sgarzare-redhat>
+References: <20260112-vsock-vmtest-v14-0-a5c332db3e2b@meta.com>
+ <20260112-vsock-vmtest-v14-4-a5c332db3e2b@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260113-selftests-net-fib-onlink-v2-1-89de2b931389@suse.com>
-X-B4-Tracking: v=1; b=H4sIAMdmZmkC/3WOwQ6CMAyGX8X0bJVtiujJ9zAeNijSCJtZJ8EY3
- t3B3d7+pt/39wtCkUngsvlCpJGFg89BbzdQd9Y/CLnJGXShy0IVJxTq20SSBD0lbNlh8D37J56
- Ma6ryYGxjCDL+itTytKpvkG/hnpfOCqGL1tfdYl0Unqa0Hyz7BepYUoif9Z1RrWhuPiqtKoxu+
- N8+KlR4Lk2h7TFPba7yFtrVYYD7PM8/c5KhyugAAAA=
-X-Change-ID: 20260107-selftests-net-fib-onlink-73bd8643ad3e
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Fernando Fernandez Mancera <fmancera@suse.de>, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openssh-sha256; t=1768318664; l=5831;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=GDXfWHnos7u19NmPu4/CLffdDu9GAUaL542SerC6adQ=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QEfDb6B/2Qje/EDcOmEeQdxrgq8erXDF0Mh2ldTQyR5Hn47rB1OSpB9ScfrBu7bmFl4CGNTBsXQ
- YJTxuTOqOgQo=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260112-vsock-vmtest-v14-4-a5c332db3e2b@meta.com>
 
-Currently, the test breaks if the SUT already has a default route
-configured for IPv6. Fix by avoiding the use of the default namespace.
+On Mon, Jan 12, 2026 at 07:11:13PM -0800, Bobby Eshleman wrote:
+>From: Bobby Eshleman <bobbyeshleman@meta.com>
+>
+>Increase the timeout from 300s to 1200s. On a modern bare metal server
+>my last run showed the new set of tests taking ~400s. Multiply by an
+>(arbitrary) factor of three to account for slower/nested runners.
+>
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+> tools/testing/selftests/vsock/settings | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes: 4ed591c8ab44 ("net/ipv6: Allow onlink routes to have a device mismatch if it is the default route")
-Suggested-by: Fernando Fernandez Mancera <fmancera@suse.de>
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
-Changes in v2:
-- Don't use the default namespace, instead of simply increasing the metric
-- Link to v1: https://lore.kernel.org/r/20251218-rbm-selftests-net-fib-onlink-v1-1-96302a5555c3@suse.com
----
- tools/testing/selftests/net/fib-onlink-tests.sh | 71 +++++++++++--------------
- 1 file changed, 30 insertions(+), 41 deletions(-)
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-diff --git a/tools/testing/selftests/net/fib-onlink-tests.sh b/tools/testing/selftests/net/fib-onlink-tests.sh
-index ec2d6ceb1f08..c01be076b210 100755
---- a/tools/testing/selftests/net/fib-onlink-tests.sh
-+++ b/tools/testing/selftests/net/fib-onlink-tests.sh
-@@ -120,7 +120,7 @@ log_subsection()
- 
- run_cmd()
- {
--	local cmd="$*"
-+	local cmd="$1"
- 	local out
- 	local rc
- 
-@@ -145,7 +145,7 @@ get_linklocal()
- 	local pfx
- 	local addr
- 
--	addr=$(${pfx} ip -6 -br addr show dev ${dev} | \
-+	addr=$(${pfx} ${IP} -6 -br addr show dev ${dev} | \
- 	awk '{
- 		for (i = 3; i <= NF; ++i) {
- 			if ($i ~ /^fe80/)
-@@ -173,58 +173,48 @@ setup()
- 
- 	set -e
- 
--	# create namespace
--	setup_ns PEER_NS
-+	# create namespaces
-+	setup_ns ns1
-+	IP="ip -netns $ns1"
-+	setup_ns ns2
- 
- 	# add vrf table
--	ip li add ${VRF} type vrf table ${VRF_TABLE}
--	ip li set ${VRF} up
--	ip ro add table ${VRF_TABLE} unreachable default metric 8192
--	ip -6 ro add table ${VRF_TABLE} unreachable default metric 8192
-+	${IP} li add ${VRF} type vrf table ${VRF_TABLE}
-+	${IP} li set ${VRF} up
-+	${IP} ro add table ${VRF_TABLE} unreachable default metric 8192
-+	${IP} -6 ro add table ${VRF_TABLE} unreachable default metric 8192
- 
- 	# create test interfaces
--	ip li add ${NETIFS[p1]} type veth peer name ${NETIFS[p2]}
--	ip li add ${NETIFS[p3]} type veth peer name ${NETIFS[p4]}
--	ip li add ${NETIFS[p5]} type veth peer name ${NETIFS[p6]}
--	ip li add ${NETIFS[p7]} type veth peer name ${NETIFS[p8]}
-+	${IP} li add ${NETIFS[p1]} type veth peer name ${NETIFS[p2]}
-+	${IP} li add ${NETIFS[p3]} type veth peer name ${NETIFS[p4]}
-+	${IP} li add ${NETIFS[p5]} type veth peer name ${NETIFS[p6]}
-+	${IP} li add ${NETIFS[p7]} type veth peer name ${NETIFS[p8]}
- 
- 	# enslave vrf interfaces
- 	for n in 5 7; do
--		ip li set ${NETIFS[p${n}]} vrf ${VRF}
-+		${IP} li set ${NETIFS[p${n}]} vrf ${VRF}
- 	done
- 
- 	# add addresses
- 	for n in 1 3 5 7; do
--		ip li set ${NETIFS[p${n}]} up
--		ip addr add ${V4ADDRS[p${n}]}/24 dev ${NETIFS[p${n}]}
--		ip addr add ${V6ADDRS[p${n}]}/64 dev ${NETIFS[p${n}]} nodad
-+		${IP} li set ${NETIFS[p${n}]} up
-+		${IP} addr add ${V4ADDRS[p${n}]}/24 dev ${NETIFS[p${n}]}
-+		${IP} addr add ${V6ADDRS[p${n}]}/64 dev ${NETIFS[p${n}]} nodad
- 	done
- 
- 	# move peer interfaces to namespace and add addresses
- 	for n in 2 4 6 8; do
--		ip li set ${NETIFS[p${n}]} netns ${PEER_NS} up
--		ip -netns ${PEER_NS} addr add ${V4ADDRS[p${n}]}/24 dev ${NETIFS[p${n}]}
--		ip -netns ${PEER_NS} addr add ${V6ADDRS[p${n}]}/64 dev ${NETIFS[p${n}]} nodad
-+		${IP} li set ${NETIFS[p${n}]} netns ${ns2} up
-+		ip -netns $ns2 addr add ${V4ADDRS[p${n}]}/24 dev ${NETIFS[p${n}]}
-+		ip -netns $ns2 addr add ${V6ADDRS[p${n}]}/64 dev ${NETIFS[p${n}]} nodad
- 	done
- 
--	ip -6 ro add default via ${V6ADDRS[p3]/::[0-9]/::64}
--	ip -6 ro add table ${VRF_TABLE} default via ${V6ADDRS[p7]/::[0-9]/::64}
-+	${IP} -6 ro add default via ${V6ADDRS[p3]/::[0-9]/::64}
-+	${IP} -6 ro add table ${VRF_TABLE} default via ${V6ADDRS[p7]/::[0-9]/::64}
- 
- 	set +e
- }
- 
--cleanup()
--{
--	# make sure we start from a clean slate
--	cleanup_ns ${PEER_NS} 2>/dev/null
--	for n in 1 3 5 7; do
--		ip link del ${NETIFS[p${n}]} 2>/dev/null
--	done
--	ip link del ${VRF} 2>/dev/null
--	ip ro flush table ${VRF_TABLE}
--	ip -6 ro flush table ${VRF_TABLE}
--}
--
- ################################################################################
- # IPv4 tests
- #
-@@ -241,7 +231,7 @@ run_ip()
- 	# dev arg may be empty
- 	[ -n "${dev}" ] && dev="dev ${dev}"
- 
--	run_cmd ip ro add table "${table}" "${prefix}"/32 via "${gw}" "${dev}" onlink
-+	run_cmd "${IP} ro add table ${table} ${prefix}/32 via ${gw} ${dev} onlink"
- 	log_test $? ${exp_rc} "${desc}"
- }
- 
-@@ -257,8 +247,8 @@ run_ip_mpath()
- 	# dev arg may be empty
- 	[ -n "${dev}" ] && dev="dev ${dev}"
- 
--	run_cmd ip ro add table "${table}" "${prefix}"/32 \
--		nexthop via ${nh1} nexthop via ${nh2}
-+	run_cmd "${IP} ro add table ${table} ${prefix}/32 \
-+		nexthop via ${nh1} nexthop via ${nh2}"
- 	log_test $? ${exp_rc} "${desc}"
- }
- 
-@@ -339,7 +329,7 @@ run_ip6()
- 	# dev arg may be empty
- 	[ -n "${dev}" ] && dev="dev ${dev}"
- 
--	run_cmd ip -6 ro add table "${table}" "${prefix}"/128 via "${gw}" "${dev}" onlink
-+	run_cmd "${IP} -6 ro add table ${table} ${prefix}/128 via ${gw} ${dev} onlink"
- 	log_test $? ${exp_rc} "${desc}"
- }
- 
-@@ -353,8 +343,8 @@ run_ip6_mpath()
- 	local exp_rc="$6"
- 	local desc="$7"
- 
--	run_cmd ip -6 ro add table "${table}" "${prefix}"/128 "${opts}" \
--		nexthop via ${nh1} nexthop via ${nh2}
-+	run_cmd "${IP} -6 ro add table ${table} ${prefix}/128 ${opts} \
-+		nexthop via ${nh1} nexthop via ${nh2}"
- 	log_test $? ${exp_rc} "${desc}"
- }
- 
-@@ -491,10 +481,9 @@ do
- 	esac
- done
- 
--cleanup
- setup
- run_onlink_tests
--cleanup
-+cleanup_ns ${ns1} ${ns2}
- 
- if [ "$TESTS" != "none" ]; then
- 	printf "\nTests passed: %3d\n" ${nsuccess}
-
----
-base-commit: 50e194b6da721e4fa1fc6ebcf5969803c214929a
-change-id: 20260107-selftests-net-fib-onlink-73bd8643ad3e
-
-Best regards,
--- 
-Ricardo B. Marlière <rbm@suse.com>
+>
+>diff --git a/tools/testing/selftests/vsock/settings b/tools/testing/selftests/vsock/settings
+>index 694d70710ff0..79b65bdf05db 100644
+>--- a/tools/testing/selftests/vsock/settings
+>+++ b/tools/testing/selftests/vsock/settings
+>@@ -1 +1 @@
+>-timeout=300
+>+timeout=1200
+>
+>-- 
+>2.47.3
+>
 
 
