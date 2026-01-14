@@ -1,259 +1,150 @@
-Return-Path: <linux-kselftest+bounces-48965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD317D20DF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BACED20DE8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:44:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E413D303FE19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:44:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 59A33301CE86
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A832133A704;
-	Wed, 14 Jan 2026 18:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6543396E1;
+	Wed, 14 Jan 2026 18:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="RJqBMKdK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kUJ/7MOi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB273346A2;
-	Wed, 14 Jan 2026 18:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9698337BB2;
+	Wed, 14 Jan 2026 18:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768416293; cv=none; b=msmhqPiD6gD9lbcmJTKPnuD9ej/MkFDQHofoy5lBZeuV2F0H1DLXJEQ/6CtBoiTKhHjH7gWNRFrBlfS5h1nOjFfxyn8vyBNVFDctK2ZVz2XDo6jhC2yr/k5NM1bo9RhJEjNy2Q1IY++HgdEc1J/EwA29KZm+xTdehQYQ0zeC/QU=
+	t=1768416283; cv=none; b=DMEUjUZ7EZe0kI0fGnmvZH2F3HADaIxNH70EEPZtli8z7Xx4VT0qjc6Gc7jilPBqxCLAvHsuaDz2/RmxicYr7W+L9mQKjmS9NnenytE2Z8FQG+yCEX/3f14Y7IcI1ZwMJnPkZo78D26JWpn0DV+/WR3P3swqc6Ikv55WPpDsXfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768416293; c=relaxed/simple;
-	bh=CzbuOLcem/ybabry9idjUdgZJV/Srmg9MoXXPHf4bOQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L7f2CrWfUJ8KyH9CD9WzoM2Z9dbm89Wob7fIG5bsgMC9O5l+VsY6TuhlxpFIikkOR0LjMRLXOYjCF7+cPk5MgnAAGb/KY9OghFtpwv3k1Rke9Zv/mZhXJkXik27sRqp/EF1IW8UVtjJSMoFvNR3PLY0qYVfUUvDOPDgweOGfU/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=RJqBMKdK; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60EHQ7TB159891;
-	Wed, 14 Jan 2026 10:44:44 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=q20R91Zh6absepefxROt
-	glkuP8Qheu/1/ykNS0LsHHg=; b=RJqBMKdKnMpdH+nUhL+peDrc6yeO0Es/yrFP
-	SsVXmC2GqRflqP66cvUAvxcyat18wRIjwlsNm0/sMg12TBSY8WxlSZQfwZR33DDU
-	Y25wizFEANbUTyhO0aWDNy2WmF6kQK/Tx29HSFvGg7EBOeVE4ZBarFQp6Ec9+tKO
-	88i8FdBwmZypojY0wOAYdvrclivxx9OFA6YSvsGIEB3kZ2MB1Q9HrQyHgJsp8elv
-	OfB5WR6vDq+wDr17Yu9W/8gMeth1MqQCKq+F67LmB+q27w/7wtplGcAYiV19QXNm
-	XVFxNAar76enTnzz5aqO5MVzcktGBplAn240c4ni0I8xs2DgEQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bpd9fa664-6
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 14 Jan 2026 10:44:44 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Wed, 14 Jan 2026 18:44:31 +0000
+	s=arc-20240116; t=1768416283; c=relaxed/simple;
+	bh=ClypWUCcmZdhOgMSv7cAqWse/cL4IEXeAo2k6l1M1+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ue6MRNxzQWJ+Li1VJ/TWAt/6ugRGtNU12iqLJWjEofWSCj+T9pgducSO9/3OH79LDRSjSlFC6nSDx7Uaf8Qx9NT8Fh7yEGBP2LsNmG67KMDSqAKOpDGYhVqKm8qA1bhdOL7MWiqoNQYXMSBLFbf3ym9nMgf66bLplJC8xPjjh/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kUJ/7MOi; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768416274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8MuE08WjOKJJ911Tg0cdT6a/SadtO731OH3L0J+ZIjA=;
+	b=kUJ/7MOi8ckRi8Q39kTf4knDQP3iSskFER8XOHkyRahsTZBtPaUNxXeVH5AhGvIOosaAMT
+	Enux6nAn6cKwi/tOtLvyrjXE7ic1DwO0GWTZLzGCfTTuDLMxEjoowT+HcuCe2lRpoMN1nr
+	vbGEKevRA0L3w6gzt7TvHzlFuodDrr4=
 Date: Wed, 14 Jan 2026 10:44:27 -0800
-From: Alex Mastro <amastro@fb.com>
-To: David Matlack <dmatlack@google.com>
-CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-        Peter
- Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Jason Gunthorpe
-	<jgg@ziepe.ca>
-Subject: Re: [PATCH v2 2/3] vfio: selftests: Align BAR mmaps for efficient
- IOMMU mapping
-Message-ID: <aWfkC4figrTo5kIS@devgpu015.cco6.facebook.com>
-References: <20260113-map-mmio-test-v2-0-e6d34f09c0bb@fb.com>
- <20260113-map-mmio-test-v2-2-e6d34f09c0bb@fb.com>
- <aWfSnNIF-3xDQr4A@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <aWfSnNIF-3xDQr4A@google.com>
-X-Proofpoint-ORIG-GUID: ooxfud2dtqjFHKgXupKgDMxy7utNSsE6
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDE1NiBTYWx0ZWRfXwZLJoBiatdXu
- JF+PKsy8ST+0U7WPgJV4IpBNxzq3xlQqGtWcEs8nZMmQusTBFclhFJSAk+9cEeyeGgzjRm+EK4j
- T5XTUn07FZPiCzGvd3q+Uo9lyg8+iia09sDcEtCvubVnepdcfes3ew1Qq+767Cs9sovR7cBsbJT
- FSpTrmawzDxhxIQyV/q3Dv0qIRDTat0TpQzsuXqO+IIxzXdEIdcl0+svpHWA6kN2A7CzQUvZVXu
- W/t8L+Bn3n2VAPm7fb3NERL75ee3Fsx/79Rzs36Up5o7N6Olbw6L0xtd2dkOVPK2uCUBzJSB5F8
- PNLtBLkkA5FJNEFoDyPFQEWKIcTOMW0vZVrAktYZeQ2Od5ZNm6MRmZ2ar5DCSkZM57EN9FHfwCR
- 9L/QSCI6EaUh8N2kv4XaairsoZKLD0Yeyvz//goq7TgPW2fn7fql7N3yelwYHXkd8UXjWzxvEtK
- jwqUNcW7zAg2XgTFFsA==
-X-Authority-Analysis: v=2.4 cv=Pc/yRyhd c=1 sm=1 tr=0 ts=6967e41c cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=FOH2dFAWAAAA:8 a=102hw27QZk9xhLRjVsAA:9 a=CjuIK1q_8ugA:10
- a=Ujx6Yl6ClJkA:10
-X-Proofpoint-GUID: ooxfud2dtqjFHKgXupKgDMxy7utNSsE6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-14_05,2026-01-14_01,2025-10-01_01
+Subject: Re: [PATCH bpf-next v3 1/5] bpf: lru: Tidy hash handling in LRU code
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+ "David S . Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
+ bpf@vger.kernel.org
+References: <20260107151456.72539-1-leon.hwang@linux.dev>
+ <20260107151456.72539-2-leon.hwang@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260107151456.72539-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jan 14, 2026 at 05:30:04PM +0000, David Matlack wrote:
-> On 2026-01-13 03:08 PM, Alex Mastro wrote:
-> > Update vfio_pci_bar_map() to align BAR mmaps for efficient huge page
-> > mappings. The manual mmap alignment can be removed once mmap(!MAP_FIXED)
-> > on vfio device fds improves to automatically return well-aligned
-> > addresses.
-> 
-> Please also mention that you added MADV_HUGEPAGE and why, and that you
-> dropped MAP_FILE (just mention that it was unnecessary in the first
-> place).
 
-Ack
 
+On 1/7/26 7:14 AM, Leon Hwang wrote:
+> The hash field is not used by the LRU list itself.
 > 
-> > 
-> > Signed-off-by: Alex Mastro <amastro@fb.com>
-> > ---
-> >  tools/testing/selftests/vfio/lib/include/libvfio.h |  9 ++++++++
-> >  tools/testing/selftests/vfio/lib/libvfio.c         | 25 ++++++++++++++++++++++
-> >  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 24 ++++++++++++++++++++-
-> >  3 files changed, 57 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/vfio/lib/include/libvfio.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
-> > index 279ddcd70194..5ebf8503586e 100644
-> > --- a/tools/testing/selftests/vfio/lib/include/libvfio.h
-> > +++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
-> > @@ -23,4 +23,13 @@
-> >  const char *vfio_selftests_get_bdf(int *argc, char *argv[]);
-> >  char **vfio_selftests_get_bdfs(int *argc, char *argv[], int *nr_bdfs);
-> >  
-> > +/*
-> > + * Reserve virtual address space of size at an address satisfying
-> > + * (vaddr % align) == offset.
-> > + *
-> > + * Returns the reserved vaddr. The caller is responsible for unmapping
-> > + * the returned region.
-> > + */
-> > +void *mmap_aligned(size_t size, size_t align, size_t offset);
+> Setting hash while manipulating the LRU list also obscures the intent
+> of the code and makes it harder to follow.
 > 
-> nit: Perhaps we should name this mmap_reserve()? The current name
-> implies something is being mmap'ed.
+> Tidy this up by moving the hash assignment to prealloc_lru_pop(),
+> where the element is prepared for insertion into the hash table.
+> 
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>   kernel/bpf/bpf_lru_list.c | 24 +++++++++---------------
+>   kernel/bpf/bpf_lru_list.h |  5 ++---
+>   kernel/bpf/hashtab.c      |  5 ++---
+>   3 files changed, 13 insertions(+), 21 deletions(-)
+> 
+> diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+> index e7a2fc60523f..f4e183a9c28f 100644
+> --- a/kernel/bpf/bpf_lru_list.c
+> +++ b/kernel/bpf/bpf_lru_list.c
+> @@ -344,10 +344,8 @@ static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
+>   static void __local_list_add_pending(struct bpf_lru *lru,
+>   				     struct bpf_lru_locallist *loc_l,
+>   				     int cpu,
+> -				     struct bpf_lru_node *node,
+> -				     u32 hash)
+> +				     struct bpf_lru_node *node)
+>   {
+> -	*(u32 *)((void *)node + lru->hash_offset) = hash;
+>   	node->cpu = cpu;
+>   	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
+>   	bpf_lru_node_clear_ref(node);
+> @@ -393,8 +391,7 @@ __local_list_pop_pending(struct bpf_lru *lru, struct bpf_lru_locallist *loc_l)
+>   	return NULL;
+>   }
+>   
+> -static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+> -						    u32 hash)
+> +static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru)
+>   {
+>   	struct list_head *free_list;
+>   	struct bpf_lru_node *node = NULL;
+> @@ -415,7 +412,6 @@ static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+>   
+>   	if (!list_empty(free_list)) {
+>   		node = list_first_entry(free_list, struct bpf_lru_node, list);
+> -		*(u32 *)((void *)node + lru->hash_offset) = hash;
+>   		bpf_lru_node_clear_ref(node);
+>   		__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);
 
-SGTM
+init the hash value later (after releasing l->lock) is not correct. The 
+node is in the inactive list. The inactive list is one of the rotate and 
+_evict_ candidates, meaning tgt_l->hash will be used in 
+htab_lru_map_delete_node(). In practice, it does not matter if 
+htab_lru_map_delete_node() cannot find the node in an incorrect bucket. 
+However, it still should not use an uninitialized value to begin with.
 
-> 
-> > +
-> >  #endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_H */
-> > diff --git a/tools/testing/selftests/vfio/lib/libvfio.c b/tools/testing/selftests/vfio/lib/libvfio.c
-> > index a23a3cc5be69..4529bb1e69d1 100644
-> > --- a/tools/testing/selftests/vfio/lib/libvfio.c
-> > +++ b/tools/testing/selftests/vfio/lib/libvfio.c
-> > @@ -2,6 +2,9 @@
-> >  
-> >  #include <stdio.h>
-> >  #include <stdlib.h>
-> > +#include <sys/mman.h>
-> > +
-> > +#include <linux/align.h>
-> >  
-> >  #include "../../../kselftest.h"
-> >  #include <libvfio.h>
-> > @@ -76,3 +79,25 @@ const char *vfio_selftests_get_bdf(int *argc, char *argv[])
-> >  
-> >  	return vfio_selftests_get_bdfs(argc, argv, &nr_bdfs)[0];
-> >  }
-> > +
-> > +void *mmap_aligned(size_t size, size_t align, size_t offset)
-> > +{
-> > +	void *map_base, *map_align;
-> > +	size_t delta;
-> > +
-> > +	VFIO_ASSERT_GT(align, offset);
-> > +	delta = align - offset;
-> > +
-> > +	map_base = mmap(NULL, size + align, PROT_NONE,
-> > +			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> > +	VFIO_ASSERT_NE(map_base, MAP_FAILED);
-> > +
-> > +	map_align = (void *)(ALIGN((uintptr_t)map_base + delta, align) - delta);
-> > +
-> > +	if (map_align > map_base)
-> > +		VFIO_ASSERT_EQ(munmap(map_base, map_align - map_base), 0);
-> > +
-> > +	VFIO_ASSERT_EQ(munmap(map_align + size, map_base + align - map_align), 0);
-> > +
-> > +	return map_align;
-> > +}
-> > diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> > index 13fdb4b0b10f..03f35011b5f7 100644
-> > --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> > +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> > @@ -12,10 +12,14 @@
-> >  #include <sys/mman.h>
-> >  
-> >  #include <uapi/linux/types.h>
-> > +#include <linux/align.h>
-> >  #include <linux/iommufd.h>
-> > +#include <linux/kernel.h>
-> >  #include <linux/limits.h>
-> > +#include <linux/log2.h>
-> >  #include <linux/mman.h>
-> >  #include <linux/overflow.h>
-> > +#include <linux/sizes.h>
-> >  #include <linux/types.h>
-> >  #include <linux/vfio.h>
-> >  
-> > @@ -124,20 +128,38 @@ static void vfio_pci_region_get(struct vfio_pci_device *device, int index,
-> >  static void vfio_pci_bar_map(struct vfio_pci_device *device, int index)
-> >  {
-> >  	struct vfio_pci_bar *bar = &device->bars[index];
-> > +	size_t align, size;
-> > +	void *vaddr;
-> >  	int prot = 0;
-> 
-> uber-nit: Put vaddr after prot to preserve the reverse-fir-tree ordering
-> of variables.
-> 
-> Here's the tip tree documentation:
-> 
->   https://docs.kernel.org/process/maintainer-tip.html#variable-declarations
-> 
-> I should probably document somewhere that this is preferred in VFIO
-> selftests as well.
-
-Ah, thanks. I usually try to do this but missed it here.
-
-> 
-> >  
-> >  	VFIO_ASSERT_LT(index, PCI_STD_NUM_BARS);
-> >  	VFIO_ASSERT_NULL(bar->vaddr);
-> >  	VFIO_ASSERT_TRUE(bar->info.flags & VFIO_REGION_INFO_FLAG_MMAP);
-> > +	VFIO_ASSERT_TRUE(is_power_of_2(bar->info.size));
-> >  
-> >  	if (bar->info.flags & VFIO_REGION_INFO_FLAG_READ)
-> >  		prot |= PROT_READ;
-> >  	if (bar->info.flags & VFIO_REGION_INFO_FLAG_WRITE)
-> >  		prot |= PROT_WRITE;
-> >  
-> > -	bar->vaddr = mmap(NULL, bar->info.size, prot, MAP_FILE | MAP_SHARED,
-> > +	size = bar->info.size;
-> > +
-> > +	/*
-> > +	 * Align BAR mmaps to improve page fault granularity during potential
-> > +	 * subsequent IOMMU mapping of these BAR vaddr. 1G for x86 is the
-> > +	 * largest hugepage size across any architecture, so no benefit from
-> > +	 * larger alignment. BARs smaller than 1G will be aligned by their
-> > +	 * power-of-two size, guaranteeing sufficient alignment for smaller
-> > +	 * hugepages, if present.
-> > +	 */
-> > +	align = min_t(size_t, size, SZ_1G);
-> > +
-> > +	vaddr = mmap_aligned(size, align, 0);
-> > +	bar->vaddr = mmap(vaddr, size, prot, MAP_SHARED | MAP_FIXED,
-> >  			  device->fd, bar->info.offset);
-> >  	VFIO_ASSERT_NE(bar->vaddr, MAP_FAILED);
-> > +
-> > +	madvise(bar->vaddr, size, MADV_HUGEPAGE);
-> >  }
-> >  
-> >  static void vfio_pci_bar_unmap(struct vfio_pci_device *device, int index)
-> > 
-> > -- 
-> > 2.47.3
-> > 
+> index 441ff5bc54ac..c2d12db9036a 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -296,12 +296,13 @@ static void htab_free_elems(struct bpf_htab *htab)
+>   static struct htab_elem *prealloc_lru_pop(struct bpf_htab *htab, void *key,
+>   					  u32 hash)
+>   {
+> -	struct bpf_lru_node *node = bpf_lru_pop_free(&htab->lru, hash);
+> +	struct bpf_lru_node *node = bpf_lru_pop_free(&htab->lru);
+>   	struct htab_elem *l;
+>   
+>   	if (node) {
+>   		bpf_map_inc_elem_count(&htab->map);
+>   		l = container_of(node, struct htab_elem, lru_node);
+> +		l->hash = hash;
+>   		memcpy(l->key, key, htab->map.key_size);
+>   		return l;
+>   	}
 
