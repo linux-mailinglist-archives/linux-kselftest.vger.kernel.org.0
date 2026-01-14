@@ -1,270 +1,152 @@
-Return-Path: <linux-kselftest+bounces-48971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63BFFD20EFC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 770C1D20FB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 20:11:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E504C303E0D7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:57:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7F1F9300AFDC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFEF33F398;
-	Wed, 14 Jan 2026 18:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E301233C187;
+	Wed, 14 Jan 2026 19:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="oE40xB4n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W2WeAOZj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C20433BBA2;
-	Wed, 14 Jan 2026 18:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DEB19C540
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 19:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768417053; cv=none; b=aKdb079W+JcICo6wXTT9wnSiNMiZCuumoFZJkEE2BFwDsZbAm2Ptkoa0ArIRPuJG+PHaRCZApkwAIglg3iSvSQrmLtn89lvhegMiShA9YMrqTasaIeL1ob/83oj291bmVltyNlWMZxgtdfb4qEopioQYFt6I4T9Z9PmQH4qw1Og=
+	t=1768417864; cv=none; b=k028nPVos+trcFwXGQkHOFyZZi1i/RL2RD572skeEvcPJU57p0M99tDuZ4Cebx09TDEswmHyaMFAW4QJua230t0Nof+JPEbEc9SU7uJwY6h+WC4ejBog2bMP3dCbN7HDwUX41RpBuB4jw2535DvEycisMTZPnBkqNPRwJ57UKMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768417053; c=relaxed/simple;
-	bh=qq3ABdRRAf3UMfh0KNPmif3pDMNMB+3JTB8aQ1mC3Pw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=a0SM0T8PtcOHGmZm83ktoo6AzzqElg2MuolayNwaPWgtpBe1AYElIYnfyvk8sS8OEetNF0alC+ZzxBCSfGWMNbPDPeHryepmZ33CKyJH6S53ixfGbZUTAxrTYgUgbf3PAqJkdHj3jsxUvSlHhLNXO9fNZkFx61cSm+l7T7d3cVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=oE40xB4n; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60EHQReJ2373504;
-	Wed, 14 Jan 2026 10:57:24 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=OoGfnppMNxMZ1o1XcxdaXDrCrbXqUXsRS4QpCZFQ0vs=; b=oE40xB4nAyWa
-	9RRsAAIYTmdi7b1Li6Gw2wmtHP/P/jK0Jf2F1MvN9yeGTcRAscISaHC0Y/iULxqV
-	lFxyCqqob6EWQ/wqVQtYXzzWphbvdxDeiyADK9W+bW7jsQE20367zUHUPME8Zfzv
-	kh6yC9qPuKXbv2ePyv7y2o4l9J1RQqnY9eExvrCNFa3OjD1YLZx8nO1rZoK97E5i
-	OQBBVADpR9daJS+DKoUNALEugbgSmi2QukdEy9vXHiHwjpGG4YE0Yc7SG/zERS80
-	hV3QSjWrHxpfOjyryw4dJf5LBv9jp9GU0xLdqVD8q9964QTspromQcu++5AoBdIr
-	ZL1rgeJ1uw==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bpactbmre-14
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 14 Jan 2026 10:57:24 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:208::7cb7) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Wed, 14 Jan 2026 18:57:22 +0000
-From: Alex Mastro <amastro@fb.com>
-Date: Wed, 14 Jan 2026 10:57:18 -0800
-Subject: [PATCH v3 3/3] vfio: selftests: Add vfio_dma_mapping_mmio_test
+	s=arc-20240116; t=1768417864; c=relaxed/simple;
+	bh=QKRezXrA3bG4ArDBbT58+S8c1CtyAn6iBKaQozySKZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jb0kmjs+NiC1HBLJeqhsvw4UFjzwneeGa8MF8kVdPuN56levnn+Ki+dK1V35Ony2fvxYueHNiYpdJENjD7JOayOvVm3qYFe5YKxENQhpTj5qhN17okTnp589pskYwtIksISLwcKmfwhh3s2+P92Q0dx3ZDKinSMOf0qrAmyiIik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W2WeAOZj; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5634feea416so118414e0c.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 11:11:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768417862; x=1769022662; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jUpDNPxjIqi9ICJXtc+mfMuxEexyo061EqFw5Nyb8q0=;
+        b=W2WeAOZjEs8YD+z5CIoy6KSKQ2B9aMRCTcfmMYTQsPYKbcYJTSIc0N+piH8+lnpMs8
+         F+kBYyaH7Pqqm7uXiC1JBCMOXIalOiWy7cfPJ1CVZnEMN8biJPWUIpE5Fv8/nqWuw7d7
+         3LyL+WC9AZ7kCHhnf6K9pM2IXh0qBqoZ29ocr0KbTX3z1jCxjaGQ5BzYFs7WWh2s9fXt
+         PXt1BjJX1TNnnGtv+9F6rkDi4y6fhMGAdv4naRsqgNKmJvK18YYZYbEQc5XGQoMqYgcK
+         2WSff0me80inzzNAl0f+IZK83neQ1jE3L0J9kVK21eLm+x6sgmBeNeGSouyN7j0vr6o3
+         2Fvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768417862; x=1769022662;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jUpDNPxjIqi9ICJXtc+mfMuxEexyo061EqFw5Nyb8q0=;
+        b=RxDChbgbWnOk3lo4LMr88d6ioTlOkOkrjP//DSk0eU4JLVdsG15XSmY+JlMTfBWUn1
+         KgkLlGZS1Pq2YTC38ARmE2SK1Ej8nZNfDo+cWQW0ClxWAU1v7mmc5scEF0Wx9NuPIkAI
+         pvFciR2sNiiLr397a3N7plGZxf1pOXri+uNtw+Sl2AgkLGlqVPYfbB2lOUuX1Ba6ZP3e
+         r9puuESVFqH7iRXt137a8DKOVwD7fqem0tdWtzBwsmiynqA1AOLz2Bwf4EoYsXXX3Iiv
+         h+vJvIIOidHZ+2y1UAXCbs4Dn2o3LeSsR0ILMjqNNAPiVViJXuVkdeY0Bw1Olu+ISGTF
+         YVmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUHxi4fJl6rfEUzP0MQgoxkHouZkJwklyBsXndhxXz/imZslhzpyFMgOVRb0pd79su5YY1tDRg4KNvxy35Crik=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7NO3nCbsUmfYyZe0JdXWcftkNf0Sd4/6VEqaIYAk1GYtiG3a3
+	wKxZh0bobOAZU+AnXdodSyJrY0tCI81NtTHNrsjjeM9ozDvY52p5TEDa8ea9JA==
+X-Gm-Gg: AY/fxX4kts+gWoLJ2sACIFM3TsQko64z2C2zwPg3EcKOduez5ytPI0491CyyO+wdWtD
+	WwbS2wP05Uo0P40Nrc71gS+x7IblX6+EWb1Uo0zYCifh0lqM+4t39ues7uUaAXTq0w08vO0oPdd
+	D37CdT6DFRXqunxua+ZOCovV9VE34O2HdVkqX1zO1615RKT51fuUjf6iJAPN0huMzGc/GJ9cMNJ
+	SVvYLmBjk4ttHORhXXp1bOzTB7u7wopmakIJMzvdmGKcCxHYMyYaQIjcDLvPG6HFgYF20UIKCum
+	QL/uLo7jMGmyCpONatiVXzQU1/8UTM000d802frLIY3Qz97OxEYPqDW09fLL1/dgbZje84prRkH
+	u2gXXH9kcr8FnNttutFLKfwxKmToy8ZrRo7G03otdjKJykwmxSn4erEoAwaoPc8pOGLFpCVcc/e
+	5yujkf8LZWh4mY85N2yFOkJ76O6zEf275Yig==
+X-Received: by 2002:a05:690e:1c06:b0:646:eb06:f2e2 with SMTP id 956f58d0204a3-64903b513d2mr1973243d50.73.1768411311135;
+        Wed, 14 Jan 2026 09:21:51 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-790aa6e12ffsm92418037b3.53.2026.01.14.09.21.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 09:21:50 -0800 (PST)
+Date: Wed, 14 Jan 2026 09:21:49 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: kernel test robot <lkp@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Long Li <longli@microsoft.com>, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	berrange@redhat.com, Sargun Dhillon <sargun@sargun.me>
+Subject: Re: [PATCH net-next v14 01/12] vsock: add netns to vsock core
+Message-ID: <aWfQrS1oNcXwcXu3@devvm11784.nha0.facebook.com>
+References: <20260112-vsock-vmtest-v14-1-a5c332db3e2b@meta.com>
+ <202601140749.5TXm5gpl-lkp@intel.com>
+ <CAGxU2F45q7CWy3O_QhYj0Y2Bt84vA=eaTeBTu+TvEmFm0_E7Jw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260114-map-mmio-test-v3-3-44e036d95e64@fb.com>
-References: <20260114-map-mmio-test-v3-0-44e036d95e64@fb.com>
-In-Reply-To: <20260114-map-mmio-test-v3-0-44e036d95e64@fb.com>
-To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
-        Shuah Khan <shuah@kernel.org>
-CC: Peter Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Jason Gunthorpe
-	<jgg@ziepe.ca>, Alex Mastro <amastro@fb.com>
-X-Mailer: b4 0.13.0
-X-Proofpoint-ORIG-GUID: vvasFR4N2RaAG4aoW_dVVaCbAdy_oc19
-X-Authority-Analysis: v=2.4 cv=d5f4CBjE c=1 sm=1 tr=0 ts=6967e714 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=FOH2dFAWAAAA:8 a=FzPllQ_cktK6OXWCqgAA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: vvasFR4N2RaAG4aoW_dVVaCbAdy_oc19
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDE1NiBTYWx0ZWRfX2cETnFHpQd0J
- ISgfZtmz/DNq43fzY6wa2sIQwhI5WqT8qdys3Kq8vieoQr/w3TtPwZ9UmRzgogCuvCfb9ztu+Qr
- msLFPdATpK4Ug4pZvZvMcLrPY60eVUC5DdEUHsxuClf8nqirqx8g3+/RFPMheWLSdwUsYxzoX4g
- pkqMyehaC/uDiGAwZfhRbLOTgt4chXIv9YjlsuiyUK2lw5LrRubE3imptff+X2iJ74+EnYe8RZJ
- 2gRY06cf1Z3MTM9RH5Z1lsPfOalp34sEDq8GNH07au+trd52O9QRKinSrA2HrESHEfhi8JALv2M
- 8qmw62XbvU/Cf+RHWpPExr9C5blS1v2ltdZqxUeBg2fBxEFkOhkddoan5oYnG+oog7/9uexsexx
- 5W/mQpyw4+Skue5FtkXxhEIZAaislfx2xQwxyy1CF9Ysx+/wyHjni53+Rpb+Bk2kbJQ6NSyR26m
- o7aKgxvxyqIRYfdodsw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-14_06,2026-01-14_01,2025-10-01_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGxU2F45q7CWy3O_QhYj0Y2Bt84vA=eaTeBTu+TvEmFm0_E7Jw@mail.gmail.com>
 
-Test IOMMU mapping the BAR mmaps created during vfio_pci_device_setup().
+On Wed, Jan 14, 2026 at 04:54:15PM +0100, Stefano Garzarella wrote:
+> On Wed, 14 Jan 2026 at 00:13, kernel test robot <lkp@intel.com> wrote:
+> >
+> > Hi Bobby,
+> >
+> > kernel test robot noticed the following build warnings:
+> >
+> > [auto build test WARNING on net-next/main]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/virtio-set-skb-owner-of-virtio_transport_reset_no_sock-reply/20260113-125559
+> > base:   net-next/main
+> > patch link:    https://lore.kernel.org/r/20260112-vsock-vmtest-v14-1-a5c332db3e2b%40meta.com
+> > patch subject: [PATCH net-next v14 01/12] vsock: add netns to vsock core
+> > config: x86_64-buildonly-randconfig-004-20260113 (https://download.01.org/0day-ci/archive/20260114/202601140749.5TXm5gpl-lkp@intel.com/config)
+> > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260114/202601140749.5TXm5gpl-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601140749.5TXm5gpl-lkp@intel.com/
+> >
+> > All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> >
+> > >> WARNING: modpost: net/vmw_vsock/vsock: section mismatch in reference: vsock_exit+0x25 (section: .exit.text) -> vsock_sysctl_ops (section: .init.data)
+> 
+> Bobby can you check this report?
+> 
+> Could be related to `__net_initdata` annotation of `vsock_sysctl_ops` ?
+> Why we need that?
+> 
+> Thanks,
+> Stefano
+> 
 
-All IOMMU modes are tested: vfio_type1 variants are expected to succeed,
-while non-type1 modes are expected to fail. iommufd compat mode can be
-updated to expect success once kernel support lands. Native iommufd will
-not support mapping vaddrs backed by MMIO (it will support dma-buf based
-MMIO mapping instead).
+Yep, no problem.
 
-Signed-off-by: Alex Mastro <amastro@fb.com>
----
- tools/testing/selftests/vfio/Makefile              |   1 +
- .../selftests/vfio/vfio_dma_mapping_mmio_test.c    | 143 +++++++++++++++++++++
- 2 files changed, 144 insertions(+)
-
-diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-index 3c796ca99a50..ead27892ab65 100644
---- a/tools/testing/selftests/vfio/Makefile
-+++ b/tools/testing/selftests/vfio/Makefile
-@@ -1,5 +1,6 @@
- CFLAGS = $(KHDR_INCLUDES)
- TEST_GEN_PROGS += vfio_dma_mapping_test
-+TEST_GEN_PROGS += vfio_dma_mapping_mmio_test
- TEST_GEN_PROGS += vfio_iommufd_setup_test
- TEST_GEN_PROGS += vfio_pci_device_test
- TEST_GEN_PROGS += vfio_pci_device_init_perf_test
-diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c
-new file mode 100644
-index 000000000000..957a89ce7b3a
---- /dev/null
-+++ b/tools/testing/selftests/vfio/vfio_dma_mapping_mmio_test.c
-@@ -0,0 +1,143 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <stdio.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#include <uapi/linux/types.h>
-+#include <linux/pci_regs.h>
-+#include <linux/sizes.h>
-+#include <linux/vfio.h>
-+
-+#include <libvfio.h>
-+
-+#include "../kselftest_harness.h"
-+
-+static const char *device_bdf;
-+
-+static struct vfio_pci_bar *largest_mapped_bar(struct vfio_pci_device *device)
-+{
-+	u32 flags = VFIO_REGION_INFO_FLAG_READ | VFIO_REGION_INFO_FLAG_WRITE;
-+	struct vfio_pci_bar *largest = NULL;
-+	u64 bar_size = 0;
-+
-+	for (int i = 0; i < PCI_STD_NUM_BARS; i++) {
-+		struct vfio_pci_bar *bar = &device->bars[i];
-+
-+		if (!bar->vaddr)
-+			continue;
-+
-+		/*
-+		 * iommu_map() maps with READ|WRITE, so require the same
-+		 * abilities for the underlying VFIO region.
-+		 */
-+		if ((bar->info.flags & flags) != flags)
-+			continue;
-+
-+		if (bar->info.size > bar_size) {
-+			bar_size = bar->info.size;
-+			largest = bar;
-+		}
-+	}
-+
-+	return largest;
-+}
-+
-+FIXTURE(vfio_dma_mapping_mmio_test) {
-+	struct iommu *iommu;
-+	struct vfio_pci_device *device;
-+	struct iova_allocator *iova_allocator;
-+	struct vfio_pci_bar *bar;
-+};
-+
-+FIXTURE_VARIANT(vfio_dma_mapping_mmio_test) {
-+	const char *iommu_mode;
-+};
-+
-+#define FIXTURE_VARIANT_ADD_IOMMU_MODE(_iommu_mode)			       \
-+FIXTURE_VARIANT_ADD(vfio_dma_mapping_mmio_test, _iommu_mode) {		       \
-+	.iommu_mode = #_iommu_mode,					       \
-+}
-+
-+FIXTURE_VARIANT_ADD_ALL_IOMMU_MODES();
-+
-+#undef FIXTURE_VARIANT_ADD_IOMMU_MODE
-+
-+FIXTURE_SETUP(vfio_dma_mapping_mmio_test)
-+{
-+	self->iommu = iommu_init(variant->iommu_mode);
-+	self->device = vfio_pci_device_init(device_bdf, self->iommu);
-+	self->iova_allocator = iova_allocator_init(self->iommu);
-+	self->bar = largest_mapped_bar(self->device);
-+
-+	if (!self->bar)
-+		SKIP(return, "No mappable BAR found on device %s", device_bdf);
-+}
-+
-+FIXTURE_TEARDOWN(vfio_dma_mapping_mmio_test)
-+{
-+	iova_allocator_cleanup(self->iova_allocator);
-+	vfio_pci_device_cleanup(self->device);
-+	iommu_cleanup(self->iommu);
-+}
-+
-+static void do_mmio_map_test(struct iommu *iommu,
-+			     struct iova_allocator *iova_allocator,
-+			     void *vaddr, size_t size)
-+{
-+	struct dma_region region = {
-+		.vaddr = vaddr,
-+		.size = size,
-+		.iova = iova_allocator_alloc(iova_allocator, size),
-+	};
-+
-+	/*
-+	 * NOTE: Check for iommufd compat success once it lands. Native iommufd
-+	 * will never support this.
-+	 */
-+	if (!strcmp(iommu->mode->name, MODE_VFIO_TYPE1V2_IOMMU) ||
-+	    !strcmp(iommu->mode->name, MODE_VFIO_TYPE1_IOMMU)) {
-+		iommu_map(iommu, &region);
-+		iommu_unmap(iommu, &region);
-+	} else {
-+		VFIO_ASSERT_NE(__iommu_map(iommu, &region), 0);
-+		VFIO_ASSERT_NE(__iommu_unmap(iommu, &region, NULL), 0);
-+	}
-+}
-+
-+TEST_F(vfio_dma_mapping_mmio_test, map_full_bar)
-+{
-+	do_mmio_map_test(self->iommu, self->iova_allocator,
-+			 self->bar->vaddr, self->bar->info.size);
-+}
-+
-+TEST_F(vfio_dma_mapping_mmio_test, map_partial_bar)
-+{
-+	if (self->bar->info.size < 2 * getpagesize())
-+		SKIP(return, "BAR too small (size=0x%llx)", self->bar->info.size);
-+
-+	do_mmio_map_test(self->iommu, self->iova_allocator,
-+			 self->bar->vaddr, getpagesize());
-+}
-+
-+/* Test IOMMU mapping of BAR mmap with intentionally poor vaddr alignment. */
-+TEST_F(vfio_dma_mapping_mmio_test, map_bar_misaligned)
-+{
-+	/* Limit size to bound test time for large BARs */
-+	size_t size = min_t(size_t, self->bar->info.size, SZ_1G);
-+	void *vaddr;
-+
-+	vaddr = mmap_reserve(size, SZ_1G, getpagesize());
-+	vaddr = mmap(vaddr, size, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED,
-+		     self->device->fd, self->bar->info.offset);
-+	VFIO_ASSERT_NE(vaddr, MAP_FAILED);
-+
-+	do_mmio_map_test(self->iommu, self->iova_allocator, vaddr, size);
-+
-+	VFIO_ASSERT_EQ(munmap(vaddr, size), 0);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	device_bdf = vfio_selftests_get_bdf(&argc, argv);
-+	return test_harness_run(argc, argv);
-+}
-
--- 
-2.47.3
-
+Best,
+Bobby
 
