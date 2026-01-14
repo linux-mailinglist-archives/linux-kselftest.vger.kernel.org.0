@@ -1,84 +1,141 @@
-Return-Path: <linux-kselftest+bounces-48932-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 011B6D1EC99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 13:34:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8A57D1ECED
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 13:38:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E4FAF305E424
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:29:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 59EC6307930E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52302399A6D;
-	Wed, 14 Jan 2026 12:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE561399024;
+	Wed, 14 Jan 2026 12:35:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZzxO7pL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/zoVWmd"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F358399A69;
-	Wed, 14 Jan 2026 12:29:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5752399014;
+	Wed, 14 Jan 2026 12:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768393743; cv=none; b=ZGNPmzNjKIdMmsYGmndnhi6mi0/13JFDzW6zDkroF6UH6wO8by1U8xlR0AOCTRk3rqbZaY05a8+K+S1FrTJrWuXU3oH7T0A6wvlH5cVrdEgtBfSpl+MN62JfTw5XQ6ASuQgnhwLmXMU9HeXhx4DouMGPxI+Sp1KW6tJNXueAZ9g=
+	t=1768394140; cv=none; b=Sw4spEVgsgLZ7lBSpr7cDWpTHUrg8zHllNmi/UJYwdDZZamxKubDAGGFaz2pRS3m48YR3WNhX9iFTaN59kYn1o/1rlNyoG4vvJTJ7xNWaqvnN7nHdYTgZhGTcV9ZO5EOajdpWHMeUBtHqrteqhmE7zZUqxWBVBP/wjwxMf5AvcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768393743; c=relaxed/simple;
-	bh=2LVUPJAyVyauvFS49vi97xmP0WMroGHn6IQqudEGN2c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IntxL8C8d8tfKG4jgFA6sBtq69qpxZu7wmwUe+PRzG7JmJvU7eX5Qva35dQte/rzuBtxdjQ3qjC37cTi+LZkA3moCXhrIODw0Dnek6rZJ4IWcXwX/KzKQ4Ax/htaVELND1cE0NPFlG+9dTwT+hPDPoPYDBxbl3kAsNvUlR8gzhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZzxO7pL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DB30C4CEF7;
-	Wed, 14 Jan 2026 12:28:56 +0000 (UTC)
+	s=arc-20240116; t=1768394140; c=relaxed/simple;
+	bh=ev6Qij2PVomzOpcTr7azRUZ5e+KCI6UhuAdUkmLUPrc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=IbrwTggB82RJgMogcYXdxhpNo9Q5a2jBkPhTaFBnwXJ4IRKbsd6e0Ck0hBjVUqFWblzj8njc648vEGpW+aU5gC18bkQgV68gWK68HimnuSpRSilp8cH5NjJOpSvfmQnkBoPJrU0M/g7Bg9zmQkCmxbbbeBCWSCSTnvYgVdG5C+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/zoVWmd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C13E1C4CEF7;
+	Wed, 14 Jan 2026 12:35:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768393742;
-	bh=2LVUPJAyVyauvFS49vi97xmP0WMroGHn6IQqudEGN2c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UZzxO7pL24lBvpdl1yW2iNKJHrmOL9xko6kMOCad3v9j6YfEYsgb2G8yIz5wt0iaw
-	 gnNNyD1rs+q/oqGcWDu9ny+k4UCf/+zmgwv5OL6s5LnzPnWVcgkJ2L9aNoiEA+XdL2
-	 G7NsXm0gSwM2wclNrL5RQSLnVVyBNjsf9KkFO26wAJISZH0AfllbWlYVsFtNyBqyJ0
-	 gOhG0ynHhGM9mSgO+ci43Yc7zOWpRaVylc14J5VBTXkTjuCHZsWoyigx5cZiUCsgO7
-	 oKZuKbdJC3Dwc2rBIiQCWC7S7JjQZTNmGRiGTGbWmcwH85AKARtM2Sg3t2b/h2OYnN
-	 MH0+g17HO78Ew==
-Message-ID: <3bc63f36-a732-43d8-8f65-43d532adcd68@kernel.org>
-Date: Wed, 14 Jan 2026 13:28:55 +0100
+	s=k20201202; t=1768394140;
+	bh=ev6Qij2PVomzOpcTr7azRUZ5e+KCI6UhuAdUkmLUPrc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=G/zoVWmdhXzybUdcadiYCJpXQu4J3VXdcfvU837J9hK5D0iJPmrT3zqqQ6wb0i7/j
+	 yzq9ITcA9CKpWNe5l/hJusxB5/KqJ9TlicSuwdrk0kMIf7B+sIVO9NJs1Y30FEFAnj
+	 Z3w4oAmqc2HM5N98rk76kZUQ2ZcLZItSsBLwuArIMr3HlbaKjsjg8yeP2kXV41zYUl
+	 dy1fpIPdSnvGXD+fF9qiY7Y3sK8mCqY3gSrq34uHkJoyu4ikVlyyn1gFuDQpzknAgl
+	 Gb+vgUgflhJ41Igm2102XYyuzT0FnM7OK99wXylz936o2teDMyAF/FrdzYW7W/jZhF
+	 D4qTB9Lk2Eiow==
+Content-Type: multipart/mixed; boundary="===============7073946550903258648=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/6] powerpc64/bpf: Support tailcalls with subprogs &
- BPF exceptions
-To: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
- andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, naveen@kernel.org,
- maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org
-References: <20260114114450.30405-1-adubey@linux.ibm.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20260114114450.30405-1-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-Id: <96af90062adce57ef61ae1fd070a0e45ad2e0f9f5043603f5f671601b6f442a0@mail.kernel.org>
+In-Reply-To: <20260114114450.30405-7-adubey@linux.ibm.com>
+References: <20260114114450.30405-7-adubey@linux.ibm.com>
+Subject: Re: [PATCH v2 6/6] powerpc64/bpf: Additional NVR handling for bpf_throw
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 14 Jan 2026 12:35:39 +0000 (UTC)
+
+--===============7073946550903258648==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index a6083dd9786c..941e0818c9ec 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+
+[ ... ]
+
+> @@ -103,9 +119,12 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+>  *		[	  ...       	] 		|
+>  * sp (r1) --->	[    stack pointer	] --------------
+>  *		[    tail_call_info	] 8
+> - *		[   nv gpr save area	] 6*8
+> + *		[   nv gpr save area	] 6*8 + (12*8)
+>  *		[    local_tmp_var	] 24
+>  *		[   unused red zone	] 224
+> + *
+> + * Additional (12*8) in 'nv gpr save area' only in case of
+> + * exception boundary.
+>  */
+>  static int bpf_jit_stack_local(struct codegen_context *ctx)
+>  {
+> @@ -114,7 +133,11 @@ static int bpf_jit_stack_local(struct codegen_context *ctx)
+>  		return STACK_FRAME_MIN_SIZE + ctx->stack_size;
+
+Does this need to account for BPF_PPC_EXC_STACK_SAVE when
+exception_boundary or exception_cb is true?
+
+In the else branch below, the exception case is handled, but the
+bpf_has_stack_frame() case returns the same value regardless of
+exception_boundary. However, bpf_jit_build_prologue() creates a larger
+frame using BPF_PPC_EXC_STACKFRAME when exception_boundary is true.
+
+This inconsistency appears to cause bpf_jit_stack_tailcallinfo_offset()
+to return an incorrect offset when both bpf_has_stack_frame() returns
+true AND exception_boundary is true. The offset would be off by 96 bytes
+(BPF_PPC_EXC_STACK_SAVE).
+
+For example, if a program uses bpf_throw (setting exception_boundary=true)
+and also calls helper functions (setting SEEN_FUNC, making
+bpf_has_stack_frame() return true), and uses tail calls, the tail call
+handling in bpf_jit_emit_tail_call() would access the wrong stack location.
+
+>  	} else {
+>  		/* Stack layout 2 */
+> -		return -(BPF_PPC_TAILCALL + BPF_PPC_STACK_SAVE + BPF_PPC_STACK_LOCALS);
+> +		return -(BPF_PPC_TAILCALL
+> +			+ BPF_PPC_STACK_SAVE
+> +			+ (ctx->exception_boundary || ctx->exception_cb ?
+> +							BPF_PPC_EXC_STACK_SAVE:0)
+> +			+ BPF_PPC_STACK_LOCALS);
+>  	}
+>  }
+
+[ ... ]
+
+> @@ -189,7 +222,20 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>  			EMIT(PPC_RAW_STD(_R0, _R1, PPC_LR_STKOFF));
+>  		}
+>
+> -		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx->stack_size)));
+> +		int stack_expand = ctx->exception_boundary || ctx->exception_cb ?
+> +					BPF_PPC_EXC_STACKFRAME : BPF_PPC_STACKFRAME;
+> +		EMIT(PPC_RAW_STDU(_R1, _R1, -(stack_expand + ctx->stack_size)));
+
+The stack frame expansion here uses BPF_PPC_EXC_STACKFRAME for exception
+cases, but bpf_jit_stack_local() in the bpf_has_stack_frame() branch does
+not account for this larger frame size.
+
+[ ... ]
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Le 14/01/2026 à 12:44, adubey@linux.ibm.com a écrit :
-> From: Abhishek Dubey <adubey@linux.ibm.com>
-> 
-> This patch series enables support for two BPF JIT features
-> on powerpc64. The first three patches target support for
-> tail calls with subprogram combinations. The first patch
-> supports realignment of tail_call_cnt offset in stack frame.
-> Implementation details are provided in the commit messages.
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20993216190
 
-Did you consider doing it also for powerpc32 ?
-
-Christophe
-
+--===============7073946550903258648==--
 
