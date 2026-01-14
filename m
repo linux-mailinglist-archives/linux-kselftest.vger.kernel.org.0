@@ -1,97 +1,103 @@
-Return-Path: <linux-kselftest+bounces-48905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BAF9D1C3EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 04:23:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18D1BD1C456
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 04:36:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B7F85300E028
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 03:23:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5B1E43011758
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 03:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178722E62C8;
-	Wed, 14 Jan 2026 03:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADA6D2C3266;
+	Wed, 14 Jan 2026 03:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gn9XFMlG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtPxaBvF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8610184;
-	Wed, 14 Jan 2026 03:23:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88009296BB7;
+	Wed, 14 Jan 2026 03:36:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768361016; cv=none; b=eWUukvwsN6LVlFxsnoEWBDG8A1998o8QFi2DTdCn/aiFtGwW2op7s3ldCsrRZRNjGeuhNnCONQj/vKuECDswXt0yn6MaL4lAq7MO0oVgSlAOEYcqs2K+1eMKvn0o3cHijmVOdNnNzaR+WYNWyBERFeoPsnTSAOHVLSVWUhXbhsc=
+	t=1768361775; cv=none; b=FocCfMZOiK294dnuWPjq/CUbiTPNpDSSLBEsEbTN3wsmJXo6x3G3bd9wCC/CoIIt9GEG61/DLiLHmFWVzrKJ33Qx/8QGxPT/LR0ivI0K1pxz5LnFk6HkBu7xA28E9ty7st8lsQB5NLCsJKiOLisrgSRhrQmwtTjY1rEmu0qJHic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768361016; c=relaxed/simple;
-	bh=bhaghKMLYIwR99ftVcdNg+TqXXijiVurTe2oOxVRWKY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fGFs+PKgOK0ZO5r7Uva4xdzExvilYUVSasAhY55X8qYPccc6HyCx5RcfIva5f4+yC/PHw2uEgwYPZ2OA+i6Z5NU+Hp3zCAdmCQzao1ukv1bFiBhHd/WsV2GiADeCelQ4rEOWgV8tUApH5BCVtrZvmRYPDGWT+b+z5+agzGNDoPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gn9XFMlG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8D9C116C6;
-	Wed, 14 Jan 2026 03:23:35 +0000 (UTC)
+	s=arc-20240116; t=1768361775; c=relaxed/simple;
+	bh=XdgwGXL6Xkf7KFiVxYJaa6oGaEzMG6qYj6DrtcALVZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TyRPnPB9CkYtPh7m+Ap0z1zVsPQ4PoqZVqvVXt3/+YgXDcVdhm8x+XDviL38sUV77PIjEWWTJJFqbD8zusirtRQlvDniDMLEQZw0pq5mrKA0BtvOOyfhfHos53GcKCvem5RKQtR3U0q/2Zm1cFoWktPksdA6gRuml2mE0lkiDik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtPxaBvF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5F8C4CEF7;
+	Wed, 14 Jan 2026 03:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768361015;
-	bh=bhaghKMLYIwR99ftVcdNg+TqXXijiVurTe2oOxVRWKY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gn9XFMlGwl7UgVMacFa4NReOBAF3pEH8QRroK+H3ysG1kwxbXJr/0eKRAL/dFlY1l
-	 oLdlZ+cl69pM+6uUT8s5jwxdxHG8P8qMPqxMytT9DDzDt9G7E59SRiuzTueZkueZFq
-	 /7ktzoFl1eIh2CRyjufGp25vYyeq52eQrUAZ+X6XTtQ3VtSPfp7NFk/KI2lwLEygDb
-	 IQguykdX9w9aKPirPKzgdemdgSXpB2I2lpWL31AF0bWNta4b2JMAx1iq24sETF4Ghg
-	 yNBKLYxViJ6vNvL3xScm//Zm0pPmvz205xZj9Bt3N8zT856zr2W16wVwDDGL9+nxtE
-	 4P8/Q82ngxz2g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id DFA123808200;
-	Wed, 14 Jan 2026 03:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1768361775;
+	bh=XdgwGXL6Xkf7KFiVxYJaa6oGaEzMG6qYj6DrtcALVZw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KtPxaBvFjvBQXFgO6ttgm1CTd9pwSd7h+Lyh+D9BlZcO995/kseP/Wry1CiCN3v/n
+	 gBwIeg1brhKqIgABt6UECFua/Ct/X6gYsG38FVO8f6nWOf173R366ktySg2c/OI6jY
+	 vk2Ge2hCtjCrU3a9L6qa0l7mSw2vfPb0vGqD7MpfJV5pEDB/zBBeNPk3CdhrwD5Zu0
+	 eumNzZOYzfdZb4LKIHdXfESrFvoslPCoWdoC1b0JaoLC/mIXrjkvL3pAioVtBHM6eI
+	 WeCKp318EhcZFMv/64Kg8sLAhyMxzF4GhCzOaMZyc6/3d1xjwxIJU83EoMG09a8DJm
+	 WGF3Zo8ytomJg==
+Date: Tue, 13 Jan 2026 19:36:12 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>, Pavan
+ Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Joshua Washington
+ <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Saeed
+ Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+ <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
+ <alexanderduyck@fb.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>, Ankit
+ Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>, Alok Tiwari
+ <alok.a.tiwari@oracle.com>, Ziwei Xiao <ziweixiao@google.com>, John Fraker
+ <jfraker@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Mohsin
+ Bashir <mohsin.bashr@gmail.com>, Joe Damato <joe@dama.to>, Mina Almasry
+ <almasrymina@google.com>, Dimitri Daskalakis
+ <dimitri.daskalakis1@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Samiullah Khawaja
+ <skhawaja@google.com>, Ahmed Zaki <ahmed.zaki@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, David Wei <dw@davidwei.uk>, Yue Haibing
+ <yuehaibing@huawei.com>, Haiyue Wang <haiyuewa@163.com>, Jens Axboe
+ <axboe@kernel.dk>, Simon Horman <horms@kernel.org>, Vishwanath Seshagiri
+ <vishs@fb.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, dtatulea@nvidia.com,
+ io-uring@vger.kernel.org
+Subject: Re: [PATCH net-next v8 7/9] eth: bnxt: support qcfg provided rx
+ page size
+Message-ID: <20260113193612.2abfcf10@kernel.org>
+In-Reply-To: <28028611f572ded416b8ab653f1b9515b0337fba.1767819709.git.asml.silence@gmail.com>
+References: <cover.1767819709.git.asml.silence@gmail.com>
+	<28028611f572ded416b8ab653f1b9515b0337fba.1767819709.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/2] selftests: Couple of fixes in Toeplitz RPS
- cases
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176836080865.2569860.17335295751025998084.git-patchwork-notify@kernel.org>
-Date: Wed, 14 Jan 2026 03:20:08 +0000
-References: <20260112173715.384843-1-gal@nvidia.com>
-In-Reply-To: <20260112173715.384843-1-gal@nvidia.com>
-To: Gal Pressman <gal@nvidia.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, andrew+netdev@lunn.ch, netdev@vger.kernel.org,
- shuah@kernel.org, willemb@google.com, petrm@nvidia.com, lixiaoyan@google.com,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Fri,  9 Jan 2026 11:28:46 +0000 Pavel Begunkov wrote:
+> @@ -4342,7 +4343,8 @@ static void bnxt_init_ring_struct(struct bnxt *bp)
+>  		if (!rxr)
+>  			goto skip_rx;
+>  
+> -		rxr->rx_page_size = BNXT_RX_PAGE_SIZE;
+> +		rxq = __netif_get_rx_queue(bp->dev, i);
+> +		rxr->rx_page_size = rxq->qcfg.rx_page_size;
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Pretty sure I asked for the netdev_queue_config() helper to make 
+a return, instead of drivers poking directly into core state.
+Having the config live in rxq directly is also ugh.
 
-On Mon, 12 Jan 2026 19:37:13 +0200 you wrote:
-> Fix a couple of bugs in the RPS cases of the Toeplitz selftest.
-> 
-> Changelog -
-> v1->v2: https://lore.kernel.org/all/20260111171658.179286-1-gal@nvidia.com/
-> * Use a single mask variable in the second patch (Willem).
-> 
-> Gal Pressman (2):
->   selftests: drv-net: fix RPS mask handling in toeplitz test
->   selftests: drv-net: fix RPS mask handling for high CPU numbers
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,v2,1/2] selftests: drv-net: fix RPS mask handling in toeplitz test
-    https://git.kernel.org/netdev/net/c/9d48c62f6b4e
-  - [net,v2,2/2] selftests: drv-net: fix RPS mask handling for high CPU numbers
-    https://git.kernel.org/netdev/net/c/cf055f8c0004
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+But at this stage we're probably better off if you just respin
+to fix the nits from Paolo and I try to de-lobotimize the driver
+facing API. This is close enough.
 
