@@ -1,76 +1,77 @@
-Return-Path: <linux-kselftest+bounces-48981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE61D21820
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 23:12:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2351D2186B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 23:15:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 11112300B379
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 22:12:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 46EAC3069632
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 22:13:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E783B52FC;
-	Wed, 14 Jan 2026 22:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD9B3B8BA4;
+	Wed, 14 Jan 2026 22:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddWWI+FR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4h4GaQm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78FB3AA19C
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 22:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BA93AEF3E
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 22:13:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768428754; cv=none; b=enLax+RkrogK/m9VoyFrZ6lSh9Hyk6AEEGT7oNXmojPugB2bTEQsESvmQQ3LEFfqW8cVEjZynmsBhPZINC7rySiaqILl/HwL3pLNmru8XCcZkvZwSwGKI9poSB5VVVikWK0T5WljcQfXmcRhZ7jd8pvhtaGdfw8E7aZ6+EeH8qY=
+	t=1768428834; cv=none; b=U6DSpn/XggRxYSMOjyIkI0olm4i/+kp5aoF4VTb2GJNjhISA7wn+IJR5na4Uix60cCWT6nt2B95Q9CIH/nTu0QDZsJWZyXhpe5Bomc3fejnf2eM4a+oJsIiuTWhfEZxf1Il7CEvuGfH9RwuqtSpp25FIwC15AuoDefuhObEFUyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768428754; c=relaxed/simple;
+	s=arc-20240116; t=1768428834; c=relaxed/simple;
 	bh=v/6ny77OEhOTDZTQ79j46inEoAHozIzSVLV54SqB5XU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b2iT0526lII0doXMkv47yR2cyAsStg+6HQxManEp8hAXx5uGysq0YX0noYBn7nZs7phbJXWru9tKM1lZU9NKHYDJL96cLWc8xOtqwErCGfvzp+4FRklhYtWaAyyfTTVF6rietEeTjmoKJKnoF7VkJzcpAxmLVMZlqSnFeEQCZjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddWWI+FR; arc=none smtp.client-ip=209.85.160.171
+	 MIME-Version; b=bqzHJUK0ESE6HHyPiXgfP+ypftNfe/8UpFk5aOS3lK9Ztm33P8YnhE0n7tqacgTTHN9xt8lRIr/rdRYE8atfpCF7fkD8f6WLVZI8wba3iaX+PenkKT2GUFDEtVk/fpYk5TYSc+ZNQVp7YSLK01A2GE+skTv9KTIaRzV2fC3LFi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4h4GaQm; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4fb68720518so2553301cf.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 14:12:29 -0800 (PST)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8b2f0f9e4cbso20871485a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 14:13:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768428743; x=1769033543; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768428824; x=1769033624; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=ckc2PkyYWXkN9ubnJOQKa6sgkDYo191+Pf3SF4+RdaY=;
-        b=ddWWI+FRLumCuusgHg2nvzmSWJc0Ve1vPjN0qxW3mKB7ybPluQdol7T3MJfDcaW840
-         woR2r49G1wj9G31aWOSJptkBrwK5yQYUUWort0yJMvFhc/eCEfv3tvIGBv1BFkACMkOt
-         k/7Z03hf5gKEn9FPVZ58A/PM4/xQ4vSZHtGzS0iInqeZP1ypwBUJ9XYby7Lprs1gXkCD
-         9DhW9BUFb3+5iWGkVHx7MvOzySCwUNXuSIq5Y+xraCVPkYooFcBqV09c97aPqYY5VMbN
-         K24M39GB9uTFdiYO2lx/wA6VfiNWIEupMYhnCT8UkuSeT0dhtFZAlDx6qxzwcRlsLcIW
-         2seg==
+        b=m4h4GaQmLps4eYd+p4N8j6XD1Cn4yDY+z9viJPYK/P+7okqaz4kgiHMQVVLTpYl7sz
+         Vin+8Oo9UpDsZ3/tdYEkI9Py1gE1HcvaO7yMETh1JSO+9Z4B26oquOgunOjvWnMaDNk9
+         xAPjkEds2ZuXntNuS7WHeS4jYhh+BuTKuOqkn67bUgGZdPFCxtHBSf+vjO/UnaMWSYyZ
+         1BPPXCp7y6xPsm7SFLbfFbzzY7hr3fRsEWPHohX+/gr+kpIdga+RcYbfIxP61168F4+Y
+         wKQ0d1Is3/aPyE7mTZhHua2wI/suXEBtiFaRzAj9TN5t69EcbZTnfkhTJmc59V+TEoFm
+         ruGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768428743; x=1769033543;
+        d=1e100.net; s=20230601; t=1768428824; x=1769033624;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
         bh=ckc2PkyYWXkN9ubnJOQKa6sgkDYo191+Pf3SF4+RdaY=;
-        b=MG+b9luYTSN+wOpfs66dDlJ5PnXbxXn6k3Z0Ka630YXaArgGV/E8D8vKStWH9L8y5U
-         VO0swNxu2W/azUDZdgbjFFnlS6QajJDt5rENHBs2kZVwOJaulKX1vP3warVVelqz8vwl
-         +EHWuTYy6sNrxKGXImYP+iqfL5PIrsOil+dOfRAFO8xH0pasdqyHlM8tCs08Gxzz5+Lc
-         XmtAsyh2Nyfsn9P9XiMI/0ptw08I7ie1PwGwL2wB874iHAbY8gYfvDFGcSEU5xmXA4AA
-         5DeZYwUIbyLZkF62ktE8LdF+6WwabrjoiPKVFkoguSAlr+gmLrUqN3Nw4sbXGEyu/EX7
-         8KKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpnSvAOyW70XGTGMKpyUHkR7Sq0gHueyqbS77ZyOFbC28FkMK9uQFSspf++MjXpnlZPrju3gXv3S4CfcUv+Ng=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTufPXtbjZbGZL9XVoH4kUATPULURG/1isSFHlu0kuMy6/LjJJ
-	673Drcj2+CAi2kXZsWLwatQdoafXgYN0FzNhzWXT4MlZa8OiQBtdqLv3Gkm2Pg==
-X-Gm-Gg: AY/fxX6cbY2B3NuL2B7TC5ySfoaoBhMKPBsxc+/ON4GwrGcYw1F97tJneaS6YURGxjZ
-	1YAvyHOEfLRsLejG8BuQssFIwDuoNLdArElaVmbdgHzc4KDM6rWo/L8E7vRA5ZzDzyXoGEHc7kQ
-	LYlL73KCK4SFCItAFpXACQp97Ii67f84cqqcBmwfYQWqp2lDjIzyOZULmtGo3gblc08Bjhgi62Y
-	zTrK2aMDwf9E+mdh18rAzabz8tEpbJzKrd4KkxdJQP9LnvSPBTCapPh9hTcWqSG3raYEbHd3mnU
-	6z3nzKymVAfXmpobzwL88EbPTKVUIRpJrwrCEETY875lHQy+4JlFDu9C9OvqdZwCsAHnAlTIgaE
-	6uByJS16pA0ixeh4aFx2//7xXaQnoTDEIlu7HHpscXWMHGpYeDy8IaC2rKtSMKwpMtecIXEcg41
-	BtSj5vcjGkIzkiMr3CRxg9Uy5L5xzRrQGdOsCUqzw0k6KKqCSCR3o3QqQRqH8a7UVb8CFLhpw=
-X-Received: by 2002:a05:622a:ec2:b0:501:48c4:28dd with SMTP id d75a77b69052e-50148c42c2cmr38121401cf.72.1768428742964;
-        Wed, 14 Jan 2026 14:12:22 -0800 (PST)
+        b=kdAGd/e9dB+RnwAPoG0kNEFc0hcimD0DgnpguBsinxCKYQ5bABk3IT8oOYJHKF9RK/
+         E381e2lBVhq18ls4AOOiD8kWvqUcWbBCne6SWHRSpXcG3ShKDWkn0qYd4j+3FI+tkm5z
+         H4rJXrlAn51vnn5+C1bCylVKOQko8QbAHA+yBSLA/7b7XZtEASMnpWo4dSgTqbP4m8ZY
+         X/KGL7uMl+UK6CpZCt/q4dTTBVLQ2AulXyNMrGWZdyCdjPh7JMGxLDFG/OrdFvp6DuJJ
+         3FF68ZgZLS6jY31x3Yv+eG43IJSi9rk4F/ytHVKxxpINfjavu2Hif8OU7F8GvaLM/BMY
+         4P5w==
+X-Forwarded-Encrypted: i=1; AJvYcCXj/9sR1cR16Bzex2lWFS5S+2w1hiItlAYEfn7B5gM3nPnV0hD8Gw8RlyXCIuwtextWx47jHlBEx6oCJqhIyFk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4qklClnXx1YTAXi4JLG906L8Afx4CJByILr99Mojld5enGGb4
+	iITF7z5efQ/B1hASgZxtx8JumPBYirD3F8QP0//NNsIWUr1XFs9vV+1P
+X-Gm-Gg: AY/fxX45ASRXi4iYw+1iPqve3WFQPgCPofryzKsyv321dc06CXY3FkR6Z1IWRR2n+iK
+	/4N60GyjOvZQHcWlbcBJ08/bIH+wmWIbfEHgmBpGI9BaGF1U9s+hdiXkHG2MVzL+JYgGrFncr0h
+	M5snCJVA8yLocvXJsRwOK27YZAZLyTYqAgO9x5eKbdiI6D3jWIB9aR868eX9N57CZLMeGgttryY
+	7OBqynDawSQMTIoGI/mSJQtaaGJC6k/BUad5ls6N2Hizzbqky0j5zpLWKzQRXIM/75xGMTDTz9Y
+	EwLPeOB/ByTA85Z9UXSp7LHiyajJSYvq7cuolkCAyrlP6NVTsk0k99NoBddQI6+Rkx66phdyeyX
+	GdNt3uCLma+SXvOgNE8kpf9XJADcQP7ztW/Tg1NEg76ksQwZWiSBKf+DrugRbHoBklOefEi/7Ig
+	y9FVWe0e2yYa7qXqhOvvm4OSrRif7WgEJ26FmqvsY/spCF941QCYYV/E7RDAQmdfdRS//sh6To4
+	gPe2DcxDg==
+X-Received: by 2002:a05:620a:4052:b0:8b2:e5da:d312 with SMTP id af79cd13be357-8c591a02e83mr164610885a.39.1768428823769;
+        Wed, 14 Jan 2026 14:13:43 -0800 (PST)
 Received: from pc.mynetworksettings.com ([2600:4041:4491:2000:c1bc:6046:8762:e96])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50148dd766fsm21715341cf.7.2026.01.14.14.12.21
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c530bb685fsm250007785a.44.2026.01.14.14.13.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 14:12:22 -0800 (PST)
+        Wed, 14 Jan 2026 14:13:43 -0800 (PST)
 From: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
 To: rostedt@goodmis.org,
 	mhiramat@kernel.org,
@@ -83,8 +84,8 @@ Cc: mathieu.desnoyers@efficios.com,
 	linux-kselftest@vger.kernel.org,
 	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
 Subject: [PATCH v5 0/3] tracing/fprobe: Support comma-separated symbols and :entry/:exit
-Date: Wed, 14 Jan 2026 17:12:16 -0500
-Message-ID: <20260114221219.127777-1-seokwoo.chung130@gmail.com>
+Date: Wed, 14 Jan 2026 17:13:37 -0500
+Message-ID: <20260114221341.128038-1-seokwoo.chung130@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251126184110.72241-1-seokwoo.chung130@gmail.com>
 References: <20251126184110.72241-1-seokwoo.chung130@gmail.com>
