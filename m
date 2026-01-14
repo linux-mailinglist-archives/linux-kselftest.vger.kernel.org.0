@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-48925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B03ED1E8BA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:51:24 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49240D1E8B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:51:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C5C6D307F72D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 11:46:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A711B3084D6D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 11:48:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FE9395DBD;
-	Wed, 14 Jan 2026 11:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EADD5396D0F;
+	Wed, 14 Jan 2026 11:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qP0P1vxI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cyFgbgaB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE26389E1B;
-	Wed, 14 Jan 2026 11:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A18396B7F;
+	Wed, 14 Jan 2026 11:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768391192; cv=none; b=LhdAw1MRDxRGq1bqlQw925p1ZNF9nrLWUgUSvb5DSXRrqh+OIDpwK7w+TPPuIBv/o2caOZgNq2edArFXHROMIM6JoeKvosRm5nzJoguWY9WsDoAnbTBGkbZTx3/5KNAKzVPwQCSAMfUNvgC8uXqP7MgABS/Gpq811AkvGjbhrJM=
+	t=1768391279; cv=none; b=HqUF1zfYKjeZmlQ48/EEPVAy42k/SQPVapp0FjvT+YRflcfCeH1PSih2XLzJZ5IdAjnACHIN0jGnk2FDdh0LRBzTkg/PcHpmThEIhT/36Kn1NOlGxalf23t/VuwMg9jLNfen6ozcofkeDj0Ei9o0WGLYJAoaFIXZpvJbKvy4Q68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768391192; c=relaxed/simple;
-	bh=G0piVQb9VJSyvY13aAZfv4i8eKvpKqz5rBImUcWOakY=;
+	s=arc-20240116; t=1768391279; c=relaxed/simple;
+	bh=+mVN/1k32p3Q/oqWuuEyICSthLwnkmAMh/wSUMCC16w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QfpEz0ssIJ6Rf1/rfWl1EjZC98M0eSeszdPZXeNSYSaXxvNWliIfemsK6wtRbpbNSqSlWGH3ubpkGoR9Jaf+T36OUBspBfDCJwixp0BFKKzHBhfiPQ/DobuSbRYJf83Vk2NNdEDczkgM3zkU2ICxOgCkSRXuMcKvbBQO4Zo7lPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qP0P1vxI; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=hxr6tTtJD7Sz6+bkN8kSLTcVE337w8GENI90rwjl/fMA0YMtxt1UTvlBmUUC14Zv1lbxs6V660wi0n8FmvtnlSR06c+8ROb0zDeKXy+umKveViVLwtDevHA+vg3z7ieRonVuy2fqC6bdcSpX5uD8fa07brPK53N5BiwbY+sE4ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cyFgbgaB; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60E97NBw002548;
-	Wed, 14 Jan 2026 11:45:56 GMT
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60DMsvIE023555;
+	Wed, 14 Jan 2026 11:46:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=ByuJMcarr0a2cFX1G
-	TvgZGdkfern0JYYktb62wOJqc4=; b=qP0P1vxIHzTOdDF19dEog1lfaiIRH4F9o
-	q8TeMfoouuf5cglSH0wG5UCFemSkbQkvT1GltCY8ndMljy0A5+35S6bO3qCJLLA1
-	tH/mR6fFlSqV3VFFLNURfkhldFcjFWu12w3JofxnFXgpAnctBoJhPkOQIjTv9JS8
-	hD0RlFyTkfiubftSdbc0HP3zQXurI/2rVFeEZ5X2Qs++FJTFtsaEY11O2G1dC5+5
-	mOGhSQNENsVNr57OcznCdHiBVsrK3UIoBJLRZgTtC9M3JZcX3GS9/ATR1ifmL8OX
-	SjI9v6PUBRBXR7T4jh2uKowTNxiQefW4TkdE2JJsl59n7BSb3jmTw==
+	:mime-version:references:subject:to; s=pp1; bh=j407n7q4cCyhc5s3H
+	s0Bcd7yRqelf1smKMXBcLjWqAY=; b=cyFgbgaBn3USLLJXlZnEJraRsZfWkuti4
+	kAN/CR6uAx9gIbCFLfZ0NJqYeP5w2OKwyEO7R6VQ4DSPuh/R1Aqq77sJPIoNFx8D
+	BCMJCHBBtC8o5dQvaaAVd0C36yAf58Qx6IwRfOPeYOWwnYJnLfm9zJkPlPDcawYt
+	z/uRaa98Wo0EPXy32VxKYgDoA+cfIBGWQFRhEZLq/hUemx1jKW7IcfrlRkfQ6jhf
+	ndS/ErJiiB/wdJaWaLPdKT42UgaZ6HwkFPL74FmAVngLSzJng+RAycgRElmpNUEF
+	ateMm+wZRdaVUBcFkAgIE3+WYu4l8Ry+LVZGf6SemcmUGxgk1cVew==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bke93154r-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkd6e8u87-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 11:45:55 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60EBWDP0020741;
-	Wed, 14 Jan 2026 11:45:55 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bke93154m-1
+	Wed, 14 Jan 2026 11:46:06 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60EBcH2D005594;
+	Wed, 14 Jan 2026 11:46:06 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkd6e8u84-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 11:45:55 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60E8Y3Pv031269;
-	Wed, 14 Jan 2026 11:45:54 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bm3t1sfm4-1
+	Wed, 14 Jan 2026 11:46:05 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60EAXcj4025809;
+	Wed, 14 Jan 2026 11:46:05 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm2kkhs9e-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 11:45:53 +0000
+	Wed, 14 Jan 2026 11:46:05 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60EBjo7142467824
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60EBk1xu45809954
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Jan 2026 11:45:50 GMT
+	Wed, 14 Jan 2026 11:46:01 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2572720043;
-	Wed, 14 Jan 2026 11:45:50 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 021DC20043;
+	Wed, 14 Jan 2026 11:46:01 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 912BD20040;
-	Wed, 14 Jan 2026 11:45:43 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 54A7820040;
+	Wed, 14 Jan 2026 11:45:54 +0000 (GMT)
 Received: from abhi.. (unknown [9.124.217.65])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 Jan 2026 11:45:43 +0000 (GMT)
+	Wed, 14 Jan 2026 11:45:54 +0000 (GMT)
 From: adubey@linux.ibm.com
 To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -84,9 +84,9 @@ Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
         mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
         iii@linux.ibm.com, shuah@kernel.org,
         Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v2 3/6] powerpc64/bpf: Tailcall handling with trampolines
-Date: Wed, 14 Jan 2026 17:14:47 +0530
-Message-ID: <20260114114450.30405-4-adubey@linux.ibm.com>
+Subject: [PATCH v2 4/6] powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
+Date: Wed, 14 Jan 2026 17:14:48 +0530
+Message-ID: <20260114114450.30405-5-adubey@linux.ibm.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260114114450.30405-1-adubey@linux.ibm.com>
 References: <20260114114450.30405-1-adubey@linux.ibm.com>
@@ -98,175 +98,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4tXRySjWdU3uBBoqa_Q3gm6Xvk9V0hL1
-X-Authority-Analysis: v=2.4 cv=dYyNHHXe c=1 sm=1 tr=0 ts=696781f3 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+X-Proofpoint-GUID: W4hPKjBIUSTGUSaemCmJiRVMBSg8nNW_
+X-Authority-Analysis: v=2.4 cv=LLxrgZW9 c=1 sm=1 tr=0 ts=696781fe cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=H7N5BJ4JIw_s2QcKL7IA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA5MyBTYWx0ZWRfXyKA8YkaVhvfS
- ggsszs6fwc/lYLx6gJ0HlxwFixH2csRghsRkXyYUQTu5Ipief6luj8YqEshM8LUoRHEiIjzxCQe
- ElJktFHnKJ3GUbS+Piua49zY++JKepRYFqSGUCRIeFs3YlqLeXeFhUy7tzz+xmKqznZotsGb+Cg
- FDgG2pI1vcS+znpm7BRNfBuM83pynfa7CKQNFR+FgL+kqKy4M+e18/B7wEC4H5mGjCloTWVynjx
- NzaswYPRIsM+/f23jJCawsNUUmd23o5a3uP2C+Jayz8uufND/G900qw6MSH8HCidWtnqFuDCV7M
- ZMssU+0BZiZACh/xCeOaD7KLmEvXlCkUZ7zd9sVe2pf4cBhRY10f2j1rGdAUEhnI2hgmW1v8TiX
- COdfZZra9rRJk5cCyopBX5Uo3qFQPFL11jMc14HLDbYz3x3xzNT6xU72f0a3p2U/Zc9bHUdZAJW
- 2TyWu4YeejRilnNTWwQ==
-X-Proofpoint-GUID: aAPXFZ5XM8R5C7Daaa3Ir7Dvb0raVItE
+ a=ovcAVf-9gG4EF5hqTukA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA5MyBTYWx0ZWRfXyhbIde78SoWS
+ W2wMLVm2FpxNcaokZK+IIx5youxA5OiBrYd6okxwWZPm85L8+gDTDZDOFi7g0Tmpt+Yob6Ly1dz
+ jUSFc4C7GU4hqU7Ekg9QJWC7xRUVj3mCvqGEN10nwBeQ+doZrSy5zcCK3rpXti3gJQXzzowomBg
+ 0v3vAkq6N7dNh9aTb6TDEFQ4giqfETDFrgkTHNNAnXIrFPigEoKocw9URbO0ucmPE0ZvUTyDeU8
+ ZsB4eW2i8ANdAOL3RkYrXycdVgY9uwGuZ9zLnErXjFV21HMAyP29RIqH/2M95pTgCgWtTRNO3tO
+ eb0f9KlrFb3id2YeHj4EgnosWHKgX33Eq3Bg9VxjbmQZBRqITtI3EohrTYE8Ro1F8y1uGQmOafR
+ f+c/i0h7eqoQBguRTZkae7I81G9y/lGBMGr/aB3DVE2YwPRvOV0eUls9qEsYftgo98+snjpgWSX
+ 21a3oexPIYvgW8IeF2Q==
+X-Proofpoint-ORIG-GUID: AVX5I48SCigD4bDqptliSEZSYfkJu5GH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-14_03,2026-01-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 impostorscore=0 adultscore=0 priorityscore=1501 suspectscore=0
- bulkscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601140093
 
 From: Abhishek Dubey <adubey@linux.ibm.com>
 
-The trampoline mechanism sets up its own stack frame and
-an additional dummy frame. We need to have additional JIT
-instructions handling tailcall dereferencing in the
-trampoline's context.
+This function is used by bpf_throw() to unwind the stack
+until frame of exception-boundary during BPF exception
+handling.
 
-We don't add the two stack frames pointed above, rather
-add space for tail_call_info at bottom in trampoline frame
-for ppc64. This makes the trampoline's frame consistent with
-layout of all other frames wrt tail_call_info offset.
+This function is necessary to support BPF exceptions on
+PowerPC.
 
 Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp.c | 83 ++++++++++++++++++++++-----------
- 1 file changed, 56 insertions(+), 27 deletions(-)
+ arch/powerpc/net/bpf_jit_comp64.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 069a8822c30d..e3088cf089d1 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -606,33 +606,58 @@ static int invoke_bpf_mod_ret(u32 *image, u32 *ro_image, struct codegen_context
- 	return 0;
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index cebf81fbd59f..ec58395f74f7 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -247,6 +247,34 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+ 	bpf_jit_build_fentry_stubs(image, ctx);
  }
  
--static void bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_context *ctx,
--					       int func_frame_offset, int r4_off)
--{
--	if (IS_ENABLED(CONFIG_PPC64)) {
--		/* See bpf_jit_stack_tailcallinfo_offset() */
--		int tailcallcnt_offset = 7 * 8;
--
--		EMIT(PPC_RAW_LL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
--		EMIT(PPC_RAW_STL(_R3, _R1, -tailcallcnt_offset));
--	} else {
--		/* See bpf_jit_stack_offsetof() and BPF_PPC_TC */
--		EMIT(PPC_RAW_LL(_R4, _R1, r4_off));
--	}
--}
-+/*
-+ * Refer the label 'Generated stack layout' in this file for actual stack
-+ * layout during trampoline invocation.
-+ *
-+ * Refer __arch_prepare_bpf_trampoline() for stack component details.
-+ *
-+ * The tailcall count/reference is present in caller's stack frame. Its required
-+ * to copy the content of tail_call_info before calling the actual function
-+ * to which the trampoline is attached.
-+ *
-+ */
- 
--static void bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_context *ctx,
--						 int func_frame_offset, int r4_off)
-+static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_context *ctx,
-+					       int func_frame_offset,
-+					       int bpf_dummy_frame_size, int r4_off)
- {
- 	if (IS_ENABLED(CONFIG_PPC64)) {
- 		/* See bpf_jit_stack_tailcallinfo_offset() */
--		int tailcallcnt_offset = 7 * 8;
-+		int tailcallinfo_offset = BPF_PPC_TAILCALL;
-+		/*
-+		 * func_frame_offset =                                   ...(1)
-+		 *     bpf_dummy_frame_size + trampoline_frame_size
-+		 */
-+		EMIT(PPC_RAW_LD(_R4, _R1, func_frame_offset));
-+		EMIT(PPC_RAW_LD(_R3, _R4, -tailcallinfo_offset));
++void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64), void *cookie)
++{
++	// callback processing always in current context
++	unsigned long fp = current_stack_frame();
++
++	for (;;) {
++		unsigned long *frame = (unsigned long *) fp;
++		unsigned long ip;
++
++		if (!validate_sp(fp, current))
++			return;
++
++		ip = frame[STACK_FRAME_LR_SAVE];
++		if (!ip)
++			break;
 +
 +		/*
-+		 * Setting the tail_call_info in trampoline's frame
-+		 * depending on if previous frame had value or reference.
++		 * consume_fn common code expects stack pointer(sp) in third
++		 * argument. There is no sp in ppc64, rather pass frame
++		 * pointer.
 +		 */
-+		EMIT(PPC_RAW_CMPLWI(_R3, MAX_TAIL_CALL_CNT));
-+		PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
-+		EMIT(PPC_RAW_ADDI(_R3, _R4, bpf_jit_stack_tailcallinfo_offset(ctx)));
-+		/*
-+		 * From ...(1) above:
-+		 * trampoline_frame_bottom =                            ...(2)
-+		 *     func_frame_offset - bpf_dummy_frame_size
-+		 *
-+		 * Using ...(2) derived above:
-+		 *  trampoline_tail_call_info_offset =                  ...(3)
-+		 *      trampoline_frame_bottom - tailcallinfo_offset
-+		 *
-+		 * From ...(3):
-+		 * Use trampoline_tail_call_info_offset to write reference of main's
-+		 * tail_call_info in trampoline frame.
-+		 */
-+		EMIT(PPC_RAW_STL(_R3, _R1, (func_frame_offset - bpf_dummy_frame_size)
-+					- tailcallinfo_offset));
- 
--		EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
--		EMIT(PPC_RAW_STL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
- 	} else {
- 		/* See bpf_jit_stack_offsetof() and BPF_PPC_TC */
--		EMIT(PPC_RAW_STL(_R4, _R1, r4_off));
-+		EMIT(PPC_RAW_LL(_R4, _R1, r4_off));
- 	}
- }
- 
-@@ -720,6 +745,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 	 * LR save area                 [ r0 save (64-bit)  ]   | header
- 	 *                              [ r0 save (32-bit)  ]   |
- 	 * dummy frame for unwind       [ back chain 1      ] --
-+	 *                              [ tail_call_info    ] non optional - 64-bit powerpc
- 	 *                              [ padding           ] align stack frame
- 	 *       r4_off                 [ r4 (tailcallcnt)  ] optional - 32-bit powerpc
- 	 *       alt_lr_off             [ real lr (ool stub)] optional - actual lr
-@@ -801,8 +827,14 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		}
- 	}
- 
--	/* Padding to align stack frame, if any */
--	bpf_frame_size = round_up(bpf_frame_size, SZL * 2);
-+	if (!(bpf_frame_size % (2 * SZL))) {
-+		/* Stack is 16-byte aligned */
-+		/* Room for padding followed by 64-bit tail_call_info */
-+		bpf_frame_size += SZL + BPF_PPC_TAILCALL;
-+	} else {
-+		/* Room for 64-bit tail_call_info */
-+		bpf_frame_size += BPF_PPC_TAILCALL;
++		if (ip && !consume_fn(cookie, ip, fp, fp))
++			break;
++
++		fp = frame[0];
 +	}
- 
- 	/* Dummy frame size for proper unwind - includes 64-bytes red zone for 64-bit powerpc */
- 	bpf_dummy_frame_size = STACK_FRAME_MIN_SIZE + 64;
-@@ -902,7 +934,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 
- 		/* Replicate tail_call_cnt before calling the original BPF prog */
- 		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
--			bpf_trampoline_setup_tail_call_cnt(image, ctx, func_frame_offset, r4_off);
-+			bpf_trampoline_setup_tail_call_info(image, ctx, func_frame_offset,
-+							   bpf_dummy_frame_size, r4_off);
- 
- 		/* Restore args */
- 		bpf_trampoline_restore_args_stack(image, ctx, func_frame_offset, nr_regs, regs_off);
-@@ -917,10 +950,6 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		/* Store return value for bpf prog to access */
- 		EMIT(PPC_RAW_STL(_R3, _R1, retval_off));
- 
--		/* Restore updated tail_call_cnt */
--		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
--			bpf_trampoline_restore_tail_call_cnt(image, ctx, func_frame_offset, r4_off);
--
- 		/* Reserve space to patch branch instruction to skip fexit progs */
- 		if (ro_image) /* image is NULL for dummy pass */
- 			im->ip_after_call = &((u32 *)ro_image)[ctx->idx];
++}
++
+ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
+ {
+ 	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
 -- 
 2.48.1
 
