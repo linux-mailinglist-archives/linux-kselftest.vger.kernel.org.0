@@ -1,150 +1,113 @@
-Return-Path: <linux-kselftest+bounces-48964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BACED20DE8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:44:46 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C011D20E00
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:45:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 59A33301CE86
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:44:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 40F723008175
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6543396E1;
-	Wed, 14 Jan 2026 18:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E36D93396E4;
+	Wed, 14 Jan 2026 18:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kUJ/7MOi"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="zpET+p3F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9698337BB2;
-	Wed, 14 Jan 2026 18:44:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77183148A7;
+	Wed, 14 Jan 2026 18:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768416283; cv=none; b=DMEUjUZ7EZe0kI0fGnmvZH2F3HADaIxNH70EEPZtli8z7Xx4VT0qjc6Gc7jilPBqxCLAvHsuaDz2/RmxicYr7W+L9mQKjmS9NnenytE2Z8FQG+yCEX/3f14Y7IcI1ZwMJnPkZo78D26JWpn0DV+/WR3P3swqc6Ikv55WPpDsXfE=
+	t=1768416329; cv=none; b=W9dzg3wmKHfOWSzHSWstV2nvJNXq252xSdvUJKletZO3UtgXXvKiJcJkFatMaRNc5MtZ3uafRz9E5F8hry3S6O4orQPPhfGZANaOHzYxQBFZRdA06AWcPTqcrIkK4TDe4WtieF7LkRt3FnO9yvcSctGKU8Y1ADHmesxkvO+4CDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768416283; c=relaxed/simple;
-	bh=ClypWUCcmZdhOgMSv7cAqWse/cL4IEXeAo2k6l1M1+U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ue6MRNxzQWJ+Li1VJ/TWAt/6ugRGtNU12iqLJWjEofWSCj+T9pgducSO9/3OH79LDRSjSlFC6nSDx7Uaf8Qx9NT8Fh7yEGBP2LsNmG67KMDSqAKOpDGYhVqKm8qA1bhdOL7MWiqoNQYXMSBLFbf3ym9nMgf66bLplJC8xPjjh/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kUJ/7MOi; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768416274;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8MuE08WjOKJJ911Tg0cdT6a/SadtO731OH3L0J+ZIjA=;
-	b=kUJ/7MOi8ckRi8Q39kTf4knDQP3iSskFER8XOHkyRahsTZBtPaUNxXeVH5AhGvIOosaAMT
-	Enux6nAn6cKwi/tOtLvyrjXE7ic1DwO0GWTZLzGCfTTuDLMxEjoowT+HcuCe2lRpoMN1nr
-	vbGEKevRA0L3w6gzt7TvHzlFuodDrr4=
-Date: Wed, 14 Jan 2026 10:44:27 -0800
+	s=arc-20240116; t=1768416329; c=relaxed/simple;
+	bh=YGzSRICdHmKogpJb4FLWyOzCwvcEcihVnn88/t0+TTU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IVLtitt81eIYbbtUjUiUKZpPwub9q83oYezWLuMKleGtyFZXWw3BrYcE7cYgvu7zKmIfqrK33CXoFJtgSg3Yomu/z+T8A9BEqdoM1jkdJ1/7WXaWavB9r32obcx3HZt1jZ51QttGyR8Dxqgak4H48L4frHfAdfj6JMypm6O8frs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=zpET+p3F; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60EHQLIS2306255;
+	Wed, 14 Jan 2026 10:45:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=WCZkrPzLCKPnrvI0xXzM
+	2CM/SZTf9qiSPmbfcpkHgbU=; b=zpET+p3F5OT1RI9z4fH09L/rUy6OOCgXoicK
+	+uiTJ++2G1KY/o3ag2xKWAJ6TvagedvOjPNkzjMt58ULNQ9+ivW7FNuz06wRSfgD
+	eFudm/EJaDnLlN9VI+yNQAXXAEuZuulGrlON/6L82Asw4El8rPq65dbtqa9Vytz7
+	O2DgnS2URmNxYSgBAAOKUKYkQ/oyFVEM1wdTvYcJb9Sed5fKubs77sqA/ERYzC8x
+	U6pVnEcpXOihgRfVyA/ll4z3PO2gLciu1DJ7loiT2O+BZsBia+msWlTHy7EigO+G
+	O9DDL+IhROJyLJJ1JRr0mt622IYUMdguQfWYuroBx5a0NeYsvg==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bp0p4yc64-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 14 Jan 2026 10:45:21 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Wed, 14 Jan 2026 18:45:20 +0000
+Date: Wed, 14 Jan 2026 10:45:17 -0800
+From: Alex Mastro <amastro@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        Peter
+ Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Jason Gunthorpe
+	<jgg@ziepe.ca>
+Subject: Re: [PATCH v2 3/3] vfio: selftests: Add vfio_dma_mapping_mmio_test
+Message-ID: <aWfkPeUMPlIMX7o2@devgpu015.cco6.facebook.com>
+References: <20260113-map-mmio-test-v2-0-e6d34f09c0bb@fb.com>
+ <20260113-map-mmio-test-v2-3-e6d34f09c0bb@fb.com>
+ <aWfXzwN4RCSsuF3u@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 1/5] bpf: lru: Tidy hash handling in LRU code
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saket Kumar Bhaskar <skb99@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
- bpf@vger.kernel.org
-References: <20260107151456.72539-1-leon.hwang@linux.dev>
- <20260107151456.72539-2-leon.hwang@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260107151456.72539-2-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aWfXzwN4RCSsuF3u@google.com>
+X-Proofpoint-ORIG-GUID: TBw0mf3aSOGJcFybudksn3ujeQkX22wE
+X-Proofpoint-GUID: TBw0mf3aSOGJcFybudksn3ujeQkX22wE
+X-Authority-Analysis: v=2.4 cv=BoGQAIX5 c=1 sm=1 tr=0 ts=6967e441 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yzsY-ZPLdYk_eKPHPisA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDE1NiBTYWx0ZWRfX7jtwIhVsWdjK
+ T3+Tl7oruCieJ8XUYq5IQIiLIxjY6TluTyJ8KMHpLOmaXOnGgYoUEh2fPscAOZ1ID6b0PnhWrRQ
+ 3VXedYhUcO9RYVZR4uB4qt3w2qcTOK9FBlW9y+Fi/4AEeoMRcU1OM7hq8+8DzrEVVogZSc2D1Nr
+ Vo8PiTedbmMdnSZRzlIZanvixs2xQF5/S+OjD9tIELEEJRFVnPkc5yAXgWFIFUa79AxBxZPaRLp
+ XBnTc3f58TZ0ZAQ6NjD1JB012o3xlz+XFIMTmQkpNUJJMIVamcuBnm24SZFOZlLrcpUPPxi/MUV
+ h5RYpuIs01ttjFfUyQFDy75yQI+JLMXd32DRdy/eqboFxf0P3A6RixBNbuRIzgEk2tPHn5k4GlT
+ 8ChVtqT1bfyBEsiiCxDIqjpfd1V2SkKMEXYGh28/zY4LBH0As8BuOPDFWVhDf6GEpY+fYKvcWEu
+ AbkSTyOOYxed4BF/kXg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-14_05,2026-01-14_01,2025-10-01_01
 
-
-
-On 1/7/26 7:14 AM, Leon Hwang wrote:
-> The hash field is not used by the LRU list itself.
+On Wed, Jan 14, 2026 at 05:52:15PM +0000, David Matlack wrote:
+> On 2026-01-13 03:08 PM, Alex Mastro wrote:
 > 
-> Setting hash while manipulating the LRU list also obscures the intent
-> of the code and makes it harder to follow.
+> > +FIXTURE_SETUP(vfio_dma_mapping_mmio_test)
+> > +{
+> > +	self->iommu = iommu_init(variant->iommu_mode);
+> > +	self->device = vfio_pci_device_init(device_bdf, self->iommu);
+> > +	self->iova_allocator = iova_allocator_init(self->iommu);
+> > +	self->bar = largest_mapped_bar(self->device);
+> > +
+> > +	if (!self->bar)
+> > +		SKIP(return, "No mappable BAR found on device %s", device_bdf);
+> > +
+> > +	if (self->bar->info.size < 2 * getpagesize())
+> > +		SKIP(return, "BAR too small (size=0x%llx)", self->bar->info.size);
 > 
-> Tidy this up by moving the hash assignment to prealloc_lru_pop(),
-> where the element is prepared for insertion into the hash table.
-> 
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->   kernel/bpf/bpf_lru_list.c | 24 +++++++++---------------
->   kernel/bpf/bpf_lru_list.h |  5 ++---
->   kernel/bpf/hashtab.c      |  5 ++---
->   3 files changed, 13 insertions(+), 21 deletions(-)
-> 
-> diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
-> index e7a2fc60523f..f4e183a9c28f 100644
-> --- a/kernel/bpf/bpf_lru_list.c
-> +++ b/kernel/bpf/bpf_lru_list.c
-> @@ -344,10 +344,8 @@ static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
->   static void __local_list_add_pending(struct bpf_lru *lru,
->   				     struct bpf_lru_locallist *loc_l,
->   				     int cpu,
-> -				     struct bpf_lru_node *node,
-> -				     u32 hash)
-> +				     struct bpf_lru_node *node)
->   {
-> -	*(u32 *)((void *)node + lru->hash_offset) = hash;
->   	node->cpu = cpu;
->   	node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
->   	bpf_lru_node_clear_ref(node);
-> @@ -393,8 +391,7 @@ __local_list_pop_pending(struct bpf_lru *lru, struct bpf_lru_locallist *loc_l)
->   	return NULL;
->   }
->   
-> -static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
-> -						    u32 hash)
-> +static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru)
->   {
->   	struct list_head *free_list;
->   	struct bpf_lru_node *node = NULL;
-> @@ -415,7 +412,6 @@ static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
->   
->   	if (!list_empty(free_list)) {
->   		node = list_first_entry(free_list, struct bpf_lru_node, list);
-> -		*(u32 *)((void *)node + lru->hash_offset) = hash;
->   		bpf_lru_node_clear_ref(node);
->   		__bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);
+> It seems like the selftest should only skip map_partial_bar if the BAR
+> is less than 2 pages. map_full_bar would still be a valid test to run.
 
-init the hash value later (after releasing l->lock) is not correct. The 
-node is in the inactive list. The inactive list is one of the rotate and 
-_evict_ candidates, meaning tgt_l->hash will be used in 
-htab_lru_map_delete_node(). In practice, it does not matter if 
-htab_lru_map_delete_node() cannot find the node in an incorrect bucket. 
-However, it still should not use an uninitialized value to begin with.
-
-> index 441ff5bc54ac..c2d12db9036a 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -296,12 +296,13 @@ static void htab_free_elems(struct bpf_htab *htab)
->   static struct htab_elem *prealloc_lru_pop(struct bpf_htab *htab, void *key,
->   					  u32 hash)
->   {
-> -	struct bpf_lru_node *node = bpf_lru_pop_free(&htab->lru, hash);
-> +	struct bpf_lru_node *node = bpf_lru_pop_free(&htab->lru);
->   	struct htab_elem *l;
->   
->   	if (node) {
->   		bpf_map_inc_elem_count(&htab->map);
->   		l = container_of(node, struct htab_elem, lru_node);
-> +		l->hash = hash;
->   		memcpy(l->key, key, htab->map.key_size);
->   		return l;
->   	}
+True. This was me being lax.
 
