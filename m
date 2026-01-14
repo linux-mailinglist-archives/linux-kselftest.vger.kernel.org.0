@@ -1,191 +1,362 @@
-Return-Path: <linux-kselftest+bounces-48974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4F04D210FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 20:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18F29D213D4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 21:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4FADD3018F4A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:40:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 64273300EE57
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 20:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C158349B11;
-	Wed, 14 Jan 2026 19:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8274F357A37;
+	Wed, 14 Jan 2026 20:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXQShQ7K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R1ElCAoy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCBE33B6D4;
-	Wed, 14 Jan 2026 19:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814D035773B
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 20:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768419626; cv=none; b=mpuWa9Xp/rw534q+HBMjSdCdc7h9qu4gpb9L21t/f76y6ydxbA6qAVGzov97hy6M9B4mvpmW0jMjtcfFPR/fmqPdob5nZXQTa51lDcyTuh5EKQ4gbJHXMQ5SQewzRs99FoUBYD5NXfhOG5qyLg6jSl8syadp6WdBrxV3Sc9RjbI=
+	t=1768424089; cv=none; b=rdI9GTLkKauDC3dIuMd9ad1WM/HlJFYIJKuxVFvWYuv1WfBFuLBo55WenTsN0RbjMPh7sxx5gDHYVKQEYbFMvrb5vmL1G0HzfbkEL4NtUkQU5eL1NpQB3D08bhg5Sm/leJRG+IavDT703uxgoJxrDlfyYE62R/FhDmM2ta5NG/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768419626; c=relaxed/simple;
-	bh=yxJ1yuBoC2AtK5ufCDSR1KJOWKcLvyq8eTR2PZlXqSc=;
+	s=arc-20240116; t=1768424089; c=relaxed/simple;
+	bh=ipqdIeIu4lifeSarLJh3Vbs2xl4o6xWuaUlVdiFqPlc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iCgS/pG2+X7fot6h00pmJxzKqyuTKzm+UGiIt/olBoGHb82xGLumsm/7dLUMfGSje0AU/p4S5Gmy8j4qDOlDFBSGKIs0r6mUDFnzdGVNnN92Er3NWz73o0Zq3H5RQXjANNPaeIf7Yv2n4/+k9lwpI3YyyrMFiqkENDekcFFpJpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXQShQ7K; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768419625; x=1799955625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yxJ1yuBoC2AtK5ufCDSR1KJOWKcLvyq8eTR2PZlXqSc=;
-  b=OXQShQ7K4IaLFLXO/vKjEMpWA5XVe8iS3NsF9NKRwQwLX+MhpR25otqg
-   VhKrAKaO7ubdtV7JknOAcijHwp26K7aDFi0H4+lyKnf4ojcmAD0o+ec5d
-   37EHI5uMItCUk5Xltgo27kFtiLKui93aPUB8PAonS11qid62Fon/qgYEK
-   yf8vtBCLuK8l3aTRG7/eNKkpELd99iOXpB9x4DVSRvtquZl7BMvrrDZYb
-   QLxFX0fcj7q6jgV08cGyc+lle1TXvXzW+3ytyLyu811Bz7rV48R336tcH
-   F0EHsniNXicYN2qVoO+y0iB8OZ5bys9PzLkZaPVQALtwqSC57N1vx1ExB
-   A==;
-X-CSE-ConnectionGUID: PKg0x9qrQeKFni4DGdY8OA==
-X-CSE-MsgGUID: L/i+AOK4QE+TA+1VvAruZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="69812173"
-X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
-   d="scan'208";a="69812173"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 11:40:24 -0800
-X-CSE-ConnectionGUID: 0gNFD7mhTwmJDzX5k4RTRg==
-X-CSE-MsgGUID: ep3If0rfTJGULNiOAdv5xw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
-   d="scan'208";a="204550709"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 14 Jan 2026 11:40:17 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vg6j0-00000000GvQ-23re;
-	Wed, 14 Jan 2026 19:40:14 +0000
-Date: Thu, 15 Jan 2026 03:39:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: adubey@linux.ibm.com, bpf@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, hbathini@linux.ibm.com,
-	sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
-	eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, christophe.leroy@csgroup.eu, naveen@kernel.org,
-	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-	memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org,
-	Abhishek Dubey <adubey@linux.ibm.com>
-Subject: Re: [PATCH v2 3/6] powerpc64/bpf: Tailcall handling with trampolines
-Message-ID: <202601150350.ZftaCBVV-lkp@intel.com>
-References: <20260114114450.30405-4-adubey@linux.ibm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IY+kLqhYYklUZh+VkGAVnzGZm34LzRVNzQArRJT1lNcMGCG5iJ3iZiDcjBUk5UUhzEzSgDqlWxKp4PuyLULM7Ww82o0c3gTU/gDp4jV+n3LS3e2Qzy3wPrHHKdfrAHNu1/PDKG4zPQavGgjEvS4T8QLDd44TkT/0wSw2BG0g5Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R1ElCAoy; arc=none smtp.client-ip=74.125.82.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2b053ec7d90so350400eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 12:54:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768424087; x=1769028887; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QAROxTfJm04J/646sr7jYZWFCaySPyYKwP5zjNwCp4U=;
+        b=R1ElCAoyt7nruFEYI02cI/qiFULerT7kggecKomzCsRah1wWlqV+8SBLaT0cTexDDZ
+         0ikSzudPQTwEBRXwaR/DN9EsXf+xQLPGAj5rgKCO6g5Vwz+xb71bx4lTzGpBmuYZiCJM
+         veM6o2NbiizLI7DAH0B5EqYhvz78mDKDHqqd9/qWeiRvbpu2iDevjSC2uQmxIMHjWJpR
+         pvJfRTRSoC1G7NIkpqM7yIXBpKbQS5mHSDRuxAQ02i0ZBJAhP8aHXSgFU4TN0sjE7/0N
+         ZaRUY4rFq6YmsJXWm9AL+Exmbya9DBuLcm16UUV7PvMMQvINifri9aXRLpMXi2/7j59A
+         2Psw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768424087; x=1769028887;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QAROxTfJm04J/646sr7jYZWFCaySPyYKwP5zjNwCp4U=;
+        b=GpPaIC4ipH0yARLAk5WPH9O0i0Ow/OwlKW6VeyQ6t8hpkm7kgpvwhfqzOBSFViQs60
+         8wy1aESuVf531826g8bQ9YWBKm2mFy415wvjfNoMYuALGrZDK+esCqV3u9DpDfRKmbTe
+         L6H3Carx2GmmEff7bhBgzlHgI4fs8hM7a3qNEepkroqInS7xp9bteArX10wbed0iyuXH
+         Ct4A2dIVrU/4v9upnuGz5nHi80qq94MmVWscx/fsCaVMhS6jJwC+szxiPIGieQKDdtoB
+         gdu/7DnZekEUQybOgEAoR5BPJdTuFg3MT7jc95/EAhNl244DUmEJ1OmCv2Gi++PRJ4S8
+         1zkg==
+X-Forwarded-Encrypted: i=1; AJvYcCVS7jYKqlTILDsDLeefmTQPpFzF7txAVgu2qNYUgaT9GUYazBsfM6N0UkyryJul3ZydYq8/ASFMiC9FPxUmQjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvbAIz0TFpPSAGorTEHdH04s700IsmJYEFo2SBZ+IjB9A22Q9O
+	gRbYHdgBr0p2JubWmjWsxvV94aJbcbkB7V8Vi1yN7XqwXOhTQ5E+CoU=
+X-Gm-Gg: AY/fxX7g252bY0ZGh6Z+z9p7N34EdbIY9BNuaYz3g9xuvTWe/8xumJ2IS2vAejMGGCo
+	wtQwmVojT9/X6emeuBj0cpqlXOqOJMqPnwPNK8zy50pS2yRgP05lpbhC+cWbUciE/52wN8JTjSV
+	lMtYhcN2CpzKrMKD1JzcFWJD5BTaxAd/c4roksFhc9iQTXBKVi27xtigmvjgrDY3SDXI49xPXFY
+	rwSfeoyIXHd0GydyQVug4kDRHPGlfBCtzOorvSx3O6xJLMbne+siHNE79lqMBP9T4eJERjtkNdu
+	mbsGkfYx5QNLMsha8ivaDJJXdjaz+puWBYg9qgyrk1MnHOddhuXZh/SRaHxv5RkDHSofz805q7C
+	0ctd2a/wc9YnmVhSXZEnFYSBmU0Z+ry5dkfOPfthr0Ilj4VlIj/7GfpqTyUgFIphxM8aA5CPBSR
+	rYFAU9bG5zqTsMLMJApvmXv9j5YkuxJ6rNh5yYd8Wl49v6KdW3cyCjyVnJrmD0w+uRLuFIwyzh5
+	CoujzZTBtBjKx/8
+X-Received: by 2002:a05:7301:4449:b0:2ae:50d5:bc0f with SMTP id 5a478bee46e88-2b487089d75mr5049015eec.26.1768424086155;
+        Wed, 14 Jan 2026 12:54:46 -0800 (PST)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078cddasm20103160eec.22.2026.01.14.12.54.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 12:54:45 -0800 (PST)
+Date: Wed, 14 Jan 2026 12:54:44 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v9 3/5] net: devmem: implement autorelease token
+ management
+Message-ID: <aWgClEgZa5ZGe3hU@mini-arch>
+References: <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-0-8042930d00d7@meta.com>
+ <20260109-scratch-bobbyeshleman-devmem-tcp-token-upstream-v9-3-8042930d00d7@meta.com>
+ <CAHS8izO=kddnYW_Z7s=zgbV5vJyc1A0Aqbx4pnkAz=dtbstWNw@mail.gmail.com>
+ <aWUgNd6nOzZY3JCJ@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260114114450.30405-4-adubey@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aWUgNd6nOzZY3JCJ@devvm11784.nha0.facebook.com>
 
-Hi,
+On 01/12, Bobby Eshleman wrote:
+> On Sun, Jan 11, 2026 at 11:12:19AM -0800, Mina Almasry wrote:
+> > On Fri, Jan 9, 2026 at 6:19 PM Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
+> > >
+> > > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > >
+> > > Add support for autorelease toggling of tokens using a static branch to
+> > > control system-wide behavior. This allows applications to choose between
+> > > two memory management modes:
+> > >
+> > > 1. Autorelease on: Leaked tokens are automatically released when the
+> > >    socket closes.
+> > >
+> > > 2. Autorelease off: Leaked tokens are released during dmabuf unbind.
+> > >
+> > > The autorelease mode is requested via the NETDEV_A_DMABUF_AUTORELEASE
+> > > attribute of the NETDEV_CMD_BIND_RX message. Having separate modes per
+> > > binding is disallowed and is rejected by netlink. The system will be
+> > > "locked" into the mode that the first binding is set to. It can only be
+> > > changed again once there are zero bindings on the system.
+> > >
+> > > Disabling autorelease offers ~13% improvement in CPU utilization.
+> > >
+> > > Static branching is used to limit the system to one mode or the other.
+> > >
+> > > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > > ---
+> > > Changes in v9:
+> > > - Add missing stub for net_devmem_dmabuf_binding_get() when NET_DEVMEM=n
+> > > - Add wrapper around tcp_devmem_ar_key accesses so that it may be
+> > >   stubbed out when NET_DEVMEM=n
+> > > - only dec rx binding count for rx bindings in free (v8 did not exclude
+> > >   TX bindings)
+> > >
+> > > Changes in v8:
+> > > - Only reset static key when bindings go to zero, defaulting back to
+> > >   disabled (Stan).
+> > > - Fix bad usage of xarray spinlock for sleepy static branch switching,
+> > >   use mutex instead.
+> > > - Access pp_ref_count via niov->desc instead of niov directly.
+> > > - Move reset of static key to __net_devmem_dmabuf_binding_free() so that
+> > >   the static key can not be changed while there are outstanding tokens
+> > >   (free is only called when reference count reaches zero).
+> > > - Add net_devmem_dmabuf_rx_bindings_count because tokens may be active
+> > >   even after xa_erase(), so static key changes must wait until all
+> > >   RX bindings are finally freed (not just when xarray is empty). A
+> > >   counter is a simple way to track this.
+> > > - socket takes reference on the binding, to avoid use-after-free on
+> > >   sk_devmem_info.binding in the case that user releases all tokens,
+> > >   unbinds, then issues SO_DEVMEM_DONTNEED again (with bad token).
+> > > - removed some comments that were unnecessary
+> > >
+> > > Changes in v7:
+> > > - implement autorelease with static branch (Stan)
+> > > - use netlink instead of sockopt (Stan)
+> > > - merge uAPI and implementation patches into one patch (seemed less
+> > >   confusing)
+> > >
+> > > Changes in v6:
+> > > - remove sk_devmem_info.autorelease, using binding->autorelease instead
+> > > - move binding->autorelease check to outside of
+> > >   net_devmem_dmabuf_binding_put_urefs() (Mina)
+> > > - remove overly defensive net_is_devmem_iov() (Mina)
+> > > - add comment about multiple urefs mapping to a single netmem ref (Mina)
+> > > - remove overly defense netmem NULL and netmem_is_net_iov checks (Mina)
+> > > - use niov without casting back and forth with netmem (Mina)
+> > > - move the autorelease flag from per-binding to per-socket (Mina)
+> > > - remove the batching logic in sock_devmem_dontneed_manual_release()
+> > >   (Mina)
+> > > - move autorelease check inside tcp_xa_pool_commit() (Mina)
+> > > - remove single-binding restriction for autorelease mode (Mina)
+> > > - unbind always checks for leaked urefs
+> > >
+> > > Changes in v5:
+> > > - remove unused variables
+> > > - introduce autorelease flag, preparing for future patch toggle new
+> > >   behavior
+> > >
+> > > Changes in v3:
+> > > - make urefs per-binding instead of per-socket, reducing memory
+> > >   footprint
+> > > - fallback to cleaning up references in dmabuf unbind if socket leaked
+> > >   tokens
+> > > - drop ethtool patch
+> > >
+> > > Changes in v2:
+> > > - always use GFP_ZERO for binding->vec (Mina)
+> > > - remove WARN for changed binding (Mina)
+> > > - remove extraneous binding ref get (Mina)
+> > > - remove WARNs on invalid user input (Mina)
+> > > - pre-assign niovs in binding->vec for RX case (Mina)
+> > > - use atomic_set(, 0) to initialize sk_user_frags.urefs
+> > > - fix length of alloc for urefs
+> > > ---
+> > >  Documentation/netlink/specs/netdev.yaml |  12 ++++
+> > >  include/net/netmem.h                    |   1 +
+> > >  include/net/sock.h                      |   7 ++-
+> > >  include/uapi/linux/netdev.h             |   1 +
+> > >  net/core/devmem.c                       | 104 ++++++++++++++++++++++++++++----
+> > >  net/core/devmem.h                       |  27 ++++++++-
+> > >  net/core/netdev-genl-gen.c              |   5 +-
+> > >  net/core/netdev-genl.c                  |  10 ++-
+> > >  net/core/sock.c                         |  57 +++++++++++++++--
+> > >  net/ipv4/tcp.c                          |  76 ++++++++++++++++++-----
+> > >  net/ipv4/tcp_ipv4.c                     |  11 +++-
+> > >  net/ipv4/tcp_minisocks.c                |   3 +-
+> > >  tools/include/uapi/linux/netdev.h       |   1 +
+> > >  13 files changed, 269 insertions(+), 46 deletions(-)
+> > >
+> > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
+> > > index 596c306ce52b..7cbe9e7b9ee5 100644
+> > > --- a/Documentation/netlink/specs/netdev.yaml
+> > > +++ b/Documentation/netlink/specs/netdev.yaml
+> > > @@ -562,6 +562,17 @@ attribute-sets:
+> > >          type: u32
+> > >          checks:
+> > >            min: 1
+> > > +      -
+> > > +        name: autorelease
+> > > +        doc: |
+> > > +          Token autorelease mode. If true (1), leaked tokens are automatically
+> > > +          released when the socket closes. If false (0), leaked tokens are only
+> > > +          released when the dmabuf is unbound. Once a binding is created with a
+> > > +          specific mode, all subsequent bindings system-wide must use the same
+> > > +          mode.
+> > > +
+> > > +          Optional. Defaults to false if not specified.
+> > > +        type: u8
+> > >
+> > >  operations:
+> > >    list:
+> > > @@ -769,6 +780,7 @@ operations:
+> > >              - ifindex
+> > >              - fd
+> > >              - queues
+> > > +            - autorelease
+> > >          reply:
+> > >            attributes:
+> > >              - id
+> > > diff --git a/include/net/netmem.h b/include/net/netmem.h
+> > > index 9e10f4ac50c3..80d2263ba4ed 100644
+> > > --- a/include/net/netmem.h
+> > > +++ b/include/net/netmem.h
+> > > @@ -112,6 +112,7 @@ struct net_iov {
+> > >         };
+> > >         struct net_iov_area *owner;
+> > >         enum net_iov_type type;
+> > > +       atomic_t uref;
+> > >  };
+> > >
+> > >  struct net_iov_area {
+> > > diff --git a/include/net/sock.h b/include/net/sock.h
+> > > index aafe8bdb2c0f..9d3d5bde15e9 100644
+> > > --- a/include/net/sock.h
+> > > +++ b/include/net/sock.h
+> > > @@ -352,7 +352,7 @@ struct sk_filter;
+> > >    *    @sk_scm_rights: flagged by SO_PASSRIGHTS to recv SCM_RIGHTS
+> > >    *    @sk_scm_unused: unused flags for scm_recv()
+> > >    *    @ns_tracker: tracker for netns reference
+> > > -  *    @sk_user_frags: xarray of pages the user is holding a reference on.
+> > > +  *    @sk_devmem_info: the devmem binding information for the socket
+> > >    *    @sk_owner: reference to the real owner of the socket that calls
+> > >    *               sock_lock_init_class_and_name().
+> > >    */
+> > > @@ -584,7 +584,10 @@ struct sock {
+> > >         struct numa_drop_counters *sk_drop_counters;
+> > >         struct rcu_head         sk_rcu;
+> > >         netns_tracker           ns_tracker;
+> > > -       struct xarray           sk_user_frags;
+> > > +       struct {
+> > > +               struct xarray                           frags;
+> > > +               struct net_devmem_dmabuf_binding        *binding;
+> > > +       } sk_devmem_info;
+> > >
+> > >  #if IS_ENABLED(CONFIG_PROVE_LOCKING) && IS_ENABLED(CONFIG_MODULES)
+> > >         struct module           *sk_owner;
+> > > diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+> > > index e0b579a1df4f..1e5c209cb998 100644
+> > > --- a/include/uapi/linux/netdev.h
+> > > +++ b/include/uapi/linux/netdev.h
+> > > @@ -207,6 +207,7 @@ enum {
+> > >         NETDEV_A_DMABUF_QUEUES,
+> > >         NETDEV_A_DMABUF_FD,
+> > >         NETDEV_A_DMABUF_ID,
+> > > +       NETDEV_A_DMABUF_AUTORELEASE,
+> > >
+> > >         __NETDEV_A_DMABUF_MAX,
+> > >         NETDEV_A_DMABUF_MAX = (__NETDEV_A_DMABUF_MAX - 1)
+> > > diff --git a/net/core/devmem.c b/net/core/devmem.c
+> > > index 05a9a9e7abb9..05c16df657c7 100644
+> > > --- a/net/core/devmem.c
+> > > +++ b/net/core/devmem.c
+> > > @@ -11,6 +11,7 @@
+> > >  #include <linux/genalloc.h>
+> > >  #include <linux/mm.h>
+> > >  #include <linux/netdevice.h>
+> > > +#include <linux/skbuff_ref.h>
+> > >  #include <linux/types.h>
+> > >  #include <net/netdev_queues.h>
+> > >  #include <net/netdev_rx_queue.h>
+> > > @@ -28,6 +29,19 @@
+> > >
+> > >  static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
+> > >
+> > > +/* If the user unbinds before releasing all tokens, the static key must not
+> > > + * change until all tokens have been released (to avoid calling the wrong
+> > > + * SO_DEVMEM_DONTNEED handler). We prevent this by making static key changes
+> > > + * and binding alloc/free atomic with regards to each other, using the
+> > > + * devmem_ar_lock. This works because binding free does not occur until all of
+> > > + * the outstanding token's references on the binding are dropped.
+> > > + */
+> > > +static DEFINE_MUTEX(devmem_ar_lock);
+> > > +
+> > > +DEFINE_STATIC_KEY_FALSE(tcp_devmem_ar_key);
+> > > +EXPORT_SYMBOL(tcp_devmem_ar_key);
+> > > +static int net_devmem_dmabuf_rx_bindings_count;
+> > > +
+> > >  static const struct memory_provider_ops dmabuf_devmem_ops;
+> > >
+> > >  bool net_is_devmem_iov(struct net_iov *niov)
+> > > @@ -60,6 +74,14 @@ void __net_devmem_dmabuf_binding_free(struct work_struct *wq)
+> > >
+> > >         size_t size, avail;
+> > >
+> > > +       if (binding->direction == DMA_FROM_DEVICE) {
+> > > +               mutex_lock(&devmem_ar_lock);
+> > > +               net_devmem_dmabuf_rx_bindings_count--;
+> > > +               if (net_devmem_dmabuf_rx_bindings_count == 0)
+> > > +                       static_branch_disable(&tcp_devmem_ar_key);
+> > > +               mutex_unlock(&devmem_ar_lock);
+> > > +       }
+> > > +
+> > 
+> > I find this loging with devmem_ar_lock and
+> > net_devmem_dmabuf_rx_bindigs_count a bit complicated. I wonder if we
+> > can do another simplification here? Can we have it such that the first
+> > binding sets the system in autorelease on or autorelease off mode, and
+> > all future bindings maintain this state? We already don't support
+> > autorelease on/off mix.
+> 
+> I think that would greatly simplify things. We would still need a lock
+> to make the static branch change and first release mode setting atomic WRT
+> each other, but the other parts (like the one above) can be
+> removed.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on powerpc/fixes linus/master v6.19-rc5 next-20260114]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/adubey-linux-ibm-com/powerpc64-bpf-Move-tail_call_cnt-to-bottom-of-stack-frame/20260114-195044
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/20260114114450.30405-4-adubey%40linux.ibm.com
-patch subject: [PATCH v2 3/6] powerpc64/bpf: Tailcall handling with trampolines
-config: powerpc-randconfig-002-20260114 (https://download.01.org/0day-ci/archive/20260115/202601150350.ZftaCBVV-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601150350.ZftaCBVV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601150350.ZftaCBVV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   arch/powerpc/net/bpf_jit_comp.c: In function 'bpf_trampoline_setup_tail_call_info':
->> arch/powerpc/net/bpf_jit_comp.c:644:43: error: 'BPF_PPC_TAILCALL' undeclared (first use in this function); did you mean 'BPF_TAIL_CALL'?
-     644 |                 int tailcallinfo_offset = BPF_PPC_TAILCALL;
-         |                                           ^~~~~~~~~~~~~~~~
-         |                                           BPF_TAIL_CALL
-   arch/powerpc/net/bpf_jit_comp.c:644:43: note: each undeclared identifier is reported only once for each function it appears in
-   arch/powerpc/net/bpf_jit_comp.c: In function '__arch_prepare_bpf_trampoline':
-   arch/powerpc/net/bpf_jit_comp.c:850:41: error: 'BPF_PPC_TAILCALL' undeclared (first use in this function); did you mean 'BPF_TAIL_CALL'?
-     850 |                 bpf_frame_size += SZL + BPF_PPC_TAILCALL;
-         |                                         ^~~~~~~~~~~~~~~~
-         |                                         BPF_TAIL_CALL
-
-
-vim +644 arch/powerpc/net/bpf_jit_comp.c
-
-   625	
-   626	/*
-   627	 * Refer the label 'Generated stack layout' in this file for actual stack
-   628	 * layout during trampoline invocation.
-   629	 *
-   630	 * Refer __arch_prepare_bpf_trampoline() for stack component details.
-   631	 *
-   632	 * The tailcall count/reference is present in caller's stack frame. Its required
-   633	 * to copy the content of tail_call_info before calling the actual function
-   634	 * to which the trampoline is attached.
-   635	 *
-   636	 */
-   637	
-   638	static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_context *ctx,
-   639						       int func_frame_offset,
-   640						       int bpf_dummy_frame_size, int r4_off)
-   641	{
-   642		if (IS_ENABLED(CONFIG_PPC64)) {
-   643			/* See bpf_jit_stack_tailcallinfo_offset() */
- > 644			int tailcallinfo_offset = BPF_PPC_TAILCALL;
-   645			/*
-   646			 * func_frame_offset =                                   ...(1)
-   647			 *     bpf_dummy_frame_size + trampoline_frame_size
-   648			 */
-   649			EMIT(PPC_RAW_LD(_R4, _R1, func_frame_offset));
-   650			EMIT(PPC_RAW_LD(_R3, _R4, -tailcallinfo_offset));
-   651	
-   652			/*
-   653			 * Setting the tail_call_info in trampoline's frame
-   654			 * depending on if previous frame had value or reference.
-   655			 */
-   656			EMIT(PPC_RAW_CMPLWI(_R3, MAX_TAIL_CALL_CNT));
-   657			PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
-   658			EMIT(PPC_RAW_ADDI(_R3, _R4, bpf_jit_stack_tailcallinfo_offset(ctx)));
-   659			/*
-   660			 * From ...(1) above:
-   661			 * trampoline_frame_bottom =                            ...(2)
-   662			 *     func_frame_offset - bpf_dummy_frame_size
-   663			 *
-   664			 * Using ...(2) derived above:
-   665			 *  trampoline_tail_call_info_offset =                  ...(3)
-   666			 *      trampoline_frame_bottom - tailcallinfo_offset
-   667			 *
-   668			 * From ...(3):
-   669			 * Use trampoline_tail_call_info_offset to write reference of main's
-   670			 * tail_call_info in trampoline frame.
-   671			 */
-   672			EMIT(PPC_RAW_STL(_R3, _R1, (func_frame_offset - bpf_dummy_frame_size)
-   673						- tailcallinfo_offset));
-   674	
-   675		} else {
-   676			/* See bpf_jit_stack_offsetof() and BPF_PPC_TC */
-   677			EMIT(PPC_RAW_LL(_R4, _R1, r4_off));
-   678		}
-   679	}
-   680	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm not against this, but I wonder how we can test both modes on NIPA?
+If we lock the mode, we can only test one mode until the kernel
+reboots... I wonder whether with your proposed refcnt changes (in the
+other thread) we can keep existing mode (where we don't need a reboot).
 
