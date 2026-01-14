@@ -1,213 +1,191 @@
-Return-Path: <linux-kselftest+bounces-48973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48974-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A36D210F4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 20:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C4F04D210FD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 20:40:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D56D3300FFAB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:39:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4FADD3018F4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:40:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5324B32B9A7;
-	Wed, 14 Jan 2026 19:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C158349B11;
+	Wed, 14 Jan 2026 19:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O5yGqqTO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXQShQ7K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 871DA2FBDF0
-	for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 19:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCBE33B6D4;
+	Wed, 14 Jan 2026 19:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768419572; cv=none; b=cL2dPQzRXGr85PFNusnT2rcy5qqpYc1RjJ7d0k/YjCCMz4Valc/VX81DKFHheTH5VN9e48mWZqqGxC5mXclJr/tKfInEBL+G2E7/xzV2JADjL46qvA9+WH9H/Lqv0omD3k3TtyDd9Vx1dRQ2lCjjcGAYdNGRUZjHt+QSMZQeosw=
+	t=1768419626; cv=none; b=mpuWa9Xp/rw534q+HBMjSdCdc7h9qu4gpb9L21t/f76y6ydxbA6qAVGzov97hy6M9B4mvpmW0jMjtcfFPR/fmqPdob5nZXQTa51lDcyTuh5EKQ4gbJHXMQ5SQewzRs99FoUBYD5NXfhOG5qyLg6jSl8syadp6WdBrxV3Sc9RjbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768419572; c=relaxed/simple;
-	bh=VbJ/vebxdGjcq2EQJHGVZ67VHx9LpWRMPkqJ2jfWMVk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pvMokHdnD/iHtpAbgpe3cnVqC7bRImWkZM2crHymHiG0GgoAMepqingmkc+6bMgdA2CXd7rSP38D5xaFcx3uqiL9Kme1eW3ODoYssvwKpFHRPDQ90sXWt61gfSBZGzszHWRQgfg2QuX/ep04OlYF1WZMqo9Zz9CPrjKciCD4P4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O5yGqqTO; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <e21c8a3d-f970-48f5-a18a-a85ee19d5bfb@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768419557;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qey3rjw38MpjAOKHrhYfvaMHCa3tBaP9p4wzTydW8XY=;
-	b=O5yGqqTOj7nUIFfhwf3VHTTW07IpJRa96QsB4ok6g/2qfqK1MdGcTfL2zal48pApOMe82Q
-	ijMAu+ITmU1rcc6oH7GnpaUzr+M5X5rXP0xvvKvRui1cP2EM+dEQ4rr4Rkk0Cd/7gtIBXh
-	RAp6mx7a1x1SHrJif3VdAxcQAYM8+1E=
-Date: Wed, 14 Jan 2026 11:39:07 -0800
+	s=arc-20240116; t=1768419626; c=relaxed/simple;
+	bh=yxJ1yuBoC2AtK5ufCDSR1KJOWKcLvyq8eTR2PZlXqSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iCgS/pG2+X7fot6h00pmJxzKqyuTKzm+UGiIt/olBoGHb82xGLumsm/7dLUMfGSje0AU/p4S5Gmy8j4qDOlDFBSGKIs0r6mUDFnzdGVNnN92Er3NWz73o0Zq3H5RQXjANNPaeIf7Yv2n4/+k9lwpI3YyyrMFiqkENDekcFFpJpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXQShQ7K; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768419625; x=1799955625;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yxJ1yuBoC2AtK5ufCDSR1KJOWKcLvyq8eTR2PZlXqSc=;
+  b=OXQShQ7K4IaLFLXO/vKjEMpWA5XVe8iS3NsF9NKRwQwLX+MhpR25otqg
+   VhKrAKaO7ubdtV7JknOAcijHwp26K7aDFi0H4+lyKnf4ojcmAD0o+ec5d
+   37EHI5uMItCUk5Xltgo27kFtiLKui93aPUB8PAonS11qid62Fon/qgYEK
+   yf8vtBCLuK8l3aTRG7/eNKkpELd99iOXpB9x4DVSRvtquZl7BMvrrDZYb
+   QLxFX0fcj7q6jgV08cGyc+lle1TXvXzW+3ytyLyu811Bz7rV48R336tcH
+   F0EHsniNXicYN2qVoO+y0iB8OZ5bys9PzLkZaPVQALtwqSC57N1vx1ExB
+   A==;
+X-CSE-ConnectionGUID: PKg0x9qrQeKFni4DGdY8OA==
+X-CSE-MsgGUID: L/i+AOK4QE+TA+1VvAruZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="69812173"
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="69812173"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 11:40:24 -0800
+X-CSE-ConnectionGUID: 0gNFD7mhTwmJDzX5k4RTRg==
+X-CSE-MsgGUID: ep3If0rfTJGULNiOAdv5xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="204550709"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 14 Jan 2026 11:40:17 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vg6j0-00000000GvQ-23re;
+	Wed, 14 Jan 2026 19:40:14 +0000
+Date: Thu, 15 Jan 2026 03:39:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: adubey@linux.ibm.com, bpf@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, hbathini@linux.ibm.com,
+	sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+	eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org, christophe.leroy@csgroup.eu, naveen@kernel.org,
+	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+	memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org,
+	Abhishek Dubey <adubey@linux.ibm.com>
+Subject: Re: [PATCH v2 3/6] powerpc64/bpf: Tailcall handling with trampolines
+Message-ID: <202601150350.ZftaCBVV-lkp@intel.com>
+References: <20260114114450.30405-4-adubey@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 4/5] bpf: lru: Fix unintended eviction when
- updating lru hash maps
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saket Kumar Bhaskar <skb99@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
- bpf@vger.kernel.org
-References: <20260107151456.72539-1-leon.hwang@linux.dev>
- <20260107151456.72539-5-leon.hwang@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260107151456.72539-5-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260114114450.30405-4-adubey@linux.ibm.com>
+
+Hi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on powerpc/fixes linus/master v6.19-rc5 next-20260114]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/adubey-linux-ibm-com/powerpc64-bpf-Move-tail_call_cnt-to-bottom-of-stack-frame/20260114-195044
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/20260114114450.30405-4-adubey%40linux.ibm.com
+patch subject: [PATCH v2 3/6] powerpc64/bpf: Tailcall handling with trampolines
+config: powerpc-randconfig-002-20260114 (https://download.01.org/0day-ci/archive/20260115/202601150350.ZftaCBVV-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601150350.ZftaCBVV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601150350.ZftaCBVV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   arch/powerpc/net/bpf_jit_comp.c: In function 'bpf_trampoline_setup_tail_call_info':
+>> arch/powerpc/net/bpf_jit_comp.c:644:43: error: 'BPF_PPC_TAILCALL' undeclared (first use in this function); did you mean 'BPF_TAIL_CALL'?
+     644 |                 int tailcallinfo_offset = BPF_PPC_TAILCALL;
+         |                                           ^~~~~~~~~~~~~~~~
+         |                                           BPF_TAIL_CALL
+   arch/powerpc/net/bpf_jit_comp.c:644:43: note: each undeclared identifier is reported only once for each function it appears in
+   arch/powerpc/net/bpf_jit_comp.c: In function '__arch_prepare_bpf_trampoline':
+   arch/powerpc/net/bpf_jit_comp.c:850:41: error: 'BPF_PPC_TAILCALL' undeclared (first use in this function); did you mean 'BPF_TAIL_CALL'?
+     850 |                 bpf_frame_size += SZL + BPF_PPC_TAILCALL;
+         |                                         ^~~~~~~~~~~~~~~~
+         |                                         BPF_TAIL_CALL
 
 
+vim +644 arch/powerpc/net/bpf_jit_comp.c
 
-On 1/7/26 7:14 AM, Leon Hwang wrote:
-> When updating an existing element in lru_[percpu_,]hash maps, the current
-> implementation always calls prealloc_lru_pop() to get a new node before
-> checking if the key already exists. If the map is full, this triggers
-> LRU eviction and removes an existing element, even though the update
-> operation only needs to modify the value of an existing key in-place.
-> 
-> This is problematic because:
-> 1. Users may unexpectedly lose entries when doing simple value updates
-> 2. The eviction overhead is unnecessary for existing key updates
+   625	
+   626	/*
+   627	 * Refer the label 'Generated stack layout' in this file for actual stack
+   628	 * layout during trampoline invocation.
+   629	 *
+   630	 * Refer __arch_prepare_bpf_trampoline() for stack component details.
+   631	 *
+   632	 * The tailcall count/reference is present in caller's stack frame. Its required
+   633	 * to copy the content of tail_call_info before calling the actual function
+   634	 * to which the trampoline is attached.
+   635	 *
+   636	 */
+   637	
+   638	static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_context *ctx,
+   639						       int func_frame_offset,
+   640						       int bpf_dummy_frame_size, int r4_off)
+   641	{
+   642		if (IS_ENABLED(CONFIG_PPC64)) {
+   643			/* See bpf_jit_stack_tailcallinfo_offset() */
+ > 644			int tailcallinfo_offset = BPF_PPC_TAILCALL;
+   645			/*
+   646			 * func_frame_offset =                                   ...(1)
+   647			 *     bpf_dummy_frame_size + trampoline_frame_size
+   648			 */
+   649			EMIT(PPC_RAW_LD(_R4, _R1, func_frame_offset));
+   650			EMIT(PPC_RAW_LD(_R3, _R4, -tailcallinfo_offset));
+   651	
+   652			/*
+   653			 * Setting the tail_call_info in trampoline's frame
+   654			 * depending on if previous frame had value or reference.
+   655			 */
+   656			EMIT(PPC_RAW_CMPLWI(_R3, MAX_TAIL_CALL_CNT));
+   657			PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
+   658			EMIT(PPC_RAW_ADDI(_R3, _R4, bpf_jit_stack_tailcallinfo_offset(ctx)));
+   659			/*
+   660			 * From ...(1) above:
+   661			 * trampoline_frame_bottom =                            ...(2)
+   662			 *     func_frame_offset - bpf_dummy_frame_size
+   663			 *
+   664			 * Using ...(2) derived above:
+   665			 *  trampoline_tail_call_info_offset =                  ...(3)
+   666			 *      trampoline_frame_bottom - tailcallinfo_offset
+   667			 *
+   668			 * From ...(3):
+   669			 * Use trampoline_tail_call_info_offset to write reference of main's
+   670			 * tail_call_info in trampoline frame.
+   671			 */
+   672			EMIT(PPC_RAW_STL(_R3, _R1, (func_frame_offset - bpf_dummy_frame_size)
+   673						- tailcallinfo_offset));
+   674	
+   675		} else {
+   676			/* See bpf_jit_stack_offsetof() and BPF_PPC_TC */
+   677			EMIT(PPC_RAW_LL(_R4, _R1, r4_off));
+   678		}
+   679	}
+   680	
 
-This is not the common LRU map use case. The bpf prog usually does a 
-lookup first, finds the entry, and then directly updates the value 
-in-place in the bpf prog itself. If the lookup fails, it will insert a 
-_new_ element.
-
-When the map is full, eviction should actually be triggered regardless. 
-For an LRU map that is too small to fit the working set, it is asking 
-for trouble.
-
- From the syscall update, if the use case is always updating an existing 
-element, the regular hashmap should be used instead.
-
-> Fix this by first checking if the key exists before allocating a new
-> node. If the key is found, update the value using the extra lru node
-> without triggering any eviction.
-
-This will instead add overhead for the common use case described above. 
-The patch is mostly for getting a selftest case to work in a small LRU 
-map. I don't think it is worth the added complexity either.
-
-Patch 2 and 3 look ok, but they also only make marginal improvements on 
-the existing code.
-
-pw-bot: cr
-
-> +static int htab_lru_map_update_elem_in_place(struct bpf_htab *htab, void *key, void *value,
-> +					     u64 map_flags, struct bucket *b,
-> +					     struct hlist_nulls_head *head, u32 hash,
-> +					     bool percpu, bool onallcpus)
-> +{
-> +	struct htab_elem *l_new, *l_old, *l_free;
-> +	struct bpf_map *map = &htab->map;
-> +	u32 key_size = map->key_size;
-> +	struct bpf_lru_node *node;
-> +	unsigned long flags;
-> +	void *l_val;
-> +	int ret;
-> +
-> +	node = bpf_lru_pop_extra(&htab->lru);
-> +	if (!node)
-> +		return -ENOENT;
-> +
-> +	l_new = container_of(node, struct htab_elem, lru_node);
-> +	l_new->hash = hash;
-> +	memcpy(l_new->key, key, key_size);
-> +	if (!percpu) {
-> +		l_val = htab_elem_value(l_new, key_size);
-> +		copy_map_value(map, l_val, value);
-> +		bpf_obj_free_fields(map->record, l_val);
-> +	}
-> +
-> +	ret = htab_lock_bucket(b, &flags);
-> +	if (ret)
-> +		goto err_lock_bucket;
-> +
-> +	l_old = lookup_elem_raw(head, hash, key, key_size);
-> +
-> +	ret = check_flags(htab, l_old, map_flags);
-> +	if (ret)
-> +		goto err;
-> +
-> +	if (l_old) {
-> +		bpf_lru_node_set_ref(&l_new->lru_node);
-> +		if (percpu) {
-> +			/* per-cpu hash map can update value in-place.
-> +			 * Keep the same logic in __htab_lru_percpu_map_update_elem().
-> +			 */
-> +			pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
-> +					value, onallcpus, map_flags);
-> +			l_free = l_new;
-> +		} else {
-> +			hlist_nulls_add_head_rcu(&l_new->hash_node, head);
-> +			hlist_nulls_del_rcu(&l_old->hash_node);
-> +			l_free = l_old;
-> +		}
-> +	} else {
-> +		ret = -ENOENT;
-> +	}
-> +
-> +err:
-> +	htab_unlock_bucket(b, flags);
-> +
-> +err_lock_bucket:
-> +	if (ret) {
-> +		bpf_lru_push_free(&htab->lru, node);
-> +	} else {
-> +		if (l_old && !percpu)
-> +			bpf_obj_free_fields(map->record, htab_elem_value(l_old, key_size));
-
-Does htab_lru_map_update_elem() have an existing bug that is missing the 
-bpf_obj_free_fields() on l_old?
-
-> +		bpf_lru_push_free(&htab->lru, &l_free->lru_node);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->   static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
->   				     u64 map_flags)
->   {
-> @@ -1215,6 +1286,11 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
->   	b = __select_bucket(htab, hash);
->   	head = &b->head;
->   
-> +	ret = htab_lru_map_update_elem_in_place(htab, key, value, map_flags, b, head, hash, false,
-> +						false);
-> +	if (!ret)
-> +		return 0;
-> +
->   	/* For LRU, we need to alloc before taking bucket's
->   	 * spinlock because getting free nodes from LRU may need
->   	 * to remove older elements from htab and this removal
-> @@ -1354,6 +1430,11 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
->   	b = __select_bucket(htab, hash);
->   	head = &b->head;
->   
-> +	ret = htab_lru_map_update_elem_in_place(htab, key, value, map_flags, b, head, hash, true,
-> +						onallcpus);
-> +	if (!ret)
-> +		return 0;
-> +
->   	/* For LRU, we need to alloc before taking bucket's
->   	 * spinlock because LRU's elem alloc may need
->   	 * to remove older elem from htab and this removal
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
