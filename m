@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-48959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A042D20726
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:12:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0D7D208A1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:28:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7C7733022A8C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 17:07:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B18213044C35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 17:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E86B2E0B5B;
-	Wed, 14 Jan 2026 17:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C419301001;
+	Wed, 14 Jan 2026 17:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vEolMwCH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NPNzAUNV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4788A2D73A6;
-	Wed, 14 Jan 2026 17:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC00B2BFC85;
+	Wed, 14 Jan 2026 17:27:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768410452; cv=none; b=jzIE4kkYt+TaxJ75LULMybvnQ3klyRUnCzFXXyd+3dWn5wL8TLBsj4vGZyKDJ3CKjhJqrOcJnTdJheUiLHoNQX+C4RhwfZR75/jvRAOZjYqbATnQhVVic/HEdkkyw8bGA+Q1O0dUg1qAOxcM8WI247er1bxVtfxM+R/AAmDKGg8=
+	t=1768411680; cv=none; b=nPmcsqw0LC8ljFbzHZiRbLAZnCnfvVGZyH84SgXNLTYnSaXUJYiKe/ADVA9gGTcEXI5kLeFI7PCnEzSTOcXRRaODJE5qSfIPFZDkjPm+D4EdE1NtY2Azj51wcxhjc03m162XEeWhtZlr73lMFtlGBlfQW8f/AsSObWFABbnlw+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768410452; c=relaxed/simple;
-	bh=MGElqEXwoRbt8mMzLI9gWMm6tx51R4BHJkiacnjgofs=;
+	s=arc-20240116; t=1768411680; c=relaxed/simple;
+	bh=MKErPubq+4dytiNTQQKxbBYuZq0PRZbULHtHlGPOA9U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lICmki7wmFHah8wHSxJwY/mkGkTonIKvgZU5FovRuziF8YfwJk6MmYEm2fFaEYIsbrTPoA8om68ASfjLHpqMp8+EGe1zpOgoWvRkLgG0o2qIpmJuq85kqK0lc2k4JUAmPog7AKQf+L02qQ5Te4RA/NEcMHqumLEgFQhZ4s1b8Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vEolMwCH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6DFC4CEF7;
-	Wed, 14 Jan 2026 17:07:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BE03Gu4TIeg1HIhNGtm7484AyBfZ+R6RAx8x94KaEp6hWnIWjFGUKk4qfM+KJlKH8gKbKHs2OYBM5ijdtmrCJJpyvzJUAlq0UnnSSecK08aPoKbz4f8cyUT7Z0/hDhXFPPL3OuT7HczqoEOGmjnoXJaf8tuFbBqCRgn1edN2/HI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NPNzAUNV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D171AC4CEF7;
+	Wed, 14 Jan 2026 17:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768410451;
-	bh=MGElqEXwoRbt8mMzLI9gWMm6tx51R4BHJkiacnjgofs=;
+	s=k20201202; t=1768411679;
+	bh=MKErPubq+4dytiNTQQKxbBYuZq0PRZbULHtHlGPOA9U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vEolMwCHO3gyuvdGmOE3O9pKCM5M8SbSniKQidIWzOSx0PpTJ7Hj4ZwnGYFesCRZ3
-	 nUL/jdfJLelH5D0whFKOjdwr35MISlOXKDOa6Lbi19ptoggFUpvSTGZlhxy8wcydSe
-	 2ru/TkW9rbl9o0etsJta6Ukc466KaXjOjS0EZlRUsIFFI5uicpeVB9DXRy+PEASF5k
-	 BFWehX7gdc0YEru5parDTnCckbHf4EXKG0ybaCo62t3jvZVfDovR7/4iu9t8FWPKOS
-	 0BvNX/YWefxE1P6ozppwQ4KuBl43vg9R78UIaOZkuSwgv6K/q5DHyUyj8B/+g5oMax
-	 iic2DLJRvz0ug==
-Date: Wed, 14 Jan 2026 17:07:25 +0000
+	b=NPNzAUNVJjw7ci4jNIO2uMrDaRZ+xEVkHOjM5IQaB+UAc/c442sRxq+JFqShLlNHu
+	 XfqXYF3w43bN21mG+uwwl5Iy8UmeqdAF6OK+8BA3dJRHuc3qxpeZ7sISIDpad07B+b
+	 jv0O9lGX3cAw6lWQMYieUSLvbvMcZ62jwgH84qc3c3mRz2fGAgBep8rPfPeqZAy0jo
+	 2dfXmVozyUzfknjXc8Ivt7BoXalm2KIXNSEnqIHuiqB0zUpwqgkgpaDN17ovsedGUq
+	 yYEBZ8Lc+y9wmjLpRmdkKVnH4HYJqOsm4rroiYmT2UWZVGLhiIVe2pKwFyE4zUS7iv
+	 BdEdk1L1lKyHw==
+Date: Wed, 14 Jan 2026 17:27:53 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Fuad Tabba <tabba@google.com>
 Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
@@ -55,12 +55,11 @@ Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	Peter Maydell <peter.maydell@linaro.org>,
 	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 22/30] KVM: arm64: Expose SME specific state to
- userspace
-Message-ID: <1b5493ed-2d44-47e2-916b-3a5052e3b88f@sirena.org.uk>
+Subject: Re: [PATCH v9 23/30] KVM: arm64: Context switch SME state for guests
+Message-ID: <5a053bb6-5052-4664-b0cb-f05d56d4679d@sirena.org.uk>
 References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
- <20251223-kvm-arm64-sme-v9-22-8be3867cb883@kernel.org>
- <CA+EHjTwMy1crsZLqfy8_Y56NFPJZ7vGyN-egc433GhxB_n=7aA@mail.gmail.com>
+ <20251223-kvm-arm64-sme-v9-23-8be3867cb883@kernel.org>
+ <CA+EHjTyYcrWwBR0AwwdWFfOSwbmTMOhSee7y_-vrMfOxphrvqw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,55 +67,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="wWm1d/lEDlGXNOgF"
+	protocol="application/pgp-signature"; boundary="5VzuVXkE42Zf47rW"
 Content-Disposition: inline
-In-Reply-To: <CA+EHjTwMy1crsZLqfy8_Y56NFPJZ7vGyN-egc433GhxB_n=7aA@mail.gmail.com>
+In-Reply-To: <CA+EHjTyYcrWwBR0AwwdWFfOSwbmTMOhSee7y_-vrMfOxphrvqw@mail.gmail.com>
 X-Cookie: Absence makes the heart grow frantic.
 
 
---wWm1d/lEDlGXNOgF
+--5VzuVXkE42Zf47rW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Jan 13, 2026 at 02:06:53PM +0000, Fuad Tabba wrote:
+On Tue, Jan 13, 2026 at 02:24:56PM +0000, Fuad Tabba wrote:
 > On Tue, 23 Dec 2025 at 01:23, Mark Brown <broonie@kernel.org> wrote:
 
-> > +static int sme_reg_to_region(struct vec_state_reg_region *region,
-> > +                            struct kvm_vcpu *vcpu,
-> > +                            const struct kvm_one_reg *reg)
-> > +{
+> > +#define sme_cond_update_smcr_vq(val, reg)                      \
+> > +       do {                                                    \
+> > +               u64 __smcr = read_sysreg_s((reg));              \
+> > +               u64 __new = __smcr & ~SMCR_ELx_LEN_MASK;        \
+> > +               __new |= (val) & SMCR_ELx_LEN_MASK;             \
 
-> > +       reg_num = (reg->id & SVE_REG_ID_MASK) >> SVE_REG_ID_SHIFT;
+> Similar to what I pointed out in patch 15 [1], I think you need to
+> preserve the other bits, since SMCR isn't just about the length.
 
-> You use array_index_nospec() below for koffset, but it might be worth
-> using it for intermediate values, such as this one.
+This does preserve the existing bits?  It reads SMCR, masks out and then
+replaces the length.
 
-This is following the existing pattern for the SVE registers, I'm
-trusting the logic there.
-
-> > +       sme_state_size = vcpu_sme_state_size(vcpu);
-
-> Is it worth caching this value and storing it in arch, since the state
-> size doesn't change after finalization?
-
-It feels marginal, and we've not been caching it for SVE all this time.
-Most of the time we use the value we're doing so as part of a fairly
-expensive operation so it seems like a reasonable choice.
-
---wWm1d/lEDlGXNOgF
+--5VzuVXkE42Zf47rW
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlnzUwACgkQJNaLcl1U
-h9Cvrgf7BgTXha0CzEi5j4VgVBXcclvOZGymP1dBDz6D4Y8U/TMKH/bpOQcIjws/
-lkQGHPmKpBCHKgkE9ZCJu5oOQqQdCjFh9pHQQZwJM1QMRg/P/cwzO+CoyMsIkb1A
-4o2x/8WgiXF4LRsm4hmHRDR51VYSsH+Pg2dVgpSdiyIG1xi02AzthMF9vY0/fEiE
-GHKptYCfpxgy14m/Ns0VKGfgNXAXH6reAeVqWVo5BQ0K9a5M1pFAIoLyaKFulRTR
-0jgqosqFLXemYeGJ99w1TFrJRO3bltyiVULxBQBDupshqNvIwApsbjn92T0Qh8ir
-VwMGpz89Lk6CAe/3AHGVTw/0GgAFBw==
-=h+Uy
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmln0hgACgkQJNaLcl1U
+h9BMEAf/RF9rOJl8ekbOzDRQR11JDX39xOnp1XjKNL/LwADVFknoshEFGbwNHbg7
+57daW1rnmcC+bbYUI884dlgzpo1QO8eu4Ln3iZDbBO3RiskXsxPq0/Aw9YPMpukh
+389uJu/fYy9Ag03Cgwp1Gcp7bMqs3eDrjnW6q4Rdaqc6tzECGGKLYT25uZjD9qdu
+n5jJy4QwQfmTpm1eH93FgHCkiW5PHP8wUv+dYDQ02i/Bg1ZOuiOeiof+YcAfZoxn
+okZ9Seieeb/x/OD9CYTtepifFAelR40y3pF8VLhESbkMzGiy7v6SmiCWhPvFhNkF
+uyOxnmGui2Xy46sOprB2XcG91p5l5g==
+=e2HB
 -----END PGP SIGNATURE-----
 
---wWm1d/lEDlGXNOgF--
+--5VzuVXkE42Zf47rW--
 
