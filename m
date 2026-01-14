@@ -1,81 +1,86 @@
-Return-Path: <linux-kselftest+bounces-48948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FF6D1F393
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 14:55:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 421C5D1F3ED
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 14:58:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE3A7311BC12
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 13:48:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BB2CA30D120C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 13:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE0C283FE5;
-	Wed, 14 Jan 2026 13:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C2427B359;
+	Wed, 14 Jan 2026 13:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="oKOoMblF"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="TMJx7gbO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.75.33.185])
+Received: from fra-out-011.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-011.esa.eu-central-1.outbound.mail-perimeter.amazon.com [52.28.197.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C5D280037;
-	Wed, 14 Jan 2026 13:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.75.33.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48876276046;
+	Wed, 14 Jan 2026 13:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.28.197.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768398490; cv=none; b=VgoGGYCEdcUkENVrMAdICktNuk0nziLGwPoSgFXDVltd/031RYa/xoovEjajvrFF6dMLn4RfVSKsKyzzjZB0mzqgCdxYKk7qwiPqSUcubI3CEUZ7NxLGFqLlFtSdfy7SoUC6WkEXaQQyBVX+WB4EhkSUe+JLx+QPhhfeAOCJY/w=
+	t=1768398975; cv=none; b=LPU5+Wf+jrB5DyEnGe0UX/ZiERDk7qpPXHZhjj/tPgfIyQkbqHqGpgMhTN0IXK20gRzD4QuQpeh+rVzKkjgOhIJCeAR3yDF4iLy+l9CFZG2Lu0/lDh8cwYHyLh3gXNtXjSuvG7F5ihKNPbIV3u12dv5HV/9D63rvqbue7b3AKnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768398490; c=relaxed/simple;
-	bh=5UpnxnEVgU0Oy/yU6lakZ+7I/hP5dkdcXUkzHcJlwzI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=fO3h1lBcwOnx4gJlGdR/W5bL/HuwU4WJN5jCvyVDA0dChO6xnI3hFLsVtHDIkqqX0t12L6lc/Xa4QIBWZpv7BF5AP3kthBjNMISx+TbTNkfh4ROzn/oHhG9tY6RsTOu81+VuE1lbWBS6IC+ip0/3YJa3puUZCg4sg5hA8oRh4oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=oKOoMblF; arc=none smtp.client-ip=3.75.33.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+	s=arc-20240116; t=1768398975; c=relaxed/simple;
+	bh=0bavQZSe/jMw07nYS7kOgTE4RJlM3SaeJ3dm9j9QGnQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jQdm6BEutA7c30oPU+KrB+T/nTq9YGNpVgsDG3PDrzm1spQ4oalvJMKtaJJ7lKW6tliGehmHSX3iarpXlz4FIj+4q8xr48A1ITOseG/+XPtmmDmiRn+YE9fFM4nHkARMOD+2ikUh6825ku7kzKGM/h61uZlB0UJ7EJ5wrfGqnng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=TMJx7gbO; arc=none smtp.client-ip=52.28.197.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazoncorp2; t=1768398489; x=1799934489;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=sUXffJ10pcwposVmC9vM2kcbCnj2+0WuRal0d/tv1pE=;
-  b=oKOoMblFNokOjdQ9WmJpyBHKLCVX+9Gwxew58ao0qpMGS+X5Ps6RmkcW
-   GzHjWqCIZ3zMzWosp8TMo3bL6mcCUs/umD2/N7pI/XhVCC6kiDTF6hEzb
-   tDKfnIc/RpT6oTzk4ilFGoACB6T5/ngpJf8z/Wcmeqk05PgkGALn1knOb
-   I9Cl2h/sZuG1r6X6oDP2v4bakXDh2zxumctQcF9i7+Qm61mv/Rn8ffuuN
-   0YXyiZOvQZnAa434fBox89DZNv2sFgER5jM+xEapUrMbTgdDvWJwI0sxZ
-   ZxOb5oGDdjF46zgx9rxAF5TMFQ1HejJCxZj8SoR6rFly3Li5JWAK0Qwik
-   A==;
-X-CSE-ConnectionGUID: TM2P1oQYSV+xOXLTuttl/A==
-X-CSE-MsgGUID: EW6MjOESTFSHJbSl7EhLcw==
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1768398973; x=1799934973;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=Sv4MlCPNVERmcNp9kqSjh82IbrnYTRQgNTSc/lKG79A=;
+  b=TMJx7gbOwUuGYT8J45Wf4BEDg+Kj4aw1agPkhrZ9O+HosJT7JUuIfqMi
+   qAOPlfT2tm2zso7wn2m3vxNyIpmqyUwGThVjrkhzKfKoMH9/+Q8p9Z+rH
+   FzJ8QObSlXBPB57tbhhlzrjtSesfn78UCD4LeVmKLtwfVEXr8DHubU/Ru
+   lT+bBRsU01TN/XA7nZd+QUelcqFivm+NRA2gryVFeMYtzFENyYUPBqCe7
+   ZO+Iy9uLlGwwy/b/6fQiqYFmDr0/+9OEv912dYKOVVKb9gcKKZsaLDtFQ
+   vBKVzWy4HqW5QxduBom4L94Dqjkp3DCkPCR4qkcYRc0H8oH20lsxZkAtu
+   Q==;
+X-CSE-ConnectionGUID: cW2/bP43S+W7GDw53OvOsA==
+X-CSE-MsgGUID: D23VOrnzTJOU3brwm1eZ2w==
 X-IronPort-AV: E=Sophos;i="6.21,225,1763424000"; 
-   d="scan'208";a="7897283"
+   d="scan'208";a="7791279"
 Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
-  by internal-fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 13:47:49 +0000
-Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.234:3376]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.7.212:2525] with esmtp (Farcaster)
- id 24ecbc43-4ad6-4a75-8fbe-89bf20ddb079; Wed, 14 Jan 2026 13:47:48 +0000 (UTC)
-X-Farcaster-Flow-ID: 24ecbc43-4ad6-4a75-8fbe-89bf20ddb079
-Received: from EX19D005EUB002.ant.amazon.com (10.252.51.103) by
- EX19MTAEUB001.ant.amazon.com (10.252.51.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Wed, 14 Jan 2026 13:47:40 +0000
+  by internal-fra-out-011.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 13:55:52 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:11343]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.30.60:2525] with esmtp (Farcaster)
+ id 8a859852-980a-4ccf-94d2-9c29b54debef; Wed, 14 Jan 2026 13:55:52 +0000 (UTC)
+X-Farcaster-Flow-ID: 8a859852-980a-4ccf-94d2-9c29b54debef
 Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19D005EUB002.ant.amazon.com (10.252.51.103) with Microsoft SMTP Server
+ EX19MTAEUA001.ant.amazon.com (10.252.50.50) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Wed, 14 Jan 2026 13:47:40 +0000
-Received: from EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c]) by
- EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c%3]) with mapi id
- 15.02.2562.035; Wed, 14 Jan 2026 13:47:40 +0000
-From: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
-To: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
-	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
-	<loongarch@lists.linux.dev>
+ Wed, 14 Jan 2026 13:55:51 +0000
+Received: from [192.168.15.25] (10.106.82.12) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35; Wed, 14 Jan 2026
+ 13:55:48 +0000
+Message-ID: <d204f259-c965-466f-bd75-bb0f767ed8f1@amazon.com>
+Date: Wed, 14 Jan 2026 13:55:43 +0000
+Precedence: bulk
+X-Mailing-List: linux-kselftest@vger.kernel.org
+List-Id: <linux-kselftest.vger.kernel.org>
+List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v8 05/13] KVM: guest_memfd: Add flag to remove from direct
+ map
+To: Vlastimil Babka <vbabka@suse.cz>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>
 CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
 	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
 	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
@@ -90,161 +95,164 @@ CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
 	"willy@infradead.org" <willy@infradead.org>, "akpm@linux-foundation.org"
 	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
 	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz"
-	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
-	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
-	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
-	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
-	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
-	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
-	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
-	"riel@surriel.com" <riel@surriel.com>, "ryan.roberts@arm.com"
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "rppt@kernel.org"
+	<rppt@kernel.org>, "surenb@google.com" <surenb@google.com>, "mhocko@suse.com"
+	<mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>, "daniel@iogearbox.net"
+	<daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "eddyz87@gmail.com"
+	<eddyz87@gmail.com>, "song@kernel.org" <song@kernel.org>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org"
+	<kpsingh@kernel.org>, "sdf@fomichev.me" <sdf@fomichev.me>,
+	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org"
+	<jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com"
+	<jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>,
+	"shuah@kernel.org" <shuah@kernel.org>, "riel@surriel.com" <riel@surriel.com>,
+	"baohua@kernel.org" <baohua@kernel.org>, "ryan.roberts@arm.com"
 	<ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>,
 	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org"
 	<kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
 	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
 	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
 	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
-	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
-	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
-	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
-	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
-	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
-	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
-	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
-	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
-	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
-	<xmarcalx@amazon.co.uk>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
-Subject: [PATCH v9 13/13] KVM: selftests: Test guest execution from direct map
- removed gmem
-Thread-Topic: [PATCH v9 13/13] KVM: selftests: Test guest execution from
- direct map removed gmem
-Thread-Index: AQHchVxZK9VKx1JGv0KQmfxswHb3WQ==
-Date: Wed, 14 Jan 2026 13:47:39 +0000
-Message-ID: <20260114134510.1835-14-kalyazin@amazon.com>
-References: <20260114134510.1835-1-kalyazin@amazon.com>
-In-Reply-To: <20260114134510.1835-1-kalyazin@amazon.com>
-Accept-Language: en-GB, en-US
+	<mlevitsk@redhat.com>, "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+	"jmattson@google.com" <jmattson@google.com>, "jthoughton@google.com"
+	<jthoughton@google.com>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "vannapurve@google.com"
+	<vannapurve@google.com>, "jackmanb@google.com" <jackmanb@google.com>,
+	"aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, "patrick.roy@linux.dev"
+	<patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Itazuri,
+ Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>,
+	"Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <20251205165743.9341-1-kalyazin@amazon.com>
+ <20251205165743.9341-6-kalyazin@amazon.com>
+ <c68efe59-5405-4be5-a768-f27ce27d59d7@suse.cz>
 Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Precedence: bulk
-X-Mailing-List: linux-kselftest@vger.kernel.org
-List-Id: <linux-kselftest.vger.kernel.org>
-List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <c68efe59-5405-4be5-a768-f27ce27d59d7@suse.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D010EUC001.ant.amazon.com (10.252.51.232) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-From: Patrick Roy <patrick.roy@linux.dev>=0A=
-=0A=
-Add a selftest that loads itself into guest_memfd (via=0A=
-GUEST_MEMFD_FLAG_MMAP) and triggers an MMIO exit when executed. This=0A=
-exercises x86 MMIO emulation code inside KVM for guest_memfd-backed=0A=
-memslots where the guest_memfd folios are direct map removed.=0A=
-Particularly, it validates that x86 MMIO emulation code (guest page=0A=
-table walks + instruction fetch) correctly accesses gmem through the VMA=0A=
-that's been reflected into the memslot's userspace_addr field (instead=0A=
-of trying to do direct map accesses).=0A=
-=0A=
-Signed-off-by: Patrick Roy <patrick.roy@linux.dev>=0A=
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>=0A=
----=0A=
- .../selftests/kvm/set_memory_region_test.c    | 52 +++++++++++++++++--=0A=
- 1 file changed, 48 insertions(+), 4 deletions(-)=0A=
-=0A=
-diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/t=
-esting/selftests/kvm/set_memory_region_test.c=0A=
-index 7fe427ff9b38..6c57fb036b20 100644=0A=
---- a/tools/testing/selftests/kvm/set_memory_region_test.c=0A=
-+++ b/tools/testing/selftests/kvm/set_memory_region_test.c=0A=
-@@ -602,6 +602,41 @@ static void test_mmio_during_vectoring(void)=0A=
- =0A=
- 	kvm_vm_free(vm);=0A=
- }=0A=
-+=0A=
-+static void guest_code_trigger_mmio(void)=0A=
-+{=0A=
-+	/*=0A=
-+	 * Read some GPA that is not backed by a memslot. KVM consider this=0A=
-+	 * as MMIO and tell userspace to emulate the read.=0A=
-+	 */=0A=
-+	READ_ONCE(*((uint64_t *)MEM_REGION_GPA));=0A=
-+=0A=
-+	GUEST_DONE();=0A=
-+}=0A=
-+=0A=
-+static void test_guest_memfd_mmio(void)=0A=
-+{=0A=
-+	struct kvm_vm *vm;=0A=
-+	struct kvm_vcpu *vcpu;=0A=
-+	struct vm_shape shape =3D {=0A=
-+		.mode =3D VM_MODE_DEFAULT,=0A=
-+		.src_type =3D VM_MEM_SRC_GUEST_MEMFD_NO_DIRECT_MAP,=0A=
-+	};=0A=
-+	pthread_t vcpu_thread;=0A=
-+=0A=
-+	pr_info("Testing MMIO emulation for instructions in gmem\n");=0A=
-+=0A=
-+	vm =3D __vm_create_shape_with_one_vcpu(shape, &vcpu, 0, guest_code_trigge=
-r_mmio);=0A=
-+=0A=
-+	virt_map(vm, MEM_REGION_GPA, MEM_REGION_GPA, 1);=0A=
-+=0A=
-+	pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);=0A=
-+=0A=
-+	/* If the MMIO read was successfully emulated, the vcpu thread will exit =
-*/=0A=
-+	pthread_join(vcpu_thread, NULL);=0A=
-+=0A=
-+	kvm_vm_free(vm);=0A=
-+}=0A=
- #endif=0A=
- =0A=
- int main(int argc, char *argv[])=0A=
-@@ -625,10 +660,19 @@ int main(int argc, char *argv[])=0A=
- 	test_add_max_memory_regions();=0A=
- =0A=
- #ifdef __x86_64__=0A=
--	if (kvm_has_cap(KVM_CAP_GUEST_MEMFD) &&=0A=
--	    (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))) {=
-=0A=
--		test_add_private_memory_region();=0A=
--		test_add_overlapping_private_memory_regions();=0A=
-+	if (kvm_has_cap(KVM_CAP_GUEST_MEMFD)) {=0A=
-+		uint64_t valid_flags =3D kvm_check_cap(KVM_CAP_GUEST_MEMFD_FLAGS);=0A=
-+=0A=
-+		if (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM)) {=0A=
-+			test_add_private_memory_region();=0A=
-+			test_add_overlapping_private_memory_regions();=0A=
-+		}=0A=
-+=0A=
-+		if ((valid_flags & GUEST_MEMFD_FLAG_MMAP)=0A=
-+			&& (valid_flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP))=0A=
-+			test_guest_memfd_mmio();=0A=
-+		else=0A=
-+			pr_info("Skipping tests requiring GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_F=
-LAG_NO_DIRECT_MAP");=0A=
- 	} else {=0A=
- 		pr_info("Skipping tests for KVM_MEM_GUEST_MEMFD memory regions\n");=0A=
- 	}=0A=
--- =0A=
-2.50.1=0A=
-=0A=
+
+
+On 08/12/2025 08:43, Vlastimil Babka wrote:
+> On 12/5/25 17:58, Kalyazin, Nikita wrote:
+>> +static int kvm_gmem_folio_zap_direct_map(struct folio *folio)
+>> +{
+>> +     int r = 0;
+>> +     unsigned long addr = (unsigned long) folio_address(folio);
+>> +     u64 gmem_flags = GMEM_I(folio_inode(folio))->flags;
+>> +
+>> +     if (kvm_gmem_folio_no_direct_map(folio) || !(gmem_flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP))
+>> +             goto out;
+>> +
+>> +     r = set_direct_map_valid_noflush(folio_page(folio, 0), folio_nr_pages(folio),
+>> +                                      false);
+>> +
+>> +     if (r)
+>> +             goto out;
+>> +
+>> +     folio->private = (void *) KVM_GMEM_FOLIO_NO_DIRECT_MAP;
+> 
+> With Dave's suggestion on patch 1/13 to have folio_zap_direct_map(), setting
+> this folio->private flag wouldn't be possible between the zap and tlb flush,
+> but it's not an issue to set it before the zap, right?
+
+I can't see an issue with that.  Did it in the v9.
+
+> 
+>> +     flush_tlb_kernel_range(addr, addr + folio_size(folio));
+>> +
+>> +out:
+>> +     return r;
+>> +}
+>> +
+>> +static void kvm_gmem_folio_restore_direct_map(struct folio *folio)
+>> +{
+>> +     /*
+>> +      * Direct map restoration cannot fail, as the only error condition
+>> +      * for direct map manipulation is failure to allocate page tables
+>> +      * when splitting huge pages, but this split would have already
+>> +      * happened in set_direct_map_invalid_noflush() in kvm_gmem_folio_zap_direct_map().
+>> +      * Thus set_direct_map_valid_noflush() here only updates prot bits.
+>> +      */
+>> +     if (kvm_gmem_folio_no_direct_map(folio))
+>> +             set_direct_map_valid_noflush(folio_page(folio, 0), folio_nr_pages(folio),
+>> +                                      true);
+> 
+> I think you're missing here clearing KVM_GMEM_FOLIO_NO_DIRECT_MAP from
+> folio->private, which means if there's another
+> kvm_gmem_folio_zap_direct_map() call on it in the future, it will do nothing?
+
+You're very right, thanks.  Fixed in the v9.
+
+> 
+>> +}
+>> +
+>>   static inline void kvm_gmem_mark_prepared(struct folio *folio)
+>>   {
+>>        folio_mark_uptodate(folio);
+>> @@ -398,6 +444,7 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
+>>        struct inode *inode = file_inode(vmf->vma->vm_file);
+>>        struct folio *folio;
+>>        vm_fault_t ret = VM_FAULT_LOCKED;
+>> +     int err;
+>>
+>>        if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+>>                return VM_FAULT_SIGBUS;
+>> @@ -423,6 +470,12 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
+>>                kvm_gmem_mark_prepared(folio);
+>>        }
+>>
+>> +     err = kvm_gmem_folio_zap_direct_map(folio);
+>> +     if (err) {
+>> +             ret = vmf_error(err);
+>> +             goto out_folio;
+>> +     }
+>> +
+>>        vmf->page = folio_file_page(folio, vmf->pgoff);
+>>
+>>   out_folio:
+>> @@ -533,6 +586,8 @@ static void kvm_gmem_free_folio(struct folio *folio)
+>>        kvm_pfn_t pfn = page_to_pfn(page);
+>>        int order = folio_order(folio);
+>>
+>> +     kvm_gmem_folio_restore_direct_map(folio);
+>> +
+>>        kvm_arch_gmem_invalidate(pfn, pfn + (1ul << order));
+>>   }
+>>
+>> @@ -596,6 +651,9 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+>>        /* Unmovable mappings are supposed to be marked unevictable as well. */
+>>        WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
+>>
+>> +     if (flags & GUEST_MEMFD_FLAG_NO_DIRECT_MAP)
+>> +             mapping_set_no_direct_map(inode->i_mapping);
+>> +
+>>        GMEM_I(inode)->flags = flags;
+>>
+>>        file = alloc_file_pseudo(inode, kvm_gmem_mnt, name, O_RDWR, &kvm_gmem_fops);
+>> @@ -807,6 +865,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>        if (!is_prepared)
+>>                r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+>>
+>> +     kvm_gmem_folio_zap_direct_map(folio);
+>> +
+>>        folio_unlock(folio);
+>>
+>>        if (!r)
+> 
+
 
