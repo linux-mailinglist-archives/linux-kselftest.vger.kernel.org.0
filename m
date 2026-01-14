@@ -1,166 +1,137 @@
-Return-Path: <linux-kselftest+bounces-48899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1225D1BBFB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 00:48:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CDDDD1BD2E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 01:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 70A7C300D33A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Jan 2026 23:48:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 316D7304A913
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 00:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 840DC2D5944;
-	Tue, 13 Jan 2026 23:48:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 348A321B191;
+	Wed, 14 Jan 2026 00:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nCzrI/qd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pRgcmhdN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6DD2773FC
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 23:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768348106; cv=none; b=I8YYd8ZVKI0MBYxVPxjqxuU7F+OuuiJcOqJLOQdAxstV/N8IN39ekFYTQFG/N1YavT8F5hYoCkIwI0P/QawEU+vvst53Mb3NXr7q/GvF3lxT/8UPmjRypHx51W7vn6xw79qGHtfgRyuVmSyGovCMO2e/4ugRfB4RnGhJs3CqkyQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768348106; c=relaxed/simple;
-	bh=/3nEZHruNblgDoS195XRf5u7JVjr67KdR83C5VowS9Q=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979F61FDE14
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Jan 2026 00:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768350726; cv=pass; b=qjvrW21r8KXEbCLVkwy0UggcbtnDKkb7vHuPUrimyZVflhx5kQV52nBhamUp6//GQhCAe+S2D5FlDBOTblGeDwKJvBRwk5Tutb/0pjpN4/V5zT4H6UdnDrp8+NM/YyyreLOAzR8/u9AS9SyCSZZjGT5E7juUk4Vnh8Jdz17v6v8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768350726; c=relaxed/simple;
+	bh=a6wUaDtICNxo6H184CHsvJN3aC8Z20MkNZw3ko+zU/g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=REnygxwe5NcTfhYLjf1hs3vl0RzQ58Vfagcj2nMTmUhL7QqyqGdL0RDatKyygQe0ylJhZTO/PMxlDhEMXVtb6L8u6MVNzVQQBiDImoFqRf0pii9RQSm2Z0F9uMNk1DENGTF+zDurzmhCEn+PA9uVLpjR27ISjVtepcingvjVZB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nCzrI/qd; arc=none smtp.client-ip=209.85.217.48
+	 To:Content-Type; b=GFkk8saVbO51wgpv+GVCd5gW7ncyRK7kBkNWkNO94alWaIttJg3hT0G6C2SEU3oJlwRQvRkP1Oyps4ND6Jw4G/EdZIwGBmU3p8ftES+RCz+0GAFTZUq5oUOz2ulG4cwd4Mw11QflZXrsNE5QSkD4St/eIj1uFV6FLcBETGRrU6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pRgcmhdN; arc=pass smtp.client-ip=209.85.208.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-5ee99dec212so2056781137.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 15:48:24 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-652fe3bf65aso2164a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Jan 2026 16:32:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768350723; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YEjStkh1a+Wn1b1sJnSxagU73pC2X3+Snhu3lwW+F5AcOIxBQig7E4DPe/B4U2beNR
+         P9QPgOfg6yuxH9XkN+p2+lLOhQUzai1vxlbvpvi3gkPrOvVO79qc15r/HxtCVtFcvgK9
+         bvIhEc/Oy0m5JSJ1Wo+0T2pvRxvzh/ecrwT5rve4Or4eI0o5gZCZjx7HXXkdHSLK/NL0
+         v/r8/tIg30CXa1SPFpRUT4MjEojvokpKO65DHixK0mC3RlQNYD2/WOv1tO7Ls0jvWZrV
+         B/2MtiJLXjm53Q8vqDX0EBM/VOfm0dASht7zszZvM9+gQwxeLDgnaVOLc/BNXNA6ketu
+         yyyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=a6wUaDtICNxo6H184CHsvJN3aC8Z20MkNZw3ko+zU/g=;
+        fh=wX0FXt2eitLoRA2IHI8GxQDDujQt4Wi3jrNkpfSvUxs=;
+        b=eOEQtykuYYW5t+rutTELQi77L7B1losj5mTkByy09DMayw4+cwlbIsXmmgHziBvXDE
+         dWfDM4sNWo+ub7sLCZ92sMjzlyIdXtPl2x2eDDLu+NHeO8tNl54sCA66nSxq5zM81GOg
+         Be+y4gt9vMVG2hsZNT1vKZ7m10qzGD9X9iW1HgCZ2XdrziORUToxSdUdx45QOCUyifZV
+         XoZBDTdE3Qp+aKu1X1bZrFF2mvk6ru/skZ+HJp8eEfpqcTR4joyAucGSMETDatrRZanF
+         LvhXb/E9gMOuT2moGAsYZ4Hm0QfgB62Sq04arZcsU+GKIz1rRksidwhXWr16kw4n6D7W
+         I1cQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768348104; x=1768952904; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=google.com; s=20230601; t=1768350723; x=1768955523; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sVWLNrdwIQNBKBOwJy78In7uUpvJppqCzymGUhTOU5w=;
-        b=nCzrI/qd2XChWascNusYWBbbJ0/LTp8VqDkYaycSBvUrYLEXFlue2RIWiLid3jTXe8
-         1WyxAyq3Yv3djLD+U9W0CnrNGsezCLLfoDwYPuxi2XGfVmJ4NOZx+/akKAYbaGXRmB2k
-         suETMjDzWspF78UIbKwu0Cl+MUzwK6P8dl53QORhLK+ugC7gted9PqGkidTpRDnQBE0C
-         9OcwupbP9kuX+YC7P9lDjvnTClfsp6maxwAQxNDSmpFJlNjiJTc0gEzSj0TM3gtLCVMW
-         kNFxRBLPUaSUsqQ+uET0O0CwvW45NlRB9lgwv450tWplYurWgOmEzEm6PHqWYnHGWOde
-         /VdA==
+        bh=a6wUaDtICNxo6H184CHsvJN3aC8Z20MkNZw3ko+zU/g=;
+        b=pRgcmhdNUPbOibNcTKb9+S6YJQ+JT0Wi8eT/qOihKLblaBSZa0CvQ1J+nS5rwVXLBf
+         A+K+yLvG4bOr8OxwQ844Q0uv0efk+K8sG/nzIbWwWco1yQjAzsfx8t+MvSHgwzJLn+gq
+         LBMlyEV+e342uFRvv4CsOQDHni2LXnRwzncnL/xjFlJL3UvAjw12dKG+n7eYMnkmNt/F
+         /V+A8eBoYJnHA+4UlXa9RTgAKozxqsNtL7jsUDXkX2ViLSeNnjwiCXLGjYoMK5RujEx0
+         6Rpx0TttJBmiCsp5SwoMLVxyF+6CJiJcQufYnUwUqwFufIafD+QEoynmEY2WP7KzxxQH
+         B8EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768348104; x=1768952904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=1e100.net; s=20230601; t=1768350723; x=1768955523;
+        h=content-transfer-encoding:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=sVWLNrdwIQNBKBOwJy78In7uUpvJppqCzymGUhTOU5w=;
-        b=qyvPYrqWtznSN0lVZbY3sEYaeCQHZoJRysJcuMU+X+TkBQX50NZbTiNf+CTXieuLpZ
-         J/Tv6ufwzWY/LUgVg3rTTUyXe9xj3LZWotp7uBhX3M0Mkb+a4+VSxz81Q2qEW2Zbl/LE
-         IOkoLLQ6z9V8nUD90lTuFandEs/Dl+z1DoqZ9lblibB5Gb+IjhzheD7HE7syTbhDRvBj
-         N6IYw4H9RIfGI6uE3K5DvWKCOgHRFC64s5MVEO1PhkIhnpFIG/pkU2K6U9JxPNISGEi/
-         DWvkw1OEPK6KomLmQ6rTbBRua+Agg+dIHwt7ngGTOp0K5Ib66pkr1W65CI9oZIOCVnG3
-         /OqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWcXhOvMOkQSN1YWhk6S7tzuZYNOz1HXMMmIzoul3mlUX4fuk5I8GnKb18F1l9MhC8PcaNlqAcqCTGJJnS1Cwo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE81HnpkySFFwXpyelV3XX2hwp/tXpqKKCdFz1488dpjfKpchb
-	r0FnpHBh/WVM/0abx/L8UuC31fBRejSB+sNSNWQ5IS5CIUUgfyYQZ/5sPcAmdf+DchQRXyPnlIi
-	obDfebxALWFUq5ILjorPssKy68BZaINu5G0ndcYjb
-X-Gm-Gg: AY/fxX7DWpmVUf7/QD78yJfB0EhSLiDt2BCwlTK2MHwsAIF8xESizfIOpkCbVjXyWea
-	XNtW80n+SSY0kTVQHzAFpQbC+f9+L0oCB+ZFfgxmFqvbgGFLCZlZ8BwsuPmS8DVmFfvoqNwaNL7
-	Qvn/XZEmpJY8rYtTjfUEXUBVDRLk1SIOmK4z407cCXff+SwsJgq/zZx8gIMh1mJHBo2deVA8hhJ
-	tJdFDmBbsOvVxEhm8atBUQar3iyu/kPHXVa4iUNqq593QDszV8pM0KtOhI0bZet+nUR3RXF
-X-Received: by 2002:a05:6102:3f09:b0:5e5:672a:b19 with SMTP id
- ada2fe7eead31-5f17f419d9fmr365708137.4.1768348103587; Tue, 13 Jan 2026
- 15:48:23 -0800 (PST)
+        bh=a6wUaDtICNxo6H184CHsvJN3aC8Z20MkNZw3ko+zU/g=;
+        b=YcFw77O3aybzdKpaVXXBtDx6u/oqo091XsYoP5dOLsTy18iC6yU9FrJvUk2KElITyD
+         CUfiEEEQqVYEzH9lKSI3t65NKsbecg2aRCHXxuyXp0FM3BfOwFBFadlrD1qyAMXvzxpG
+         +Q/+tuvJB6uLCb6ETeKxnWXEmC0frRtJnGDTFT4eAtex+9AcgM94pGix81BIBaUJVCLa
+         gODKFPK25QIsTBRg/Szw9kCughzH/MwRwqCBiwFGwg/R5u2ZfQVKKma0gJpIGtLw9YRH
+         aESEnesV+w5gVkK7nNCizy3kU0O3CajtfTiR/4DVU+SP9uimK59Jsf4JASJDzGkNTaGv
+         PKKg==
+X-Forwarded-Encrypted: i=1; AJvYcCUzjnYvM3Py2q+pyggbuEJ7sGOjwRaIXreSP2biYiYca+L6Cxa0bCOL1RPkooGdP2j787mh2sEKS2coNAOmrUA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3ibxmKAlHLbn8TNLGvahRG356mn4vE9G6NVWIGRRf+HGITzT9
+	si0NiNqB+shj5BW2Lh0TMl5TTGOy8x869uN3L+a7zeLjM28pvnVaUkRdzqS4a6Fj3soHlgCcEK/
+	wKQAxa8E5gHZ7WyiGOoWEDW8UEDutqSRJi+/O4Gt+
+X-Gm-Gg: AY/fxX4kTlmhaVGIfhz6+BkQd+KbV9qD9lWWMEi9KVcZfwiohVJ3UNJg46eJVOf2yqj
+	JD28UQ1M6rrGJ59i4FNDcyzemcyYHar/mcR9KVe0+K6+Jm0gU3BJnZmGJds2DqD1eBmA5CUjlqB
+	0iNGJ6URJHOQUznvD5rvWtes/3tuOdz1vY8UUqqgNPrgH+nQjBHyQtLlaDSrZIHgIRfq18FaJUH
+	P2OxhQi15Ucw9F2i4jDDKxu7iYCDmLiz8cZskz6CPX8cZOVZJC8dJqMC5XZrTYhoDjbJeo=
+X-Received: by 2002:aa7:d399:0:b0:640:4aeb:b4d3 with SMTP id
+ 4fb4d7f45d1cf-653eb8b91e0mr16246a12.2.1768350722680; Tue, 13 Jan 2026
+ 16:32:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com> <20260108141044.GC545276@ziepe.ca>
- <20260108084514.1d5e3ee3@shazbot.org> <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
- <20260108183339.GF545276@ziepe.ca> <aWAhuSgEQzr_hzv9@google.com>
- <20260109003621.GG545276@ziepe.ca> <aWBPNHOsaP1sNvze@google.com>
- <20260109005440.GH545276@ziepe.ca> <CALzav=cBGkhbbyggkfaYh3wfqodxRHZKXTNdnmjoXOgwMouBuA@mail.gmail.com>
- <20260109180153.GI545276@ziepe.ca> <20260109143830.176dc279@shazbot.org>
-In-Reply-To: <20260109143830.176dc279@shazbot.org>
-From: David Matlack <dmatlack@google.com>
-Date: Tue, 13 Jan 2026 15:47:53 -0800
-X-Gm-Features: AZwV_QjdcFsJsgt85dNhSC_YTux420gKxRVuQRmmDpaV4k1qPluDDfAJcne_NFU
-Message-ID: <CALzav=cE4SQbbcWL9-bhHPEjCq3DPOWnGZnqrHcvR5mYB_t3cA@mail.gmail.com>
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-To: Alex Williamson <alex@shazbot.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Alex Mastro <amastro@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260113003016.3511895-1-jmattson@google.com>
+In-Reply-To: <20260113003016.3511895-1-jmattson@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Tue, 13 Jan 2026 16:31:50 -0800
+X-Gm-Features: AZwV_Qj48k15LymrU0ga_vbUw3bTYYBlGdp6Pdii9Imxn230GNLk5A_U70QLjgs
+Message-ID: <CALMp9eTLS6_HhWTkf-baga77=0zNq6KUBYtvY0WNuGs3ts2Ptw@mail.gmail.com>
+Subject: Re: [PATCH 00/10] KVM: x86: nSVM: Improve PAT virtualization
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Joerg Roedel <joro@8bytes.org>, 
+	Avi Kivity <avi@redhat.com>, =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>, 
+	David Hildenbrand <david@kernel.org>, Cathy Avery <cavery@redhat.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 9, 2026 at 1:38=E2=80=AFPM Alex Williamson <alex@shazbot.org> w=
+On Mon, Jan 12, 2026 at 4:30=E2=80=AFPM Jim Mattson <jmattson@google.com> w=
 rote:
 >
-> On Fri, 9 Jan 2026 14:01:53 -0400
-> Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> KVM's implementation of nested SVM treats PAT the same way whether or
+> not nested NPT is enabled: L1 and L2 share a PAT.
 >
-> > On Fri, Jan 09, 2026 at 09:04:30AM -0800, David Matlack wrote:
-> > > > If you really want to test TYPE1 you need to test what makes it
-> > > > unique, which is that you can map any VMA and then unmap any slice =
-of
-> > > > it. Including within what should otherwise be a 1G page.
-> > > >
-> > > > But I doubt anyone cares enough to fix this, so just exclude
-> > > > VFIO_TYPE1_IOMMU from this test?
-> > >
-> > > Ah, ok, thanks for the explanation. So VFIO_TYPE1_IOMMU should always
-> > > use 4K mappings regardless of backend (VFIO or iommufd) so that unmap
-> > > can work as intended.
-> >
-> > IDK, I think you should just ignore testing TYPE1v0. The actual real
-> > semantics that it had are quite confusing and iommufd provides an
-> > emulation that is going to be functionally OK (indeed, functionally
-> > more capable) but is not the exactly the same.
-> >
-> > The old comment here is sort of enlightening:
-> >
-> > +        * vfio-iommu-type1 (v1) - User mappings were coalesced togethe=
-r to
-> > +        * avoid tracking individual mappings.  This means that the gra=
-nularity
-> > +        * of the original mapping was lost and the user was allowed to=
- attempt
-> > +        * to unmap any range.  Depending on the contiguousness of phys=
-ical
-> > +        * memory and page sizes supported by the IOMMU, arbitrary unma=
-ps may
-> > +        * or may not have worked.  We only guaranteed unmap granularit=
-y
-> > +        * matching the original mapping; even though it was untracked =
-here,
-> > +        * the original mappings are reflected in IOMMU mappings.  This
-> > +        * resulted in a couple unusual behaviors.  First, if a range i=
-s not
-> > +        * able to be unmapped, ex. a set of 4k pages that was mapped a=
-s a
-> > +        * 2M hugepage into the IOMMU, the unmap ioctl returns success =
-but with
-> > +        * a zero sized unmap.  Also, if an unmap request overlaps the =
-first
-> > +        * address of a hugepage, the IOMMU will unmap the entire hugep=
-age.
-> > +        * This also returns success and the returned unmap size reflec=
-ts the
-> > +        * actual size unmapped.
-> >
-> > iommufd does not try to do this "returned unmap size reflects the
-> > actual size unmapped" part, it always unmaps exactly what was
-> > requested, because it disables huge pages.
->
-> I think there was also some splitting code in the IOMMU drivers that
-> has since been removed that may have made the v1 interface slightly
-> more sane.  It certainly never restricted mappings to PAGE_SIZE in
-> order to allow arbitrary unmaps, it relied on users to do sane things
-> and examine the results.  Those "sane things" sort of became the v2
-> interface.
->
-> In any case, we've had v2 for a long time and if IOMMUFD compat make v1
-> more bloated and slow such that users realize they're using an old,
-> crappy interface, that's probably for the best.  Examining what page
-> size is used for v1 is probably not worthwhile though.  Thanks,
+> This is correct when nested NPT is disabled, but incorrect when nested
+> NPT is enabled. When nested NPT is enabled, L1 and L2 have independent
+> PATs.
 
-Ack. I'll send a patch to skip the page size checks for v1.
+Yosry points out that this series does not correctly handle saving a
+checkpoint on a new kernel and restoring it on an old kernel. In that
+scenario, KVM_SET_MSRS will restore the L2 PAT, and the old kernel
+will not restore L1's PAT on emulated #VMEXIT.
+
+I have also discovered that not all userspace VMMs restore MSRs before
+nested state.
+
+Ironically, I think the way to correctly deal with compatibility in
+both directions is to go back to the architected separation of hPAT
+and gPAT. Accesses to IA32_PAT from userspace will always have to
+reference hPAT to properly restore a new checkpoint on an old kernel.
+
+Cooking up v2...
 
