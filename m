@@ -1,77 +1,77 @@
-Return-Path: <linux-kselftest+bounces-48927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49240D1E8B6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:51:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BD75D1E8BD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:51:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A711B3084D6D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 11:48:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C2DE430221B4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 11:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EADD5396D0F;
-	Wed, 14 Jan 2026 11:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E828392829;
+	Wed, 14 Jan 2026 11:46:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cyFgbgaB"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="lTT2E0Ym"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A18396B7F;
-	Wed, 14 Jan 2026 11:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3ED4395DBE;
+	Wed, 14 Jan 2026 11:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768391279; cv=none; b=HqUF1zfYKjeZmlQ48/EEPVAy42k/SQPVapp0FjvT+YRflcfCeH1PSih2XLzJZ5IdAjnACHIN0jGnk2FDdh0LRBzTkg/PcHpmThEIhT/36Kn1NOlGxalf23t/VuwMg9jLNfen6ozcofkeDj0Ei9o0WGLYJAoaFIXZpvJbKvy4Q68=
+	t=1768391210; cv=none; b=E4/Is6yufSPsrVh2DEb7LuRdk9R5vmbMMwyjb9Bm7Zhj4TmTFNYNyjnUSV7BnYd/ZK4Wu8utY5a/beDixyNqPGHtI6yTrbbEsLnyXkNru352/NoqRgJZL+9zoIQXglx4F95aEEp/t/FaioIeuaCurcLjAgvoA3TsgzcsDti8r4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768391279; c=relaxed/simple;
-	bh=+mVN/1k32p3Q/oqWuuEyICSthLwnkmAMh/wSUMCC16w=;
+	s=arc-20240116; t=1768391210; c=relaxed/simple;
+	bh=tQZNFgrbg2PtUm7ISJ2VVRAYxlrVEz8pWBRoCM4lntk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hxr6tTtJD7Sz6+bkN8kSLTcVE337w8GENI90rwjl/fMA0YMtxt1UTvlBmUUC14Zv1lbxs6V660wi0n8FmvtnlSR06c+8ROb0zDeKXy+umKveViVLwtDevHA+vg3z7ieRonVuy2fqC6bdcSpX5uD8fa07brPK53N5BiwbY+sE4ZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cyFgbgaB; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=W89XnJ96tpwQsMp5R6TaJGtsi6LfXUdFxJyK1N1tqA4meVW2HC26GYhQvH0FsKNfmTIpgrqVVZd6BBs7rKfKbQVoR4bPPEK9PDLdzodGM3dp0zR2aFe+nK6c5eAvagxMSicMSiEdvq99mu9l3jmTNsDJU/0Yn4P2zBGdkIoRmfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=lTT2E0Ym; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60DMsvIE023555;
-	Wed, 14 Jan 2026 11:46:06 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60EBVIFw009441;
+	Wed, 14 Jan 2026 11:46:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=j407n7q4cCyhc5s3H
-	s0Bcd7yRqelf1smKMXBcLjWqAY=; b=cyFgbgaBn3USLLJXlZnEJraRsZfWkuti4
-	kAN/CR6uAx9gIbCFLfZ0NJqYeP5w2OKwyEO7R6VQ4DSPuh/R1Aqq77sJPIoNFx8D
-	BCMJCHBBtC8o5dQvaaAVd0C36yAf58Qx6IwRfOPeYOWwnYJnLfm9zJkPlPDcawYt
-	z/uRaa98Wo0EPXy32VxKYgDoA+cfIBGWQFRhEZLq/hUemx1jKW7IcfrlRkfQ6jhf
-	ndS/ErJiiB/wdJaWaLPdKT42UgaZ6HwkFPL74FmAVngLSzJng+RAycgRElmpNUEF
-	ateMm+wZRdaVUBcFkAgIE3+WYu4l8Ry+LVZGf6SemcmUGxgk1cVew==
+	:mime-version:references:subject:to; s=pp1; bh=aXJUn3bNZD9fOETwc
+	zZ/IV1t0kDAXX4Muw0AQio7os4=; b=lTT2E0YmAM/iOpFUA42h/oorTWU+K10D5
+	5u7CBO1rDajGULasgPTZ0zr+CFZJeEktvFOsc1RTKH2R7Z+OeT5IPHQaZqlsU/J+
+	XSQYM07S8aG8IMh18xM4nKiA4iG04RaZiODQ2bSh0+CZn8dyk9suGQp28DPbJ2J8
+	DPoE36VgaOlLxanh2ki5oDtft9v0dCf0+YNCnVMlmtuL5RFYb2PotsbjXi7dKfa2
+	VQ0Uhw61FMlIgb+ydoN7DD5zdeirrB/hzKpG+V6upyxiSKP86DIxbFM5qveZEBGo
+	thJ30N18Z9XvXk/icC+LVGxetzpsx8a/e9ID5suGTydyfPwddCgmg==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkd6e8u87-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bke93155t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 11:46:06 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60EBcH2D005594;
-	Wed, 14 Jan 2026 11:46:06 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkd6e8u84-1
+	Wed, 14 Jan 2026 11:46:17 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60EBWDP2020741;
+	Wed, 14 Jan 2026 11:46:17 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bke93155q-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 11:46:05 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60EAXcj4025809;
-	Wed, 14 Jan 2026 11:46:05 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm2kkhs9e-1
+	Wed, 14 Jan 2026 11:46:17 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60EBMTux025961;
+	Wed, 14 Jan 2026 11:46:15 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm23n9ra2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 11:46:05 +0000
+	Wed, 14 Jan 2026 11:46:15 +0000
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60EBk1xu45809954
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60EBkBUq46072088
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Jan 2026 11:46:01 GMT
+	Wed, 14 Jan 2026 11:46:11 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 021DC20043;
-	Wed, 14 Jan 2026 11:46:01 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3C25E20040;
+	Wed, 14 Jan 2026 11:46:11 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 54A7820040;
-	Wed, 14 Jan 2026 11:45:54 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id AB4B520043;
+	Wed, 14 Jan 2026 11:46:04 +0000 (GMT)
 Received: from abhi.. (unknown [9.124.217.65])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 Jan 2026 11:45:54 +0000 (GMT)
+	Wed, 14 Jan 2026 11:46:04 +0000 (GMT)
 From: adubey@linux.ibm.com
 To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
@@ -84,9 +84,9 @@ Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
         mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
         iii@linux.ibm.com, shuah@kernel.org,
         Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v2 4/6] powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
-Date: Wed, 14 Jan 2026 17:14:48 +0530
-Message-ID: <20260114114450.30405-5-adubey@linux.ibm.com>
+Subject: [PATCH v2 5/6] powerpc64/bpf: Support exceptions
+Date: Wed, 14 Jan 2026 17:14:49 +0530
+Message-ID: <20260114114450.30405-6-adubey@linux.ibm.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260114114450.30405-1-adubey@linux.ibm.com>
 References: <20260114114450.30405-1-adubey@linux.ibm.com>
@@ -98,82 +98,178 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: W4hPKjBIUSTGUSaemCmJiRVMBSg8nNW_
-X-Authority-Analysis: v=2.4 cv=LLxrgZW9 c=1 sm=1 tr=0 ts=696781fe cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=ovcAVf-9gG4EF5hqTukA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA5MyBTYWx0ZWRfXyhbIde78SoWS
- W2wMLVm2FpxNcaokZK+IIx5youxA5OiBrYd6okxwWZPm85L8+gDTDZDOFi7g0Tmpt+Yob6Ly1dz
- jUSFc4C7GU4hqU7Ekg9QJWC7xRUVj3mCvqGEN10nwBeQ+doZrSy5zcCK3rpXti3gJQXzzowomBg
- 0v3vAkq6N7dNh9aTb6TDEFQ4giqfETDFrgkTHNNAnXIrFPigEoKocw9URbO0ucmPE0ZvUTyDeU8
- ZsB4eW2i8ANdAOL3RkYrXycdVgY9uwGuZ9zLnErXjFV21HMAyP29RIqH/2M95pTgCgWtTRNO3tO
- eb0f9KlrFb3id2YeHj4EgnosWHKgX33Eq3Bg9VxjbmQZBRqITtI3EohrTYE8Ro1F8y1uGQmOafR
- f+c/i0h7eqoQBguRTZkae7I81G9y/lGBMGr/aB3DVE2YwPRvOV0eUls9qEsYftgo98+snjpgWSX
- 21a3oexPIYvgW8IeF2Q==
-X-Proofpoint-ORIG-GUID: AVX5I48SCigD4bDqptliSEZSYfkJu5GH
+X-Proofpoint-ORIG-GUID: Zt7Vyr5IxOTsYF3YS_KghMXvGQFRnPuJ
+X-Authority-Analysis: v=2.4 cv=dYyNHHXe c=1 sm=1 tr=0 ts=69678209 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=DU0EyFXtAAAA:8 a=VnNF1IyMAAAA:8
+ a=8rlfmSvwrT77M3U47S8A:9 a=UCR5be5CC-YrbG9FbbB0:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA5MyBTYWx0ZWRfX9216ceHfLNTy
+ f2q9BP5brJFX1ng4HTTga5/7fd8UuEVNs/evVTdD6cNNyz4BKRooftukmA95roVZIZP0QO3EzC0
+ aYkkHQ2wc1hCNVx/7lltVXShDgSImtUN4HbzUDUG8WdFb76NSO3in+ciBq3sI26BIjm2hpDtUTB
+ MH9FP35PVrLJ/7IXGiUw94U5HY2cx3kSNsqX9phRKHQRuEoq6hGqGSmaHKq1jH7rjfLQhBzgsrm
+ /LPoZEi6sllTrhP/2Nhkp3FsRiwhMK5FVj1dxcYUscn4GhqmnKth92EaAQm85vV4Pu5xEoPqNeO
+ PHS+DjfSCLCckAO6PlMA69u9lTNDo9Dk/QtdZJtKHNopxAqg6fV8claIqY3ANO85dO+fa0Zep3L
+ R2r7tKW/pYye5/jB7yO78mOIw1cmyvgBVa4VGQEdASel8X9L8P5UVczf/ttcW+j6lvocfYAYwgZ
+ Of673mxUYFhLLpcij1A==
+X-Proofpoint-GUID: mX_nWFvyyTcU6KkGbHjUDlMtSJl3gZNE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-14_03,2026-01-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0 impostorscore=0
- malwarescore=0 phishscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
+ spamscore=0 impostorscore=0 adultscore=0 priorityscore=1501 suspectscore=0
+ bulkscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601140093
 
 From: Abhishek Dubey <adubey@linux.ibm.com>
 
-This function is used by bpf_throw() to unwind the stack
-until frame of exception-boundary during BPF exception
-handling.
+The modified prologue/epilogue generation code now
+enables exception-callback to use the stack frame of
+the program marked as exception boundary, where callee
+saved registers are stored.
 
-This function is necessary to support BPF exceptions on
-PowerPC.
+As per ppc64 ABIv2 documentation[1], r14-r31 are callee
+saved registers. BPF programs on ppc64 already saves
+r26-r31 registers. Saving the remaining set of callee
+saved registers(r14-r25) is handled in the next patch.
+
+[1] https://ftp.rtems.org/pub/rtems/people/sebh/ABI64BitOpenPOWERv1.1_16July2015_pub.pdf
 
 Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp64.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/powerpc/net/bpf_jit.h        |  2 ++
+ arch/powerpc/net/bpf_jit_comp.c   |  7 ++++
+ arch/powerpc/net/bpf_jit_comp64.c | 53 +++++++++++++++++++++----------
+ 3 files changed, 45 insertions(+), 17 deletions(-)
 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index cebf81fbd59f..ec58395f74f7 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -247,6 +247,34 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
- 	bpf_jit_build_fentry_stubs(image, ctx);
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 5d735bc5e6bd..fb548ae5d143 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -179,6 +179,8 @@ struct codegen_context {
+ 	u64 arena_vm_start;
+ 	u64 user_vm_start;
+ 	bool is_subprog;
++	bool exception_boundary;
++	bool exception_cb;
+ };
+ 
+ #define bpf_to_ppc(r)	(ctx->b2p[r])
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index e3088cf089d1..26991940d36e 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -207,6 +207,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
+ 	cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
+ 	cgctx.is_subprog = bpf_is_subprog(fp);
++	cgctx.exception_boundary = fp->aux->exception_boundary;
++	cgctx.exception_cb = fp->aux->exception_cb;
+ 
+ 	/* Scouting faux-generate pass 0 */
+ 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+@@ -436,6 +438,11 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 	bpf_prog_unlock_free(fp);
  }
  
-+void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64), void *cookie)
++bool bpf_jit_supports_exceptions(void)
 +{
-+	// callback processing always in current context
-+	unsigned long fp = current_stack_frame();
-+
-+	for (;;) {
-+		unsigned long *frame = (unsigned long *) fp;
-+		unsigned long ip;
-+
-+		if (!validate_sp(fp, current))
-+			return;
-+
-+		ip = frame[STACK_FRAME_LR_SAVE];
-+		if (!ip)
-+			break;
-+
-+		/*
-+		 * consume_fn common code expects stack pointer(sp) in third
-+		 * argument. There is no sp in ppc64, rather pass frame
-+		 * pointer.
-+		 */
-+		if (ip && !consume_fn(cookie, ip, fp, fp))
-+			break;
-+
-+		fp = frame[0];
-+	}
++	return IS_ENABLED(CONFIG_PPC64);
 +}
 +
- int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
+ bool bpf_jit_supports_subprog_tailcalls(void)
  {
- 	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
+ 	return IS_ENABLED(CONFIG_PPC64);
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index ec58395f74f7..a6083dd9786c 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -89,7 +89,9 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+ 	 * - the bpf program uses its stack area
+ 	 * The latter condition is deduced from the usage of BPF_REG_FP
+ 	 */
+-	return ctx->seen & SEEN_FUNC || bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP));
++	return ctx->seen & SEEN_FUNC ||
++	       bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)) ||
++	       ctx->exception_cb;
+ }
+ 
+ /*
+@@ -190,23 +192,32 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx->stack_size)));
+ 	}
+ 
+-	/*
+-	 * Back up non-volatile regs -- BPF registers 6-10
+-	 * If we haven't created our own stack frame, we save these
+-	 * in the protected zone below the previous stack frame
+-	 */
+-	for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+-		if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+-			EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1, bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
++	if (!ctx->exception_cb) {
++		/*
++		 * Back up non-volatile regs -- BPF registers 6-10
++		 * If we haven't created our own stack frame, we save these
++		 * in the protected zone below the previous stack frame
++		 */
++		for (i = BPF_REG_6; i <= BPF_REG_10; i++)
++			if (ctx->exception_boundary || bpf_is_seen_register(ctx, bpf_to_ppc(i)))
++				EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1,
++					bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+ 
+-	if (ctx->arena_vm_start)
+-		EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
++		if (ctx->exception_boundary || ctx->arena_vm_start)
++			EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
+ 				 bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
+ 
+-	/* Setup frame pointer to point to the bpf stack area */
+-	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+-		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
++		/* Setup frame pointer to point to the bpf stack area */
++		if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
++			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+ 				STACK_FRAME_MIN_SIZE + ctx->stack_size));
++	} else {
++		/*
++		 * Exception callback receives Frame Pointer of main
++		 * program as third arg
++		 */
++		EMIT(PPC_RAW_MR(_R1, _R5));
++	}
+ 
+ 	if (ctx->arena_vm_start)
+ 		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+@@ -218,17 +229,25 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 
+ 	/* Restore NVRs */
+ 	for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+-		if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
++		if (ctx->exception_cb || bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+ 			EMIT(PPC_RAW_LD(bpf_to_ppc(i), _R1, bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+ 
+-	if (ctx->arena_vm_start)
++	if (ctx->exception_cb || ctx->arena_vm_start)
+ 		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
+ 				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
+ 
++	if (ctx->exception_cb) {
++		/*
++		 * LR value from boundary-frame is received as second parameter
++		 * in exception callback.
++		 */
++		EMIT(PPC_RAW_MTLR(_R4));
++	}
++
+ 	/* Tear down our stack frame */
+ 	if (bpf_has_stack_frame(ctx)) {
+ 		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
+-		if (ctx->seen & SEEN_FUNC) {
++		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
+ 			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
+ 			EMIT(PPC_RAW_MTLR(_R0));
+ 		}
 -- 
 2.48.1
 
