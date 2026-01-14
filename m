@@ -1,125 +1,259 @@
-Return-Path: <linux-kselftest+bounces-48963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F9AFD20C92
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:26:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD317D20DF4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 19:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 48D8230AC976
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:22:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E413D303FE19
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 18:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF1933555D;
-	Wed, 14 Jan 2026 18:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A832133A704;
+	Wed, 14 Jan 2026 18:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gnv936Pw"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="RJqBMKdK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4666C2F39D7;
-	Wed, 14 Jan 2026 18:22:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB273346A2;
+	Wed, 14 Jan 2026 18:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768414932; cv=none; b=l8eLWoXzKhsGJYu+iZoAANRRJsDqQTF4aDv25nVsZUfEx4UPCwnVtkeX6r8bJFmMVfwdbjMFhtPo9WvjLn4C/Xal8k2BW/PYxgGioWxQI1EWrCnfWJkmhQQh16TrAPpq4MDlG5PuvTrkPMKhueoyEQ+q4WQMWaW8MI6Y1UqiqOg=
+	t=1768416293; cv=none; b=msmhqPiD6gD9lbcmJTKPnuD9ej/MkFDQHofoy5lBZeuV2F0H1DLXJEQ/6CtBoiTKhHjH7gWNRFrBlfS5h1nOjFfxyn8vyBNVFDctK2ZVz2XDo6jhC2yr/k5NM1bo9RhJEjNy2Q1IY++HgdEc1J/EwA29KZm+xTdehQYQ0zeC/QU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768414932; c=relaxed/simple;
-	bh=tcknC6iemaw7J5r4is+1RFQMsTj8mbkEYsrSA6D6Saw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeGh2TkGZ+xujEu49iTscHhbDPLCHQLyS3huzF9AERfRBpM3IXosH3KqCGiWSFO1S5X/I56GvkkgnXEjxJ4y5Sdht7LGqHvGzevl7mcCIePaINQ7AqVBI3JPwe57awqWBQsgZK4be+OA6fORRQFja+rXsXv6xu+hTplHZQa4Azs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gnv936Pw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6A5C19421;
-	Wed, 14 Jan 2026 18:22:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768414931;
-	bh=tcknC6iemaw7J5r4is+1RFQMsTj8mbkEYsrSA6D6Saw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gnv936PwAOYqla2o5RLnSGyPnWK7eepNYoigSv3xXJ9tqfUVL17uGzncwmmSr8jmA
-	 fh4eTYbjwkRZaR/lWB4BeQFZeI321YENVp8PuJFL27WkKn6hGS7oxQ3cluEXsJKnUf
-	 e+CWfzWOQOHbIi1FxuPUJvknfYFlCBcidWhMHmmDTsRmlcrzYEpjBMYMaEoTVksV3U
-	 fApWuGawlIvleBifk6rYfDE4Q+QM7Y/6v3afg+uN1IThtpoL1Pr8o8yr+UBntNCr1j
-	 6RfbmLF9dPh2zIAHhUCaPHd+V49mgU2eFN3GXxpC4hWgyf7Rz4pazXUXqAZC71JL5u
-	 nbaDt7DOD7v/Q==
-Date: Wed, 14 Jan 2026 18:22:05 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Fuad Tabba <tabba@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v9 25/30] KVM: arm64: Expose SME to nested guests
-Message-ID: <2498896a-78cb-4184-82ac-6497b1e9bd03@sirena.org.uk>
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
- <20251223-kvm-arm64-sme-v9-25-8be3867cb883@kernel.org>
- <CA+EHjTwZCcMFT6gAM2oaQz5V_vqEBmVuggFBbABbXPvC+U919Q@mail.gmail.com>
+	s=arc-20240116; t=1768416293; c=relaxed/simple;
+	bh=CzbuOLcem/ybabry9idjUdgZJV/Srmg9MoXXPHf4bOQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L7f2CrWfUJ8KyH9CD9WzoM2Z9dbm89Wob7fIG5bsgMC9O5l+VsY6TuhlxpFIikkOR0LjMRLXOYjCF7+cPk5MgnAAGb/KY9OghFtpwv3k1Rke9Zv/mZhXJkXik27sRqp/EF1IW8UVtjJSMoFvNR3PLY0qYVfUUvDOPDgweOGfU/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=RJqBMKdK; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60EHQ7TB159891;
+	Wed, 14 Jan 2026 10:44:44 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=q20R91Zh6absepefxROt
+	glkuP8Qheu/1/ykNS0LsHHg=; b=RJqBMKdKnMpdH+nUhL+peDrc6yeO0Es/yrFP
+	SsVXmC2GqRflqP66cvUAvxcyat18wRIjwlsNm0/sMg12TBSY8WxlSZQfwZR33DDU
+	Y25wizFEANbUTyhO0aWDNy2WmF6kQK/Tx29HSFvGg7EBOeVE4ZBarFQp6Ec9+tKO
+	88i8FdBwmZypojY0wOAYdvrclivxx9OFA6YSvsGIEB3kZ2MB1Q9HrQyHgJsp8elv
+	OfB5WR6vDq+wDr17Yu9W/8gMeth1MqQCKq+F67LmB+q27w/7wtplGcAYiV19QXNm
+	XVFxNAar76enTnzz5aqO5MVzcktGBplAn240c4ni0I8xs2DgEQ==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bpd9fa664-6
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 14 Jan 2026 10:44:44 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Wed, 14 Jan 2026 18:44:31 +0000
+Date: Wed, 14 Jan 2026 10:44:27 -0800
+From: Alex Mastro <amastro@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        Peter
+ Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Jason Gunthorpe
+	<jgg@ziepe.ca>
+Subject: Re: [PATCH v2 2/3] vfio: selftests: Align BAR mmaps for efficient
+ IOMMU mapping
+Message-ID: <aWfkC4figrTo5kIS@devgpu015.cco6.facebook.com>
+References: <20260113-map-mmio-test-v2-0-e6d34f09c0bb@fb.com>
+ <20260113-map-mmio-test-v2-2-e6d34f09c0bb@fb.com>
+ <aWfSnNIF-3xDQr4A@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="GsOJE4+Rwb8rI0F1"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CA+EHjTwZCcMFT6gAM2oaQz5V_vqEBmVuggFBbABbXPvC+U919Q@mail.gmail.com>
-X-Cookie: Absence makes the heart grow frantic.
+In-Reply-To: <aWfSnNIF-3xDQr4A@google.com>
+X-Proofpoint-ORIG-GUID: ooxfud2dtqjFHKgXupKgDMxy7utNSsE6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDE1NiBTYWx0ZWRfXwZLJoBiatdXu
+ JF+PKsy8ST+0U7WPgJV4IpBNxzq3xlQqGtWcEs8nZMmQusTBFclhFJSAk+9cEeyeGgzjRm+EK4j
+ T5XTUn07FZPiCzGvd3q+Uo9lyg8+iia09sDcEtCvubVnepdcfes3ew1Qq+767Cs9sovR7cBsbJT
+ FSpTrmawzDxhxIQyV/q3Dv0qIRDTat0TpQzsuXqO+IIxzXdEIdcl0+svpHWA6kN2A7CzQUvZVXu
+ W/t8L+Bn3n2VAPm7fb3NERL75ee3Fsx/79Rzs36Up5o7N6Olbw6L0xtd2dkOVPK2uCUBzJSB5F8
+ PNLtBLkkA5FJNEFoDyPFQEWKIcTOMW0vZVrAktYZeQ2Od5ZNm6MRmZ2ar5DCSkZM57EN9FHfwCR
+ 9L/QSCI6EaUh8N2kv4XaairsoZKLD0Yeyvz//goq7TgPW2fn7fql7N3yelwYHXkd8UXjWzxvEtK
+ jwqUNcW7zAg2XgTFFsA==
+X-Authority-Analysis: v=2.4 cv=Pc/yRyhd c=1 sm=1 tr=0 ts=6967e41c cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=FOH2dFAWAAAA:8 a=102hw27QZk9xhLRjVsAA:9 a=CjuIK1q_8ugA:10
+ a=Ujx6Yl6ClJkA:10
+X-Proofpoint-GUID: ooxfud2dtqjFHKgXupKgDMxy7utNSsE6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-14_05,2026-01-14_01,2025-10-01_01
 
+On Wed, Jan 14, 2026 at 05:30:04PM +0000, David Matlack wrote:
+> On 2026-01-13 03:08 PM, Alex Mastro wrote:
+> > Update vfio_pci_bar_map() to align BAR mmaps for efficient huge page
+> > mappings. The manual mmap alignment can be removed once mmap(!MAP_FIXED)
+> > on vfio device fds improves to automatically return well-aligned
+> > addresses.
+> 
+> Please also mention that you added MADV_HUGEPAGE and why, and that you
+> dropped MAP_FILE (just mention that it was unnecessary in the first
+> place).
 
---GsOJE4+Rwb8rI0F1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ack
 
-On Tue, Jan 13, 2026 at 02:37:57PM +0000, Fuad Tabba wrote:
-> On Tue, 23 Dec 2025 at 01:23, Mark Brown <broonie@kernel.org> wrote:
+> 
+> > 
+> > Signed-off-by: Alex Mastro <amastro@fb.com>
+> > ---
+> >  tools/testing/selftests/vfio/lib/include/libvfio.h |  9 ++++++++
+> >  tools/testing/selftests/vfio/lib/libvfio.c         | 25 ++++++++++++++++++++++
+> >  tools/testing/selftests/vfio/lib/vfio_pci_device.c | 24 ++++++++++++++++++++-
+> >  3 files changed, 57 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/vfio/lib/include/libvfio.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
+> > index 279ddcd70194..5ebf8503586e 100644
+> > --- a/tools/testing/selftests/vfio/lib/include/libvfio.h
+> > +++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
+> > @@ -23,4 +23,13 @@
+> >  const char *vfio_selftests_get_bdf(int *argc, char *argv[]);
+> >  char **vfio_selftests_get_bdfs(int *argc, char *argv[], int *nr_bdfs);
+> >  
+> > +/*
+> > + * Reserve virtual address space of size at an address satisfying
+> > + * (vaddr % align) == offset.
+> > + *
+> > + * Returns the reserved vaddr. The caller is responsible for unmapping
+> > + * the returned region.
+> > + */
+> > +void *mmap_aligned(size_t size, size_t align, size_t offset);
+> 
+> nit: Perhaps we should name this mmap_reserve()? The current name
+> implies something is being mmap'ed.
 
-> >         case SYS_ID_AA64PFR1_EL1:
-> > -               /* Only support BTI, SSBS, CSV2_frac */
-> > +               /* Only support BTI, SME, SSBS, CSV2_frac */
-> >                 val &= ~(ID_AA64PFR1_EL1_PFAR           |
-> >                          ID_AA64PFR1_EL1_MTEX           |
-> >                          ID_AA64PFR1_EL1_THE            |
-> >                          ID_AA64PFR1_EL1_GCS            |
-> >                          ID_AA64PFR1_EL1_MTE_frac       |
-> >                          ID_AA64PFR1_EL1_NMI            |
-> > -                        ID_AA64PFR1_EL1_SME            |
+SGTM
 
-> Should we also limit this to SME2, i.e.
+> 
+> > +
+> >  #endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_H */
+> > diff --git a/tools/testing/selftests/vfio/lib/libvfio.c b/tools/testing/selftests/vfio/lib/libvfio.c
+> > index a23a3cc5be69..4529bb1e69d1 100644
+> > --- a/tools/testing/selftests/vfio/lib/libvfio.c
+> > +++ b/tools/testing/selftests/vfio/lib/libvfio.c
+> > @@ -2,6 +2,9 @@
+> >  
+> >  #include <stdio.h>
+> >  #include <stdlib.h>
+> > +#include <sys/mman.h>
+> > +
+> > +#include <linux/align.h>
+> >  
+> >  #include "../../../kselftest.h"
+> >  #include <libvfio.h>
+> > @@ -76,3 +79,25 @@ const char *vfio_selftests_get_bdf(int *argc, char *argv[])
+> >  
+> >  	return vfio_selftests_get_bdfs(argc, argv, &nr_bdfs)[0];
+> >  }
+> > +
+> > +void *mmap_aligned(size_t size, size_t align, size_t offset)
+> > +{
+> > +	void *map_base, *map_align;
+> > +	size_t delta;
+> > +
+> > +	VFIO_ASSERT_GT(align, offset);
+> > +	delta = align - offset;
+> > +
+> > +	map_base = mmap(NULL, size + align, PROT_NONE,
+> > +			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > +	VFIO_ASSERT_NE(map_base, MAP_FAILED);
+> > +
+> > +	map_align = (void *)(ALIGN((uintptr_t)map_base + delta, align) - delta);
+> > +
+> > +	if (map_align > map_base)
+> > +		VFIO_ASSERT_EQ(munmap(map_base, map_align - map_base), 0);
+> > +
+> > +	VFIO_ASSERT_EQ(munmap(map_align + size, map_base + align - map_align), 0);
+> > +
+> > +	return map_align;
+> > +}
+> > diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > index 13fdb4b0b10f..03f35011b5f7 100644
+> > --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> > @@ -12,10 +12,14 @@
+> >  #include <sys/mman.h>
+> >  
+> >  #include <uapi/linux/types.h>
+> > +#include <linux/align.h>
+> >  #include <linux/iommufd.h>
+> > +#include <linux/kernel.h>
+> >  #include <linux/limits.h>
+> > +#include <linux/log2.h>
+> >  #include <linux/mman.h>
+> >  #include <linux/overflow.h>
+> > +#include <linux/sizes.h>
+> >  #include <linux/types.h>
+> >  #include <linux/vfio.h>
+> >  
+> > @@ -124,20 +128,38 @@ static void vfio_pci_region_get(struct vfio_pci_device *device, int index,
+> >  static void vfio_pci_bar_map(struct vfio_pci_device *device, int index)
+> >  {
+> >  	struct vfio_pci_bar *bar = &device->bars[index];
+> > +	size_t align, size;
+> > +	void *vaddr;
+> >  	int prot = 0;
+> 
+> uber-nit: Put vaddr after prot to preserve the reverse-fir-tree ordering
+> of variables.
+> 
+> Here's the tip tree documentation:
+> 
+>   https://docs.kernel.org/process/maintainer-tip.html#variable-declarations
+> 
+> I should probably document somewhere that this is preferred in VFIO
+> selftests as well.
 
-> + val = ID_REG_LIMIT_FIELD_ENUM(val, ID_AA64PFR1_EL1, SME, SME2);
+Ah, thanks. I usually try to do this but missed it here.
 
-> That said, we don't do anything similar to SVE, but it might also be
-> worth doing that there.
-
-This feels like a general approach issue with these registers that's out
-of scope for this series, it's not just the vector extensions which
-could introduce new state or anything else that requires explicit
-support.  AIUI the theory here is that we bootstrap from the host's
-sanitised registers so the time to add any required limits on future
-values would be when enabling them for the host kernel, assuming KVM
-support isn't added simultaneously.
-
---GsOJE4+Rwb8rI0F1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmln3swACgkQJNaLcl1U
-h9D5Awf+IRsqdR9I7nYCFQPlwzCHBQBbuNnWwG5/UXXDqIc3+6wyvcIQNcpbea0/
-TQLaQPJEdkXSt9dQkg0iKdV3YBSDo8IW8JMvqDcgNueXpfuJdIPFDerneL0HTO/l
-/80XNxIjRpwrR71w+bFdSGWj6TpDcgtNYQj4z1wT6wRQ3VoQxnRsNiZoxObmnM8A
-t1DLEPg1EigeOwvBt12Q6yOVBiAM+lAF04JU7Kq28s3Nho38aMBGrMkiz9zLY/bv
-Lk+KVaDLIh5KmecygdX5rm/EEyT96tV/fj+NXrctDs2+/ktqa2JYtF2PpuQuNXZx
-6dDmflaX69rqabPcKmADbMedkpxJRA==
-=kw66
------END PGP SIGNATURE-----
-
---GsOJE4+Rwb8rI0F1--
+> 
+> >  
+> >  	VFIO_ASSERT_LT(index, PCI_STD_NUM_BARS);
+> >  	VFIO_ASSERT_NULL(bar->vaddr);
+> >  	VFIO_ASSERT_TRUE(bar->info.flags & VFIO_REGION_INFO_FLAG_MMAP);
+> > +	VFIO_ASSERT_TRUE(is_power_of_2(bar->info.size));
+> >  
+> >  	if (bar->info.flags & VFIO_REGION_INFO_FLAG_READ)
+> >  		prot |= PROT_READ;
+> >  	if (bar->info.flags & VFIO_REGION_INFO_FLAG_WRITE)
+> >  		prot |= PROT_WRITE;
+> >  
+> > -	bar->vaddr = mmap(NULL, bar->info.size, prot, MAP_FILE | MAP_SHARED,
+> > +	size = bar->info.size;
+> > +
+> > +	/*
+> > +	 * Align BAR mmaps to improve page fault granularity during potential
+> > +	 * subsequent IOMMU mapping of these BAR vaddr. 1G for x86 is the
+> > +	 * largest hugepage size across any architecture, so no benefit from
+> > +	 * larger alignment. BARs smaller than 1G will be aligned by their
+> > +	 * power-of-two size, guaranteeing sufficient alignment for smaller
+> > +	 * hugepages, if present.
+> > +	 */
+> > +	align = min_t(size_t, size, SZ_1G);
+> > +
+> > +	vaddr = mmap_aligned(size, align, 0);
+> > +	bar->vaddr = mmap(vaddr, size, prot, MAP_SHARED | MAP_FIXED,
+> >  			  device->fd, bar->info.offset);
+> >  	VFIO_ASSERT_NE(bar->vaddr, MAP_FAILED);
+> > +
+> > +	madvise(bar->vaddr, size, MADV_HUGEPAGE);
+> >  }
+> >  
+> >  static void vfio_pci_bar_unmap(struct vfio_pci_device *device, int index)
+> > 
+> > -- 
+> > 2.47.3
+> > 
 
