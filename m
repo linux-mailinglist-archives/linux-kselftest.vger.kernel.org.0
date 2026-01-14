@@ -1,141 +1,132 @@
-Return-Path: <linux-kselftest+bounces-48933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48934-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8A57D1ECED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 13:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 419FED1ED26
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 13:40:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 59EC6307930E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:35:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4CE5E304D4A0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Jan 2026 12:37:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE561399024;
-	Wed, 14 Jan 2026 12:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64E49395242;
+	Wed, 14 Jan 2026 12:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G/zoVWmd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mxhIGXZS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5752399014;
-	Wed, 14 Jan 2026 12:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400E037BE9D;
+	Wed, 14 Jan 2026 12:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768394140; cv=none; b=Sw4spEVgsgLZ7lBSpr7cDWpTHUrg8zHllNmi/UJYwdDZZamxKubDAGGFaz2pRS3m48YR3WNhX9iFTaN59kYn1o/1rlNyoG4vvJTJ7xNWaqvnN7nHdYTgZhGTcV9ZO5EOajdpWHMeUBtHqrteqhmE7zZUqxWBVBP/wjwxMf5AvcQ=
+	t=1768394277; cv=none; b=mSho5wQL5mziBdJxFW3mgHJ7fsE7xKnnGS+WdS1EsSnqqR1Fj2o3WBI3a+fihopuooqJ0BI+Kgh3bho8pEyrIg22PrJ+3gyXqBq7LFLkWSLMaJVV49vypy1kM8ECtTUbnBNnSsmHZePiv2FlkecyNEHdMduoO/UCcG+ETw/q7bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768394140; c=relaxed/simple;
-	bh=ev6Qij2PVomzOpcTr7azRUZ5e+KCI6UhuAdUkmLUPrc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IbrwTggB82RJgMogcYXdxhpNo9Q5a2jBkPhTaFBnwXJ4IRKbsd6e0Ck0hBjVUqFWblzj8njc648vEGpW+aU5gC18bkQgV68gWK68HimnuSpRSilp8cH5NjJOpSvfmQnkBoPJrU0M/g7Bg9zmQkCmxbbbeBCWSCSTnvYgVdG5C+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G/zoVWmd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C13E1C4CEF7;
-	Wed, 14 Jan 2026 12:35:39 +0000 (UTC)
+	s=arc-20240116; t=1768394277; c=relaxed/simple;
+	bh=lNpjmkdFV/Up7u2UcfDh2qsaN2WPt0yc3qVyJNVl+04=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sc8ZDhdOfmqA51V8vP4J7APwi24NriMKefs7mKXZFOta8CExv9M2RtWmTCubHdMIfCAe2/x6rS9qQyuArRUG2GNO6ljI1d1w0MYV2o1Q8UXbpeEHDg5frhDQaBAtU4LQm9QLisnbuPKuAuBMjBK3VKh8YoGV5o2d5o/QXCbEZYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mxhIGXZS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E449EC4CEF7;
+	Wed, 14 Jan 2026 12:37:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768394140;
-	bh=ev6Qij2PVomzOpcTr7azRUZ5e+KCI6UhuAdUkmLUPrc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=G/zoVWmdhXzybUdcadiYCJpXQu4J3VXdcfvU837J9hK5D0iJPmrT3zqqQ6wb0i7/j
-	 yzq9ITcA9CKpWNe5l/hJusxB5/KqJ9TlicSuwdrk0kMIf7B+sIVO9NJs1Y30FEFAnj
-	 Z3w4oAmqc2HM5N98rk76kZUQ2ZcLZItSsBLwuArIMr3HlbaKjsjg8yeP2kXV41zYUl
-	 dy1fpIPdSnvGXD+fF9qiY7Y3sK8mCqY3gSrq34uHkJoyu4ikVlyyn1gFuDQpzknAgl
-	 Gb+vgUgflhJ41Igm2102XYyuzT0FnM7OK99wXylz936o2teDMyAF/FrdzYW7W/jZhF
-	 D4qTB9Lk2Eiow==
-Content-Type: multipart/mixed; boundary="===============7073946550903258648=="
+	s=k20201202; t=1768394276;
+	bh=lNpjmkdFV/Up7u2UcfDh2qsaN2WPt0yc3qVyJNVl+04=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=mxhIGXZSrgGZ43btZ+ttNG5DeVmxHV6GEwrU66wB/pmLKSOywFZDEEG5gTiCS/or1
+	 5zHdjDSRSL/kr6cHiZcckKD9fIfC61cyBEQUiK9hVGZTzkDpbB7ihDmfYELUZeJUOE
+	 co724rkK9uytdwLB3BSN+3aMrb7WTWgY5Bu3wLdVCK3nDaFTP4btHhbP0tjKa6Fw5A
+	 dFXOPC3hk62hU9/FezcMOsHId5HId+YxFmoK6sjvqm0TW9kxjkLm3vf8I2jxNqCg5b
+	 YfrAAFtT66/gspVbpkk/azZaC4E9tetUPsVBGNd8FxAEue629r3yRzoIPg//nA1lm2
+	 UgXStecUrLNzQ==
+Message-ID: <18dacad3-ec1d-4c91-adfb-2ee8d592de29@kernel.org>
+Date: Wed, 14 Jan 2026 13:37:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <96af90062adce57ef61ae1fd070a0e45ad2e0f9f5043603f5f671601b6f442a0@mail.kernel.org>
-In-Reply-To: <20260114114450.30405-7-adubey@linux.ibm.com>
-References: <20260114114450.30405-7-adubey@linux.ibm.com>
-Subject: Re: [PATCH v2 6/6] powerpc64/bpf: Additional NVR handling for bpf_throw
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 14 Jan 2026 12:35:39 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/6] powerpc64/bpf: Add arch_bpf_stack_walk() for BPF
+ JIT
+To: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+ andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, naveen@kernel.org,
+ maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ memxor@gmail.com, iii@linux.ibm.com, shuah@kernel.org
+References: <20260114114450.30405-1-adubey@linux.ibm.com>
+ <20260114114450.30405-5-adubey@linux.ibm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20260114114450.30405-5-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---===============7073946550903258648==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
+
+Le 14/01/2026 à 12:44, adubey@linux.ibm.com a écrit :
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> This function is used by bpf_throw() to unwind the stack
+> until frame of exception-boundary during BPF exception
+> handling.
+> 
+> This function is necessary to support BPF exceptions on
+> PowerPC.
+> 
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit_comp64.c | 28 ++++++++++++++++++++++++++++
+>   1 file changed, 28 insertions(+)
+> 
 > diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index a6083dd9786c..941e0818c9ec 100644
+> index cebf81fbd59f..ec58395f74f7 100644
 > --- a/arch/powerpc/net/bpf_jit_comp64.c
 > +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -247,6 +247,34 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+>   	bpf_jit_build_fentry_stubs(image, ctx);
+>   }
+>   
+> +void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64), void *cookie)
+> +{
+> +	// callback processing always in current context
+> +	unsigned long fp = current_stack_frame();
+> +
+> +	for (;;) {
+> +		unsigned long *frame = (unsigned long *) fp;
+> +		unsigned long ip;
+> +
+> +		if (!validate_sp(fp, current))
+> +			return;
+> +
+> +		ip = frame[STACK_FRAME_LR_SAVE];
+> +		if (!ip)
+> +			break;
+> +
+> +		/*
+> +		 * consume_fn common code expects stack pointer(sp) in third
+> +		 * argument. There is no sp in ppc64, rather pass frame
+> +		 * pointer.
+> +		 */
+> +		if (ip && !consume_fn(cookie, ip, fp, fp))
+> +			break;
+> +
+> +		fp = frame[0];
+> +	}
+> +}
+> +
 
-[ ... ]
+This fonction looks very close to arch_stack_walk(). Would it be 
+possible to refactor and have a common part used by both functions, like 
+ARM64 for instance ?
 
-> @@ -103,9 +119,12 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
->  *		[	  ...       	] 		|
->  * sp (r1) --->	[    stack pointer	] --------------
->  *		[    tail_call_info	] 8
-> - *		[   nv gpr save area	] 6*8
-> + *		[   nv gpr save area	] 6*8 + (12*8)
->  *		[    local_tmp_var	] 24
->  *		[   unused red zone	] 224
-> + *
-> + * Additional (12*8) in 'nv gpr save area' only in case of
-> + * exception boundary.
->  */
->  static int bpf_jit_stack_local(struct codegen_context *ctx)
->  {
-> @@ -114,7 +133,11 @@ static int bpf_jit_stack_local(struct codegen_context *ctx)
->  		return STACK_FRAME_MIN_SIZE + ctx->stack_size;
+>   int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *ctx, u64 func)
+>   {
+>   	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
 
-Does this need to account for BPF_PPC_EXC_STACK_SAVE when
-exception_boundary or exception_cb is true?
-
-In the else branch below, the exception case is handled, but the
-bpf_has_stack_frame() case returns the same value regardless of
-exception_boundary. However, bpf_jit_build_prologue() creates a larger
-frame using BPF_PPC_EXC_STACKFRAME when exception_boundary is true.
-
-This inconsistency appears to cause bpf_jit_stack_tailcallinfo_offset()
-to return an incorrect offset when both bpf_has_stack_frame() returns
-true AND exception_boundary is true. The offset would be off by 96 bytes
-(BPF_PPC_EXC_STACK_SAVE).
-
-For example, if a program uses bpf_throw (setting exception_boundary=true)
-and also calls helper functions (setting SEEN_FUNC, making
-bpf_has_stack_frame() return true), and uses tail calls, the tail call
-handling in bpf_jit_emit_tail_call() would access the wrong stack location.
-
->  	} else {
->  		/* Stack layout 2 */
-> -		return -(BPF_PPC_TAILCALL + BPF_PPC_STACK_SAVE + BPF_PPC_STACK_LOCALS);
-> +		return -(BPF_PPC_TAILCALL
-> +			+ BPF_PPC_STACK_SAVE
-> +			+ (ctx->exception_boundary || ctx->exception_cb ?
-> +							BPF_PPC_EXC_STACK_SAVE:0)
-> +			+ BPF_PPC_STACK_LOCALS);
->  	}
->  }
-
-[ ... ]
-
-> @@ -189,7 +222,20 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
->  			EMIT(PPC_RAW_STD(_R0, _R1, PPC_LR_STKOFF));
->  		}
->
-> -		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx->stack_size)));
-> +		int stack_expand = ctx->exception_boundary || ctx->exception_cb ?
-> +					BPF_PPC_EXC_STACKFRAME : BPF_PPC_STACKFRAME;
-> +		EMIT(PPC_RAW_STDU(_R1, _R1, -(stack_expand + ctx->stack_size)));
-
-The stack frame expansion here uses BPF_PPC_EXC_STACKFRAME for exception
-cases, but bpf_jit_stack_local() in the bpf_has_stack_frame() branch does
-not account for this larger frame size.
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20993216190
-
---===============7073946550903258648==--
 
