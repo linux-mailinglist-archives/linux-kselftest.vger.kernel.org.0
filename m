@@ -1,57 +1,60 @@
-Return-Path: <linux-kselftest+bounces-48994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516A9D232D8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 09:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2DCBD232E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 09:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C08BD311178C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 08:30:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2C2533112E56
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 08:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7156B331209;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E403346BC;
 	Thu, 15 Jan 2026 08:30:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fWiN9yBM";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FJ9B2fCf"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TIPGLfQS";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1fTyM0dN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD98336ECB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4784A334C27;
 	Thu, 15 Jan 2026 08:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768465811; cv=none; b=GgNcBayn7fYD6OoCpO25TX15bTMQ8QIuxDY1u8Uc1Ll9ttTSXpkPHCsfKUgrpCNGvxjMZm3dHqnmwNURRZ18y6y1P17VriSOx+sRIs9x9VgkzgGKgsWOFQmTKSq43fOYy/kiuD8C5Sqah/GFnMYzstvcjp/AM6aCwtkEaTt6Q8w=
+	t=1768465813; cv=none; b=GJAtu/oDIMizkCKtHdirIIyeJaIJBC28OjPxgm2URvHrciAwZT1vD6SPBKqYloRQqBNurGpGs/jAimVnPTvLBa9AxH8/UYHCGW2UrKK2azP6uX8t6zzUNJnX6ObrJ2UWjPbDGSz8Y8WimHzpmr9AU12UGca88Zw3lQbJLcU7ISs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768465811; c=relaxed/simple;
-	bh=D2InvSLttbmw+3mRVayW7XQcRWC8MVYcV5tgdm+yDY8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pAlkKqkkvN4K1kDpuG9UwFn3Hm3StPx0HsNaqUAOADmcBjL421x5zb1xiZZGNbVDsriX202VNEyFM8Oq/0nrh6UTr4ZqMetXVQ2jLtmMOTIM+pDPmurgUs7/oh39GNUeKGIbNXzPjV6Y/KhBSfUcarSZFvRtk/SYRG2Z5V3MJyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fWiN9yBM; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FJ9B2fCf; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1768465813; c=relaxed/simple;
+	bh=aT4hP/Xjaz7+PkNF5DQWPJA6Sb3o1cAR5eFVQ/RwAdY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=F2RsAzT0Y4viyabz9U8c7kUHmkX98fQ4gqT8n5Po1D+Q1x5bXvX0tw5mRsoChiMEMkckkMCYSFVbQONS7ktN80e+FkH8wmYUKtngCo62D1xsyPpsQSpcj0PVPPNWCS6cnVEzMboXqetxJOCIzKTgY27u7ux5MzVuvmfLzn9py6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TIPGLfQS; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1fTyM0dN; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768465799;
+	s=2020; t=1768465800;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uIOkM67DRvjKkhcb7FESrBVq6BnyBbc83MvNMASq5Og=;
-	b=fWiN9yBMkptABbA2sWp7728iuwu/LrBKTaR/UAB/0P4J5Rk8XDr5vkwMVIA87EDYJAiv4V
-	fam9l7N7QBwXG6YVo+qrqpKdy2C1CHAbmmFkRzpCoJmhnXZ7n1USIUb1B03Bs3Eov1vayc
-	kYr/7UwggenujPTvaaHyCBPR369CLrT69i3sUyiz5D2Ab216xo62yic5KF9MWGlv7NtQn6
-	kjOyJw165F2HFgMQEjMsP4TAFd0WU80XzeFNxtLFKf0fyheGlc4c4WY+JrN7kwyZibAMmw
-	qCRk1duZ9fZ6CGaXzSedr7h7CgrtcHhqk7kSDguttu1qqopXDGouaaxaWEyYtg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FIAW7yt+HRVaavrO4/GGIGyhQt+lpXP6LVx2zSI/KXc=;
+	b=TIPGLfQSzSugXhKQw1yssBHRvchWYzGcuaW8ybb+u2jLmm74sgm78+9ftN5DRnHdBBAQGX
+	Jpp1UVu1a1wA3LjIY2L2BX1xLpe6f0qWztL87cE6dSQpoPd5zvhqZ/uL7IcxQteOwtJuzI
+	27QR1ckjlpJVusFKivOJMUxeK0SPJ6odESqU/cixRNNVWcgJfv4GgLNM5VkRDc+xQKoreB
+	3w6VukK4o29tDoLAEX4q9yAPk9WH2dHckZ11vSv+MNAXaQA7jgoDIWEMDfXupgG1zWNvze
+	0EQiPWsyyYrKtx0zZnbqa/ewZ8GEnW/xmS3Pfn6qaIIUeuN9eNV3SmHa44aGKA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768465799;
+	s=2020e; t=1768465800;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uIOkM67DRvjKkhcb7FESrBVq6BnyBbc83MvNMASq5Og=;
-	b=FJ9B2fCfQjgbNhq7a5pEPc81RxxcySSv3ZdJnsrQo3qZEc1pBvRUyPHmSzS4tZVRkFZDL6
-	V/q5X48y7gB/NsDw==
-Subject: [PATCH 0/6] selftests: vDSO: Assorted cleanups and improvements
-Date: Thu, 15 Jan 2026 09:29:52 +0100
-Message-Id: <20260115-vdso-selftest-cleanups-v1-0-103e1ccbfdc3@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FIAW7yt+HRVaavrO4/GGIGyhQt+lpXP6LVx2zSI/KXc=;
+	b=1fTyM0dNy/EUlGLy7sQnMjBZH2RN0QUXP8zweyJ9e1OkjJI7mEF+qAUyaDrzwY+e+NgU+n
+	kDbissPk5F0iJhBw==
+Date: Thu, 15 Jan 2026 09:29:53 +0100
+Subject: [PATCH 1/6] Revert "selftests: vDSO: parse_vdso: Use UAPI headers
+ instead of libc headers"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,47 +63,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAIClaGkC/x3MQQqAIBBA0avErBvIiKSuEi1ExxoQC6ciEO+et
- HyL/zMIJSaBucmQ6GHhI1aotgG7m7gRsquGvuvHTqkBHycHCgV/kVxoA5l4n4JaT147OzpvBqj
- xmcjz+4+XtZQPSEYF3GgAAAA=
-X-Change-ID: 20260114-vdso-selftest-cleanups-779f7dc6dfa4
+Message-Id: <20260115-vdso-selftest-cleanups-v1-1-103e1ccbfdc3@linutronix.de>
+References: <20260115-vdso-selftest-cleanups-v1-0-103e1ccbfdc3@linutronix.de>
+In-Reply-To: <20260115-vdso-selftest-cleanups-v1-0-103e1ccbfdc3@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
  Vincenzo Frascino <vincenzo.frascino@arm.com>, 
  Shuah Khan <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Andreas Larsson <andreas@gaisler.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768465799; l=1127;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768465799; l=1734;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=D2InvSLttbmw+3mRVayW7XQcRWC8MVYcV5tgdm+yDY8=;
- b=AdjZ4golxbLv0RZPwVDbbzhyhyL7JPSF8lg46qUZ2/QwHQLfdWsK+ExZmixnDsnbbgteaQwwl
- o3O1A+H+uHLDBKZ/sHv4XhIU6CPyxz39h5UHCx+CWwYjvXDEHUPhWiZ
+ bh=aT4hP/Xjaz7+PkNF5DQWPJA6Sb3o1cAR5eFVQ/RwAdY=;
+ b=I1sfybExBJCy65ulQBUldZkCE+AIFZ+APUUjN9OEYTkWzDg9g5zT4tiNtKRpNkqYQe1CyFkzA
+ fuWbHkETWwFCQX/MHnM7vOJHxSbM1X38YWCxTZyCnpjPhuXL/06RSYi
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-I had these lying around in different, unrelated serieses.
+This reverts commit c9fbaa879508 ("selftests: vDSO: parse_vdso: Use UAPI
+headers instead of libc headers")
+
+The kernel headers were used to make parse_vdso.c compatible with
+nolibc.  Unfortunately linux/elf.h is incompatible with glibc's
+sys/auxv.h. When using glibc it is therefore not possible build
+parse_vdso.c as part of the same compilation unit as its caller
+as sys/auxv.h is needed for getauxval().
+
+In the meantime nolibc gained its own elf.h, providing compatibility
+with the documented libc interfaces.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Thomas Weißschuh (6):
-      Revert "selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers"
-      selftests: vDSO: vdso_test_gettimeofday: Remove nolibc checks
-      selftests: vDSO: vdso_test_correctness: Drop SYS_getcpu fallbacks
-      selftests: vDSO: vdso_test_correctness: Handle different tv_usec types
-      selftests: vDSO: vdso_test_correctness: Use facilities from parse_vdso.c
-      selftests: vDSO: vdso_test_correctness: Add a test for time()
+ tools/testing/selftests/vDSO/Makefile     | 2 --
+ tools/testing/selftests/vDSO/parse_vdso.c | 3 +--
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
- tools/testing/selftests/vDSO/Makefile              |   6 +-
- tools/testing/selftests/vDSO/parse_vdso.c          |   3 +-
- .../testing/selftests/vDSO/vdso_test_correctness.c | 103 +++++++++++++++------
- .../selftests/vDSO/vdso_test_gettimeofday.c        |   2 -
- 4 files changed, 76 insertions(+), 38 deletions(-)
----
-base-commit: 759a1f97373f25770cf438d9fb5f2bddf4d77a54
-change-id: 20260114-vdso-selftest-cleanups-779f7dc6dfa4
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index e361aca22a74..2de5cef311c8 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -19,8 +19,6 @@ endif
+ 
+ include ../lib.mk
+ 
+-CFLAGS += $(TOOLS_INCLUDES)
+-
+ CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tables \
+ 		 -fno-stack-protector -include $(top_srcdir)/tools/include/nolibc/nolibc.h \
+ 		 -I$(top_srcdir)/tools/include/nolibc/ $(KHDR_INCLUDES)
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 3ff00fb624a4..c6ff4413ea36 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -19,8 +19,7 @@
+ #include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+-#include <linux/auxvec.h>
+-#include <linux/elf.h>
++#include <elf.h>
+ 
+ #include "parse_vdso.h"
+ 
 
-Best regards,
 -- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+2.52.0
 
 
