@@ -1,148 +1,59 @@
-Return-Path: <linux-kselftest+bounces-49039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CD1CD2585D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 16:56:51 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 217EFD25BB1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 17:26:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B6A513098789
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 15:55:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E61E1304BB6F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 16:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526953A35A0;
-	Thu, 15 Jan 2026 15:55:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F3B3B8D60;
+	Thu, 15 Jan 2026 16:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O2rIC7Vp"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="fS91y4AN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from outbound.mr.icloud.com (p-west2-cluster4-host9-snip4-1.eps.apple.com [57.103.69.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466FA3A1E63;
-	Thu, 15 Jan 2026 15:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BA73A9018
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 16:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.69.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768492532; cv=none; b=VTm1VYFFIx/JI+mw9sjDh+mB8/NgDwo8PrXsxw4CjtUqs5JTu36ov1eAbK9BJCYSrst+KlMaMM/+mksTs1bo/7H0QfX6Z63q1kushony8HRgji/CJNIuV2jCh/+x3J+O7LZRlsoUENNvJcMwo68451BU3eN9GOjKVygx8Lab6nc=
+	t=1768494068; cv=none; b=tg4FYr2vYXIpgfVVgNVDWfpICiWWZLCdM/z26g9dzNKAIwhbjuqloyyQQC2B0A9K3Dzr3ZpLHIQx7zVpfbgLPx7w1KWn1t8WUe5gWiheG19v0A2fE4rNcAjyQhbzrNvItMqL/gE7ILpSU2hlgrFlOibFBAguFlnLPPrb4lhF2uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768492532; c=relaxed/simple;
-	bh=46BFkTdwtLapqZHArkx23WouduY4BLv38XWs7Y82E7w=;
+	s=arc-20240116; t=1768494068; c=relaxed/simple;
+	bh=OUyVgq7n6ocw8+tH/ttuc+fcP78f5xqqDzDaGHPrNuw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ECueSyTIRNEWFH7spDB5ZT7QqlZNIDoxw4jdj6pGePkKhKvzd80g8YJuSfZNRiByUwzoV3u/qOonvCOJMjKkByRffWebxQEtRFWqPCy21wxpgPShTGZv4pKhEap+/0l0rXM4UYeveRlj5h0UkOpAssQYFWYa8wHEL6/v6fRhB/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=O2rIC7Vp; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=q5bkL3Phvitbtx1bT4hfJIq6tZnmxPD0rFJlAMAShJ4=; b=O2rIC7VppOmyI4NJVqpXeNx1ps
-	9E8lXOJndmHISi9czu2yHfSrQTRbYobUU55b39rEMzyDlLR6z+C4bKlMldkk0zKZcDtVQyRXirthW
-	KI1r01BntklxKvuUMRRrhgmfBmFnpmdmRgaKJwlaz+Qr95fzmRdU8AMMwVYhCB/fCB/gyfRfTEhdL
-	oCCHfn5loLBrr7rjqMykoBHhlmKOfS1Z5lF7LMiDAfY3TLvCDDF6etTTuk+ncZAGMIu/wScOPq3Qt
-	ysh0B8nLJ2h3UIs60lSbHici2O7xcYYlHYyatawLyoOOL6mJoOtWjhMKRYG6tjN8XoPCMrGZHt0W7
-	BP1PTC9g==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vgPgp-00000007w8N-2zaT;
-	Thu, 15 Jan 2026 15:55:15 +0000
-Date: Thu, 15 Jan 2026 15:55:15 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kernel@xen0n.name" <kernel@xen0n.name>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"maz@kernel.org" <maz@kernel.org>,
-	"oupton@kernel.org" <oupton@kernel.org>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"seanjc@google.com" <seanjc@google.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"david@kernel.org" <david@kernel.org>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"vbabka@suse.cz" <vbabka@suse.cz>,
-	"rppt@kernel.org" <rppt@kernel.org>,
-	"surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>,
-	"jolsa@kernel.org" <jolsa@kernel.org>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"riel@surriel.com" <riel@surriel.com>,
-	"ryan.roberts@arm.com" <ryan.roberts@arm.com>,
-	"jgross@suse.com" <jgross@suse.com>,
-	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
-	"kas@kernel.org" <kas@kernel.org>,
-	"coxu@redhat.com" <coxu@redhat.com>,
-	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>,
-	"maobibo@loongson.cn" <maobibo@loongson.cn>,
-	"prsampat@amd.com" <prsampat@amd.com>,
-	"mlevitsk@redhat.com" <mlevitsk@redhat.com>,
-	"jmattson@google.com" <jmattson@google.com>,
-	"jthoughton@google.com" <jthoughton@google.com>,
-	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-	"alex@ghiti.fr" <alex@ghiti.fr>,
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-	"chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-	"dev.jain@arm.com" <dev.jain@arm.com>,
-	"gor@linux.ibm.com" <gor@linux.ibm.com>,
-	"hca@linux.ibm.com" <hca@linux.ibm.com>,
-	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-	"palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"pjw@kernel.org" <pjw@kernel.org>,
-	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-	"svens@linux.ibm.com" <svens@linux.ibm.com>,
-	"thuth@redhat.com" <thuth@redhat.com>,
-	"wyihan@google.com" <wyihan@google.com>,
-	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-	"vannapurve@google.com" <vannapurve@google.com>,
-	"jackmanb@google.com" <jackmanb@google.com>,
-	"aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-	"patrick.roy@linux.dev" <patrick.roy@linux.dev>,
-	"Thomson, Jack" <jackabt@amazon.co.uk>,
-	"Itazuri, Takahiro" <itazur@amazon.co.uk>,
-	"Manwaring, Derek" <derekmn@amazon.com>,
-	"Cali, Marco" <xmarcalx@amazon.co.uk>
-Subject: Re: [PATCH v9 01/13] set_memory: add folio_{zap,restore}_direct_map
- helpers
-Message-ID: <aWkN4yzwPtotaTeq@casper.infradead.org>
-References: <20260114134510.1835-1-kalyazin@amazon.com>
- <20260114134510.1835-2-kalyazin@amazon.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iztWSLyVFmpjLdgbKmL+S2jmXHKu1qblcijdzHzr30U6kP2QpCk947JE6FsQNBVhNAEb995gxBxpf8dxo8DrSTSOKyV5Tpwis7+m01V+185YMWEnIooobW9o/5WFxUx1M/72ri42FbwZmdj2rWwDVTUtMpercZHhszgrhB/Aj3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=fS91y4AN reason="key not found in DNS"; arc=none smtp.client-ip=57.103.69.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
+Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-3 (Postfix) with ESMTPS id 1A444180011D;
+	Thu, 15 Jan 2026 16:21:04 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=aH808W6yiWKX0lcyGYLe3fnalzSmDYO3ZMB253efdQw=; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:x-icloud-hme; b=fS91y4ANhGYo7yPgIAtx6NESup1ZJGceGTWF2IXmsVWXZY5AucfX5tQHfs5Fn9YmQeTCLkC+xhoOhYrdSipkFyJQgM/83Yh/ywqA0oNz4Ta8mzW6GGTy4zGiXLF9U2zOtpPTKI6geWtFd1zoSJa8KMerxyXFtd1xaPaFuefGLP/3QafqiBN/Jem5wMgwRjmgIhXIdfsoCaZVV8tb1X2j8rcb9wYi0BJ9vGv8nRV0Tp5kofPnbIgCEgIaXTY7V7P0Y74qaLDLc+GVorlRk3XfC8tPGIjQpE4UT+58vqHJwRlagDCJ43UPagXqjCYnqH/3FwhGT0WKxgpXVKU2cif0TA==
+mail-alias-created-date: 1719758601013
+Received: from desktop.y-koj.net (unknown [17.57.152.38])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-3 (Postfix) with ESMTPSA id 53EC118013D6;
+	Thu, 15 Jan 2026 16:21:02 +0000 (UTC)
+Date: Fri, 16 Jan 2026 01:21:00 +0900
+From: Yohei Kojima <yk@y-koj.net>
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: improve error handling
+ in passive TFO test
+Message-ID: <aWkRvBz734sa_1vV@desktop.y-koj.net>
+References: <cover.1768312014.git.yk@y-koj.net>
+ <24707c8133f7095c0e5a94afa69e75c3a80bf6e7.1768312014.git.yk@y-koj.net>
+ <1696424e-2092-4e47-bd4f-293e2992056b@web.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -151,21 +62,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260114134510.1835-2-kalyazin@amazon.com>
+In-Reply-To: <1696424e-2092-4e47-bd4f-293e2992056b@web.de>
+X-Proofpoint-GUID: Y5j5UaESNPWUHeIKiSAldqreB0UtguRO
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDEyNCBTYWx0ZWRfX6PHlrvHZ3Dz2
+ 7HEBRVJ3hsWICYlYguvKPxyxFgLEIMZWneK9OZ2B8PyZ1w1W7zc6smiA8TDWZjHs+Ymu85j8Xmz
+ kLHDbsGei0vUk6YdOnaJ8Rv877ncQcKKfxCxMEhORHwkYdtPZw+DBFjv6oVxdljkVUSiV+rRjJq
+ MwBikyLGEOHy+R5zxLPIKH0PRGpH/ypE1EdSdhpbDpMQflYUXDi7OGyYOSR9FhRxbrtZnuG61SZ
+ Zq1CJDz9FpQfauPoG35rmLwcsJrm/pu9jQrQ/+xfToVGH8iKvfrApbZRbaykAeAaJs3JAA8/dMA
+ oiYkwgNUjlkDSPBDx9j
+X-Authority-Info: v=2.4 cv=bapmkePB c=1 sm=1 tr=0 ts=696913f2
+ cx=c_apl:c_apl_out:c_pps a=9OgfyREA4BUYbbCgc0Y0oA==:117
+ a=9OgfyREA4BUYbbCgc0Y0oA==:17 a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=jnl5ZKOAAAAA:8
+ a=qKQrQ7_CLwTn8uSwdssA:9 a=CjuIK1q_8ugA:10 a=RNrZ5ZR47oNZP8zBN2PD:22
+X-Proofpoint-ORIG-GUID: Y5j5UaESNPWUHeIKiSAldqreB0UtguRO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-15_05,2026-01-15_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ mlxscore=0 adultscore=0 bulkscore=0 mlxlogscore=771 spamscore=0 clxscore=1030
+ suspectscore=0 malwarescore=0 classifier=spam authscore=0 adjust=0 reason=mlx
+ scancount=1 engine=8.22.0-2510240001 definitions=main-2601150124
+X-JNJ: AAAAAAABetAzsSZ6/ZjHiPzpY9p5fLxX3cLwYCfpINjrrjGCVem46SQ0ppjb8Em7W+WyglCjc6BiJF35by0x9gA3/ARjj4IAqqBNiyyiW57El1mqVPmBI9pbbUdZgwccgpfbIavn0YKio8wV1AdsU/Yxny/o6LeE8P8ks4V6EwucBipZjiBRV0V4NSivMZKyVVAjvQIemah1ca7q63jwctQ3hzmPUXPq2AbCEvbd4R4oPR1ILUXUIXFC/eSFWpx2cs8OQwogxUsdnZR2duRGIQ1dkSKJyLdVg8iRfp8orKwmQxhHJYLrn8QCHdEUa58f87GHgS9zApMGf5RJOpRZlSLDOXWVoyUKqggPLAgnMQmh4W147gTU9IfA0iuF2gld25SXECmpaqxGAwqBEL2q1E4Pi3/uNpQraFVa2U+pvoo9biiaeoF4VjWcxnrucp5uHcA/k6MkljhjQD1Kj3FLE/rtirzUspyaLwlr7VOQzwQqdRHJoQxuypjtm6iWpq2zy9lPik2hNIBcQ/uND/xbfXujU/HmhhzosN48jjhO+RkWos7mNgPAr6r7pPsCR+0ukXEnvw87dpXpTbGsA/fdUMRELyeOWgVF4gM5Zy18fl/fPYRMd+VRssMJlZLG3Ey9kOxENriR0N8Sl127CBeZrxISdm7Aplww1/UJg2LZQK+j9ChAN43FdeXVKhcWT7qbjEvP5F+OO6WE6oJwrDIxxWIlJv2X6c4ZnUuAY27PH/CAOrJUYU1nInw1Y9A+1WQArEs6v9N+Ceew4wYJQg==
 
-On Wed, Jan 14, 2026 at 01:45:23PM +0000, Kalyazin, Nikita wrote:
-> +int folio_zap_direct_map(struct folio *folio)
-> +{
-> +	return set_direct_map_valid_noflush(folio_page(folio, 0),
-> +					    folio_nr_pages(folio), false);
-> +}
+On Wed, Jan 14, 2026 at 09:33:12AM +0100, Markus Elfring wrote:
+> > Improve the error handling in passive TFO test to check the return value
+> > from sendto(), and to fail if read() or fprintf() failed.
+> 
+> You propose to adjust error detection and corresponding exception handling another bit.
+> How do you think about to take also another look if further function implementations
+> would be similarly affected?
 
-The implementation isn't the greatest.  None of the implementations
-of set_direct_map_valid_noflush() actually do anything with the struct
-page; they all call page_address() or page_to_virt() (fundamentally the
-same thing).  So converting folio->page->address is a bit inefficient.
+Thank you for the suggestion. The first objective of this series is to
+fix the misleading behavior that was caused by the following bug.
+Therefore, I intentionally limited the scope of this patch to the
+affected or closely related functions.
 
-It feels like we should change set_direct_map_valid_noflush() to take a
-const void * and pass either page_address() or folio_address(), depending
-whether the caller has a page or a folio.  What do you think?
+https://lore.kernel.org/netdev/602c9e1ba5bb2ee1997bb38b1d866c9c3b807ae9.1767624906.git.yk@y-koj.net/
+
+I believe this is sufficient to prevent it from showing misleading error
+messages when the test fails.
+
+Thank you,
+Yohei
+
+> 
+> Regards,
+> Markus
 
