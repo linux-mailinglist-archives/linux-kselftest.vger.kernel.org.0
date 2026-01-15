@@ -1,229 +1,389 @@
-Return-Path: <linux-kselftest+bounces-49015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59DEED2467A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 13:14:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F91AD24840
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 13:33:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 890853042FF0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 12:14:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 32D5430321DE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 12:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7AE393DE2;
-	Thu, 15 Jan 2026 12:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BEDB394470;
+	Thu, 15 Jan 2026 12:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cuKu8ya/"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="JnQgP2wF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013003.outbound.protection.outlook.com [40.107.162.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FFE34D911;
-	Thu, 15 Jan 2026 12:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768479251; cv=none; b=VRnD3xi0hQJsrTrS2Y4o5qzstyUYbvGafTwVnncn4CDtBgGQYgoLcK5ANHeCJgwDZVF0PU2igA9DSq76McvbOxLciS/xbuIydqd1cxWlIzmIQ5qj1fVNIz8A2Txu1jpSWNW3o3jqQB4nuztCrqtQwJvQqhQvnoQTYLTqp7txWaU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768479251; c=relaxed/simple;
-	bh=dbbBys7KiuTWXq9B3XNkEcrhBqu1MPkgaTNO6LYJB2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t5E75rdxv3N5kPsKlhPwAvYhBw9aJ7pfg55n4oFpkdSi3NhaNzFmCcfTjQv/ofzDP7Nx3M2XaTr4O72IYKIsOy/pkGxxeYqEFb0YNLVqwH0U5V+NMjV6GLQWnQDGDRGTMBN5/HuhFYdUw0OX+bDKz8YLki3LTgEFwXYkrvd+piY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cuKu8ya/; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60FBh0Lo026299;
-	Thu, 15 Jan 2026 12:12:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=Ltc+hcjxizM3P3QQBHE8tMO8jkD4Ax
-	QpYmpFhYGG4/w=; b=cuKu8ya/gJARYizZ+g/vHOY4PzDBHZF7Wwq1mv4V5AdCv1
-	XtCNos0bxbpmqKnKdLi4H5IdfKb9s7ch6G1geIanNdWa/X3K6YkKRecaAPokUfb2
-	1x4mgLqPN16fB0/D0Pkm6U/pb59Ogtc3eOpM1B44xD2ehHe+glr2xrd1WVELSucC
-	w1jyKp86zhqkdOnALb30dL2/ACSyMp7uPc3x6mqSdi/3nwslJn8vSQg4Ja6SAUY9
-	GldKPVt66qLjpOUIAyutPLXE6dH9uWTlCr+0Z+SnIyuknO5Dx7wiiH3LkchHwh+j
-	RNdQcJfkXvDGCHWjOidfiUORs+UGEwXKLPICprOA==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bpja4k093-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 12:12:17 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60FBW8mI025858;
-	Thu, 15 Jan 2026 12:12:16 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm2kkqtyb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 12:12:15 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60FCCBvg36634880
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Jan 2026 12:12:11 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B634A2004D;
-	Thu, 15 Jan 2026 12:12:11 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B8BAA20040;
-	Thu, 15 Jan 2026 12:12:10 +0000 (GMT)
-Received: from osiris (unknown [9.52.214.206])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 15 Jan 2026 12:12:10 +0000 (GMT)
-Date: Thu, 15 Jan 2026 13:12:09 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
-Cc: "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kernel@xen0n.name" <kernel@xen0n.name>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>,
-        "oupton@kernel.org" <oupton@kernel.org>,
-        "joey.gouly@arm.com" <joey.gouly@arm.com>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "david@kernel.org" <david@kernel.org>,
-        "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>,
-        "surenb@google.com" <surenb@google.com>,
-        "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "eddyz87@gmail.com" <eddyz87@gmail.com>,
-        "song@kernel.org" <song@kernel.org>,
-        "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@fomichev.me" <sdf@fomichev.me>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "pfalcato@suse.de" <pfalcato@suse.de>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "riel@surriel.com" <riel@surriel.com>,
-        "ryan.roberts@arm.com" <ryan.roberts@arm.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>,
-        "kas@kernel.org" <kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
-        "kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
-        "ackerleytng@google.com" <ackerleytng@google.com>,
-        "maobibo@loongson.cn" <maobibo@loongson.cn>,
-        "prsampat@amd.com" <prsampat@amd.com>,
-        "mlevitsk@redhat.com" <mlevitsk@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "jthoughton@google.com" <jthoughton@google.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "alex@ghiti.fr" <alex@ghiti.fr>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "dev.jain@arm.com" <dev.jain@arm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "pjw@kernel.org" <pjw@kernel.org>,
-        "shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "thuth@redhat.com" <thuth@redhat.com>,
-        "wyihan@google.com" <wyihan@google.com>,
-        "yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
-        "vannapurve@google.com" <vannapurve@google.com>,
-        "jackmanb@google.com" <jackmanb@google.com>,
-        "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
-        "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
-        "Thomson, Jack" <jackabt@amazon.co.uk>,
-        "Itazuri, Takahiro" <itazur@amazon.co.uk>,
-        "Manwaring, Derek" <derekmn@amazon.com>,
-        "Cali, Marco" <xmarcalx@amazon.co.uk>
-Subject: Re: [PATCH v9 01/13] set_memory: add folio_{zap,restore}_direct_map
- helpers
-Message-ID: <20260115121209.7060B42-hca@linux.ibm.com>
-References: <20260114134510.1835-1-kalyazin@amazon.com>
- <20260114134510.1835-2-kalyazin@amazon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABAE32E728;
+	Thu, 15 Jan 2026 12:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.3
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768480149; cv=fail; b=HSa2lNFg8CeBY5RZzJFwLyecEtD3pCEkIev2DcQNk/BAeUGiQlezkYyH96hI00zj//7dqjGsp2oFiDsf5tWBCi0106QwGULLT6Uzpi+eMXg+K5JFwBnU6A+0jABHyCjlN94dQhcgPBDuaagnfvCvlkL7m2tY2ReVP+QewNDsFE0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768480149; c=relaxed/simple;
+	bh=K+xG6q9M03m17xw3Ss2Zns8IrEW9W9LXKJAfaEremeo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=LeoH6epiCkOpCraBTc2XfCE/fwNCZfFgVrH9w/7BxhZv+Z5ZQ3Ok/dR3KcudcKveqnI9RcxoshCWhesaQ83gGHBhJDQh34abdz8Hb11rrv20N9SpOpUYjBgkDVA5lkQhOjL0aeAp2cm6nKBw8Y4+66BqPu0KEIiufsuNya8n/5w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=JnQgP2wF; arc=fail smtp.client-ip=40.107.162.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VA+0okcpuKcs+R39AEWF9efQzDCmSk9b2sub5ph4k1urGerw+RfWMIOGmf19I+RrvSCzbx/+zOVZ88YKlbPCtZpUqDZMDDgYr/J7zRJEGixOJIATiSmISTKDIhWMnZwZiQR21zDX6XbQIMI+OZGAFLGr3+vaCI2QWuOzUL19IzxQuo8gMv8RcngTpW9/y41cTFaG6ui1P7FgfgDjmIE3LrEUGC37F0DTtIZhfpyDWN+10blz2kRF4iWohyejApq51vqybNGunEBF47kwZ7LXX97+v9PdM/CqgCwrRcO8JRFIct8fohtvmfZJiKoOA5kzh1WFO2jLto5IXbZD9LQf5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q6XqS5rsMX74T6JUQ2W91ghUmIM8I7gFzzBxD673jbY=;
+ b=b6SlWT5QTz/56oLLeWYsbCz6Ca4xQ6w2abbW/sVZSMqD4mPABzeudm8tjonrpnt+uxNhmgzMixKIlHt/Jp5WFRcKk+ZM4a3Psxswd2POgw0DhLN3N8fnzNrg3lt7QgjFjPShsGfvCN/zhzba0zXlf9fnkCKGZ+/hdGHzqJYG0HLU/3GMHopAmOQH5haFE3RW4PDIctWXab4PPHTM0uOw8xulUliHQ/4+ZSyMQ7m61J5n1Ho/9864LiMTnY9LBqgod/47JKc/w8Um/n1RktV4HBebG1yd8p9+h1i6qOjkWDf2JLFZNLWVcxcvnNS3eRwHz8IqI4PLr7N9C1/Zd/bKWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q6XqS5rsMX74T6JUQ2W91ghUmIM8I7gFzzBxD673jbY=;
+ b=JnQgP2wFLEmgm0ptQ8aGNUM2RIRcTZfDnc6N1mhp9dqFTOab63Ez2q0JEfUnwnUHscXNnxy7NpnIbS7Z74mTfhVkYGjvNnZq9vlz0Fu29omXmOOMwhflvMeTi4Hv1RQ7iVG+H8epKerQ/LMYAOIQLfusuovtCL20k0XAhaWqW6y51gtFgdQx7tFehZnTReJ7gmWkwsPnOmhmryuv52BDiIx+3Ds8vZtudxUs/I3tWktCQDKgjg/bsdH/y7CIWn1wpZUKV97FcI6fprcd2DuxSCJXxZ+4j3tW9Or8cbUIT34ekz/7cKcXCcQfS9VSJ1k2bKEHaZVCahL6ncSC1qNlNg==
+Received: from AS4P192CA0018.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5e1::7)
+ by AM8PR07MB7618.eurprd07.prod.outlook.com (2603:10a6:20b:241::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.6; Thu, 15 Jan
+ 2026 12:29:01 +0000
+Received: from AM3PEPF0000A794.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5e1:cafe::5c) by AS4P192CA0018.outlook.office365.com
+ (2603:10a6:20b:5e1::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.6 via Frontend Transport; Thu,
+ 15 Jan 2026 12:29:00 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.241 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.2.241;
+ helo=fihe3nok0734.emea.nsn-net.net; pr=C
+Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
+ AM3PEPF0000A794.mail.protection.outlook.com (10.167.16.123) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.1
+ via Frontend Transport; Thu, 15 Jan 2026 12:29:01 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id A3FDF20164;
+	Thu, 15 Jan 2026 14:28:59 +0200 (EET)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	parav@nvidia.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v8 net-next 00/14] AccECN protocol case handling series
+Date: Thu, 15 Jan 2026 13:28:32 +0100
+Message-Id: <20260115122846.114576-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260114134510.1835-2-kalyazin@amazon.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDA4NiBTYWx0ZWRfX8xuvdIWONZns
- NVj8BAvAH4TNQ9O0kDyAmsAi7jrDlvBlIX5lrVtDjlKsAykqSak61W2NzOEE/mTeTapMZAxp4BE
- Kg5JlEQ4oCZWkWECJyrK2hjes04NLm7FAxGCZLFEpSOLNK1+igAOkLJOHY9GXNAN7bkVCl9xtfU
- qXDykXOjQUTOWBz25zMoy3olki99jMxOPUC0PwGY/k8vF3D7ujIT5mkzaC/zsmark/FqUFuC91E
- +10vy+dh49wFMZRjzJA1LX+EM18nWBc15kk/7b4DHobAhio5bH3z57/Jt8du8sRGsMSFOrV8v9q
- 1gZM94iCNVVUgv/wFLJNo3sZMr4MvSRNs611NG5Gl6uaOxxj0gsx1F0GA9AWcV2yHhAJAOQjPhG
- ywiloEVRKAUYbQRI1zQhnfFyDO73c8tnH757E4fEE+iW/HO5M2Mf9Wc16eZZ8naIw0Qe3IcZlBk
- 4FgoOq0SpQYiKqDUr5w==
-X-Proofpoint-ORIG-GUID: SiTgUlerDfUVs79tMKJhCw9rSIvAm_ra
-X-Proofpoint-GUID: SiTgUlerDfUVs79tMKJhCw9rSIvAm_ra
-X-Authority-Analysis: v=2.4 cv=U4afzOru c=1 sm=1 tr=0 ts=6968d9a1 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=vggBfdFIAAAA:8 a=3DJOwtP4az6VclhYBKkA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-15_03,2026-01-14_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 clxscore=1011 priorityscore=1501 lowpriorityscore=0 adultscore=0
- malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601150086
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM3PEPF0000A794:EE_|AM8PR07MB7618:EE_
+X-MS-Office365-Filtering-Correlation-Id: fb6618af-a4ec-45a8-7fe6-08de5431a9ed
+X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|1800799024|376014|7416014|36860700013|82310400026|18082099003|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?Z0c1LzZGbm9KRmlXWHpsdUh0MmRxOHFOZnhmWGVxamR2MjFhVHV6dWVxVkVo?=
+ =?utf-8?B?RW9iL1diajhDQjI2ajNRR09UWVBCVXhrNk1velpQOTJMT0hHWWE4aTViNjJp?=
+ =?utf-8?B?SjFaTHhzSkVUSXhrdjNKM2xzdGZRcGJTUWRMZjlldDJxZ01TWkpFeC95NFdR?=
+ =?utf-8?B?NVY1elVJVDh2czZuMVdqc1g3KzFUTzR0aUp3NHJ3OXhBcW1GbUpzZlJJZGRh?=
+ =?utf-8?B?QS9zVEtjazFGQXJPenkrU1NuQ0ZuSmpPTEFTWmRPUWR4L2pmNWp2NTRNS25i?=
+ =?utf-8?B?K1l1TjhYOHNPOHJqUS9ka0F6elg3eTNzVXdSRXB0dmp1OWNSL0FQU0RYK3N6?=
+ =?utf-8?B?czZMK0lKRkt4RTFXN3hOWFptb0daRzc0SFRCUFcwRFQ2Tk9paHY3VDc5Z3Uz?=
+ =?utf-8?B?K2pka0RjMWRUeEtEakl5RzQwL3AvNjQwbHFNT1FLSjZaTnA3cGl3dnRod2Iz?=
+ =?utf-8?B?c0F4T1IyMzdJbmxXdUY4dnNZNlR3d09hZWFwaXhCZDltakkyKy9EVHg3OGdt?=
+ =?utf-8?B?djVnUEZNcjAwRk44bTByN3FMOFh3bU1waERKRU8zR3ViTUZ3RVNBeG9jQ0o4?=
+ =?utf-8?B?V0Z6eFh2RURiV2NWTnVibWxFNUYrUFM0NFJubzZpWnBWS1Z3eUN2NmlrRWtF?=
+ =?utf-8?B?SDNuVzFuRHRxdGdyUi8xTzY1Ym9JekcwemhuSVVTbmhlY25JTG02NVpocSti?=
+ =?utf-8?B?TUNhN211SkE2dThITGhQVk5Zak04MU5VMG5rMkFLTFNXeGVTUkhwWG9taDds?=
+ =?utf-8?B?TWRqQ2ZhTGRkMHBsNUJjTk5TQkpQVXdRVkVzcGZzNjlOU25IcWJEbjNCaVRX?=
+ =?utf-8?B?NHdnYlJDNjZZMWkvNzRWTi90UmhzYVZ0UkdZVVRLNnQzMDdBckxqRElLWUR4?=
+ =?utf-8?B?d1I5aEIwWXlaSGdUdkVIR25tWXZnaEtzY05taUpzUTdNRDBYZTF1bEQ0YWxs?=
+ =?utf-8?B?NE9LYXI0ZXlaZWZsclJLWUpMdmxHMm00ZFFQRktNckFBVnpFcDZIR1BjM3pZ?=
+ =?utf-8?B?TzdOY1lEcmNBUU5heXBvS2RqUmV3NFpwTEtOaVgzZStUN0F4MU9OQ0xwdEdZ?=
+ =?utf-8?B?b202bGJmQ3dESWEwMFZuRnduck42cXRISlFiNTFEL2NGWllwNk5pSGVja2xZ?=
+ =?utf-8?B?c3d1NUF4TTI5R1h3Z1BvZnpuWmk3TXE2OUVZWWMyZFd5Vy85SHMvU2I4RUpH?=
+ =?utf-8?B?TCs4cHY0TTg4N0l5SzRwYXRYaDhJd1BjRnorcXVubVN2WnJKVHhjellkU1JR?=
+ =?utf-8?B?MzhmakpSR1A3SnVGZks5Mld3V1paVFRrOElWemJJalp2V2RjWDUwOFZsbDZV?=
+ =?utf-8?B?eVNub2VEZDhHeTZyaGtsai9QMXRUV3Jhc24vZGhnVnZyM3JvbGtLZmw3Vyth?=
+ =?utf-8?B?bFA4cHhMU1RkR2E0cWwyMXlLbHpqUDlXaUpmeFRRVzNJTUZtZ1h1anZVOVRy?=
+ =?utf-8?B?eEFuTnJySGlMK1Q4TzVDbWFSWkxCNHdSS3JhbFFWNXNLR2pFZjRZek1hTFJa?=
+ =?utf-8?B?Ly82QVhoQ2tqeVdiOU9mZzZBRVcxdytyTXBwOEphMGZNbTFqOVFCT09aMkh5?=
+ =?utf-8?B?R09IdlViTWpGUThhbzduUzNxT2NsemNxblJuQ1hQWmhqMkFMdTRYUWYxYnpU?=
+ =?utf-8?B?UEpyTElpRUZ2Q0JaRHZqd0Z5VUdYMjJTZkdWRjRpU0w0T3VlZnlGRDFyLzVX?=
+ =?utf-8?B?R2RHMlczR3JaWnEyYUNlMU1Sa1B0MzVmeVpwVG9sYlRwaDVOS09IcnFjYW9S?=
+ =?utf-8?B?SXlWN0hRZmRWNEhNNkRqWW5WTVJnQU1vSUFmTzRWTVovSmZWUkJBWGtLTWJI?=
+ =?utf-8?B?WExZOXdlbUdCSGg2d29sc2VZdFo3NlZKaWM0cWxBZnNvTm45ZHJiUGgwZzN0?=
+ =?utf-8?B?ZDRoVjJsdWp4RERwOUhBZzNrc0NoNVg4NkJzcUwzU2ppSDNZa2ZnQWF2MDRo?=
+ =?utf-8?B?UXRQbklQeHJzcXkveElpUHBMMkx4clRYMk03Ky9KSW1IeUFvV3lndDhYM1Q4?=
+ =?utf-8?B?SVBpMzNmWmljcVZFbEpaZktFbGZDSzg5d2VXa1dZb0syYVY2VzV0c2hiM2ox?=
+ =?utf-8?B?MXVzTXhydDBnTVBDa3A1ZGdpT2NzbkJra3VPYnZIOSs4WG41dGlDT2ZacU5C?=
+ =?utf-8?B?Sm91ZTc5YXdaeWV2Q0pjbHN6dnVSQzNXSnQzYWwrUzhkK1czeUpNS0VzOTRR?=
+ =?utf-8?B?ekNXOThqY0lvMEw3dFp0dSs2SmZrT2hIeG1ZUEY2VXVCUmMxSkUxeWp2RmJs?=
+ =?utf-8?Q?gRGSsXb0H9NCfJfrC5vEeqiT4x3d9stW9Gd9gqvR8U=3D?=
+X-Forefront-Antispam-Report:
+ CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700013)(82310400026)(18082099003)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2026 12:29:01.3155
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fb6618af-a4ec-45a8-7fe6-08de5431a9ed
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM3PEPF0000A794.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR07MB7618
 
-On Wed, Jan 14, 2026 at 01:45:23PM +0000, Kalyazin, Nikita wrote:
-> From: Nikita Kalyazin <kalyazin@amazon.com>
-> 
-> These allow guest_memfd to remove its memory from the direct map.
-> Only implement them for architectures that have direct map.
-> In folio_zap_direct_map(), flush TLB on architectures where
-> set_direct_map_valid_noflush() does not flush it internally.
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-...
+Hello,
 
-> diff --git a/arch/s390/mm/pageattr.c b/arch/s390/mm/pageattr.c
-> index d3ce04a4b248..df4a487b484d 100644
-> --- a/arch/s390/mm/pageattr.c
-> +++ b/arch/s390/mm/pageattr.c
-> @@ -412,6 +412,24 @@ int set_direct_map_valid_noflush(struct page *page, unsigned nr, bool valid)
->  	return __set_memory((unsigned long)page_to_virt(page), nr, flags);
->  }
->  
-> +int folio_zap_direct_map(struct folio *folio)
-> +{
-> +	unsigned long addr = (unsigned long)folio_address(folio);
-> +	int ret;
-> +
-> +	ret = set_direct_map_valid_noflush(folio_page(folio, 0),
-> +					   folio_nr_pages(folio), false);
-> +	flush_tlb_kernel_range(addr, addr + folio_size(folio));
-> +
-> +	return ret;
-> +}
+Plesae find the v8 AccECN case handling patch series, which covers
+several excpetional case handling of Accurate ECN spec (RFC9768),
+adds new identifiers to be used by CC modules, adds ecn_delta into
+rate_sample, and keeps the ACE counter for computation, etc.
 
-The instructions used in the s390 implementation of
-set_direct_map_valid_noflush() do flush TLB entries.
-The extra flush_tlb_kernel_range() is not required.
+This patch series is part of the full AccECN patch series, which is available at
+https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
+
+Best regards,
+Chia-Yu
+
+---
+v8:
+- Add apcketdrill patch #14 into this series (Paolo Abeni <pabeni@redhat.com> & Jakub Kicinski <kuba@kernel.org>)
+- Add helper function in patch #10 (Paolo Abeni <pabeni@redhat.com>)
+
+v7:
+- Update comments in #3 (Paolo Abeni <pabeni@redhat.com>)
+- Update comments and use synack_type TCP_SYNACK_RETRANS and num_timeout in #9. (Paolo Abeni <pabeni@redhat.com>)
+
+v6:
+- Update comment in #3 to highlight RX path is only used for virtio-net (Paolo Abeni <pabeni@redhat.com>)
+- Rename TCP_CONG_WANTS_ECT_1 to TCP_CONG_ECT_1_NEGOTIATION to distiguish from TCP_CONG_ECT_1_ESTABLISH (Paolo Abeni <pabeni@redhat.com>)
+- Move TCP_CONG_ECT_1_ESTABLISH in #6 to latter patch series (Paolo Abeni <pabeni@redhat.com>)
+- Add new synack_type instead of moving the increment of num_retran in #9 (Paolo Abeni <pabeni@redhat.com>)
+- Use new synack_type TCP_SYNACK_RETRANS and num_retrans for SYN/ACK retx fallbackk for AccECN in #10 (Paolo Abeni <pabeni@redhat.com>)
+- Do not cast const struct into non-const in #11, and set AccECN fail mode after tcp_rtx_synack() (Paolo Abeni <pabeni@redhat.com>)
+
+v5:
+- Move previous #11 in v4 in latter patch after discussion with RFC author.
+- Add #3 to update the comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN. (Parav Pandit <parav@nvidia.com>)
+- Add gro self-test for TCP CWR flag in #4. (Eric Dumazet <edumazet@google.com>)
+- Add fixes: tag into #7 (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message of #8 and if condition check (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #13 (Paolo Abeni <pabeni@redhat.com>)
+
+v4:
+- Add previous #13 in v2 back after dicussion with the RFC author.
+- Add TCP_ACCECN_OPTION_PERSIST to tcp_ecn_option sysctl to ignore AccECN fallback policy on sending AccECN option.
+
+v3:
+- Add additional min() check if pkts_acked_ewma is not initialized in #1. (Paolo Abeni <pabeni@redhat.com>)
+- Change TCP_CONG_WANTS_ECT_1 into individual flag add helper function INET_ECN_xmit_wants_ect_1() in #3. (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #4. (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message to fix old AccECN commits in #5. (Paolo Abeni <pabeni@redhat.com>)
+- Remove unnecessary brackets in #10. (Paolo Abeni <pabeni@redhat.com>)
+- Move patch #3 in v2 to a later Prague patch serise and remove patch #13 in v2. (Paolo Abeni <pabeni@redhat.com>)
+
+Chia-Yu Chang (12):
+  selftests/net: gro: add self-test for TCP CWR flag
+  tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
+  tcp: disable RFC3168 fallback identifier for CC modules
+  tcp: accecn: handle unexpected AccECN negotiation feedback
+  tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+  tcp: add TCP_SYNACK_RETRANS synack_type
+  tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN
+    SYN/ACK
+  tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+  tcp: accecn: fallback outgoing half link to non-AccECN
+  tcp: accecn: detect loss ACK w/ AccECN option and add
+    TCP_ACCECN_OPTION_PERSIST
+  tcp: accecn: enable AccECN
+  selftests/net: packetdrill: add TCP Accurate ECN cases
+
+Ilpo Järvinen (2):
+  tcp: try to avoid safer when ACKs are thinned
+  gro: flushing when CWR is set negatively affects AccECN
+
+ Documentation/networking/ip-sysctl.rst        |  4 +-
+ .../networking/net_cachelines/tcp_sock.rst    |  1 +
+ include/linux/tcp.h                           |  4 +-
+ include/net/inet_ecn.h                        | 20 +++-
+ include/net/tcp.h                             | 32 +++++-
+ include/net/tcp_ecn.h                         | 99 ++++++++++++++-----
+ net/ipv4/inet_connection_sock.c               |  3 +
+ net/ipv4/sysctl_net_ipv4.c                    |  4 +-
+ net/ipv4/tcp.c                                |  2 +
+ net/ipv4/tcp_cong.c                           |  5 +-
+ net/ipv4/tcp_input.c                          | 37 ++++++-
+ net/ipv4/tcp_minisocks.c                      | 43 +++++---
+ net/ipv4/tcp_offload.c                        |  3 +-
+ net/ipv4/tcp_output.c                         | 32 +++---
+ net/ipv4/tcp_timer.c                          |  2 +
+ tools/testing/selftests/drivers/net/gro.c     | 81 ++++++++++-----
+ tools/testing/selftests/drivers/net/gro.py    |  3 +-
+ .../tcp_accecn_2nd_data_as_first.pkt          | 24 +++++
+ .../tcp_accecn_2nd_data_as_first_connect.pkt  | 30 ++++++
+ .../tcp_accecn_3rd_ack_after_synack_rxmt.pkt  | 19 ++++
+ ..._accecn_3rd_ack_ce_updates_received_ce.pkt | 18 ++++
+ .../tcp_accecn_3rd_ack_lost_data_ce.pkt       | 22 +++++
+ .../net/packetdrill/tcp_accecn_3rd_dups.pkt   | 26 +++++
+ .../tcp_accecn_acc_ecn_disabled.pkt           | 14 +++
+ .../tcp_accecn_accecn_then_notecn_syn.pkt     | 28 ++++++
+ .../tcp_accecn_accecn_to_rfc3168.pkt          | 18 ++++
+ .../tcp_accecn_client_accecn_options_drop.pkt | 34 +++++++
+ .../tcp_accecn_client_accecn_options_lost.pkt | 38 +++++++
+ .../tcp_accecn_clientside_disabled.pkt        | 12 +++
+ ...cecn_close_local_close_then_remote_fin.pkt | 25 +++++
+ .../tcp_accecn_delivered_2ndlargeack.pkt      | 25 +++++
+ ..._accecn_delivered_falseoverflow_detect.pkt | 31 ++++++
+ .../tcp_accecn_delivered_largeack.pkt         | 24 +++++
+ .../tcp_accecn_delivered_largeack2.pkt        | 25 +++++
+ .../tcp_accecn_delivered_maxack.pkt           | 25 +++++
+ .../tcp_accecn_delivered_updates.pkt          | 70 +++++++++++++
+ .../net/packetdrill/tcp_accecn_ecn3.pkt       | 12 +++
+ .../tcp_accecn_ecn_field_updates_opt.pkt      | 35 +++++++
+ .../packetdrill/tcp_accecn_ipflags_drop.pkt   | 14 +++
+ .../tcp_accecn_listen_opt_drop.pkt            | 16 +++
+ .../tcp_accecn_multiple_syn_ack_drop.pkt      | 28 ++++++
+ .../tcp_accecn_multiple_syn_drop.pkt          | 18 ++++
+ .../tcp_accecn_negotiation_bleach.pkt         | 23 +++++
+ .../tcp_accecn_negotiation_connect.pkt        | 23 +++++
+ .../tcp_accecn_negotiation_listen.pkt         | 26 +++++
+ .../tcp_accecn_negotiation_noopt_connect.pkt  | 23 +++++
+ .../tcp_accecn_negotiation_optenable.pkt      | 23 +++++
+ .../tcp_accecn_no_ecn_after_accecn.pkt        | 20 ++++
+ .../net/packetdrill/tcp_accecn_noopt.pkt      | 27 +++++
+ .../net/packetdrill/tcp_accecn_noprogress.pkt | 27 +++++
+ .../tcp_accecn_notecn_then_accecn_syn.pkt     | 28 ++++++
+ .../tcp_accecn_rfc3168_to_fallback.pkt        | 18 ++++
+ .../tcp_accecn_rfc3168_to_rfc3168.pkt         | 18 ++++
+ .../tcp_accecn_sack_space_grab.pkt            | 28 ++++++
+ .../tcp_accecn_sack_space_grab_with_ts.pkt    | 39 ++++++++
+ ...tcp_accecn_serverside_accecn_disabled1.pkt | 20 ++++
+ ...tcp_accecn_serverside_accecn_disabled2.pkt | 20 ++++
+ .../tcp_accecn_serverside_broken.pkt          | 19 ++++
+ .../tcp_accecn_serverside_ecn_disabled.pkt    | 19 ++++
+ .../tcp_accecn_serverside_only.pkt            | 18 ++++
+ ...n_syn_ace_flags_acked_after_retransmit.pkt | 18 ++++
+ .../tcp_accecn_syn_ace_flags_drop.pkt         | 16 +++
+ ...n_ack_ace_flags_acked_after_retransmit.pkt | 27 +++++
+ .../tcp_accecn_syn_ack_ace_flags_drop.pkt     | 27 +++++
+ .../net/packetdrill/tcp_accecn_syn_ce.pkt     | 13 +++
+ .../net/packetdrill/tcp_accecn_syn_ect0.pkt   | 13 +++
+ .../net/packetdrill/tcp_accecn_syn_ect1.pkt   | 13 +++
+ .../net/packetdrill/tcp_accecn_synack_ce.pkt  | 28 ++++++
+ ..._accecn_synack_ce_updates_delivered_ce.pkt | 22 +++++
+ .../packetdrill/tcp_accecn_synack_ect0.pkt    | 24 +++++
+ .../packetdrill/tcp_accecn_synack_ect1.pkt    | 24 +++++
+ .../packetdrill/tcp_accecn_synack_rexmit.pkt  | 15 +++
+ .../packetdrill/tcp_accecn_synack_rxmt.pkt    | 25 +++++
+ .../packetdrill/tcp_accecn_tsnoprogress.pkt   | 26 +++++
+ .../net/packetdrill/tcp_accecn_tsprogress.pkt | 25 +++++
+ 75 files changed, 1654 insertions(+), 87 deletions(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_2nd_data_as_first.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_2nd_data_as_first_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_after_synack_rxmt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_ce_updates_received_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_lost_data_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_dups.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_acc_ecn_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_accecn_then_notecn_syn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_accecn_to_rfc3168.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_client_accecn_options_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_client_accecn_options_lost.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_clientside_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_close_local_close_then_remote_fin.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_2ndlargeack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_falseoverflow_detect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_largeack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_largeack2.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_maxack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_updates.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ecn3.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ecn_field_updates_opt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ipflags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_listen_opt_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_multiple_syn_ack_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_multiple_syn_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_bleach.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_listen.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_noopt_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_optenable.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_no_ecn_after_accecn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_noopt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_noprogress.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_notecn_then_accecn_syn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_rfc3168_to_fallback.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_rfc3168_to_rfc3168.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_sack_space_grab.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_sack_space_grab_with_ts.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_accecn_disabled1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_accecn_disabled2.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_broken.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_ecn_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_only.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ace_flags_acked_after_retransmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ace_flags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ack_ace_flags_acked_after_retransmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ack_ace_flags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ect0.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ect1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ce_updates_delivered_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ect0.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ect1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_rexmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_rxmt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_tsnoprogress.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_tsprogress.pkt
+
+-- 
+2.34.1
+
 
