@@ -1,151 +1,105 @@
-Return-Path: <linux-kselftest+bounces-48991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B300D224EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 04:33:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7575D225AC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 05:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AEAB3300B374
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 03:33:46 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5F744300CF10
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 04:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301812848B2;
-	Thu, 15 Jan 2026 03:33:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C097D2BEFE4;
+	Thu, 15 Jan 2026 04:11:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vKTNtO3e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5VlrzLx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E7D283FD4
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 03:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC16EEA8;
+	Thu, 15 Jan 2026 04:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768448023; cv=none; b=A3VZs2ntqsw2vykTYqhlXkFO9+cstdwKSRd6H3g0PrT93v14nMHLos5GQrkMsoVboJt9EONhHGcAZiiSgBbioVB8+d4UG7Y5ZVU9rryyRcILsUD2G1tau+YcwfGnKpzI4i42MrPgMdOxQnYbteNaGjEFbfpc/TNxsSdltx30ayg=
+	t=1768450295; cv=none; b=o8otknYNqX9qR+qcLUfwS/8iqbZNgFJN4VsliboE8I/2I+D9LXFW84JIJzPQ8hI/0NFWc+MPBjYWu2BMKSmRGkt4Asf1rf6mEinTHpm1a15okprFlJ3a8Q250nNU6qjtm6JF/mdX8YNMueCfR5AaxtNErkcXsPDVeHJWAL0iTAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768448023; c=relaxed/simple;
-	bh=SwifmEH36vgZHkEL9Wh5thbrRhr2OxX/OtKyeNOkcWw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=om/d0PQObJNQoSQ7DjgPRMjZW1aeozBxyrX93WZHcSPoZx0+tyxXntw8LFj5WPUtL5un0NKHVEJeR5o3p2DXExshrNS7n9OUZQDsGHi3oVrT8QPTGK9sD5bIHMhCjVOl/PJ4SJOKS64zkHd6Oz7tVQ2q36yaOFUFflYDE6gbfog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vKTNtO3e; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <48965a3c-011f-49b2-abda-38e2fa1a0ee1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768448009;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C6Fh+tPbjQgnUthuSHBuKi8PwjE1LerN8unJAOqdNX4=;
-	b=vKTNtO3eKCWKRMMUxpldbAvhX/pVBoG2KvylSmq0zuPfBgShbLaoBhIGZ3QdXGKlPFGA5C
-	lAhJu6pkxtAQQ3N+d8bDqkfNgqDuVje3e2Ud3NzU0Dera5BwHovmQB7i3J0JyKXK0QCVnl
-	uI0uopGUa1E86ByCkF0sbaGK/DUtY/E=
-Date: Thu, 15 Jan 2026 11:33:14 +0800
+	s=arc-20240116; t=1768450295; c=relaxed/simple;
+	bh=bVEzf1YEsVmAfpl4RGUDHiheNnPIShSLYxhFE64NKhc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TATyXte5zLB1NuLf2PUBMVIkP/DXs1c7rnZeV2mu8gEry8nPQQyIP43FYmwD4pdZB1He9N/PejWobECT5ch0D7zYHfJ8vLA467bJoGHhQDcrB0u/c5rXELkgzCtW/a3bVHzPxz5cyE99XO397A+/I/JFWmXQldJISlACw1eTy1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5VlrzLx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D57C116D0;
+	Thu, 15 Jan 2026 04:11:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768450295;
+	bh=bVEzf1YEsVmAfpl4RGUDHiheNnPIShSLYxhFE64NKhc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=G5VlrzLxRqLvfO0lhVUQKX8RVuAclYZ5DXQW7V6v8UY1VB+zXZ0jOoOWx2dE4JBlR
+	 YmuFXwgwKHpEcP2Mgf9iRNx/qHDFcIrxg2DXAVoNdvJRU6+8dFIDFa9XIEl3L1Etpu
+	 iXoVBMS36ls72qM3pQwkzYGvdAYIdPx5ooQcBReJpU133MXyakTc889hjeo0EMd/co
+	 ldHtVOlAVKgstTehtAEfbsdRXPTtxUbCh+h0TcxBF5v1gQNcEEodAx6pnTNNjQwRp/
+	 hHqHkqWJRgBrlBYKWDqTyAC+5nM1c22pJZn5nfMoySkYLoba9cjTB1caGm9WEw7Tqt
+	 rSSTlg480f5gw==
+Date: Wed, 14 Jan 2026 20:11:33 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+Cc: "pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
+ <edumazet@google.com>, "parav@nvidia.com" <parav@nvidia.com>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "corbet@lwn.net"
+ <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
+ "dsahern@kernel.org" <dsahern@kernel.org>, "kuniyu@google.com"
+ <kuniyu@google.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "dave.taht@gmail.com"
+ <dave.taht@gmail.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>,
+ "stephen@networkplumber.org" <stephen@networkplumber.org>,
+ "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+ <jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+ <donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+ "liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+ <shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+ "ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+ <koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+ <g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+ <ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+ <mirja.kuehlewind@ericsson.com>, cheshire <cheshire@apple.com>,
+ "rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+ <Jason_Livingood@comcast.com>, Vidhi Goel <vidhi_goel@apple.com>
+Subject: Re: [PATCH v2 net-next 0/1] AccECN packetdrill selftest series
+Message-ID: <20260114201133.710abe3c@kernel.org>
+In-Reply-To: <PAXPR07MB7984E23DB685074239202CA8A38FA@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260114162915.94820-1-chia-yu.chang@nokia-bell-labs.com>
+	<20260114151346.734001ac@kernel.org>
+	<PAXPR07MB7984E23DB685074239202CA8A38FA@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 1/5] bpf: lru: Tidy hash handling in LRU code
-Content-Language: en-US
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Saket Kumar Bhaskar <skb99@linux.ibm.com>,
- "David S . Miller" <davem@davemloft.net>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
- bpf@vger.kernel.org
-References: <20260107151456.72539-1-leon.hwang@linux.dev>
- <20260107151456.72539-2-leon.hwang@linux.dev>
- <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-
-
-On 15/1/26 02:44, Martin KaFai Lau wrote:
+On Wed, 14 Jan 2026 23:25:59 +0000 Chia-Yu Chang (Nokia) wrote:
+> > Missing your own SoB on the patch, but also -- are these supposed to pass without the kernel patches? Without going back to check Paolo's message my understanding was that you'd repost this as patch 15 of the kernel series.
+> > 
+> > On the packetdrill side -- is PR #61 the code we need merged?
+> > Doesn't seem like it. Could you please clean that part up and start the review process?  
 > 
-> 
-> On 1/7/26 7:14 AM, Leon Hwang wrote:
->> The hash field is not used by the LRU list itself.
->>
->> Setting hash while manipulating the LRU list also obscures the intent
->> of the code and makes it harder to follow.
->>
->> Tidy this up by moving the hash assignment to prealloc_lru_pop(),
->> where the element is prepared for insertion into the hash table.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>   kernel/bpf/bpf_lru_list.c | 24 +++++++++---------------
->>   kernel/bpf/bpf_lru_list.h |  5 ++---
->>   kernel/bpf/hashtab.c      |  5 ++---
->>   3 files changed, 13 insertions(+), 21 deletions(-)
->>
->> diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
->> index e7a2fc60523f..f4e183a9c28f 100644
->> --- a/kernel/bpf/bpf_lru_list.c
->> +++ b/kernel/bpf/bpf_lru_list.c
->> @@ -344,10 +344,8 @@ static void bpf_lru_list_pop_free_to_local(struct
->> bpf_lru *lru,
->>   static void __local_list_add_pending(struct bpf_lru *lru,
->>                        struct bpf_lru_locallist *loc_l,
->>                        int cpu,
->> -                     struct bpf_lru_node *node,
->> -                     u32 hash)
->> +                     struct bpf_lru_node *node)
->>   {
->> -    *(u32 *)((void *)node + lru->hash_offset) = hash;
->>       node->cpu = cpu;
->>       node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
->>       bpf_lru_node_clear_ref(node);
->> @@ -393,8 +391,7 @@ __local_list_pop_pending(struct bpf_lru *lru,
->> struct bpf_lru_locallist *loc_l)
->>       return NULL;
->>   }
->>   -static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru
->> *lru,
->> -                            u32 hash)
->> +static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru)
->>   {
->>       struct list_head *free_list;
->>       struct bpf_lru_node *node = NULL;
->> @@ -415,7 +412,6 @@ static struct bpf_lru_node
->> *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
->>         if (!list_empty(free_list)) {
->>           node = list_first_entry(free_list, struct bpf_lru_node, list);
->> -        *(u32 *)((void *)node + lru->hash_offset) = hash;
->>           bpf_lru_node_clear_ref(node);
->>           __bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);
-> 
-> init the hash value later (after releasing l->lock) is not correct. The
-> node is in the inactive list. The inactive list is one of the rotate and
-> _evict_ candidates, meaning tgt_l->hash will be used in
-> htab_lru_map_delete_node(). In practice, it does not matter if
-> htab_lru_map_delete_node() cannot find the node in an incorrect bucket.
-> However, it still should not use an uninitialized value to begin with.
-> 
+> Thanks, I will add my own SoB in the next version.
+> This patch can NOT pass without the last kernel patch; shall I merge
+> this series into that kernel series? If yes, I will submit v8 on that
+> series and add this patch as the last one.
 
-Thanks for the explanation — this is the part I missed earlier.
+Yes, please.
 
-Without additional context or comments in the code, it was not obvious
-why the hash needs to be set at that point.
+> On the packetdrill, the used packetdrill is commit
+> 6f2116af6b7e1936a53e80ab31b77f74abda1aaa of the branch:
+> https://github.com/minuscat/packetdrill_accecn Shall I create PR? Or
+> above info is ok for merging into packetdrill.
 
-I’ll drop this change as-is. If you have suggestions for a clearer or
-better way to handle the hash assignment while preserving the required
-ordering, I’d appreciate your guidance.
-
-Thanks,
-Leon
-
+Please create a PR and let's give Neal a couple of days to look thru it.
+We don't need the packetdrill side to be fully merged upstream but
+I'd love some indication that it's not going to take long because
+we need to manually manage the packetdrill build if it's not upstream.
 
