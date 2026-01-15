@@ -1,54 +1,53 @@
-Return-Path: <linux-kselftest+bounces-48990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1E3AD224B1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 04:26:05 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B300D224EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 04:33:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 56C473015E07
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 03:26:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AEAB3300B374
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Jan 2026 03:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866FE288C30;
-	Thu, 15 Jan 2026 03:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301812848B2;
+	Thu, 15 Jan 2026 03:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rWWj7X3Z"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vKTNtO3e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2727FD43
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 03:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E7D283FD4
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 03:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768447561; cv=none; b=dRuTTMKO1gWNzqQWN2fXkHH5+hE7rIWieg4DezDHR+eLEIzHaNm0dauVkEbYSWwIhI3BTf9P1QoSRRwMKV1KB/QIlHe9Udy3FEaGFgMFRpkbaWWIUzVTmRUccNB6KouWG8jlPL9ogDbYNdWHqC68AARJZMKkIni7BKj/Y5SL54Q=
+	t=1768448023; cv=none; b=A3VZs2ntqsw2vykTYqhlXkFO9+cstdwKSRd6H3g0PrT93v14nMHLos5GQrkMsoVboJt9EONhHGcAZiiSgBbioVB8+d4UG7Y5ZVU9rryyRcILsUD2G1tau+YcwfGnKpzI4i42MrPgMdOxQnYbteNaGjEFbfpc/TNxsSdltx30ayg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768447561; c=relaxed/simple;
-	bh=QkPXqnV3ZRfhtGfh1Vcau6M2ZsYkINU+HKPnyvuY0iU=;
+	s=arc-20240116; t=1768448023; c=relaxed/simple;
+	bh=SwifmEH36vgZHkEL9Wh5thbrRhr2OxX/OtKyeNOkcWw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wsq6x7yjzkZoZB4cvUnH/Oak9zH4gV5OMaKn+UWF/ucMh2eTrtR7Yg1HZ2mO4I+8mUhPqiU0xRu/GZYx5O6yiZauJWGD4v2u8pGCgWS5B/9r0cFAYYt/orQemMzb9JOtwIRsw82R93B9LH0XxC75IDI28riB4w0x1SS4idZ5DMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rWWj7X3Z; arc=none smtp.client-ip=91.218.175.171
+	 In-Reply-To:Content-Type; b=om/d0PQObJNQoSQ7DjgPRMjZW1aeozBxyrX93WZHcSPoZx0+tyxXntw8LFj5WPUtL5un0NKHVEJeR5o3p2DXExshrNS7n9OUZQDsGHi3oVrT8QPTGK9sD5bIHMhCjVOl/PJ4SJOKS64zkHd6Oz7tVQ2q36yaOFUFflYDE6gbfog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vKTNtO3e; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <3d4287e5-0564-4933-83ee-c2dcbfe993f4@linux.dev>
+Message-ID: <48965a3c-011f-49b2-abda-38e2fa1a0ee1@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768447557;
+	t=1768448009;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QwdtCxk+bhle2ZNHlx3yJsg+WAw9Zp1L7FaYnQsiDdw=;
-	b=rWWj7X3Z2fEw+8PidI1ci6WixFd5ud03Mwh/YDwBd5ZkwOSyXuvYFcwQXTjjOGzMzNnWR3
-	pgwu+gNmbAEs7GKgMkE0vcY+ReR0X611mnt5pNo3q9BhyX/NRsAWnmu1/JjXVMR8zi3igH
-	W5z8PYpkszoIK9EgQbdjNUcxwzeZBDE=
-Date: Thu, 15 Jan 2026 11:25:46 +0800
+	bh=C6Fh+tPbjQgnUthuSHBuKi8PwjE1LerN8unJAOqdNX4=;
+	b=vKTNtO3eKCWKRMMUxpldbAvhX/pVBoG2KvylSmq0zuPfBgShbLaoBhIGZ3QdXGKlPFGA5C
+	lAhJu6pkxtAQQ3N+d8bDqkfNgqDuVje3e2Ud3NzU0Dera5BwHovmQB7i3J0JyKXK0QCVnl
+	uI0uopGUa1E86ByCkF0sbaGK/DUtY/E=
+Date: Thu, 15 Jan 2026 11:33:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 4/5] bpf: lru: Fix unintended eviction when
- updating lru hash maps
+Subject: Re: [PATCH bpf-next v3 1/5] bpf: lru: Tidy hash handling in LRU code
 Content-Language: en-US
 To: Martin KaFai Lau <martin.lau@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -63,102 +62,90 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com,
  bpf@vger.kernel.org
 References: <20260107151456.72539-1-leon.hwang@linux.dev>
- <20260107151456.72539-5-leon.hwang@linux.dev>
- <e21c8a3d-f970-48f5-a18a-a85ee19d5bfb@linux.dev>
+ <20260107151456.72539-2-leon.hwang@linux.dev>
+ <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <e21c8a3d-f970-48f5-a18a-a85ee19d5bfb@linux.dev>
+In-Reply-To: <b20c1231-c8ef-4d66-97a9-120f2d77738e@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 15/1/26 03:39, Martin KaFai Lau wrote:
+On 15/1/26 02:44, Martin KaFai Lau wrote:
 > 
 > 
 > On 1/7/26 7:14 AM, Leon Hwang wrote:
->> When updating an existing element in lru_[percpu_,]hash maps, the current
->> implementation always calls prealloc_lru_pop() to get a new node before
->> checking if the key already exists. If the map is full, this triggers
->> LRU eviction and removes an existing element, even though the update
->> operation only needs to modify the value of an existing key in-place.
+>> The hash field is not used by the LRU list itself.
 >>
->> This is problematic because:
->> 1. Users may unexpectedly lose entries when doing simple value updates
->> 2. The eviction overhead is unnecessary for existing key updates
+>> Setting hash while manipulating the LRU list also obscures the intent
+>> of the code and makes it harder to follow.
+>>
+>> Tidy this up by moving the hash assignment to prealloc_lru_pop(),
+>> where the element is prepared for insertion into the hash table.
+>>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>   kernel/bpf/bpf_lru_list.c | 24 +++++++++---------------
+>>   kernel/bpf/bpf_lru_list.h |  5 ++---
+>>   kernel/bpf/hashtab.c      |  5 ++---
+>>   3 files changed, 13 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+>> index e7a2fc60523f..f4e183a9c28f 100644
+>> --- a/kernel/bpf/bpf_lru_list.c
+>> +++ b/kernel/bpf/bpf_lru_list.c
+>> @@ -344,10 +344,8 @@ static void bpf_lru_list_pop_free_to_local(struct
+>> bpf_lru *lru,
+>>   static void __local_list_add_pending(struct bpf_lru *lru,
+>>                        struct bpf_lru_locallist *loc_l,
+>>                        int cpu,
+>> -                     struct bpf_lru_node *node,
+>> -                     u32 hash)
+>> +                     struct bpf_lru_node *node)
+>>   {
+>> -    *(u32 *)((void *)node + lru->hash_offset) = hash;
+>>       node->cpu = cpu;
+>>       node->type = BPF_LRU_LOCAL_LIST_T_PENDING;
+>>       bpf_lru_node_clear_ref(node);
+>> @@ -393,8 +391,7 @@ __local_list_pop_pending(struct bpf_lru *lru,
+>> struct bpf_lru_locallist *loc_l)
+>>       return NULL;
+>>   }
+>>   -static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru
+>> *lru,
+>> -                            u32 hash)
+>> +static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru)
+>>   {
+>>       struct list_head *free_list;
+>>       struct bpf_lru_node *node = NULL;
+>> @@ -415,7 +412,6 @@ static struct bpf_lru_node
+>> *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
+>>         if (!list_empty(free_list)) {
+>>           node = list_first_entry(free_list, struct bpf_lru_node, list);
+>> -        *(u32 *)((void *)node + lru->hash_offset) = hash;
+>>           bpf_lru_node_clear_ref(node);
+>>           __bpf_lru_node_move(l, node, BPF_LRU_LIST_T_INACTIVE);
 > 
-> This is not the common LRU map use case. The bpf prog usually does a
-> lookup first, finds the entry, and then directly updates the value in-
-> place in the bpf prog itself. If the lookup fails, it will insert a
-> _new_ element.
-> 
-> When the map is full, eviction should actually be triggered regardless.
-> For an LRU map that is too small to fit the working set, it is asking
-> for trouble.
-> 
-> From the syscall update, if the use case is always updating an existing
-> element, the regular hashmap should be used instead.
-> 
-
-Thanks for the explanation.
-
-While the common use case is indeed to update values in place after a
-lookup, small-capacity LRU maps are not forbidden today, so the
-unexpected eviction behavior can still be observed in practice.
-
-I have been asked about data loss with a 110-entry LRU map before, and
-in that case my recommendation was also to use a regular hash map instead.
-
->> Fix this by first checking if the key exists before allocating a new
->> node. If the key is found, update the value using the extra lru node
->> without triggering any eviction.
-> 
-> This will instead add overhead for the common use case described above.
-> The patch is mostly for getting a selftest case to work in a small LRU
-> map. I don't think it is worth the added complexity either.
-> 
-
-Given this, instead of pursuing this change, I will update the selftests
-in 'tools/testing/selftests/bpf/prog_tests/percpu_alloc.c' to make them
-more robust and avoid CI failures.
-
-> Patch 2 and 3 look ok, but they also only make marginal improvements on
-> the existing code.
-> 
-> pw-bot: cr
-> 
->> +static int htab_lru_map_update_elem_in_place(struct bpf_htab *htab,
->> void *key, void *value,
->> +                         u64 map_flags, struct bucket *b,
->> +                         struct hlist_nulls_head *head, u32 hash,
->> +                         bool percpu, bool onallcpus)
->> +{
-
-[...]
-
->> +err:
->> +    htab_unlock_bucket(b, flags);
->> +
->> +err_lock_bucket:
->> +    if (ret) {
->> +        bpf_lru_push_free(&htab->lru, node);
->> +    } else {
->> +        if (l_old && !percpu)
->> +            bpf_obj_free_fields(map->record, htab_elem_value(l_old,
->> key_size));
-> 
-> Does htab_lru_map_update_elem() have an existing bug that is missing the
-> bpf_obj_free_fields() on l_old?
+> init the hash value later (after releasing l->lock) is not correct. The
+> node is in the inactive list. The inactive list is one of the rotate and
+> _evict_ candidates, meaning tgt_l->hash will be used in
+> htab_lru_map_delete_node(). In practice, it does not matter if
+> htab_lru_map_delete_node() cannot find the node in an incorrect bucket.
+> However, it still should not use an uninitialized value to begin with.
 > 
 
-No.
+Thanks for the explanation — this is the part I missed earlier.
 
-htab_lru_push_free() would free the special fields.
+Without additional context or comments in the code, it was not obvious
+why the hash needs to be set at that point.
+
+I’ll drop this change as-is. If you have suggestions for a clearer or
+better way to handle the hash assignment while preserving the required
+ordering, I’d appreciate your guidance.
 
 Thanks,
 Leon
-
-[...]
 
 
