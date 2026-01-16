@@ -1,178 +1,341 @@
-Return-Path: <linux-kselftest+bounces-49135-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5411D2EC23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 10:30:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAFF7D2EC2A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 10:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EB7733045494
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:30:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 39F44301330C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A183570AB;
-	Fri, 16 Jan 2026 09:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79705357A30;
+	Fri, 16 Jan 2026 09:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uVC69cd6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1uBQOYOZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F525356A37
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 09:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC7C242D62
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 09:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768555838; cv=pass; b=bGRASZnBphK6hMvGpEfHpKBE26YgCV06y0TC74O5hYsu3dUSC1KjObCDu0+tSg7//oP76Jq1ik5w84fOMsz8T/DnMPjtNHlRrP6XoVuhAYZP4SfpsobsJ7qqNW2L4gMZ38ReJbMlPMSIy3xbxXyCCwQcn5c4pUx3ee+av7FERwk=
+	t=1768555842; cv=pass; b=jbd4lbVHA/yB0twWfTorRydmAYi8XQjPHIt64LgAUXyy/3s7EpSECvqQ0Kb2JGLUrEkME+2oab8BxKjc8S54yuVE9QmHKP7vw3MKaBqb3LMZ3Q4uG5tM1WtUAdPheN9VXv/4lfXS4S7M2eYw6CJ1AlfKarD/3zIHR43w6nkQwL8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768555838; c=relaxed/simple;
-	bh=6KNEvfQtXcIY1fNeyduAVcCO0ceL2Qnv40SDH7bOgto=;
+	s=arc-20240116; t=1768555842; c=relaxed/simple;
+	bh=w6sYV/AUyf270NsloBcksa9+y2sFqJCpbebqaVD1ai0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UFzlQd40rvRbUVIlg/ZAQEAnJLDOzuOnxZ2lSI7PSqwmUd+kH15HkflEAwYfEFEPujKjt2LI/hls8EcX07YJo+jIxobnSBdy+stHF97KPqvw+Gw688fEIpC+l7h4uUk6Q9z75n3W6ALHz1gFViAqF3b/vlNE+XTyOxlaD3JwfH4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uVC69cd6; arc=pass smtp.client-ip=209.85.128.52
+	 To:Cc:Content-Type; b=WRZHuEbwaUtBMjodGr2kLNuz8ZitAjpiDeyLXQIQKeL1/aHBWGROV/1x05t/iZPcnbbD5EIRbQ0Z/YESxDKLvpM/XdEZKvFmUtN5rL+YuL4Jk/lLLRUh+hqHMyiobIaLn438QCgii/fYR/aJOZY9nFWwz3AmfFHPyMQMzA0ciK8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1uBQOYOZ; arc=pass smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so21478935e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 01:30:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768555833; cv=none;
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47ee974e230so16074325e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 01:30:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768555836; cv=none;
         d=google.com; s=arc-20240605;
-        b=Mw0t0cCWc/lzMXjcWfocGlyZyGIWefz5GkAEUqKLLNMqm/Vplc6x1OF9ThPlk2EobV
-         7HQGCxxjFyo2pcL71paCJyS5lbiOSufd2RPacByRuyyHuYsXFlGtAH53UNEWoatwzTwx
-         NwqaYugKrwufb6nCMSab3QX3j8MUplFCkZxCd0Aodil5iMrlnK9CikpvGKBcPjpCN49R
-         j9a0zGVuqs+zCKlM1jqiP+1xV0NvQfP59ATgQQeEgmPjFKTx2cp4MO8OmLXvumJ+AE6t
-         Y+bUjS7vlY8nPR3jjt1Gd53vEwvY0QPyBo0jkI8RRRTkz9hVapPC6BjHXunRa7CTZvbI
-         BLdg==
+        b=PEg6LieFAZamvNyyxEbI1jRQ3dUSSEQ0l7VjXBoCSsih5p7JODwnZFkVzjb3/wADk3
+         72s5G8VIzEAY37ZYCpCeZGRaYawkws+cnbvDNXnMXTTTqIr5ZHdpzYDNO8gPJn7o2IIm
+         Opu8Xi4j2+F1md5P2CG3X343GeWHhWxG54oFy9R4y1UZgFojbcYi1jluUO+W4IKovqmM
+         e6/XjQTsFwqPvQpl7xTgk4E75p0DcWe8SAE50pPzUOBpHreC5AKZdeuKWFjmecWLl7kq
+         HveDVZlQ3q5zmVq7Y1iQVO1xN67F0U+0PeDcR1T6i0P2/XO0fdIVD/CHMVaxrN638zHO
+         gXOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=dAUl0GMblGI56X30SIR3EDBwPD5EPhbwzVLX3i/wRUc=;
-        fh=N+XU5fvaoF/fQiOStCUEbqliGa7bEK05FMli8ap3NvI=;
-        b=DOd+/QWFH+IK1bRHqklQfmeoM+liUzeZvAb0+OT1m6lsnZb9FJvHsygWhyFwi+emZ0
-         JK4ays0+8KOoBUlVplQ+gvK2ru8sUa2h2hZstF4mn/SLvEbOEQk/gMS1C1TvD0S/kJ32
-         IGgkIFtIhRw0kE8tjUwMDpBCrhZ7JRRjWh+d3AHJy0rOV+xKuzX3DENOR75uKy/1cBTo
-         +M5ruyvFtLClWi9MwJGMiffkqcWmUm0qdT7e/V/FKVXOAWddl/kTWeZMDrOr3loUPT9k
-         8VGtYyzCFsAojAHpzImb542NCYat9m2ojlRK0yoDV18KVqHrwBW9erMBPeMFpPnugBKx
-         4qnw==;
+        bh=OntQoz3I9EUsl3kN0fTTi6tO3SgZ8DSb/O0cRDbjxwQ=;
+        fh=bUAloTkJUMVoPp+RbR7sHeVLbwTVOxpJTXItb06nQxY=;
+        b=gjQH8XNSvYH7WwgmywXFm1V2EkhvRmNZvyIb7EjFByo3GoiTm83QEaYlDQoOBpKQ3Y
+         mv1CONtvOt1yNuYMyW+EExf7Sdv0pjDxJNAGmPooOTd3v4mKlQL4HVyaTrfCbBRVYf5N
+         B40C7cUcCqQAy+8iIv9uSNnQ4kQp6Q1o3eTFJi+NE91Gis5SmlyqdVkOBUEM7KubrNen
+         YmIN9mqcfRWU2eOtfvWqcDA10drOFEDSlIAoULrE++vUiVklEWxJwh6gIIXTU0LioYU0
+         2vmwfj+TELMinEdTh0rnb6zak4fsjMcNMMBs6PoDAW1sit+Axdoy/Mo7ts4k+abskOjs
+         yTmQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768555833; x=1769160633; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1768555836; x=1769160636; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAUl0GMblGI56X30SIR3EDBwPD5EPhbwzVLX3i/wRUc=;
-        b=uVC69cd6dl6d8YnNQASyqg34rpdn4iaK8hF3/aPMgntfZj8ZESUCav8GuyCO5j8xxx
-         SZ3bCHre8V1au1tPzsAfO4DBY3YeWH0cdpj8pIPvBnb1lXqtp7Q/QwXYGetLC+6lUUCI
-         gergBMtKhGG6IUyvuwNblGHvLO1VeKDbp7fj36qJBaGY3nDvEZAHoKZ5EQuQ2+axbs+D
-         58roJE4r2672W/QC7CSUAcSgS578JgVGYHhVjMVMthrk4Sy6HeJNvE2dsIp9Nym7Lcpw
-         EwJMfkdFD6x6ZBweY9ACxoLKr/+MFUi0KZsC/Rt2IQqin9iLUpV7mBm8pBrm/jpAPV8S
-         WSDw==
+        bh=OntQoz3I9EUsl3kN0fTTi6tO3SgZ8DSb/O0cRDbjxwQ=;
+        b=1uBQOYOZKTWMyNuA58dPMJ0YH4JoF0uh7HDBHZHErMQWm9UTQcexdzh2yrpbBhi2iJ
+         19UTiyDcK/tPbkH4AMZkS6c9R1A9ksQOqzvfUa52z3uWECg3stRu3DjT0ITdNWtuDs0W
+         x8lLyBVxM8h1X/sexWgKniC/vrdmwPu0xXxMc1fdESoI57M+3NP7xQ6EzJLiyWoAd3TH
+         lfbz7YUWc1/JdQRlGCvPkNTCUcOAmN/nNxyIL/gRn9lt1bsTxrn/1FXqlPptmyoGziwM
+         2ZCfY1d+9SHGap8JGRTMuM2OhLIsg2Cj2nDg2y6a7eLbFSQRU/zAwusfThkwGfTxrou7
+         sRbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768555833; x=1769160633;
+        d=1e100.net; s=20230601; t=1768555836; x=1769160636;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dAUl0GMblGI56X30SIR3EDBwPD5EPhbwzVLX3i/wRUc=;
-        b=YnpXpOzAglwKGnq82eb8R6eXCNh2z4LjDMMGwDABfUOxMtUB8J9+o/FqZd/tUa4Wqo
-         DR8JVqncdzIsdSg9a7sKUFGkwXnwu6gi1W3wFX75cxHDQtcVhvnAoO4mo+QJ6bpjg6mo
-         OzfiAgrF2sLmQGvCjWS6bUS7qVQGne54DE/0EF6H17x30Iplk+zr20zMmT2BE7ElqLug
-         oopSClmMdcA9Dkcmih6ufunBgtGbc5wTr1jxxy3V0Ulurfhjbpgi6Kc4txiIOq9ziM9O
-         XKFGoz5Q44HaPG7vOsTbyurbtqzYfC7Ltq4aoVnzm32O2iwuqleibn29Gq8xG40kLpV8
-         FOJg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzbi29mwBrTYMmuxz4IjeK5UBN/7ApkhiwEP6sVUgPz8HILAfiyrmA623KSdbEtv2ZR7MOLl3aGUfen2jogz0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyW4iPL2SAUOxdomDByh5fng7wQcE2/HxI/ifcvvTzb0pB/VWp0
-	81HZ7RFRIzwcvr5foUTZf8oBa2VQNgVGL5rAdZwWrol+OKYAb23rJyPXviQApIS7UqCoG290dH7
-	JdxcYXDlly81BfTjuuPRQiCSCo1NVU1nZenyxeOKE
-X-Gm-Gg: AY/fxX6TEEnA5XnQF+zoThfaZ/eM9B+vSBdG4OrTK4mJeUAZ1DTg3AaHPnEU3wNjJtn
-	+DvUetKwCFWP454F9KiYY2Az9dauQecSmma5Sakwa/I9BIqsHsLH9s6WYIt8b59UvWX51BdsG/d
-	S8TIJnzuqIqVBCBDQoSiPezA46rjheW0nbXQ5Vc6nbkibfA1tUGC0XRzlqz+4FT4ziUTyH9uiN/
-	VrlIwo0rPaJSsgVZBPzj7eRYrNhn+R3nGhpJ5TRtOgajoFO5m/xocNeeHooF3zKZVcbZg==
-X-Received: by 2002:a05:600c:4e50:b0:47d:18b0:bb9a with SMTP id
- 5b1f17b1804b1-4801e34dafbmr25638165e9.33.1768555832421; Fri, 16 Jan 2026
- 01:30:32 -0800 (PST)
+        bh=OntQoz3I9EUsl3kN0fTTi6tO3SgZ8DSb/O0cRDbjxwQ=;
+        b=o6qhRyruOOOU35LK9volDXGKB037lTJWwGubckw6H84PBvipupCho9frEdrI+WRdgh
+         94s691fc0UG1oMuJ5iiWwPP4qnQuimp+p8GOyPo+dkznnm2HOXauGRlINg0AHwOu9JTr
+         N2SCS41negD9MYh7laopiN8pdkujXqZrmiPSfVmofeLSXb9WCKcSHWoY9HSxqVrUV3BX
+         l1c0SmzIISoB2m4F1QBOJwIM9HrW4faF+ZvIbobFMD1ZDXnj/kcUDboqapWalngojJO2
+         ghkwnu+14DhuaFOGhIrg0FUws55cQSrnxYxQYEh6JASUhCpTcyvWnu5NoqoH6Lw2OP53
+         QENg==
+X-Forwarded-Encrypted: i=1; AJvYcCXuGCpI9zfLlpZ0CjSD3X+lpZL0LfApPtxDmaYmCTpOSiDD4/nE49kb4g5XAthSYNZbQvvhKlzxFvrQwh1wlK4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJIDAUJrNnW7TRTJjvPxsVb0QSYk0C/OVpicyYYhwENrtDHjqk
+	VG+oDBBlazL6sd17ExViHxvQPOFPKCoWsDgeQKb/BibwfxuJIt6ojFcvHsrHhueMVRtoqFK/Ns/
+	HbEVDAuJTEwgV4ulom3EYoemmJBYm1gZydyIHZ9q/
+X-Gm-Gg: AY/fxX49V1M6HIwYz48ebROFvI/cpB3ggnDC/tdkutWf5jkbba/YAm4Mt/X1bzBifei
+	J+A7nRcmtbJJvmVOqPwgFc7Bl7nItHU3rPJftm9KQ7aOLVHYO9pfTJivJA3EXf+H9T0bLDptngt
+	pSPHaXDmujPEc+/83nvrn5grLfmSES+WVGDUghfPSvfGLsIHWcEZia3oo8tPDbXhQs6Uk56Wc5U
+	ulAiTJPORxsW1VOI+5RGWcCPZ21qP4L2NlD7HYoL8aQYzyBL8FSstQiE5cYKSUBU1CWnQ==
+X-Received: by 2002:a05:6000:2988:10b0:431:808:2d32 with SMTP id
+ ffacd0b85a97d-43569972f16mr1760851f8f.7.1768555835970; Fri, 16 Jan 2026
+ 01:30:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260112041322.2168-1-always.starving0@gmail.com>
-In-Reply-To: <20260112041322.2168-1-always.starving0@gmail.com>
+References: <20260115-kunit-completion-v1-1-4de6564962c4@gmail.com>
+In-Reply-To: <20260115-kunit-completion-v1-1-4de6564962c4@gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 16 Jan 2026 17:30:19 +0800
-X-Gm-Features: AZwV_Qju1iQ5ldQ5W0MvdzQFEWskCs2-eM2KChk-yMN2FCHphFFxNC6XmryzbtY
-Message-ID: <CABVgOSmnqS5Qy=HVFTj_JivoBggKvw-iKaX==4C0SGLK82Tf6w@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: suppress confusing error output in test
-To: Jinseok Kim <always.starving0@gmail.com>
-Cc: brendan.higgins@linux.dev, raemoar63@gmail.com, 
+Date: Fri, 16 Jan 2026 17:30:22 +0800
+X-Gm-Features: AZwV_QhfntKzWRKn8eedZ2ZfHJTcL48vYxb_AbvQqRBtGp1aNuBGm3qt5xljFg0
+Message-ID: <CABVgOS=Yn3K+Xzq_3tb0LCrX2eJjU5AG38uMwHaa21nXfxsjEQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: add bash completion
+To: Ryota Sakamoto <sakamo.ryota@gmail.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
+	Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000032ca6f06487dfe89"
+	boundary="000000000000679d7e06487dfe13"
 
---00000000000032ca6f06487dfe89
+--000000000000679d7e06487dfe13
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 12 Jan 2026 at 12:14, Jinseok Kim <always.starving0@gmail.com> wrote:
+On Thu, 15 Jan 2026 at 22:54, Ryota Sakamoto <sakamo.ryota@gmail.com> wrote:
 >
-> When running kunit_tool_test.py, the test_run_raw_output_invalid test
-> prints invalid usage text and error messages to stderr. This happens because the
-> test triggers kunit.main() with an invalid argument, causing argparse to
-> print the usage and exit.
+> Currently, kunit.py has many subcommands and options, making it difficult
+> to remember them without checking the help message.
 >
-> This output is confusing to the user because it looks like a test failure
-> or usage error, even though the test passed successfully. Furthermore,
-> argparse displays 'usage: kunit_tool_test.py run ...', which is misleading
-> since the test script itself does not accept the 'run' command.
+> Add --list-cmds and --list-opts to kunit.py to get available commands and
+> options, use those outputs in kunit-completion.sh to show completion.
 >
-> This patch mocks sys.stderr in the test to suppress this expected error
-> output, making the test execution output cleaner.
+> This implementation is similar to perf and tools/perf/perf-completion.sh.
 >
-> Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
+> Example output:
+>   $ source tools/testing/kunit/kunit-completion.sh
+>   $ ./tools/testing/kunit/kunit.py [TAB][TAB]
+>   build   config  exec    parse   run
+>   $ ./tools/testing/kunit/kunit.py run --k[TAB][TAB]
+>   --kconfig_add  --kernel_args  --kunitconfig
+>
+> Signed-off-by: Ryota Sakamoto <sakamo.ryota@gmail.com>
 > ---
 
-This has been slightly annoying for a long time, so thanks for fixing it.
+This is awesome!
 
-One minor nitpick in the commit description, otherwise this is good:
+Two small suggestions:
+- Could we add './tools/testing/kunit/kunit.py' to the list of
+commands? That's what's recommended in lots of documentation, emails,
+etc.
+- It'd be great to rebase this on top of kselftest/kunit -- there's a
+conflict with your previous patch.
 
-WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit
-description?)
-#11:
-prints invalid usage text and error messages to stderr. This happens because the
+Otherwise, this is great!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
-
->  tools/testing/kunit/kunit_tool_test.py | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  Documentation/dev-tools/kunit/run_wrapper.rst |  9 ++++++++
+>  tools/testing/kunit/kunit-completion.sh       | 33 +++++++++++++++++++++++++++
+>  tools/testing/kunit/kunit.py                  | 30 ++++++++++++++++++++++++
+>  tools/testing/kunit/kunit_tool_test.py        | 21 +++++++++++++++++
+>  4 files changed, 93 insertions(+)
 >
+> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
+> index 6697c71ee8ca020b8ac7e91b46e29ab082d9dea0..3c0b585dcfffbd3929d0eef1ab9376fa4f380872 100644
+> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
+> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
+> @@ -335,3 +335,12 @@ command line arguments:
+>
+>  - ``--list_tests_attr``: If set, lists all tests that will be run and all of their
+>    attributes.
+> +
+> +Command-line completion
+> +==============================
+> +
+> +The kunit_tool comes with a bash completion script:
+> +
+> +.. code-block:: bash
+> +
+> +       source tools/testing/kunit/kunit-completion.sh
+> diff --git a/tools/testing/kunit/kunit-completion.sh b/tools/testing/kunit/kunit-completion.sh
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..3b9b68e3bc384c026f10f74b8a1df2129cb2cd50
+> --- /dev/null
+> +++ b/tools/testing/kunit/kunit-completion.sh
+> @@ -0,0 +1,33 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +# bash completion support for KUnit
+> +
+> +_kunit_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+> +
+> +_kunit()
+> +{
+> +       local cur prev words cword
+> +       _init_completion || return
+> +
+> +       local script="${_kunit_dir}/kunit.py"
+> +
+> +       if [[ $cword -eq 1 && "$cur" != -* ]]; then
+> +               local cmds=$(${script} --list-cmds 2>/dev/null)
+> +               COMPREPLY=($(compgen -W "${cmds}" -- "$cur"))
+> +               return 0
+> +       fi
+> +
+> +       if [[ "$cur" == -* ]]; then
+> +               if [[ -n "${words[1]}" && "${words[1]}" != -* ]]; then
+> +                       local opts=$(${script} ${words[1]} --list-opts 2>/dev/null)
+> +                       COMPREPLY=($(compgen -W "${opts}" -- "$cur"))
+> +                       return 0
+> +               else
+> +                       local opts=$(${script} --list-opts 2>/dev/null)
+> +                       COMPREPLY=($(compgen -W "${opts}" -- "$cur"))
+> +                       return 0
+> +               fi
+> +       fi
+> +}
+> +
+> +complete -o default -F _kunit kunit.py
+> +complete -o default -F _kunit kunit
+
+Can we add:
+complete -o default -F _kunit  ./tools/testing/kunit/kunit.py
+
+as well?
+
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index cd99c1956331dbbfb06cf4ddf130db3dcf2a7c31..a5aee1eb88e65fa2387b2623642d2ee9a66db600 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -323,6 +323,17 @@ def get_default_jobs() -> int:
+>                 return ncpu
+>         raise RuntimeError("os.cpu_count() returned None")
+>
+> +def add_completion_opts(parser: argparse.ArgumentParser) -> None:
+> +       parser.add_argument('--list-opts',
+> +                           help=argparse.SUPPRESS,
+> +                           action='store_true')
+> +
+> +def add_root_opts(parser: argparse.ArgumentParser) -> None:
+> +       parser.add_argument('--list-cmds',
+> +                           help=argparse.SUPPRESS,
+> +                           action='store_true')
+> +       add_completion_opts(parser)
+> +
+>  def add_common_opts(parser: argparse.ArgumentParser) -> None:
+>         parser.add_argument('--build_dir',
+>                             help='As in the make command, it specifies the build '
+> @@ -374,6 +385,8 @@ def add_common_opts(parser: argparse.ArgumentParser) -> None:
+>                             help='Additional QEMU arguments, e.g. "-smp 8"',
+>                             action='append', metavar='')
+>
+> +       add_completion_opts(parser)
+> +
+>  def add_build_opts(parser: argparse.ArgumentParser) -> None:
+>         parser.add_argument('--jobs',
+>                             help='As in the make command, "Specifies  the number of '
+> @@ -569,6 +582,7 @@ subcommand_handlers_map = {
+>  def main(argv: Sequence[str]) -> None:
+>         parser = argparse.ArgumentParser(
+>                         description='Helps writing and running KUnit tests.')
+> +       add_root_opts(parser)
+>         subparser = parser.add_subparsers(dest='subcommand')
+>
+>         # The 'run' command will config, build, exec, and parse in one go.
+> @@ -603,12 +617,28 @@ def main(argv: Sequence[str]) -> None:
+>         parse_parser.add_argument('file',
+>                                   help='Specifies the file to read results from.',
+>                                   type=str, nargs='?', metavar='input_file')
+> +       add_completion_opts(parse_parser)
+>
+>         cli_args = parser.parse_args(massage_argv(argv))
+>
+>         if get_kernel_root_path():
+>                 os.chdir(get_kernel_root_path())
+>
+> +       if cli_args.list_cmds:
+> +               print(" ".join(subparser.choices.keys()))
+> +               return
+> +
+> +       if cli_args.list_opts:
+> +               target_parser = subparser.choices.get(cli_args.subcommand)
+> +               if not target_parser:
+> +                       target_parser = parser
+> +
+> +               # Accessing private attribute _option_string_actions to get
+> +               # the list of options. This is not a public API, but argparse
+> +               # does not provide a way to inspect options programmatically.
+> +               print(' '.join(target_parser._option_string_actions.keys()))
+> +               return
+> +
+>         subcomand_handler = subcommand_handlers_map.get(cli_args.subcommand, None)
+>
+>         if subcomand_handler is None:
 > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index bbba921e0eac..7a8ba8e4f1d4 100755
+> index bbba921e0eacb18663abfcabb2bccf330d8666f5..a7f09a6c97a473ff85e087d17c2f5faf7755b994 100755
 > --- a/tools/testing/kunit/kunit_tool_test.py
 > +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -8,6 +8,7 @@
->
->  import unittest
->  from unittest import mock
-> +import io
+> @@ -11,11 +11,13 @@ from unittest import mock
 >
 >  import tempfile, shutil # Handling test_tmpdir
 >
-> @@ -688,8 +689,9 @@ class KUnitMainTest(unittest.TestCase):
+> +import io
+>  import itertools
+>  import json
+>  import os
+>  import signal
+>  import subprocess
+> +import sys
+>  from typing import Iterable
 >
->         def test_run_raw_output_invalid(self):
->                 self.linux_source_mock.run_kernel = mock.Mock(return_value=[])
-> -               with self.assertRaises(SystemExit) as e:
-> -                       kunit.main(['run', '--raw_output=invalid'])
-> +               with mock.patch('sys.stderr', new=io.StringIO()):
-> +                       with self.assertRaises(SystemExit) as e:
-> +                               kunit.main(['run', '--raw_output=invalid'])
->                 self.assertNotEqual(e.exception.code, 0)
+>  import kunit_config
+> @@ -855,5 +857,24 @@ class KUnitMainTest(unittest.TestCase):
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test1', filter='', filter_action=None, timeout=300),
+>                 ])
 >
->         def test_run_raw_output_does_not_take_positional_args(self):
+> +       @mock.patch.object(sys, 'stdout', new_callable=io.StringIO)
+> +       def test_list_cmds(self, mock_stdout):
+> +               kunit.main(['--list-cmds'])
+> +               output = mock_stdout.getvalue()
+> +               output_cmds = sorted(output.split())
+> +               expected_cmds = sorted(['build', 'config', 'exec', 'parse', 'run'])
+> +               self.assertEqual(output_cmds, expected_cmds)
+> +
+> +       @mock.patch.object(sys, 'stdout', new_callable=io.StringIO)
+> +       def test_run_list_opts(self, mock_stdout):
+> +               kunit.main(['run', '--list-opts'])
+> +               output = mock_stdout.getvalue()
+> +               output_cmds = set(output.split())
+> +               self.assertIn('--help', output_cmds)
+> +               self.assertIn('--kunitconfig', output_cmds)
+> +               self.assertIn('--jobs', output_cmds)
+> +               self.assertIn('--kernel_args', output_cmds)
+> +               self.assertIn('--raw_output', output_cmds)
+> +
+>  if __name__ == '__main__':
+>         unittest.main()
+>
+> ---
+> base-commit: b71e635feefc852405b14620a7fc58c4c80c0f73
+> change-id: 20260114-kunit-completion-265889f59c52
+>
+> Best regards,
 > --
-> 2.43.0
+> Ryota Sakamoto <sakamo.ryota@gmail.com>
+>
 
---00000000000032ca6f06487dfe89
+--000000000000679d7e06487dfe13
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -262,14 +425,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgt8+AS2L6Ft8pLQmAnzq5qdCYcn8s
-IKTbFbo9zJ7f8+gwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
-MTE2MDkzMDMzWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgDUWk8rEMZgpcEMAO3/v+59ldsjga
+qfYEdnoViiZtLO0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
+MTE2MDkzMDM2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAf4FyH+tR6AR+lg4OFwEEV28DaQvNFSGw3QzfVXw6kAlvboU33ZV9uVFigiFCvWfT
-Rpf6GmMrodgtq6qu9lRJtH/mNkJJkCcmDpMiPcZYurojiixInJFe35z03Ga/h3KBPfqwfibYdSsd
-KQlDM+EwnE0Jjk9w6e3FGhbXPngBv3fXCTuzdb1N4B322LU99SG45WFllmaER5HCjBgd6MuEyHfj
-o0w70dBCSlXyPyYhxrB4BVEmwf8b5dKzQqDzn0VjnPN/O3Es3nJUj+98Q/j6+HEW7aFVAEQyEQLc
-D1TJbslQQJ+WVGSUr/2eXlQEKyTAfg34F3PhQXRZVjVD51JHHQ==
---00000000000032ca6f06487dfe89--
+AQEBBQAEggEAkdKfpvd/lmCz0a4D82FKAiM60g0fAIodYpbhWZ41BPFlbkoMtue7QC+A/jd2VaaU
+ZtytmeQAKYip5FXb4No6VAhZoHRI/WhQOHI076YVjXr40EVSr8TJZtbq76JHzt/V+kGzafpZ9CgV
+BDUdA6/cxEnWQd6JOQbi5WdUPq0hz76oPYaUktMbV3cywdCToOcHc5r2b7GjNAcptebiwgRn7C5L
+Dc38nXoHe/2JqEWrgQ2QZISPLR2bBEBoZ0JFNlxvxn22mgcBqJPOJG9Ad20kjTVOicVwvbNeuY+R
+vNX1BY6x2SJ7bYPol7nBRAtUopiS0kNlbbQqG4ux7w/8vI1EiQ==
+--000000000000679d7e06487dfe13--
 
