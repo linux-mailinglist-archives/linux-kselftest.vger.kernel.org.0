@@ -1,144 +1,262 @@
-Return-Path: <linux-kselftest+bounces-49154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11C5FD32CC0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 15:43:41 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC372D33003
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 16:01:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B90803019197
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 14:38:53 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8D19E301CA30
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 14:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A81039341F;
-	Fri, 16 Jan 2026 14:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C9739341D;
+	Fri, 16 Jan 2026 14:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B/srJcu2"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="F0NxxFs7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.156.205.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EF239341E
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 14:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530D623D2B2;
+	Fri, 16 Jan 2026 14:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.156.205.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768574331; cv=none; b=flBi6ddsPoUK1FsE9ia0I9+WzOAiTMzKbLDWFc1ZK4IFI+k4NEHp2j21JbC33MT/aihTMu6BBAJSx4kjGxkjdC7i4mXORSgxEdXreJQZKZwSxREnk0Kn7GR2WJ2S5eaMlUuGLdECRtJAZddSjEcM43BycHprZaFvyBopRvbLnfw=
+	t=1768575383; cv=none; b=DAAEL/ythQC9dcNK4inEoLJdHBLeXIDYhp8B/zWP9QzKE9IvYa7r4za6VGrKDLtjbSnbrrKaAg6fmYVJwqsigEU4TOSFsU/qs2NVk/atVu1NdRRuSNdT5qFz/e+8h6TEWup4KibdcunnSVwzyCIw+2qymXLJMQWytk68tx1iDpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768574331; c=relaxed/simple;
-	bh=CeYWVW8VfM0P+9OVOOOqSKgq9221JvmOkwmMFowPykI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G1OV0TRknb7G3mDkEeQe9Vv1UWPBYKZY8A2fO6HRhYXT4AXZH9xfR/DB0r3Vk2DeYpX8+zg7y1NhVXc1GCPfJdyz/KjGRiN2JyNivYEfLsOuxFFuZ2dS3HXVGKPQLPEQ68VsaynrVUjQusppTRPEVFVGK9Kj+WwzAzrZOcm8q10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B/srJcu2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFA6C2BC87
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 14:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768574331;
-	bh=CeYWVW8VfM0P+9OVOOOqSKgq9221JvmOkwmMFowPykI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=B/srJcu2r3cvdNI6HK8d6Kg+l8A/v0Bq/olfgH6KG4o4xi62a0HXFRi5TFQmV5H1e
-	 Lwi5/BvbmXsSS7NPOUaYqpumCEL4zeX6crZaRQD7MiDre21uViPRRmmffUkxIzV44b
-	 LpBtlAFE6FRI1B6MLnK9FQVcLCg/fadTDmAsh8vycF7ga6NY/js9LXphuCkn2lsuZJ
-	 sF6JvSaoZ5O5bV364tAHmRJEKNwHyyUkaWz6i7uua79W42zncyDuvWzR+b+AIcjfCg
-	 WttAs6nIuC81VUD48JLawqHW4N4IiIh1Fekt7D/S9sqtjKe7ey+awNDDL8iStuOnlC
-	 AlUXeDS+LReJA==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59a10df8027so2402755e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 06:38:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVADS1BTa9xjj9QCFhmbep90p+fG+tzF5WOvOVIIrVuA2RJfj9O1PGbFam+zph4b7W6YGdp1Mb+juQ4Pzlo32I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl90+IBYPqpvKZZCUbBW7HWZzzLMKo5xa8hph17jtELAHwVf65
-	9BLQP3MOCVsjf+Al8Yp2IgDZ/kVN/lzUJdTVZZtHeLQLLW58id3fVrVyMlXKVVOfUMk3q3pMl5P
-	DFCylAqJn5g6DzsNGnivhCTXCwfRl6hNFKSJE5NUrgw==
-X-Received: by 2002:a05:6512:2209:b0:595:910c:8eea with SMTP id
- 2adb3069b0e04-59baeedb8d0mr1047903e87.32.1768574329704; Fri, 16 Jan 2026
- 06:38:49 -0800 (PST)
+	s=arc-20240116; t=1768575383; c=relaxed/simple;
+	bh=BxZnyiI6YgvskaCwpGEH+hfPdJiGYdOF3yczju02EHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=b/JAdQvUEdGVM+Wf43S6WyAWz2pkI/+ltYRfr9jVv8atARLfFnvYYu6uZZ+ioq/OzyIRaVX5G8+98jiprqI+JZmvarV7Gm1ZE0n6SzfarpNFy+wXaglFbdaXlH2t+OeQec0rz2gGBxMV4uWt/GS0FVjUyJ4kUVyXCZMzwfsVGXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=F0NxxFs7; arc=none smtp.client-ip=18.156.205.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1768575381; x=1800111381;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=IEO4wkDrWsP8gb8dVRwVt7tfKvgBUuiF6zz/e0uDn6E=;
+  b=F0NxxFs7rBOpuPtGdmPKFR/XqYq1t+f3Brm9bFysGyZrP3gPftBLJw/i
+   Wh5P7IUKOKdVho9MP82TqY40LlX9qP84QSwMeu8tPY5QUX8wuwUybHvAH
+   ovqE+OvhOcMUrNusqjSXCf90nYcXKoL1nmKlKiRksCwwYPAcn568K2rpj
+   Zq6R4GcTOUEWuLLs1x6zuDKdmkaZFhFTLRDGI0/wt7b+qSK4UMyO/lLoP
+   u5Xx3nzWkD2eqZJq7uXPn/avRekRG18I3qBE/1WcohS0AA/SxrY5pkt18
+   Dbf/Jtx36fSUWubpBI96UeCyLTkQmvYDq2aPsxNi5NBwhpvT1cyB9L7tV
+   A==;
+X-CSE-ConnectionGUID: t80jrskTRzKiYCPAndralA==
+X-CSE-MsgGUID: hn4FZT+mTRGLqNyYAxxD5Q==
+X-IronPort-AV: E=Sophos;i="6.21,231,1763424000"; 
+   d="scan'208";a="7704673"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 14:56:02 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:3849]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.41.192:2525] with esmtp (Farcaster)
+ id 260b6298-10cb-4eed-9151-e85b598fcfcc; Fri, 16 Jan 2026 14:56:02 +0000 (UTC)
+X-Farcaster-Flow-ID: 260b6298-10cb-4eed-9151-e85b598fcfcc
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUA002.ant.amazon.com (10.252.50.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Fri, 16 Jan 2026 14:56:01 +0000
+Received: from [192.168.12.13] (10.106.82.9) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35; Fri, 16 Jan 2026
+ 14:55:57 +0000
+Message-ID: <6b50a83e-acd7-4db3-ae9b-015ffad4f615@amazon.com>
+Date: Fri, 16 Jan 2026 14:55:56 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260116081036.352286-1-tzungbi@kernel.org> <20260116081036.352286-2-tzungbi@kernel.org>
- <20260116141356.GI961588@nvidia.com>
-In-Reply-To: <20260116141356.GI961588@nvidia.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Fri, 16 Jan 2026 15:38:37 +0100
-X-Gmail-Original-Message-ID: <CAMRc=MfNHuTYsZJ+_RqPN1TtLOHsenv2neD5wvhA18NH6m7XjA@mail.gmail.com>
-X-Gm-Features: AZwV_QgKGGwLD0w6o4kmw7zFNYd6T1XDEchQCsf09zNM0M9ftM2EdmkAv3QwV20
-Message-ID: <CAMRc=MfNHuTYsZJ+_RqPN1TtLOHsenv2neD5wvhA18NH6m7XjA@mail.gmail.com>
-Subject: Re: [PATCH 01/23] gpiolib: Correct wrong kfree() usage for `kobj->name`
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Dan Williams <dan.j.williams@intel.com>, linux-gpio@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v9 02/13] mm/gup: drop secretmem optimization from
+ gup_fast_folio_allowed
+To: Ackerley Tng <ackerleytng@google.com>, "Kalyazin, Nikita"
+	<kalyazin@amazon.co.uk>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
+	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org"
+	<luto@kernel.org>, "peterz@infradead.org" <peterz@infradead.org>,
+	"willy@infradead.org" <willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz"
+	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
+	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
+	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
+	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
+	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
+	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
+	"riel@surriel.com" <riel@surriel.com>, "ryan.roberts@arm.com"
+	<ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>,
+	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org"
+	<kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "maobibo@loongson.cn"
+	<maobibo@loongson.cn>, "prsampat@amd.com" <prsampat@amd.com>,
+	"mlevitsk@redhat.com" <mlevitsk@redhat.com>, "jmattson@google.com"
+	<jmattson@google.com>, "jthoughton@google.com" <jthoughton@google.com>,
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>, "alex@ghiti.fr"
+	<alex@ghiti.fr>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+	"chenhuacai@kernel.org" <chenhuacai@kernel.org>, "dev.jain@arm.com"
+	<dev.jain@arm.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>,
+	"hca@linux.ibm.com" <hca@linux.ibm.com>, "Jonathan.Cameron@huawei.com"
+	<Jonathan.Cameron@huawei.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"pjw@kernel.org" <pjw@kernel.org>, "shijie@os.amperecomputing.com"
+	<shijie@os.amperecomputing.com>, "svens@linux.ibm.com" <svens@linux.ibm.com>,
+	"thuth@redhat.com" <thuth@redhat.com>, "wyihan@google.com"
+	<wyihan@google.com>, "yang@os.amperecomputing.com"
+	<yang@os.amperecomputing.com>, "vannapurve@google.com"
+	<vannapurve@google.com>, "jackmanb@google.com" <jackmanb@google.com>,
+	"aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, "patrick.roy@linux.dev"
+	<patrick.roy@linux.dev>, "Thomson, Jack" <jackabt@amazon.co.uk>, "Itazuri,
+ Takahiro" <itazur@amazon.co.uk>, "Manwaring, Derek" <derekmn@amazon.com>,
+	"Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <20260114134510.1835-1-kalyazin@amazon.com>
+ <20260114134510.1835-3-kalyazin@amazon.com>
+ <CAEvNRgGrpv5h04s+btubhUFHo=d6mBFbr2BVrMt=bWuWOztdJQ@mail.gmail.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <CAEvNRgGrpv5h04s+btubhUFHo=d6mBFbr2BVrMt=bWuWOztdJQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D012EUA003.ant.amazon.com (10.252.50.98) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-On Fri, Jan 16, 2026 at 3:14=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Fri, Jan 16, 2026 at 08:10:14AM +0000, Tzung-Bi Shih wrote:
-> > `kobj->name` should be freed by kfree_const()[1][2].  Correct it.
-> >
-> > [1] https://elixir.bootlin.com/linux/v6.18/source/lib/kasprintf.c#L41
-> > [2] https://elixir.bootlin.com/linux/v6.18/source/lib/kobject.c#L695
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: c351bb64cbe6 ("gpiolib: free device name on error path to fix km=
-emleak")
-> > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> > ---
-> >  drivers/gpio/gpiolib.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> > index 5eb918da7ea2..ba9323432e3a 100644
-> > --- a/drivers/gpio/gpiolib.c
-> > +++ b/drivers/gpio/gpiolib.c
-> > @@ -1263,7 +1263,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *=
-gc, void *data,
-> >  err_free_descs:
-> >       kfree(gdev->descs);
-> >  err_free_dev_name:
-> > -     kfree(dev_name(&gdev->dev));
-> > +     kfree_const(dev_name(&gdev->dev));
-> >  err_free_ida:
-> >       ida_free(&gpio_ida, gdev->id);
-> >  err_free_gdev:
->         kfree(gdev);
->
-> I don't think users should be open coding this, put_device() frees the
-> dev_name properly. The issue here is that the code doesn't call
-> device_initialize() before doing dev_set_name() and then tries to
-> fiddle a weird teardown sequence when it eventually does get initialized:
->
-> err_remove_from_list:
->         if (gdev->dev.release) {
->                 /* release() has been registered by gpiochip_setup_dev() =
-*/
->                 gpio_device_put(gdev);
->                 goto err_print_message;
->         }
->
-> If gpiochip_add_data_with_key() is split into two functions, one that
-> does kzalloc(), some initialization and then ends with
-> device_initialize(), then a second function that calls the first and
-> does the rest of the initialization and error unwinds with
-> put_device() it will work a lot better.
->
 
-In theory yes but you wouldn't be the first one to attempt to improve
-it. This code is very brittle when it comes to GPIO chips that need to
-be initialized very early into the boot process. I'm talking old
-drivers in arch which call this function without even an associated
-parent struct device. When I'm looking at it now, it does seem
-possible to call device_initialize() early but whether that will work
-correctly for all existing users is a bigger question.
 
-I'm open to trying it after v7.0-rc1 is tagged. This would give it
-enough time in linux-next to make sure it works.
+On 15/01/2026 21:40, Ackerley Tng wrote:
+> "Kalyazin, Nikita" <kalyazin@amazon.co.uk> writes:
+> 
+>> From: Patrick Roy <patrick.roy@linux.dev>
+>>
+>> This drops an optimization in gup_fast_folio_allowed() where
+>> secretmem_mapping() was only called if CONFIG_SECRETMEM=y. secretmem is
+>> enabled by default since commit b758fe6df50d ("mm/secretmem: make it on
+>> by default"), so the secretmem check did not actually end up elided in
+>> most cases anymore anyway.
+>>
+>> This is in preparation of the generalization of handling mappings where
+>> direct map entries of folios are set to not present.  Currently,
+>> mappings that match this description are secretmem mappings
+>> (memfd_secret()).  Later, some guest_memfd configurations will also fall
+>> into this category.
+>>
+>> Signed-off-by: Patrick Roy <patrick.roy@linux.dev>
+>> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+>> ---
+>>   mm/gup.c | 11 +----------
+>>   1 file changed, 1 insertion(+), 10 deletions(-)
+>>
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 95d948c8e86c..9cad53acbc99 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -2739,7 +2739,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+>>   {
+>>        bool reject_file_backed = false;
+>>        struct address_space *mapping;
+>> -     bool check_secretmem = false;
+>>        unsigned long mapping_flags;
+>>
+>>        /*
+>> @@ -2751,14 +2750,6 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+> 
+> Copying some lines the diff didn't contain:
+> 
+>          /*
+>           * If we aren't pinning then no problematic write can occur. A long term
+>           * pin is the most egregious case so this is the one we disallow.
+>           */
+>          if ((flags & (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE)) ==
+>              (FOLL_PIN | FOLL_LONGTERM | FOLL_WRITE))
+> 
+> If we're pinning, can we already return true here? IIUC this function
+> is passed a folio that is file-backed, and the check if (!mapping) is
+> just there to catch the case where the mapping got truncated.
 
-Bartosz
+I have to admit that I am not comfortable with removing this check, 
+unless someone says it's certainly alright.
+
+> 
+> Or should we wait for the check where the mapping got truncated? If so,
+> then maybe we can move this "are we pinning" check to after this check
+> and remove the reject_file_backed variable?
+
+I can indeed move the pinning check to the end to remove the variable. 
+I'd do it in a separate patch.
+
+> 
+>          /*
+>           * The mapping may have been truncated, in any case we cannot determine
+>           * if this mapping is safe - fall back to slow path to determine how to
+>           * proceed.
+>           */
+>          if (!mapping)
+>                  return false;
+> 
+> 
+>>                reject_file_backed = true;
+>>
+>>        /* We hold a folio reference, so we can safely access folio fields. */
+>> -
+>> -     /* secretmem folios are always order-0 folios. */
+>> -     if (IS_ENABLED(CONFIG_SECRETMEM) && !folio_test_large(folio))
+>> -             check_secretmem = true;
+>> -
+>> -     if (!reject_file_backed && !check_secretmem)
+>> -             return true;
+>> -
+>>        if (WARN_ON_ONCE(folio_test_slab(folio)))
+>>                return false;
+>>
+>> @@ -2800,7 +2791,7 @@ static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+>>         * At this point, we know the mapping is non-null and points to an
+>>         * address_space object.
+>>         */
+>> -     if (check_secretmem && secretmem_mapping(mapping))
+>> +     if (secretmem_mapping(mapping))
+>>                return false;
+>>        /* The only remaining allowed file system is shmem. */
+>>        return !reject_file_backed || shmem_mapping(mapping);
+>> --
+>> 2.50.1
+
 
