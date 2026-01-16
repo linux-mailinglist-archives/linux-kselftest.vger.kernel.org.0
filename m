@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-49121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E614D2DDE7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:17:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF9B4D2DD16
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:15:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E995530A1EA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:12:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4A38A309FF46
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:12:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A58303A1D;
-	Fri, 16 Jan 2026 08:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1315304BB3;
+	Fri, 16 Jan 2026 08:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vBWBDz9W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6UgG//i"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE7F2FD1C1;
-	Fri, 16 Jan 2026 08:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5B22F8BCA;
+	Fri, 16 Jan 2026 08:12:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768551119; cv=none; b=OETRFsY9pkdIdpfW5Qv2kyNRxrIdz7X30i4yrVzfoRBmAQUxwqTFVPk9fAdOlngOYIUMIak5AGnEO0I68VxEETFJ2s9WeM2ciG3O448VtDZN6SNZlmCYiW2oo/NnlQV9l7BpiDAMMr7VoTyXGMZMm/AvLhfcEGCMF6u9wQ297/s=
+	t=1768551122; cv=none; b=UQuejwD5HC0iT0kgn5kzUKkwAt1b9Sj3RwKqnJjHQjpWFoQWMcR/RWUne1MJhN9qVvgCi8/MJBz6zbEDXemYM/oAvs5Hlgian+8zqpk+o61G/hvniCX21iW8INiwy/DC52Z/gU1KK68jxUBY4LviQdTo09brLs46wI2fhenjYms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768551119; c=relaxed/simple;
-	bh=vyYMV5QhjflcofTLaNItfu44HrOf/uN6d8iFrlO8uOs=;
+	s=arc-20240116; t=1768551122; c=relaxed/simple;
+	bh=M97oTgnSw1sfrxSklOHkGQxBKG5c3HS0FDf1iP0ruEQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HvNyxfTmohj+891C2JrStee5xYYyKTxjaqMObPK55wGavGY+LIwglEuHQarik6139jSdhiP2f6WF/xWlX1eZyIie7713Gtc33JxQR5NqeKHBY7f550i1P1LwHAU5LA0rKHS6hAy8RlS6oUwRLw7P7SZfdpU+XC4Yi1CaExdPoxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vBWBDz9W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1B15C19423;
-	Fri, 16 Jan 2026 08:11:56 +0000 (UTC)
+	 MIME-Version; b=SZyMJJHrhWF6bLMYWnYwO083x1TsmCEv8BsmgAY9xACUev9/U5cXg8RqSiQadAxbL5ig1L7joQ2PDfu9U55WrmPMLKRyr0rMix/qizAsCrsLIxhA/havUA7r1RXpeNf3o78LNPA3FKBUtx6Nm6C5swhaz4xrE7d+hA9KK0wezrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6UgG//i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7501C116C6;
+	Fri, 16 Jan 2026 08:11:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768551119;
-	bh=vyYMV5QhjflcofTLaNItfu44HrOf/uN6d8iFrlO8uOs=;
+	s=k20201202; t=1768551122;
+	bh=M97oTgnSw1sfrxSklOHkGQxBKG5c3HS0FDf1iP0ruEQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vBWBDz9W7QDcLCgO/btne0VY50vcex8VOreTFCRw8HxOp3KfBbLme09Z6ayUuf7AI
-	 cXm11s28nlbDpPsMNh2zx/MBS/+YAcCjMyHhJEJfoL9vgB2IPDmHaDU9CpTQzUPlrX
-	 xmtSQpdoK9Rn7Qa+FEzHCr2kFhhKmZc9mEce0zNCG8WqJvEqANXfECWL7iyurDBz5z
-	 L9/HiPxtjI+Cxr5d69G0pjSyrplfA2744ttFHg3OvxaxiKPZ9+KpdVgpXIGrystqys
-	 j+gCbA6lrOat/8Ez9QffvKmkSStNCBhDqQksU/cSeiMLpUxAkf5IvkpIHq/wC8gugL
-	 VpirQKwZ6vXeQ==
+	b=T6UgG//iLeUIMluCggL3whL1Zmotux70J3SW+L+WErFMIyvBdcvfE04jj1OX3fbRH
+	 UYuAXwPx+wWPo+/7SIw9YFu1tm48Ug6pRH9cRfQhvx2KghKCoVBNYIt13z8mz3EA8L
+	 ecRms+75hOxbfG/O9hykqcOy/AbAVdbg+/vH5wRoqOqhkhRA/XTP+Ka0tQY9LRkZTz
+	 6FsHEnMdc4/++tM7JqEV0Nl2t9R0T/kWWOk4yn8vphGy1p6WWcJAVsLbwoqM229/75
+	 LknmArbRz5R1i3yfS7ms/sgJxSedLHRBWIrL/AXsd7iTrLypcsiKN0LX5FDw9TRp6w
+	 jK6x18bF/Knug==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -59,9 +59,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Jason Gunthorpe <jgg@nvidia.com>,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH 17/23] gpiolib: cdev: Leverage revocable for lineinfo_changed_notify
-Date: Fri, 16 Jan 2026 08:10:30 +0000
-Message-ID: <20260116081036.352286-18-tzungbi@kernel.org>
+Subject: [PATCH 18/23] gpiolib: Leverage revocable for gpiolib_sops
+Date: Fri, 16 Jan 2026 08:10:31 +0000
+Message-ID: <20260116081036.352286-19-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
 In-Reply-To: <20260116081036.352286-1-tzungbi@kernel.org>
 References: <20260116081036.352286-1-tzungbi@kernel.org>
@@ -74,71 +74,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Struct gpio_device now provides a revocable provider to the underlying
-struct gpio_chip.  Leverage revocable for lineinfo_changed_notify so
-that it doesn't need to handle the synchronization by accessing the SRCU
+struct gpio_chip.  Leverage revocable for gpiolib_sops so that it
+doesn't need to handle the synchronization by accessing the SRCU
 explicitly.
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/gpio/gpiolib-cdev.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/gpio/gpiolib.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index 54150d718931..1a4dde56dc0c 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -2522,6 +2522,7 @@ struct lineinfo_changed_ctx {
- 	struct gpio_v2_line_info_changed chg;
- 	struct gpio_device *gdev;
- 	struct gpio_chardev_data *cdev;
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 6226dc738281..cd18ff42b610 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -5376,6 +5376,7 @@ static void gpiolib_dbg_show(struct seq_file *s, struct gpio_chip *gc)
+ struct gpiolib_seq_priv {
+ 	bool newline;
+ 	int idx;
 +	struct revocable *chip_rev;
  };
  
- static void lineinfo_changed_func(struct work_struct *work)
-@@ -2538,12 +2539,9 @@ static void lineinfo_changed_func(struct work_struct *work)
- 		 * Pin functions are in general much more static and while it's
- 		 * not 100% bullet-proof, it's good enough for most cases.
- 		 */
--		scoped_guard(srcu, &ctx->gdev->srcu) {
--			gc = srcu_dereference(ctx->gdev->chip, &ctx->gdev->srcu);
--			if (gc &&
--			    !pinctrl_gpio_can_use_line(gc, ctx->chg.info.offset))
--				ctx->chg.info.flags |= GPIO_V2_LINE_FLAG_USED;
--		}
-+		REVOCABLE_TRY_ACCESS_WITH(ctx->chip_rev, gc);
-+		if (gc && !pinctrl_gpio_can_use_line(gc, ctx->chg.info.offset))
-+			ctx->chg.info.flags |= GPIO_V2_LINE_FLAG_USED;
+ static void *gpiolib_seq_start(struct seq_file *s, loff_t *pos)
+@@ -5397,8 +5398,12 @@ static void *gpiolib_seq_start(struct seq_file *s, loff_t *pos)
+ 
+ 	list_for_each_entry_srcu(gdev, &gpio_devices, list,
+ 				 srcu_read_lock_held(&gpio_devices_srcu)) {
+-		if (index-- == 0)
++		if (index-- == 0) {
++			priv->chip_rev = revocable_alloc(gdev->chip_rp);
++			if (!priv->chip_rev)
++				return NULL;
+ 			return gdev;
++		}
  	}
  
- 	ret = kfifo_in_spinlocked(&ctx->cdev->events, &ctx->chg, 1,
-@@ -2553,6 +2551,7 @@ static void lineinfo_changed_func(struct work_struct *work)
- 	else
- 		pr_debug_ratelimited("lineinfo event FIFO is full - event dropped\n");
+ 	return NULL;
+@@ -5425,6 +5430,8 @@ static void gpiolib_seq_stop(struct seq_file *s, void *v)
+ 	if (!priv)
+ 		return;
  
-+	revocable_free(ctx->chip_rev);
- 	gpio_device_put(ctx->gdev);
- 	fput(ctx->cdev->fp);
- 	kfree(ctx);
-@@ -2599,11 +2598,19 @@ static int lineinfo_changed_notify(struct notifier_block *nb,
- 	/* Keep the GPIO device alive until we emit the event. */
- 	ctx->gdev = gpio_device_get(desc->gdev);
- 	ctx->cdev = cdev;
-+	ctx->chip_rev = revocable_alloc(desc->gdev->chip_rp);
-+	if (!ctx->chip_rev) {
-+		pr_err("Failed to allocate memory for revocable handle\n");
-+		goto err_put_device;
-+	}
++	if (priv->chip_rev)
++		revocable_free(priv->chip_rev);
+ 	srcu_read_unlock(&gpio_devices_srcu, priv->idx);
+ 	kfree(priv);
+ }
+@@ -5439,9 +5446,7 @@ static int gpiolib_seq_show(struct seq_file *s, void *v)
+ 	if (priv->newline)
+ 		seq_putc(s, '\n');
  
- 	INIT_WORK(&ctx->work, lineinfo_changed_func);
- 	queue_work(ctx->gdev->line_state_wq, &ctx->work);
- 
- 	return NOTIFY_OK;
-+err_put_device:
-+	gpio_device_put(desc->gdev);
-+	kfree(ctx);
- err_put_fp:
- 	fput(fp);
- 	return NOTIFY_DONE;
+-	guard(srcu)(&gdev->srcu);
+-
+-	gc = srcu_dereference(gdev->chip, &gdev->srcu);
++	REVOCABLE_TRY_ACCESS_WITH(priv->chip_rev, gc);
+ 	if (!gc) {
+ 		seq_printf(s, "%s: (dangling chip)\n", dev_name(&gdev->dev));
+ 		return 0;
 -- 
 2.52.0.457.g6b5491de43-goog
 
