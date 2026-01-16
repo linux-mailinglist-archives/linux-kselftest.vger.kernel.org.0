@@ -1,304 +1,201 @@
-Return-Path: <linux-kselftest+bounces-49189-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49191-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 549D4D37A9F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 18:47:09 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F91D37AD8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 18:54:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ED24F300ACDD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 17:47:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3715D3027BCB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 17:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1610C33C1A5;
-	Fri, 16 Jan 2026 17:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99EB3A0B0C;
+	Fri, 16 Jan 2026 17:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NP+GWIyA"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ATajx2eA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.74.81.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE011340DB0
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 17:46:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B6BF39C634;
+	Fri, 16 Jan 2026 17:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.74.81.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768585622; cv=none; b=czujKi+beUximVzEcm2faBfVcUvIb4EWBbPpC3cWO8wd/N281lhYIKupknh7fdZJnGOtI9EHfXpJVbG0Lp7Q2grH2M35g1LMnew9FQ0MhBDmlirliyu2PciyLVceO2Ak/aDe1a/rJRPlM4d9TR3TFE6ujUF3shomMUGgx3SwoXM=
+	t=1768585912; cv=none; b=a431GF7gvfVbmyT7I/NDpxIXUG8L9+pURiy+XYdBH0+T4UPnP+QuUF8BsphNCGD4BSOp+RJZONWMKqpfC/GwIRyuO7bZ7T2bPiabXc9U6V0ecJONWbBl8nftj4+lVa7DVJQOHXmvQniEPQQSmI46BBycCkuLE9m6Z6sIk/u1bYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768585622; c=relaxed/simple;
-	bh=S3CI7rQIWs9HJdUvqhIwtwa5rLnoqW9fYA/1FX4zfVU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Uy4xJJDHCW9Ec2ZL3LDknwN4nuLrIGYzlavrJzGQAZ2Yfz50CZlPTaXD6xj49WGHXDTGGPMaXESM3QHerQQmvzpkirn9Mp96budbRchMwXhQpqaophlkAnNSgs6DBvMNmWvoFGEOfjgjKiO/8Yt7jBXVM+JSAb4JMgoYYeMBo7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NP+GWIyA; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a081c163b0so13398985ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 09:46:59 -0800 (PST)
+	s=arc-20240116; t=1768585912; c=relaxed/simple;
+	bh=pH0sjRk5QHkFsF7GNqODJXSxVQ1zsneslUTGuhZpomA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=b50cTB+2Tw4br9C8n3fte439QvVJmWOjIAoRr91vb7UKtbxG83yA/eXzpzUKttWrUdcgocvrQWQszBM/IaqPhO+B3CU5kt1m8viuGo7JAACvHTQn2Q4mDyOkkfnp40eb9yK33Gmmkhybi194F6p9W+M78z+t8//3MVBWwzafJd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ATajx2eA; arc=none smtp.client-ip=3.74.81.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768585619; x=1769190419; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bqprM+/fMABEF2BT0yjlCPRYQsErnl1lQWu3bm8SrTk=;
-        b=NP+GWIyAZLJui2f3BwvN4yRvYZwfqEG7RZu1EXzvuTFO677zumYUcvZZhN57CyrtrD
-         bqVFLtAXXx67z0q7dUn43JdiEBimy90kRnNjD0ZS/YR3f+V7qyPFBskeCR15ikY74qpT
-         9qC+fqCflczSvbJm+J0QdMD8sLh7kZntVuCQC+nQjYAmhan/CJaKrw/VZd6V2IERU0of
-         fe4sTUymMeQT4LIuCtCVxF9RAHlHdGtdpR9xBvl38ncke/3PDg6FD8SJUg92gIeUfKIA
-         oNQ/PU7kFSOO/1rmeyP7NIOY0NLauaCy+51sVmbXmxhvIh5qElOQgFt1e0HK2wz2S20d
-         44AA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768585619; x=1769190419;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bqprM+/fMABEF2BT0yjlCPRYQsErnl1lQWu3bm8SrTk=;
-        b=WIf+F1KEHKcbF7Y7n3fkBXZFpWX1Rh+KFPQKz85POc061g37QtQ4GxWBuOzJ0jeVHZ
-         LWIEifSYCu5/gsKiyMFT+2aNNr9X+0yXnCsR7vjD+rbtcFSggo+WVpSoFN2KzjNfFK+s
-         9trNxb99ZIvtzT4I4ZMcfFWxdUH1fD+H9y+6RjUYz1/PSOOovkeLDNsQcjR7m6EwECcY
-         FPi0qX/BbtU/+trZU4tc6VbwtK5nkxP3hoOLHOJ4TLmuACWDC94Sct442j7szKLs1Gly
-         DW3YXjzqcWj979ngTiXjh+2e1e5NlAZq1nEXsiO1rvwqlsPUViJhGOgZymog/SZY1Cu9
-         1PJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVU/oAJ0dM7uYwSyKlfz+rtKguYR8oUih2RNiao3aZS+cJBuAGTTO0Yi8OfUWQAHsSNmKug7Jsljs0Zz+VwZcA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY8BPBln1BO52nMh85BWuprQtfKxx8f8IpOuMbGd16SqbtPtLD
-	7Dd++NUXLzrvqy6lv9+ZKhyxiMFoCh27mtjvjHi86Xs8qqsdihLANcET
-X-Gm-Gg: AY/fxX5I6W5MewGhL9NVEDuh4UNtUyL7IkM4kuAxCLibgq9L9red5wy22eySPtIJVtC
-	V8rOKPRmHe2f+sTUCPtr6/5PrxH/akl5IqmOJbULed2Ol60I0wXrIhFTRfF8m3E882p2j4xevXa
-	2b0d2gh0IozMHoY5oe3aD+lred4QBzg9v31edQMImFI0EYEmOGy2wVvgdhobRlxf1NLg4T4+BUF
-	JxKBHzsevZI/fBFxBva4LyzPGReWJn4/xUQ+B/5MjbUnaBB7e/TMWMAX3tngZBS4dA1c/xf8sXC
-	S3T8h0b1H9fsTkGwzaV9aXnpk/4GamD2CNkzTvvXEW+RDZLF83CJp/NypWKgRBB73PSvQeQc05i
-	yLMLlpiRa5Y8F9B5WItLuFVa7g6tbVyw3l6zjUQAMBEfKqRsDykwUCI4ICdS7VQimns+MpPsWAh
-	PwHQH98oUej126ue51nu0=
-X-Received: by 2002:a17:903:2f82:b0:2a0:992c:c54e with SMTP id d9443c01a7336-2a7177daea5mr34315265ad.48.1768585618643;
-        Fri, 16 Jan 2026 09:46:58 -0800 (PST)
-Received: from [172.16.80.107] ([210.228.119.9])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7193decfcsm26573895ad.60.2026.01.16.09.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 09:46:58 -0800 (PST)
-From: Ryota Sakamoto <sakamo.ryota@gmail.com>
-Date: Sat, 17 Jan 2026 02:46:34 +0900
-Subject: [PATCH v2] kunit: add bash completion
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1768585911; x=1800121911;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=n3dU03TxGYY3gXB5y1WjelwjMhwgBHF8SdzzakH2Vf0=;
+  b=ATajx2eA22WDfxXGaqIYpQE6LlDeXf6ZrUgI/bqm9epugjnxg3HDKyOd
+   LQlcYnXiEWo/uXMsw7HC0K5bvpIu+ZYfjdCTJGYQLQtdgc4luFxcycG1W
+   7PW6Ny/hcS2Eg2w6AuYJbHJ78KajIuCDGu5YfmOlutOjvzYtDL5Ta4HL3
+   yOQ2lTSW/f1rLyLkuCA4UuR6a2vLiOeI9t9HLgYB7liJcLdB61HS28oMo
+   ifqTDAKVhmURIaVvBfHY08dxtb3glq/v9EpB0kCxOtrPTHVco/bjIKm7p
+   smfuF+HkrxXNCLJeXipY+YiFAXlt/Bd2I1tqRTS+vREPRUFpi7R3jN0eF
+   A==;
+X-CSE-ConnectionGUID: 0QIKAWpmQ6KIzk2q7ONlfg==
+X-CSE-MsgGUID: 557UGuZhT/aa8eVdXv+XUw==
+X-IronPort-AV: E=Sophos;i="6.21,231,1763424000"; 
+   d="scan'208";a="8036550"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 17:51:32 +0000
+Received: from EX19MTAEUB002.ant.amazon.com [54.240.197.232:20138]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.45.189:2525] with esmtp (Farcaster)
+ id 3df24bb3-7aa4-4217-abc1-e8fb9f5e98f8; Fri, 16 Jan 2026 17:51:32 +0000 (UTC)
+X-Farcaster-Flow-ID: 3df24bb3-7aa4-4217-abc1-e8fb9f5e98f8
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Fri, 16 Jan 2026 17:51:30 +0000
+Received: from [192.168.12.13] (10.106.82.9) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35; Fri, 16 Jan 2026
+ 17:51:25 +0000
+Message-ID: <98b8ea1e-3bdd-4987-8acc-58112076d451@amazon.com>
+Date: Fri, 16 Jan 2026 17:51:24 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct
+ map
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, "kernel@xen0n.name"
+	<kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kalyazin@amazon.co.uk" <kalyazin@amazon.co.uk>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>
+CC: "david@kernel.org" <david@kernel.org>, "svens@linux.ibm.com"
+	<svens@linux.ibm.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "jgross@suse.com"
+	<jgross@suse.com>, "surenb@google.com" <surenb@google.com>, "vbabka@suse.cz"
+	<vbabka@suse.cz>, "riel@surriel.com" <riel@surriel.com>, "pfalcato@suse.de"
+	<pfalcato@suse.de>, "x86@kernel.org" <x86@kernel.org>, "rppt@kernel.org"
+	<rppt@kernel.org>, "thuth@redhat.com" <thuth@redhat.com>,
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "maz@kernel.org"
+	<maz@kernel.org>, "peterx@redhat.com" <peterx@redhat.com>, "ast@kernel.org"
+	<ast@kernel.org>, "Annapurve, Vishal" <vannapurve@google.com>,
+	"pjw@kernel.org" <pjw@kernel.org>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "hca@linux.ibm.com"
+	<hca@linux.ibm.com>, "willy@infradead.org" <willy@infradead.org>,
+	"wyihan@google.com" <wyihan@google.com>, "ryan.roberts@arm.com"
+	<ryan.roberts@arm.com>, "jolsa@kernel.org" <jolsa@kernel.org>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"jmattson@google.com" <jmattson@google.com>, "aneesh.kumar@kernel.org"
+	<aneesh.kumar@kernel.org>, "luto@kernel.org" <luto@kernel.org>,
+	"haoluo@google.com" <haoluo@google.com>, "patrick.roy@linux.dev"
+	<patrick.roy@linux.dev>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"mhocko@suse.com" <mhocko@suse.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "hpa@zytor.com"
+	<hpa@zytor.com>, "song@kernel.org" <song@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"peterz@infradead.org" <peterz@infradead.org>, "Liam.Howlett@oracle.com"
+	<Liam.Howlett@oracle.com>, "lorenzo.stoakes@oracle.com"
+	<lorenzo.stoakes@oracle.com>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "jthoughton@google.com"
+	<jthoughton@google.com>, "Jonathan.Cameron@huawei.com"
+	<Jonathan.Cameron@huawei.com>, "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>, "prsampat@amd.com" <prsampat@amd.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"itazur@amazon.co.uk" <itazur@amazon.co.uk>, "suzuki.poulose@arm.com"
+	<suzuki.poulose@arm.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>,
+	"jackabt@amazon.co.uk" <jackabt@amazon.co.uk>, "daniel@iogearbox.net"
+	<daniel@iogearbox.net>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+	"andrii@kernel.org" <andrii@kernel.org>, "mingo@redhat.com"
+	<mingo@redhat.com>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"joey.gouly@arm.com" <joey.gouly@arm.com>, "derekmn@amazon.com"
+	<derekmn@amazon.com>, "xmarcalx@amazon.co.uk" <xmarcalx@amazon.co.uk>,
+	"kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
+	<sdf@fomichev.me>, "jackmanb@google.com" <jackmanb@google.com>,
+	"bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
+	"ackerleytng@google.com" <ackerleytng@google.com>, "jannh@google.com"
+	<jannh@google.com>, "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"kas@kernel.org" <kas@kernel.org>, "will@kernel.org" <will@kernel.org>,
+	"seanjc@google.com" <seanjc@google.com>
+References: <20260114134510.1835-1-kalyazin@amazon.com>
+ <20260114134510.1835-8-kalyazin@amazon.com>
+ <e619ded526a2f9a4cec4f74383cef31519624935.camel@intel.com>
+ <294bca75-2f3e-46db-bb24-7c471a779cc1@amazon.com>
+ <bb58a21f91113ca39f8888d718d4450a5fd72808.camel@intel.com>
+ <318407ba-ecb6-4691-8911-645fb8c20250@amazon.com>
+ <c42cc00f3902673b1a964c3d098b8c3f236cf9a1.camel@intel.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <c42cc00f3902673b1a964c3d098b8c3f236cf9a1.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260117-kunit-completion-v2-1-cabd127d0801@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2WNQQ6DIBREr2L+ujRCgEhXvYdxYfCrP1U0QEkbw
- 91LTbrq8k1m3hwQ0BMGuFUHeEwUaHMFxKUCO/duQkZDYRC10DXnkj2ejiKz27ovGEuZCa2axoz
- KWCWgzHaPI71OZdsVninEzb/Ph8S/6U+m/mWJM87kgFppabSw8j6tPS3XUoEu5/wBv+q0ZLAAA
- AA=
-X-Change-ID: 20260114-kunit-completion-265889f59c52
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- Ryota Sakamoto <sakamo.ryota@gmail.com>
-X-Mailer: b4 0.14.2
+X-ClientProxiedBy: EX19D005EUA004.ant.amazon.com (10.252.50.241) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-Currently, kunit.py has many subcommands and options, making it difficult
-to remember them without checking the help message.
 
-Add --list-cmds and --list-opts to kunit.py to get available commands and
-options, use those outputs in kunit-completion.sh to show completion.
 
-This implementation is similar to perf and tools/perf/perf-completion.sh.
+On 16/01/2026 17:36, Edgecombe, Rick P wrote:
+> On Fri, 2026-01-16 at 17:28 +0000, Nikita Kalyazin wrote:
+>>>
+>>> I imagine this feature is really targeted towards machines running
+>>> a bunch of untrusted VMs, so cloud hypervisors really. In that case
+>>> the direct map will probably be carved up pretty quick. Did you
+>>> consider just breaking the full direct map to 4k at the start when
+>>> it's in use?
+>>
+>> That's an interesting point, I haven't thought about it from this
+>> perspective.  We should run some tests internally to see if it'd
+>> help.  This will likely change with support for huge pages coming in
+>> though.
+> 
+> The thing is, those no_flush() helpers actually still flush if they
+> need to split a page. Plus if they need to clear out lazy vmalloc
+> aliases it could be another flush. There are probably a lot of
+> opportunities to reduce flushing even beyond pre-split.
+> 
+> Just curious... as far as performance, have you tested this on a big
+> multi-socket system, where that flushing will hurt more? It's something
+> that has always been a fear for these directmap unmapping solutions
 
-Example output:
-  $ source tools/testing/kunit/kunit-completion.sh
-  $ ./tools/testing/kunit/kunit.py [TAB][TAB]
-  build   config  exec    parse   run
-  $ ./tools/testing/kunit/kunit.py run --k[TAB][TAB]
-  --kconfig_add  --kernel_args  --kunitconfig
+Yes, this is a problem that we'd like to address.  We have been 
+discussing it in [1].  The effect of flushing on memory population that 
+we see on x86 is 5-7x elongation.  We are thinking of making use of the 
+no-direct-map memory allocator that Brendan is working on [2].
 
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Ryota Sakamoto <sakamo.ryota@gmail.com>
----
-Changes in v2:
-- Add relative path './tools/testing/kunit/kunit.py' to completion list
-- Rebase on kselftest/kunit branch
-- Link to v1: https://lore.kernel.org/r/20260115-kunit-completion-v1-1-4de6564962c4@gmail.com
----
- Documentation/dev-tools/kunit/run_wrapper.rst |  9 +++++++
- tools/testing/kunit/kunit-completion.sh       | 34 +++++++++++++++++++++++++++
- tools/testing/kunit/kunit.py                  | 30 +++++++++++++++++++++++
- tools/testing/kunit/kunit_tool_test.py        | 21 +++++++++++++++++
- 4 files changed, 94 insertions(+)
-
-diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-index 6697c71ee8ca020b8ac7e91b46e29ab082d9dea0..3c0b585dcfffbd3929d0eef1ab9376fa4f380872 100644
---- a/Documentation/dev-tools/kunit/run_wrapper.rst
-+++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-@@ -335,3 +335,12 @@ command line arguments:
- 
- - ``--list_tests_attr``: If set, lists all tests that will be run and all of their
-   attributes.
-+
-+Command-line completion
-+==============================
-+
-+The kunit_tool comes with a bash completion script:
-+
-+.. code-block:: bash
-+
-+	source tools/testing/kunit/kunit-completion.sh
-diff --git a/tools/testing/kunit/kunit-completion.sh b/tools/testing/kunit/kunit-completion.sh
-new file mode 100644
-index 0000000000000000000000000000000000000000..f053e7b5d265aec8317b6eb11c8920063607073f
---- /dev/null
-+++ b/tools/testing/kunit/kunit-completion.sh
-@@ -0,0 +1,34 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# bash completion support for KUnit
-+
-+_kunit_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-+
-+_kunit()
-+{
-+	local cur prev words cword
-+	_init_completion || return
-+
-+	local script="${_kunit_dir}/kunit.py"
-+
-+	if [[ $cword -eq 1 && "$cur" != -* ]]; then
-+		local cmds=$(${script} --list-cmds 2>/dev/null)
-+		COMPREPLY=($(compgen -W "${cmds}" -- "$cur"))
-+		return 0
-+	fi
-+
-+	if [[ "$cur" == -* ]]; then
-+		if [[ -n "${words[1]}" && "${words[1]}" != -* ]]; then
-+			local opts=$(${script} ${words[1]} --list-opts 2>/dev/null)
-+			COMPREPLY=($(compgen -W "${opts}" -- "$cur"))
-+			return 0
-+		else
-+			local opts=$(${script} --list-opts 2>/dev/null)
-+			COMPREPLY=($(compgen -W "${opts}" -- "$cur"))
-+			return 0
-+		fi
-+	fi
-+}
-+
-+complete -o default -F _kunit kunit.py
-+complete -o default -F _kunit kunit
-+complete -o default -F _kunit ./tools/testing/kunit/kunit.py
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index e3d82a038f93df0e86952da92461bc2e02f69ed1..4ec5ecba6d49b1ba3360515a2b66a2a98813bd18 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -328,6 +328,17 @@ def get_default_build_dir() -> str:
- 		return os.path.join(os.environ['KBUILD_OUTPUT'], '.kunit')
- 	return '.kunit'
- 
-+def add_completion_opts(parser: argparse.ArgumentParser) -> None:
-+	parser.add_argument('--list-opts',
-+			    help=argparse.SUPPRESS,
-+			    action='store_true')
-+
-+def add_root_opts(parser: argparse.ArgumentParser) -> None:
-+	parser.add_argument('--list-cmds',
-+			    help=argparse.SUPPRESS,
-+			    action='store_true')
-+	add_completion_opts(parser)
-+
- def add_common_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
-@@ -379,6 +390,8 @@ def add_common_opts(parser: argparse.ArgumentParser) -> None:
- 			    help='Additional QEMU arguments, e.g. "-smp 8"',
- 			    action='append', metavar='')
- 
-+	add_completion_opts(parser)
-+
- def add_build_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--jobs',
- 			    help='As in the make command, "Specifies  the number of '
-@@ -574,6 +587,7 @@ subcommand_handlers_map = {
- def main(argv: Sequence[str]) -> None:
- 	parser = argparse.ArgumentParser(
- 			description='Helps writing and running KUnit tests.')
-+	add_root_opts(parser)
- 	subparser = parser.add_subparsers(dest='subcommand')
- 
- 	# The 'run' command will config, build, exec, and parse in one go.
-@@ -608,12 +622,28 @@ def main(argv: Sequence[str]) -> None:
- 	parse_parser.add_argument('file',
- 				  help='Specifies the file to read results from.',
- 				  type=str, nargs='?', metavar='input_file')
-+	add_completion_opts(parse_parser)
- 
- 	cli_args = parser.parse_args(massage_argv(argv))
- 
- 	if get_kernel_root_path():
- 		os.chdir(get_kernel_root_path())
- 
-+	if cli_args.list_cmds:
-+		print(" ".join(subparser.choices.keys()))
-+		return
-+
-+	if cli_args.list_opts:
-+		target_parser = subparser.choices.get(cli_args.subcommand)
-+		if not target_parser:
-+			target_parser = parser
-+
-+		# Accessing private attribute _option_string_actions to get
-+		# the list of options. This is not a public API, but argparse
-+		# does not provide a way to inspect options programmatically.
-+		print(' '.join(target_parser._option_string_actions.keys()))
-+		return
-+
- 	subcomand_handler = subcommand_handlers_map.get(cli_args.subcommand, None)
- 
- 	if subcomand_handler is None:
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 238a31a5cc291854bb8738f22e04c65bcbaeb11c..b67408147c1faaab12b168aabe3bfba8bf1b00aa 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -11,11 +11,13 @@ from unittest import mock
- 
- import tempfile, shutil # Handling test_tmpdir
- 
-+import io
- import itertools
- import json
- import os
- import signal
- import subprocess
-+import sys
- from typing import Iterable
- 
- import kunit_config
-@@ -886,5 +888,24 @@ class KUnitMainTest(unittest.TestCase):
- 			mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test1', filter='', filter_action=None, timeout=300),
- 		])
- 
-+	@mock.patch.object(sys, 'stdout', new_callable=io.StringIO)
-+	def test_list_cmds(self, mock_stdout):
-+		kunit.main(['--list-cmds'])
-+		output = mock_stdout.getvalue()
-+		output_cmds = sorted(output.split())
-+		expected_cmds = sorted(['build', 'config', 'exec', 'parse', 'run'])
-+		self.assertEqual(output_cmds, expected_cmds)
-+
-+	@mock.patch.object(sys, 'stdout', new_callable=io.StringIO)
-+	def test_run_list_opts(self, mock_stdout):
-+		kunit.main(['run', '--list-opts'])
-+		output = mock_stdout.getvalue()
-+		output_cmds = set(output.split())
-+		self.assertIn('--help', output_cmds)
-+		self.assertIn('--kunitconfig', output_cmds)
-+		self.assertIn('--jobs', output_cmds)
-+		self.assertIn('--kernel_args', output_cmds)
-+		self.assertIn('--raw_output', output_cmds)
-+
- if __name__ == '__main__':
- 	unittest.main()
-
----
-base-commit: f126d688193b4dd6d0044c19771469724c03f8f8
-change-id: 20260114-kunit-completion-265889f59c52
-
-Best regards,
--- 
-Ryota Sakamoto <sakamo.ryota@gmail.com>
+[1] 
+https://lore.kernel.org/lkml/d1b58114-9b88-4535-b28c-09d9cc1ff3be@amazon.com
+[2] https://lore.kernel.org/kvm/DDVS9ITBCE2Z.RSTLCU79EX8G@google.com
+> 
 
 
