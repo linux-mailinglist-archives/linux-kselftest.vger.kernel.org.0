@@ -1,132 +1,168 @@
-Return-Path: <linux-kselftest+bounces-49197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49198-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBCD1D38456
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 19:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15BEED38815
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 22:01:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3CBD730066C2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 18:32:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7738E3002B84
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 21:01:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BBC8349B16;
-	Fri, 16 Jan 2026 18:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D91264A65;
+	Fri, 16 Jan 2026 21:01:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b4SGA+/1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S2jeg763"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FDE31B100
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 18:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF231A9FA8
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 21:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768588326; cv=none; b=VcOomRGKTRK6cr6nDn12YAFIjivoTEoAuJBz75u8bBp/eK5SERTyiiQ6aLzjqNkMYhh32XQDa3/8R56fqPXdMugirlgMdOE2r64UZDG6OFXcyFA+jKBsRvFNNeOVSsyLyyOVxWTYs24OEHnzZP1wR+ewTvZBCzxfZoR/fUBO260=
+	t=1768597288; cv=none; b=aU/bIpkEXITWG5d7vSvwN9o6CIQn1gggV8MNno99TISVNoxrjqergLHhCGAnVXtwR59vDYTfKIbmrPZf4w7LY6TgW4svWQLGSlgRDJX23ma6jAu2QWSeqR5XeQ5G86SX/2dlQCNA91ulyXNU9AI1dybMv1f7r/JHdd/mVhqyax0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768588326; c=relaxed/simple;
-	bh=Ss7qiRqTeuY+VD+9H9/ZWNCvERV6Dkawhl4DEc9LoVI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tX1CuzGDPUI1VsAvY/XmJbJQjJgVV2W1gpKx/PDVKKWX9vep3Wnv2+lH0FP7M5HqAgfafuIMOL/z6E9hzGWAPhgxITvMRzHsBjEWFCaQ7IYDjGzHtGVgiF5QQcFNBXs3fdl2iliwjNc8EirzXUsb6zf85zAy8K0E0nH2U9HO/sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b4SGA+/1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8869AC4AF0B
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 18:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768588325;
-	bh=Ss7qiRqTeuY+VD+9H9/ZWNCvERV6Dkawhl4DEc9LoVI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b4SGA+/1MZXjRUOv6t/Nl8NtJ/OLE9LVuNugo9h6zdSvVvdEmabRufWLmKz2c+Vhy
-	 +bbjsOm4lhhi70Bb2IF6Am1apRaUIVDgVHhHFCf3miqVmjr8J0/X5JrpofEmx0fJ56
-	 u+r9m1oXG4y8YOHIhn/PcguhnDW1O4/mIF346Py2RNG8seasZ29/mxrCec6JtqAkUQ
-	 Fwvrlhpn9jJ6KJydXlQBRPSGu+wcOrk0fIWswrZ41m8XSG1KmGhjtxpqI4QMNfg3hD
-	 QPavFKm/WZDhd1vxAfUkpwj4YQYHogJJfPe5/6H4glBBPFVqo4FzMqC2XDS0QGbAKh
-	 BGxHq+jgsO3Jg==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59b6a987346so2207655e87.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 10:32:05 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXZ2h4TR9BHDTgQB+9J/RV5JOV/2dtfYS4/ipa2Kfwku+KNp1CWwbiVCPU0/4EcFYhbzt8CdzTYeQEYJbZ4iPI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhiilPjSjta5U4oDD5/PLFR+E9YMxQKjW8Dew3Ul2cj2aKyLam
-	0Equw4SHZ8Vv6hVWPiPpA+VGPL8Kt1zJht8F7398bpRPs70P/opE6NjafdvjYXo9rLbtKvvVcxg
-	Jdodpef0N7FkXYtxPH/XPTas7yr0vFdidl4L0D/TDMQ==
-X-Received: by 2002:a05:6512:b81:b0:59b:9f92:301f with SMTP id
- 2adb3069b0e04-59bafdb63a8mr1058854e87.7.1768588324162; Fri, 16 Jan 2026
- 10:32:04 -0800 (PST)
+	s=arc-20240116; t=1768597288; c=relaxed/simple;
+	bh=/Xh071rFobUifp9vg+391OtG1/GHsYcuoKH5i8JyjOg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZQLzeYKMwwjmQQA+rRd4fY+7Kxs3wY2x+5XMbKh68K2cpu5XoKwxFeTvy/QRzb1beRRozovylNlLEGxnb6++oCNMiln7HQk227W1F9CYVdBgy4e7OtLBKKgjv8iLvpLwguqadmVcpjOGiPmoGorno57S4o5rXNHhJabwzZccZeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S2jeg763; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-430f3ef2d37so1844086f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 13:01:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768597285; x=1769202085; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aXlyykM87bz8EPPmErTX2/nMizjLMi1IDXeb9kqCDiE=;
+        b=S2jeg763oGMvOb2mBNJhei7xpYnLP7JJO66GgwHTeN85bumqS2b4dc894XOOzLYvqg
+         gPRydq+IVVHDlLMhM5iqlwbYJXKnagmyqvhdgJkwVtZ+rnh163dPCKuWvnrQ7fbdvpFH
+         2gKrou1g7aEL96c1vqsUZH0opdGQr8GQePf9PB6cuoUl6NF7Vrvp7xfCH7DTaXqlbBmX
+         GB5Jii7QHPgdQaYb8mjfNaxIpHfOxJ1GViFgE639IhwyfHnotfSjAy+4NDKFYlp4oakA
+         8FRQcMZrI9Qrw5f9IPO8G+tNKYOcA/0S+FTCZhliTfvsGiP23Ao7HLPvusxldDgsGkY2
+         QAug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768597285; x=1769202085;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aXlyykM87bz8EPPmErTX2/nMizjLMi1IDXeb9kqCDiE=;
+        b=XzTEQYZNR3OFhroc61ov30gTVrm114pgHTSpkwNT3uyg5BFqMzesuPaZrD5YNM4nAM
+         eBSotXnpVWlU+aNG88oaZEVLONhpqLWouk/AcMREVJBTNAoF4yfRHVOqtF81nC/6mezC
+         5X9BIGOpNQeQhiOQu9FVYqKBg+MRwL+LdcuawIGj/cKFTBWye/cd6aoVcPYot0J1UzbQ
+         6Ma1+wn4xrQlI+xCmW8nkLK4cPLpIZnO23YnVtOx1ldDh6mp12/83Z+OwnXRBy3tSL8x
+         GYVfmiGJ+9+sfjCD6fWeIAjXEGayexqZvqJca8h+//oZCczhhVjox3yIXp084DUSLMZk
+         l3HA==
+X-Forwarded-Encrypted: i=1; AJvYcCXsQkghUqNr8m4uemq4hfD6iRvI4T25OOPTIQPpeCUcj7zOkgSH72J0mIoLLvOWeYkfQAoYbzbtdDLP7diJ9mU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7lLnicMntLF3yXYlMwOCXqiqjwZn+68FwDifB7eu72uBIyd/G
+	q/lNIYazEUmBCDIZQnvOymGn85AtKq183PUUpoDO1l06JESvZ2nCknLQ
+X-Gm-Gg: AY/fxX5Kn/wib1joaM7JLkMqMTKd34NVe41kqtWjS/obFR2PIHp4voLeqnJNo4QBxwj
+	gBKT01ghCviovIRtM8Ia5NPNeRzxu4C32MGWPzKNBiBnUMe9wpVwO+ClR5C2cGnrQi9frvvzW1c
+	DOnp+f/RmfwCAoLbQEmMwEWoyMvzgqs9CVkPGI8LucYCcktpj6mbCfFnYhunNI7uPceBto22jfY
+	Y88Nfy/Bgq9o+3EzWb8BnOD9gvPD4PP/tsH67D/Gso/9Bxzoit+vJ3oGNwSHTF69t98kP3aaUjP
+	HbheJ+suElT+yhURgrX1laE9hpS+pxLih1ZLQcm+YQDx8Pz6UE5swCQ9G5k992LuZqXQHD2Vkhf
+	pIO+EPH+kEfhlxjClKgCf+aFOPjMZ9bmOgjkfDwcrNR7EtHMk3zZZoqy84rXRCXNKVzGP/AtT40
+	nMGvO3Cg==
+X-Received: by 2002:a05:6000:4387:b0:431:1ae:a3d0 with SMTP id ffacd0b85a97d-435699810a1mr5156199f8f.25.1768597284962;
+        Fri, 16 Jan 2026 13:01:24 -0800 (PST)
+Received: from archlinux ([143.58.192.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435699982aasm7545219f8f.42.2026.01.16.13.01.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jan 2026 13:01:24 -0800 (PST)
+Date: Fri, 16 Jan 2026 21:01:22 +0000
+From: Andre Carvalho <asantostc@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v10 7/7] selftests: netconsole: validate target
+ resume
+Message-ID: <aWqkhT_-4UoNHX6F@archlinux>
+References: <20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com>
+ <20260112-netcons-retrigger-v10-7-d82ebfc2503e@gmail.com>
+ <20260112061642.7092437c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260116080235.350305-1-tzungbi@kernel.org> <20260116080235.350305-2-tzungbi@kernel.org>
- <DFQ45FWO4XHC.2BW7I9LGC76WT@kernel.org> <CAMRc=Medaqr5UPimc8o+VTy=9MgU5p8AXjArisQfBNqi7ktSGg@mail.gmail.com>
- <20260116160424.GA14499@pendragon.ideasonboard.com> <DFQ5W41X6Z7S.3V6FRPXYMDJ1F@kernel.org>
- <CAMRc=MfAZxzd2hjqgDsXBR+UxgkaEQX0vR5nNZ=a+5WccUb4GQ@mail.gmail.com> <20260116182431.GA1134360@nvidia.com>
-In-Reply-To: <20260116182431.GA1134360@nvidia.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Fri, 16 Jan 2026 19:31:51 +0100
-X-Gmail-Original-Message-ID: <CAMRc=McsrthHS4kcV7UkmdVFS4nr9vXe8Z_kQODvMUYxVkE8KQ@mail.gmail.com>
-X-Gm-Features: AZwV_QhX6LG8DkljEPjMvfuFGbrj6wIYYufM6rhcWWImQbypzvqc5Ui2tF-rlh8
-Message-ID: <CAMRc=McsrthHS4kcV7UkmdVFS4nr9vXe8Z_kQODvMUYxVkE8KQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/3] revocable: Revocable resource management
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Danilo Krummrich <dakr@kernel.org>, Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Dan Williams <dan.j.williams@intel.com>, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260112061642.7092437c@kernel.org>
 
-On Fri, Jan 16, 2026 at 7:24=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Fri, Jan 16, 2026 at 07:19:50PM +0100, Bartosz Golaszewski wrote:
-> > On Fri, Jan 16, 2026 at 5:41=E2=80=AFPM Danilo Krummrich <dakr@kernel.o=
-rg> wrote:
-> > >
-> > > On Fri Jan 16, 2026 at 5:04 PM CET, Laurent Pinchart wrote:
-> > > > Based on the discussions we had at LPC, the revocable resource mana=
-gement API
-> > > > is not the right solution to handle races between device removal an=
-d userspace
-> > > > access.
-> > >
-> > > Please see: https://lore.kernel.org/all/DFQ5D44A0348.PZJIGPL972N@kern=
-el.org/
-> > >
-> > > > It is however a possibly useful tool for races between producers an=
-d consumers
-> > > > *inside the kernel*.
-> > >
-> > > Do you have an example for such a case?
-> >
-> > Isn't the GPIO use-case - which the series on top of it addresses - one=
-?
-> >
-> > With fw_devlink=3Doff it's quite easy to trigger all kinds of crashes
-> > with in-kernel users.
->
-> Does this series solve that? It looked to me like it just replaces the
-> existing SRCU with a wrapper?
->
+On Mon, Jan 12, 2026 at 06:16:42AM -0800, Jakub Kicinski wrote:
+> On Mon, 12 Jan 2026 09:40:58 +0000 Andre Carvalho wrote:
+> > Introduce a new netconsole selftest to validate that netconsole is able
+> > to resume a deactivated target when the low level interface comes back.
+> > 
+> > The test setups the network using netdevsim, creates a netconsole target
+> > and then remove/add netdevsim in order to bring the same interfaces
+> > back. Afterwards, the test validates that the target works as expected.
+> > 
+> > Targets are created via cmdline parameters to the module to ensure that
+> > we are able to resume targets that were bound by mac and interface name.
+> 
+> The new test seems to be failing in netdev CI:
+> 
+> TAP version 13
+> 1..1
+> # timeout set to 180
+> # selftests: drivers/net: netcons_resume.sh
+> # Running with bind mode: ifname
+> not ok 1 selftests: drivers/net: netcons_resume.sh # exit=1
+> -- 
+> pw-bot: cr
 
-SRCU already *did* solve it. Revocable *is* a wrapper around SRCU that
-generalizes the initial solution.
+I've finally been able to reproduce this locally. The issue is caused by the
+fact that the test currently expects that mac addresses for netdevsim devices are
+deterministic. This is the case on my setup as systemd enforces it (MACAddressPolicy=persistent).
 
-Replacing SRCU with a generalized wrapper is fine but there are
-subsystems out there, where the problem is much less trivial. Take I2C
-for example: the struct device management is so broken that there
-isn't even anything *to revoke* yet. It'll take years of little
-reworks before we can even use revocable at all.
+I was able to disable this behaviour by setting up /etc/systemd/network/50-netdevsim.link, with:
 
-I'm not against it as a library of functions. But TBH I looked at the
-series and - besides making the code run slower - it also kind of
-makes it harder to read. With *naked* SRCU it's very clear what's
-going on, when you start hiding the logic, it becomes needlessly
-obfuscated.
+[Match]
+Driver=netdevsim
 
-I want to first see revocable match current GPIO performance and then
-we can talk about accepting it.
+[Link]
+MACAddressPolicy=none
 
-Bartosz
+I'm assuming this is also the behaviour on CI hosts. I have started working on a fix
+for this test and will submit v11 once that is ready. The approach I'm taking is saving and
+restoring the mac addresses once I reload netdevsim module. Example code below (needs more testing):
+
+function deactivate() {
+	# Start by storing mac addresses so we can be restored in reactivate
+	SAVED_DSTMAC=$(ip netns exec "${NAMESPACE}" \
+		cat /sys/class/net/"$DSTIF"/address)
+	SAVED_SRCMAC=$(mac_get "${SRCIF}")
+	# Remove low level module
+	rmmod netdevsim
+}
+
+function reactivate() {
+	# Add back low level module
+	modprobe netdevsim
+	# Recreate namespace and two interfaces
+	set_network
+	# Restore MACs
+	ip netns exec "${NAMESPACE}" ip link set "${DSTIF}" \
+		address "${SAVED_DSTMAC}"
+	if [ "${BINDMODE}" == "mac" ]; then
+		ip link set dev "${SRCIF}" down
+		ip link set dev "${SRCIF}" address "${SAVED_SRCMAC}"
+		# Rename device in order to trigger target resume, as initial
+		# when device was recreated it didnt have correct mac address.
+		ip link set dev "${SRCIF}" name "${TARGET}"
+	fi
+}
+
+The main annoyance is that to test resuming when a device was bound by mac I actually need
+to change the name of the device after restoring the mac address (since when the device 
+is registered after deactivation the mac won't match).
+
+
+-- 
+Andre Carvalho
 
