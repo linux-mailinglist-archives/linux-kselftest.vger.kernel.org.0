@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-49105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A964D2DC4A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3A8CD2DC68
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:13:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6F41330A8389
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:11:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D03C930B470B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DB22F1FFE;
-	Fri, 16 Jan 2026 08:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1161F2F25FD;
+	Fri, 16 Jan 2026 08:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikzfgt9v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NDarakeb"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C246A2EDD57;
-	Fri, 16 Jan 2026 08:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACC3281520;
+	Fri, 16 Jan 2026 08:11:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768551070; cv=none; b=OxF1DajeOlY9RdvVOlaPw6Tzsnd2XXhNxgfxm+btAIjQjJzGsoEhTME9R96iKLTIG4aAkvqplUhd5sNArpuJ+gH5n4MavPCkQ4XKiDRdVIgQy/mrpbJ4hKy1AUJMVRUarj/1Ue6GOppKLTXuJZYGBAhXlyyX+UhyOUuN4Btf9XQ=
+	t=1768551073; cv=none; b=bfVliZExOcveAA7SYeevDR5QKDoAv158ski9c73vruZZeDhOJlEqGXBuVSwH2fVzdvNRYhusnmdapW8T1WerokTTSElBW94zSUcjO+eovOkVm6PoRYtAXvzeziNz1BfPfh3lXIIWFt71QpOpvZN/P7YHrQpneRmjFF5XmVcWeXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768551070; c=relaxed/simple;
-	bh=NaRA1uc76ad6S3cdm3cYzD/8X6vYxOm/vKCplm42B0w=;
+	s=arc-20240116; t=1768551073; c=relaxed/simple;
+	bh=69pG6w4Xdr2sPbaRa1R8SZLmAPZBUmeVdfDx/U98QV4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XPwEW/4T6fYrCHPTjKeSU1sugVabKueLE8Fd6YlGQZsOgHge20PaBrYh+7G0YsY519ADeZniwO9AR0QI/7pBI/GpOdsO/mAM/dtJ4NVp2nMYubLwYTkQvZ9Ha53P91jxVjYq5HiZB6BqKUNKi1aQBaUixSJtPAZtZN3o3qIc8j0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikzfgt9v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 833ADC19425;
-	Fri, 16 Jan 2026 08:11:07 +0000 (UTC)
+	 MIME-Version; b=Aw2OtTvy+x5mSkGdrA23nzm5e2fRjcj/lzFFjcZ0R0oTHvErv4gVtcqBQyNkc5kk/Wa1yFREJ3CXAc6YbHPgAvJZT3LaPUfCgsza7ByQtO76z5Ci43Ro4a63NFwh7hSFtA7W6XBfeGM7wvI+m+tL/mHVzrflUyGuc5ktvP6bK+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NDarakeb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7585C19423;
+	Fri, 16 Jan 2026 08:11:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768551070;
-	bh=NaRA1uc76ad6S3cdm3cYzD/8X6vYxOm/vKCplm42B0w=;
+	s=k20201202; t=1768551073;
+	bh=69pG6w4Xdr2sPbaRa1R8SZLmAPZBUmeVdfDx/U98QV4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ikzfgt9v3EEPMDDgymCkftGRcMvUTHk2iKLjpzF5CTSJNIRpl6yexOby2ZyhyiLCI
-	 9qNfRG+aoc8yCngd4/IDH24Sq51yhPhYsG6mVdUi39NW5+r+hDdYYkFDOb+qg21e5s
-	 7Id2RAIt+3bPNUL9hZAQmlhzuCLqsBXgejKNXUBdy8Tw5kiNa2VriybRosxrbW+IKH
-	 4MwZS1Ce8nKe6zshkz7F8Zj7nrv6Gq9phHXAk8XPQV8viUmSzCNoWSde3UCvCsrNPS
-	 /6foe1FJ1jyZcVZFH3uyjZ40+h/dOC3FMY3wpu197vQ10WJthSs87hSasc8J8vWlH0
-	 75C2AkKtb/bDA==
+	b=NDarakebh7JLgCgBuxTphef3UWbCWlNQzQ677JzLKyz4LFH4dJIeFUUxIU+Tl/+Su
+	 +RVn/BFp31fO9p7/cvdAH6bO4FCfhTlPcxY0tPk3EZHpnxgssN7vdum2XuKdKFHRmU
+	 HTEE60r/KPCpXVPNkUsc5orEtDRPeMngqSJd3+lVZjTutTANy7TbJLoSgFiqLmSLmI
+	 pWJd+XvFyMBKgVf63S+1jqjs13YhF8O3zACCQe24nBYz7YLXG3b71h9mVidc/rKfa1
+	 oGvtpJ68xqsEvnTKJc1FaPyh/9jekXbOlHOt5NBKSS2WC5wsHBKwnjnxGB0+lF9sFe
+	 Wj4nhlBOoGCgQ==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -60,9 +60,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Jason Gunthorpe <jgg@nvidia.com>,
 	linux-gpio@vger.kernel.org,
 	stable@vger.kernel.org
-Subject: [PATCH 01/23] gpiolib: Correct wrong kfree() usage for `kobj->name`
-Date: Fri, 16 Jan 2026 08:10:14 +0000
-Message-ID: <20260116081036.352286-2-tzungbi@kernel.org>
+Subject: [PATCH 02/23] gpiolib: cdev: Fix resource leaks on errors in gpiolib_cdev_register()
+Date: Fri, 16 Jan 2026 08:10:15 +0000
+Message-ID: <20260116081036.352286-3-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
 In-Reply-To: <20260116081036.352286-1-tzungbi@kernel.org>
 References: <20260116081036.352286-1-tzungbi@kernel.org>
@@ -74,31 +74,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-`kobj->name` should be freed by kfree_const()[1][2].  Correct it.
-
-[1] https://elixir.bootlin.com/linux/v6.18/source/lib/kasprintf.c#L41
-[2] https://elixir.bootlin.com/linux/v6.18/source/lib/kobject.c#L695
+On error handling paths, gpiolib_cdev_register() doesn't free the
+allocated resources which results leaks.  Fix it.
 
 Cc: stable@vger.kernel.org
-Fixes: c351bb64cbe6 ("gpiolib: free device name on error path to fix kmemleak")
+Fixes: 7b9b77a8bba9 ("gpiolib: add a per-gpio_device line state notification workqueue")
+Fixes: d83cee3d2bb1 ("gpio: protect the pointer to gpio_chip in gpio_device with SRCU")
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/gpio/gpiolib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpiolib-cdev.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 5eb918da7ea2..ba9323432e3a 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -1263,7 +1263,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- err_free_descs:
- 	kfree(gdev->descs);
- err_free_dev_name:
--	kfree(dev_name(&gdev->dev));
-+	kfree_const(dev_name(&gdev->dev));
- err_free_ida:
- 	ida_free(&gpio_ida, gdev->id);
- err_free_gdev:
+diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
+index 3735c9fe1502..ba1eae15852d 100644
+--- a/drivers/gpio/gpiolib-cdev.c
++++ b/drivers/gpio/gpiolib-cdev.c
+@@ -2797,16 +2797,23 @@ int gpiolib_cdev_register(struct gpio_device *gdev, dev_t devt)
+ 
+ 	ret = cdev_device_add(&gdev->chrdev, &gdev->dev);
+ 	if (ret)
+-		return ret;
++		goto err_free_workqueue;
+ 
+ 	guard(srcu)(&gdev->srcu);
+ 	gc = srcu_dereference(gdev->chip, &gdev->srcu);
+-	if (!gc)
+-		return -ENODEV;
++	if (!gc) {
++		ret = -ENODEV;
++		goto err_free_cdev;
++	}
+ 
+ 	gpiochip_dbg(gc, "added GPIO chardev (%d:%d)\n", MAJOR(devt), gdev->id);
+ 
+ 	return 0;
++err_free_cdev:
++	cdev_device_del(&gdev->chrdev, &gdev->dev);
++err_free_workqueue:
++	destroy_workqueue(gdev->line_state_wq);
++	return ret;
+ }
+ 
+ void gpiolib_cdev_unregister(struct gpio_device *gdev)
 -- 
 2.52.0.457.g6b5491de43-goog
 
