@@ -1,271 +1,176 @@
-Return-Path: <linux-kselftest+bounces-49148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B655D3240D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 15:00:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8E02D32698
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 15:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DE9AD30081B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 14:00:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A22DF30954FC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 14:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD76E28C5AA;
-	Fri, 16 Jan 2026 14:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00F6729A33E;
+	Fri, 16 Jan 2026 14:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="E4JNMoGH"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w8mhEmgH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551592882DB;
-	Fri, 16 Jan 2026 14:00:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70970287263;
+	Fri, 16 Jan 2026 14:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768572047; cv=none; b=h+1u4LtRWHmRjCThT9UR7vz5eW8BAzIntntYya9CdOCZ1R7YQfU5OiveJj5a95IFnxM57hDcmvcjgC83Ppy+TehDlpBEOK8cweULVzeWdU/Sj+XdST0bVwjSHleQ6obGygYAnMAwOikZTjGLRQjZMD/Dk7vY0klGF+VCc2OC2nU=
+	t=1768572646; cv=none; b=ZOexds6/RoiN3KtYlDDM2nsXPEcCvxnpGzJgyWtzQLvcJM2/t28ukZBUX6o4rhzozaAyw3E/MzJz+2Nr+6YgiJO5Nghrw38cU5Oe0BucrkQEHRgS4ag1uq+ZYAH0GW3pLcUHmFkLKP3sizKRWWSlc/nkE+MNdk3C22Wt51ZiBg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768572047; c=relaxed/simple;
-	bh=Fwa4ncslrjiPica4CGUZuPDWw7Tx3y7S91lHl5KUNE0=;
+	s=arc-20240116; t=1768572646; c=relaxed/simple;
+	bh=+jgDwfGEgZ/gfdC0Vw6xWmOfG9Ku+O5C3mi5MoII2Yw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L5rtgS/4OB/BM7n5ApFtvwSvlFMrU0vucDLnJWintpkyYde4PqendnHviOxjjVjuVaO4+UkZ8euThR4bTdbffSMkQercxZd6EJr24tES9J3Ih4JppnQIqHWOyK9XEYdH8uTciAeeztoPvjUIsgZox2qdcBY2BLp6v2TEHPnWSOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=E4JNMoGH; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60GCRw4i031369;
-	Fri, 16 Jan 2026 13:59:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=myVOCt
-	ChlyLQtK/gurvuHhrtUul1Cjy4qpiGZDFtLmI=; b=E4JNMoGH7I9epFA/V3UdGb
-	9h54mFOicaoOHmiB7BYKzNYuJLgJz6+FOJQkQ8q6IdcdqUjvuCS8ecJG8vIlvAi8
-	JuyyxwAKqQEQAdXgGhZ6C+nprlk1MpuLSTS2MPkgCYbWw9fzitMXQgWZ8aMWKEAh
-	k5hho8DCOOTNRlSvu6tVLAy/7SzFOFtLuLAVQHgtY+x+8FETVTQuHARpsPsNxMEl
-	Z8Wih2HZTR8ToNGgkCazJUu6Vob9xT80TNPzkLEfQxy8iBo+v/cj6AHWJoKa4vm9
-	MvWtgheKzewkogMTYjlmTrXEd05PNUqHsTwtHAZ2oks9yB6nN05tkCEah14BDVQQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bq9bmk4b6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Jan 2026 13:59:16 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60GDwqla025224;
-	Fri, 16 Jan 2026 13:59:15 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bq9bmk4b2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Jan 2026 13:59:15 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60GDjiBb014333;
-	Fri, 16 Jan 2026 13:59:14 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm1fypn5h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Jan 2026 13:59:14 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60GDxAwx50921824
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 16 Jan 2026 13:59:10 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0621C20043;
-	Fri, 16 Jan 2026 13:59:10 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E2CE620040;
-	Fri, 16 Jan 2026 13:59:03 +0000 (GMT)
-Received: from [9.43.86.214] (unknown [9.43.86.214])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 16 Jan 2026 13:59:03 +0000 (GMT)
-Message-ID: <051521cf-5dd2-4831-ab4c-b0db32436ba9@linux.ibm.com>
-Date: Fri, 16 Jan 2026 19:29:02 +0530
+	 In-Reply-To:Content-Type; b=YZMj28On5QplQTByCOBhqhuYMzh7R+Rv1C5dEIJLTgWechfGqQn0lDszvZsSFDAThPf0lRBh5UifJPibtSoSBceMZC1cW41EFzTYrU2y+q/XmAwzhNtjfg7v9SaroAlh7ClO8NWnzMASUy03aPkRlcoK3ORTjRhGFPqdUZZSDxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w8mhEmgH; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <36cf80a8-a224-4191-b235-50c2b3dd73f6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768572632;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LltPikOjfn91v4eQf5wN9GiDkEuZIGDG/ABublmrXDA=;
+	b=w8mhEmgHxpePEGZgYwqycR5BSjb33zglHkzQuRAsu+5zMXMstSGTHQduak5A1ZSIqRYQXY
+	o9x8dMApX3LtTYR7BWK/oeGQkMMJXJlPGMVkv8KG5CKuCfZBxEONIBfv/JLQGdz++mNDlO
+	bpWCLY7R0NEnSryu+da6E+wrKAi1XZk=
+Date: Fri, 16 Jan 2026 22:10:12 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/6] powerpc64/bpf: Support tailcalls with subprogs
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        adubey <adubey@imap.linux.ibm.com>
-Cc: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        naveen@kernel.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
-        npiggin@gmail.com, memxor@gmail.com, iii@linux.ibm.com,
-        shuah@kernel.org
-References: <20260114114450.30405-1-adubey@linux.ibm.com>
- <20260114114450.30405-3-adubey@linux.ibm.com>
- <42d41a0d-9d26-4eeb-af46-200083261c09@kernel.org>
- <2d242f4476b61373da236d24272b0ec3@imap.linux.ibm.com>
- <78536979-e924-4be3-b847-332802ad82e2@linux.ibm.com>
- <ea66ddc5-984f-4873-993d-9de1140d7e6e@kernel.org>
+Subject: Re: [PATCH bpf-next v5 4/9] bpf: Add syscall common attributes
+ support for prog_load
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260112145616.44195-1-leon.hwang@linux.dev>
+ <20260112145616.44195-5-leon.hwang@linux.dev>
+ <CAEf4BzZbcA2T8+OR1_68sxq9Chukmh8beyz+018O22U=SsafrA@mail.gmail.com>
 Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <ea66ddc5-984f-4873-993d-9de1140d7e6e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzZbcA2T8+OR1_68sxq9Chukmh8beyz+018O22U=SsafrA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VuNl7drb6mZuvd-iVxqcmKJ66PXc6Fdf
-X-Proofpoint-ORIG-GUID: jy3gV0NpS5tDjoM9jCk7woG2U7zqPjNr
-X-Authority-Analysis: v=2.4 cv=TrvrRTXh c=1 sm=1 tr=0 ts=696a4434 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VnNF1IyMAAAA:8 a=Gp1ZgnKn9qXeJorAczUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDA5NyBTYWx0ZWRfX9y61cOoBodfm
- V56e2FeZp4Ez7hzI/Q0J8IhFR2ker99R3rNCmZ8HZo5fU1Yk4vEmTWckVGEn3YO6c/8ziFDd5aH
- fZv7KrpPyB2Q7fuOaomaDe+i57xzsmhilxAZ980y/LOXKkXKNOKnd7IaBewj9blCHsu2TN7Qm++
- E5pkUYsWiilR0xMkrK34Ohmz2btmkR71BNZB+9BkLmQgIIv5+Knuct/k+0SCSEu+Zunqh4O0xWT
- 3EAXaQ5xxQ2P2x2uuO4vkPxCjGoLtLzjLhbkQED0o6gd5j6r8CiKK0UbEEKjysDZGcDUA1HU3Nh
- 2+jTb6k8K/CMS6Y2UuA/llTfcHe0ApyB0xZf/oWRMb7Kn7Vlh+t3v3v8yCx/T5kGLugVdPazYZz
- HePs4xqLkgaFX4qirP0xLKbUseFtTrTJiDsRP47ffZEl3GifURd8wtsJWQLIsR/zvpwjHIvPYw0
- LdTiKv2xhWpCfWo4tVw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-16_05,2026-01-15_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 clxscore=1015
- bulkscore=0 impostorscore=0 malwarescore=0 suspectscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601160097
+X-Migadu-Flow: FLOW_OUT
 
 
 
-On 16/01/26 1:19 pm, Christophe Leroy (CS GROUP) wrote:
+On 2026/1/16 08:54, Andrii Nakryiko wrote:
+> On Mon, Jan 12, 2026 at 6:59 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> The log buffer of common attributes would be confusing with the one in
+>> 'union bpf_attr' for BPF_PROG_LOAD.
+>>
+>> In order to clarify the usage of these two log buffers, they both can be
+>> used for logging if:
+>>
+>> * They are same, including 'log_buf', 'log_level' and 'log_size'.
+>> * One of them is missing, then another one will be used for logging.
+>>
+>> If they both have 'log_buf' but they are not same totally, return -EUSERS.
 > 
+> why use this special error code that we don't seem to use in BPF
+> subsystem at all? What's wrong with -EINVAL. This shouldn't be an easy
+> mistake to do, tbh.
 > 
-> Le 16/01/2026 à 05:50, Hari Bathini a écrit :
-> 
-> Not received this mail that Hari is reponding to.
 
-That is weird.
+-EUSERS was suggested by Alexei.
+
+However, I agree with you that it is better to use -EINVAL here.
 
 >>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>  include/linux/bpf_verifier.h |  4 +++-
+>>  kernel/bpf/log.c             | 29 ++++++++++++++++++++++++++---
+>>  kernel/bpf/syscall.c         |  9 ++++++---
+>>  3 files changed, 35 insertions(+), 7 deletions(-)
 >>
->> On 14/01/26 6:33 pm, adubey wrote:
->>> On 2026-01-14 17:57, Christophe Leroy (CS GROUP) wrote:
->>>> Le 14/01/2026 à 12:44, adubey@linux.ibm.com a écrit :
->>>>> From: Abhishek Dubey <adubey@linux.ibm.com>
->>>>>
->>>>> Enabling tailcalls with subprog combinations by referencing
->>>>> method. The actual tailcall count is always maintained in the
->>>>> tail_call_info variable present in the frame of main function
->>>>> (also called entry function). The tail_call_info variables in
->>>>> the frames of all other subprog contains reference to the
->>>>> tail_call_info present in frame of main function.
->>>>>
->>>>> Dynamic resolution interprets the tail_call_info either as
->>>>> value or reference depending on the context of active frame
->>>>> while tailcall is invoked.
->>>>>
->>>>> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
->>>>> ---
->>>>>   arch/powerpc/net/bpf_jit.h        | 12 +++++-
->>>>>   arch/powerpc/net/bpf_jit_comp.c   | 10 ++++-
->>>>>   arch/powerpc/net/bpf_jit_comp64.c | 68 ++++++++++++++++++++++ 
->>>>> +--------
->>>>>   3 files changed, 70 insertions(+), 20 deletions(-)
->>>>>
->>>>> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
->>>>> index 45d419c0ee73..5d735bc5e6bd 100644
->>>>> --- a/arch/powerpc/net/bpf_jit.h
->>>>> +++ b/arch/powerpc/net/bpf_jit.h
->>>>> @@ -51,6 +51,12 @@
->>>>>           EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | 
->>>>> (offset & 0xfffc));                    \
->>>>>       } while (0)
->>>>>   +/* Same as PPC_BCC_SHORT, except valid dest is known prior to 
->>>>> call. */
->>>>> +#define PPC_COND_BRANCH(cond, dest)         \
->>>>> +    do {                                      \
->>>>> +        long offset = (long)(dest) - CTX_NIA(ctx);              \
->>>>> +        EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | 
->>>>> (offset & 0xfffc));    \
->>>>> +    } while (0)
->>>>
->>>> I don't like the idea of duplicating PPC_BCC_SHORT() to just kick the
->>>> verification out. Now we will have two macros doing the exact same
->>>> thing with one handling failure case and one ignoring failure case.
->>>> There is a big risk that one day or another someone will use the wrong
->>>> macro.
->>>>
->>>> Could you change bpf_jit_build_prologue() to return an int add use
->>>> PPC_BCC_SHORT() instead of that new PPC_COND_BRANCH() ?
->>> I implemented exactly same change in bpf_jit_build_prologue(). But, 
->>> during internal review, @HariBathini suggested
->>> to have separate macro with a caution note.
->>>
->>> @Hari please suggest here!
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 4c9632c40059..da2d37ca60e7 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -637,9 +637,11 @@ struct bpf_log_attr {
+>>         u32 log_level;
+>>         struct bpf_attrs *attrs;
+>>         u32 offsetof_log_true_size;
+>> +       struct bpf_attrs *attrs_common;
+>>  };
 >>
->> Not just about the change of return type but the check seems like an
->> overkill for cases where the offset is known and within branch range.
->> How about using BUILD_BUG_ON() to avoid unecessary checks and
->> return type change for places where the branch offset is known
->> and is a constant?
+>> -int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs);
+>> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs,
+>> +                               struct bpf_attrs *attrs_common);
+>>  int bpf_log_attr_finalize(struct bpf_log_attr *log_attr, struct bpf_verifier_log *log);
+>>
+>>  #define BPF_MAX_SUBPROGS 256
+>> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+>> index 457b724c4176..eba60a13e244 100644
+>> --- a/kernel/bpf/log.c
+>> +++ b/kernel/bpf/log.c
+>> @@ -865,23 +865,41 @@ void print_insn_state(struct bpf_verifier_env *env, const struct bpf_verifier_st
+>>  }
+>>
+>>  static int bpf_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs, u64 log_buf,
+>> -                            u32 log_size, u32 log_level, int offsetof_log_true_size)
+>> +                            u32 log_size, u32 log_level, int offsetof_log_true_size,
+>> +                            struct bpf_attrs *attrs_common)
+>>  {
+>> +       const struct bpf_common_attr *common_attr = attrs_common ? attrs_common->attr : NULL;
+>> +
 > 
-> When offset is a constant known at build time, checks are eliminated by 
-> gcc at build, see exemple below from disasembly of bpf_jit_comp32.o, 
-> there are no checks.
-> 
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      36d8:       3c 80 41 81     lis     r4,16769
->                                  EMIT(PPC_RAW_CMPLW(src_reg, _R0));
->      36dc:       81 3f 00 04     lwz     r9,4(r31)
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      36e0:       60 84 00 10     ori     r4,r4,16
->                                  EMIT(PPC_RAW_CMPLW(src_reg, _R0));
->      36e4:       39 29 00 01     addi    r9,r9,1
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      36e8:       55 23 10 3a     slwi    r3,r9,2
->                                  EMIT(PPC_RAW_CMPLW(src_reg, _R0));
->      36ec:       91 3f 00 04     stw     r9,4(r31)
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      36f0:       7c 97 19 2e     stwx    r4,r23,r3
->                                  EMIT(PPC_RAW_LI(dst_reg, 0));
->      36f4:       55 49 a9 94     rlwinm  r9,r10,21,6,10
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      36f8:       80 9f 00 04     lwz     r4,4(r31)
->                                  EMIT(PPC_RAW_LI(dst_reg, 0));
->      36fc:       65 29 38 00     oris    r9,r9,14336
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      3700:       38 84 00 01     addi    r4,r4,1
->                                  EMIT(PPC_RAW_LI(dst_reg, 0));
->      3704:       54 83 10 3a     slwi    r3,r4,2
->                                  PPC_BCC_SHORT(COND_GT, (ctx->idx + 4) * 
-> 4);
->      3708:       90 9f 00 04     stw     r4,4(r31)
->                                  EMIT(PPC_RAW_LI(dst_reg, 0));
->      370c:       7d 37 19 2e     stwx    r9,r23,r3
+> There is something to be said about naming choices here :) it's easy
+> to get lost in attrs_common being actually bpf_attrs, which contains
+> attr field, which is actually of bpf_common_attr type... It's a bit
+> disorienting. :)
 > 
 
-Interesting. I do see is_offset_in_cond_branch_range() in action with
-constant offsets too, on ppc64 compile at least. fwiw, I had this
-optimized version in mind for constant offset:
+I see your point about the naming being confusing.
 
-   #define PPC_BCC_CONST_SHORT(cond, offset) 
-                     \
-         do { 
-                     \
-                 BUILD_BUG_ON(offset < -0x8000 || offset > 0x7fff || 
-(offset & 0x3));        \
-                 EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | 
-(offset & 0xfffc));  \
-         } while (0)
+The original intent of 'struct bpf_attrs' was to provide a shared
+wrapper for both 'union bpf_attr' and 'struct bpf_common_attr'. However,
+I agree that using 'attrs_common' here makes the layering harder to follow.
 
-With that, something like:
+If that approach is undesirable, how about introducing a dedicated
+structure instead, e.g.:
 
-     PPC_BCC_SHORT(COND_NE, (ctx->idx + 3) * 4);
+struct bpf_common_attrs {
+	const struct bpf_common_attr *attr;
+	bpfptr_t uattr;
+	u32 size;
+};
 
-becomes
+This should make the ownership and intent clearer.
 
-     PPC_BCC_CONST_SHORT(COND_NE, 12);
+Thanks,
+Leon
 
-- Hari
+[...]
+
 
