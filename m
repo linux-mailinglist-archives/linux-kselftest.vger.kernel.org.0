@@ -1,43 +1,44 @@
-Return-Path: <linux-kselftest+bounces-49104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A1BD2DBD7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:11:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A964D2DC4A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:12:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5C091300B02B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:11:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6F41330A8389
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD042F1FE9;
-	Fri, 16 Jan 2026 08:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9DB22F1FFE;
+	Fri, 16 Jan 2026 08:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0Uu6nUg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikzfgt9v"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CAC2F1FDA;
-	Fri, 16 Jan 2026 08:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C246A2EDD57;
+	Fri, 16 Jan 2026 08:11:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768551067; cv=none; b=XNseM1fqZX8RvgvIabdczHQFAOTKhBxdHQ8Ux4qCrWUzVCdTvLAOkLAKkY1Zx0RXsHTgVbD7uyul4fUr/M6Bq4YazIx0OmrvuqctHlSOiSGpw4SkcyoKXr3pHXD2J6yvl7STmS2XYyLrIJ95GsGw4L7X/iKDS4+5RN7JvJcupVM=
+	t=1768551070; cv=none; b=OxF1DajeOlY9RdvVOlaPw6Tzsnd2XXhNxgfxm+btAIjQjJzGsoEhTME9R96iKLTIG4aAkvqplUhd5sNArpuJ+gH5n4MavPCkQ4XKiDRdVIgQy/mrpbJ4hKy1AUJMVRUarj/1Ue6GOppKLTXuJZYGBAhXlyyX+UhyOUuN4Btf9XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768551067; c=relaxed/simple;
-	bh=wFh+7TBblBKdqsuPRAvtZYiS1LG+bG9QlY39DipsRU0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QwV3mksL++sycX3fSEMa6hX8gsFRwLH1FXKJcUDrCAUgHIn710to2z6vKSeaXu4K+2U1LdC0TmMyTbFnf+iy10RdZfLWKBcacf0TaTqCsUMUSZjFXG+rX2ZlToKbGXIxWeqLgNxMouavuYnmEptxU/FGHj7T5DwnMR1dnk0XUN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0Uu6nUg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA15C19423;
-	Fri, 16 Jan 2026 08:11:04 +0000 (UTC)
+	s=arc-20240116; t=1768551070; c=relaxed/simple;
+	bh=NaRA1uc76ad6S3cdm3cYzD/8X6vYxOm/vKCplm42B0w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XPwEW/4T6fYrCHPTjKeSU1sugVabKueLE8Fd6YlGQZsOgHge20PaBrYh+7G0YsY519ADeZniwO9AR0QI/7pBI/GpOdsO/mAM/dtJ4NVp2nMYubLwYTkQvZ9Ha53P91jxVjYq5HiZB6BqKUNKi1aQBaUixSJtPAZtZN3o3qIc8j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikzfgt9v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 833ADC19425;
+	Fri, 16 Jan 2026 08:11:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768551067;
-	bh=wFh+7TBblBKdqsuPRAvtZYiS1LG+bG9QlY39DipsRU0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=I0Uu6nUgBPQ6gByHmffeTu+v39Jt4WVp/vzlLvOVJ++6OhHdQS1ZGfEdAM14oAWy6
-	 zzSgFsxjZYEKfXT9N6xFYKdYWswEWSfsMzlVXytIA3df+84DFVSWFf91ecaGP+MN/z
-	 jUEs2ldPXtqec25Pg590n8ALIZqHEDAfgBi15G7NTneBw0GX8tmMFEZ1rfuQsGnqGZ
-	 u7r6/ZV7wawSnyegesjKDqRNmqNi4zl6A4S1drkRxq41250qjZPpFBx9UUPKVuguNX
-	 Sp79fOnSXU/nZn+ZomZBsrVp/A/ZgN9iBdV+2YGcMqhw4bwTQzJOuf6e3IOgzAbkIJ
-	 xzFXm9+WdSowA==
+	s=k20201202; t=1768551070;
+	bh=NaRA1uc76ad6S3cdm3cYzD/8X6vYxOm/vKCplm42B0w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ikzfgt9v3EEPMDDgymCkftGRcMvUTHk2iKLjpzF5CTSJNIRpl6yexOby2ZyhyiLCI
+	 9qNfRG+aoc8yCngd4/IDH24Sq51yhPhYsG6mVdUi39NW5+r+hDdYYkFDOb+qg21e5s
+	 7Id2RAIt+3bPNUL9hZAQmlhzuCLqsBXgejKNXUBdy8Tw5kiNa2VriybRosxrbW+IKH
+	 4MwZS1Ce8nKe6zshkz7F8Zj7nrv6Gq9phHXAk8XPQV8viUmSzCNoWSde3UCvCsrNPS
+	 /6foe1FJ1jyZcVZFH3uyjZ40+h/dOC3FMY3wpu197vQ10WJthSs87hSasc8J8vWlH0
+	 75C2AkKtb/bDA==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -57,11 +58,14 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Simona Vetter <simona.vetter@ffwll.ch>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Jason Gunthorpe <jgg@nvidia.com>,
-	linux-gpio@vger.kernel.org
-Subject: [PATCH 00/23] gpiolib: Adopt revocable mechanism for UAF prevention
-Date: Fri, 16 Jan 2026 08:10:13 +0000
-Message-ID: <20260116081036.352286-1-tzungbi@kernel.org>
+	linux-gpio@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH 01/23] gpiolib: Correct wrong kfree() usage for `kobj->name`
+Date: Fri, 16 Jan 2026 08:10:14 +0000
+Message-ID: <20260116081036.352286-2-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+In-Reply-To: <20260116081036.352286-1-tzungbi@kernel.org>
+References: <20260116081036.352286-1-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,92 +74,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series transitions the UAF prevention logic within the GPIO core
-(gpiolib) to use the 'revocable' mechanism.
+`kobj->name` should be freed by kfree_const()[1][2].  Correct it.
 
-The existing code aims to prevent UAF issues when the underlying GPIO
-chip is removed.  This series replaces that custom logic with the
-generic 'revocable' API, which is designed to handle such lifecycle
-dependencies.  There should be no change in behavior.
+[1] https://elixir.bootlin.com/linux/v6.18/source/lib/kasprintf.c#L41
+[2] https://elixir.bootlin.com/linux/v6.18/source/lib/kobject.c#L695
 
-This series depends on the 'revocable' API, introduced in [1].  Some
-build bots may report errors due to undefined symbols related to
-'revocable' until the dependency is merged.
+Cc: stable@vger.kernel.org
+Fixes: c351bb64cbe6 ("gpiolib: free device name on error path to fix kmemleak")
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+---
+ drivers/gpio/gpiolib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1] https://lore.kernel.org/chrome-platform/20260116080235.350305-1-tzungbi@kernel.org
-
-Tzung-Bi Shih (23):
-  gpiolib: Correct wrong kfree() usage for `kobj->name`
-  gpiolib: cdev: Fix resource leaks on errors in gpiolib_cdev_register()
-  gpiolib: Fix resource leaks on errors in gpiochip_add_data_with_key()
-  gpiolib: Fix resource leaks on errors in lineinfo_changed_notify()
-  gpiolib: cdev: Correct return code on memory allocation failure
-
-=> The first 5 patches are fixes.  They aren't directly related to the
-   replacement, and should be able to apply independently.
-
-  gpiolib: Access `gpio_bus_type` in gpiochip_setup_dev()
-  gpiolib: Remove redundant check for struct gpio_chip
-  gpiolib: sysfs: Remove redundant check for struct gpio_chip
-  gpiolib: Ensure struct gpio_chip for gpiochip_setup_dev()
-  gpiolib: cdev: Don't check struct gpio_chip in gpio_chrdev_open()
-
-=> The following 5 patches are refactors.  Makes the subsequent changes
-   easier or at least clear.
-
-  selftests: gpio: Add gpio-cdev-uaf tests
-
-=> The following patch adds kselftest cases for some classic UAF
-   scenarios.
-
-  gpiolib: Add revocable provider handle for struct gpio_chip
-  gpiolib: cdev: Leverage revocable for gpio_fileops
-  gpiolib: cdev: Leverage revocable for linehandle_fileops
-  gpiolib: cdev: Leverage revocable for line_fileops
-  gpiolib: cdev: Leverage revocable for lineevent_fileops
-  gpiolib: cdev: Leverage revocable for lineinfo_changed_notify
-  gpiolib: Leverage revocable for gpiolib_sops
-
-=> The following 7 patches start to replace the existing code.  They
-   are intentionally making small changes for easier to review.
-
-  revocable: Support to define revocable consumer handle on stack
-  revocable: Add Kunit test case for DEFINE_REVOCABLE()
-  selftests: revocable: Add test case for DEFINE_REVOCABLE()
-
-=> The following 3 patches introduce a new way to define revocable
-   consumer handles on stack and its test cases.
-
-  gpiolib: Leverage revocable for other independent lifecycle instances
-
-=> The following patch handles the "others" (i.e., the rest of those
-   custom logic) by using DEFINE_REVOCABLE() to at least make the usage
-   easier.  A big patch.
-
-  gpiolib: Remove unused `chip` and `srcu` in struct gpio_device
-
-=> The last patch removes the unused fields for the custom logic as all
-   of them should be transiting to revocable.
-
- .../driver-api/driver-model/revocable.rst     |   5 +-
- drivers/base/revocable.c                      |  60 ++-
- drivers/base/revocable_test.c                 |  54 +++
- drivers/gpio/gpiolib-cdev.c                   | 262 ++++++-----
- drivers/gpio/gpiolib-cdev.h                   |   3 +-
- drivers/gpio/gpiolib-sysfs.c                  |  55 ++-
- drivers/gpio/gpiolib-sysfs.h                  |  11 +-
- drivers/gpio/gpiolib.c                        | 410 ++++++++++--------
- drivers/gpio/gpiolib.h                        |  27 +-
- include/linux/revocable.h                     |  30 +-
- .../drivers/base/revocable/revocable_test.c   |  12 +
- .../revocable/test_modules/revocable_test.c   |  37 +-
- tools/testing/selftests/gpio/Makefile         |   5 +-
- tools/testing/selftests/gpio/gpio-cdev-uaf.c  | 320 ++++++++++++++
- tools/testing/selftests/gpio/gpio-cdev-uaf.sh |  67 +++
- 15 files changed, 974 insertions(+), 384 deletions(-)
- create mode 100644 tools/testing/selftests/gpio/gpio-cdev-uaf.c
- create mode 100755 tools/testing/selftests/gpio/gpio-cdev-uaf.sh
-
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 5eb918da7ea2..ba9323432e3a 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1263,7 +1263,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ err_free_descs:
+ 	kfree(gdev->descs);
+ err_free_dev_name:
+-	kfree(dev_name(&gdev->dev));
++	kfree_const(dev_name(&gdev->dev));
+ err_free_ida:
+ 	ida_free(&gpio_ida, gdev->id);
+ err_free_gdev:
 -- 
 2.52.0.457.g6b5491de43-goog
 
