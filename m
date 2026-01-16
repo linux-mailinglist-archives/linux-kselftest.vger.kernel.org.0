@@ -1,100 +1,110 @@
-Return-Path: <linux-kselftest+bounces-49171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EC0CD334D7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 16:48:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A2CCD3361C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 17:05:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CD6CA3023D46
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 15:44:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A2B1C302036A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 16:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F298833A9F1;
-	Fri, 16 Jan 2026 15:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B9833D6D5;
+	Fri, 16 Jan 2026 16:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="CHQexJO2"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="OrhJihAt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF41922D781;
-	Fri, 16 Jan 2026 15:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A992133A03F;
+	Fri, 16 Jan 2026 16:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768578274; cv=none; b=sJ1xJyzaIdJGE7idyS8Q8q7RB9JiGad9LOSgqOUMLoA4vSaoj59m1D1qcDmbSxi+HXPueswI79G2arqGZHuVTeWqgSQqL4mn76afVRS/LC0b11nNuy+nIiXVTDnTd9JcuYiwgxLddj1M4AFX5Y1CeF7YnEoxc+FvzQB4WyrFOzo=
+	t=1768579490; cv=none; b=THqYkmCvlYCkis+D4a76oLmA2xgc0vJT9g2nFVHMGOWUbko1MoInbnENjuK1MGM48aFwYl0tDBNl8M80w7WPtg4QSbvQFvjmf0n42MKMoGp0qZDm/cJ42/KVotAToF1nyroZHc4keR7cAeksK8R7X7oUJGN7J64PinG7v8A90n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768578274; c=relaxed/simple;
-	bh=Ywkk0ckwF86jetpRVGopodoAwE4G7Q3iX6e+4FisqyY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iY9ol+jqxzR7brGwzVLtsyOCU2rW1lNg81VBT/gYJcA9gasVxZD+D2xcxvdwsZF9ZdtfjSvPl49Onqd4S/iJsAQD97uGzZNwD+iyeZpNf8eZevFFmOmg9KH/0pQA5RhKQzuDB+mLwOjnYJGJuYQNio1NNZJvx/XcmFK1pnw0i6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=CHQexJO2; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=HRx9lWK+S+WOBI8oXXWCj90P7mXf+6WG0+uvtWiJJF4=; t=1768578272;
-	x=1769183072; b=CHQexJO2lip/AyAlZ/EZjx7ClJMY+6yVOnbYkzx3lVPdrqpuYtjaLek7eCIjj
-	PRf7sy7yXUVEMV6rkViXS1yC987WLm9XjaXaHunMnQ1bWonIKc8ySx9BJgM4FxSAohcdRac0gfCKR
-	jvvgjFhpivAn2XcLE+8hJbDKe2kIi/qaxLpEIW5AjLWF761G1Q1zuAZbCMGAWdog6RwwkxzPjJlrF
-	yFm1QIBUKDOeRdwYW/xpSULZligkSkIBVdeRay8ZJSfJByOlssEdo/vSgzdou92z5gH+W/NbZOjnS
-	HBgjPgW2MAo5jcmYD3vPDdc4TAtDyZQsRTx6x/7uSeb+bRpOvA==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1vglzr-00000002otT-0phK; Fri, 16 Jan 2026 16:44:23 +0100
-Received: from p5dc55f29.dip0.t-ipconnect.de ([93.197.95.41] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1vglzq-00000000YIc-3w6z; Fri, 16 Jan 2026 16:44:23 +0100
-Message-ID: <c3f713a89dd406d094eae99ef95c108e779780c3.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 0/3] sparc: Add architecture support for clone3
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Ludwig Rydberg <ludwig.rydberg@gaisler.com>, davem@davemloft.net, 
-	andreas@gaisler.com, brauner@kernel.org, shuah@kernel.org
-Cc: sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, arnd@arndb.de, geert@linux-m68k.org, 
-	schuster.simon@siemens-energy.com
-Date: Fri, 16 Jan 2026 16:44:21 +0100
-In-Reply-To: <20260116153051.21678-1-ludwig.rydberg@gaisler.com>
-References: <20260116153051.21678-1-ludwig.rydberg@gaisler.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 
+	s=arc-20240116; t=1768579490; c=relaxed/simple;
+	bh=d6fx63Lc9tb5FePd5rV7dwl4JBQ3NTTSjw9eH/lcsl0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CKmaMjMws24nQzngtCoQ6HbUjQYZDLQvdXjefuPCxSeY7hI0SjXaPm5VdGFrUJakEr1J4z9DBVl1VDjgeN/I3nSEMYamgXaly8Uf2ljv+RlbB2zQfQdPhLw6YKwjXGG5saaoOjIhIVCGhM7/XsrL8DJqEDQJVNfQpjc5XNDTdus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=OrhJihAt; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-152.bb.dnainternet.fi [81.175.209.152])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 438893D7;
+	Fri, 16 Jan 2026 17:04:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1768579457;
+	bh=d6fx63Lc9tb5FePd5rV7dwl4JBQ3NTTSjw9eH/lcsl0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OrhJihAtkd/QVayLh2IudJ7/j0ryHqHTIClVRs6aFSilR0jLySPgpImvAXAhKM0Wz
+	 4iyWD8xG+ui/o7qdH/tx+lQY/MgWGRTTdLE5jNR2jNVykBAVxyzIyZGdixAtqQtgFi
+	 zy7gRAoXWFyofs6RsRyauVYrL2juMzJDkxiZYsHQ=
+Date: Fri, 16 Jan 2026 18:04:24 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Danilo Krummrich <dakr@kernel.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v7 1/3] revocable: Revocable resource management
+Message-ID: <20260116160424.GA14499@pendragon.ideasonboard.com>
+References: <20260116080235.350305-1-tzungbi@kernel.org>
+ <20260116080235.350305-2-tzungbi@kernel.org>
+ <DFQ45FWO4XHC.2BW7I9LGC76WT@kernel.org>
+ <CAMRc=Medaqr5UPimc8o+VTy=9MgU5p8AXjArisQfBNqi7ktSGg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=Medaqr5UPimc8o+VTy=9MgU5p8AXjArisQfBNqi7ktSGg@mail.gmail.com>
 
-Hi Ludwig,
+On Fri, Jan 16, 2026 at 04:27:27PM +0100, Bartosz Golaszewski wrote:
+> On Fri, Jan 16, 2026 at 4:20 PM Danilo Krummrich wrote:
+> > On Fri Jan 16, 2026 at 9:02 AM CET, Tzung-Bi Shih wrote:
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index a671e3d4e8be..fd683c62012a 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -22517,6 +22517,13 @@ F:   include/uapi/linux/rseq.h
+> > >  F:   kernel/rseq.c
+> > >  F:   tools/testing/selftests/rseq/
+> > >
+> > > +REVOCABLE RESOURCE MANAGEMENT
+> > > +M:   Tzung-Bi Shih <tzungbi@kernel.org>
+> > > +L:   linux-kernel@vger.kernel.org
+> > > +S:   Maintained
+> > > +F:   drivers/base/revocable.c
+> > > +F:   include/linux/revocable.h
+> >
+> > NIT: I think we should add this include to the DRIVER CORE entry as well.
+> 
+> FWIW: I'm not even sure drivers/base/ is the right place for this.
+> Except for a few devm_ helpers, nothing here is inherently tied into
+> the driver model This could be useful outside of device drivers and I
+> would suggest to put it under lib/ with devres factored out into a
+> separate source file.
 
-On Fri, 2026-01-16 at 16:30 +0100, Ludwig Rydberg wrote:
-> This series adds support for the clone3 system call to the SPARC{32|64}
-> architectures and also adds a related patch for clone/fork/vfork that fix=
- an
-> issue previously reported[1] that could result in -EFAULT for no good rea=
-son.
-> Without this patch, the clone3 system call would need the same mitigation=
- as
-> introduced in glibc[2] for the clone system call.
+I agree. Based on the discussions we had at LPC, the revocable resource
+management API is not the right solution to handle races between device
+removal and userspace access. It is however a possibly useful tool for
+races between producers and consumers *inside the kernel*. lib/ is a
+better location.
 
-Woohoo, thanks a lot for working on this! I'll build a test kernel right aw=
-ay!
+-- 
+Regards,
 
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Laurent Pinchart
 
