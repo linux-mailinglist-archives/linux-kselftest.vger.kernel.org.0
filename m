@@ -1,222 +1,418 @@
-Return-Path: <linux-kselftest+bounces-49086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62A9DD2B533
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 05:24:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4102AD2B9EA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 05:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A8C9B308AC0D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 04:23:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C5E8C3022F0E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 04:52:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D0B346799;
-	Fri, 16 Jan 2026 04:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB6834BA53;
+	Fri, 16 Jan 2026 04:52:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4vr5Shc5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Yfu6VLrh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABC23451AE
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 04:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768537422; cv=pass; b=XBXZMI/vkgY/ynySWBsXh5MgsjZe1XBez5wixhvwsFoz2Zxd1ND2SC78A5DXvFF5sKyaMEP+jNenYFmsX6R93ZadSwFsXOAHEPqg8nu/4A3Dc3eWSaieN9xQRD8jI/5T+iZn+3AARnOXlzC3gy9ee3kZUXvzmGiMDkjjyhSV7o4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768537422; c=relaxed/simple;
-	bh=t9W/scSXovPATZ+gq3bWTCsz5jE4rtYjFSKZcQ2zPks=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=Fdr/SENfAlXKlXRtjQYHmBlhXD17mmXsfatE9/GgKaFic6xOqQGPwCoFGdy/rGsHBVL7Tx6PYqPfsiBNiHOp3VuOofaMADTA6e+F+YnCXY7/n3GB0BG6r8KTJKndAiwFON2dI3balXKIFNpIGE26R+rqMl1F9180xS3SJkhJXDw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4vr5Shc5; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6505d147ce4so4750a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Jan 2026 20:23:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768537418; cv=none;
-        d=google.com; s=arc-20240605;
-        b=guYRAlfIC1ob1dwDZin96JgBKdOuQW4+RQnXFO0bPSquqNcwRruXl1VZ1OFY5B0FeQ
-         fgMyJtgW1xPo2wXCr/MjkM3CZFZaWXPoXN9mtizFLd/mEfK/4Ea9kGrv+ghRFFz5Ir1Q
-         zgbgyvvxeXhTFf4YpEf+0zviz0o+FMmXYJTPDDasa6nCexYAx8gyNrbyzmklH2E0Zx1l
-         bB/2K2o4Tuu1LOmtsclMrMqZVo7C+8kBijgBKtt0d3wv8pBDUGpfZ3yZ9obo3SCpZ9cx
-         F1aZrvlM0bfZ/MQOZnokSvONDt0t7AX3o12wyFE/sqwuL/tE77z91WGL9VklNVeXhPQQ
-         ELGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CQBnNlpZCgFRekPGXIOEqkC5tJTqz8MzcUs9mWtjz+I=;
-        fh=i5KKDnj4/4XUo6Q0HQGoDs0CCpyAsLvbvmMLLNmVkeg=;
-        b=EeDiADlMPLliupSkhZfTty5XqaImU8OW/EMII4zB3tsPpWfjB4qH4nD7ewCpEcP/hf
-         D9t4Hu2dT/z1+Hgk3itDMiZbl6hxeYCtC9GaW0MyhWKY4uvjhdgzPHCa3avumUFF69Vx
-         ONWOO5othFUJJ7rMNWQw8XOOrCaNsBYwbWCAbbJYFZ4YdfekOSN566E9p4QusoKXjI7p
-         OnZyUMnhvoGX1QHGjIiqxhHO6jjKhOJdzoXL2Z8HOtDLjMn8nsovH3pDwbnKpSc6miHV
-         IUSowRcpiAQMUM7QX3KcTilTn/iRcrXvRmVraDCkueCdqwjmej7BkQJoqIlys7IgLwq7
-         iBxA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768537418; x=1769142218; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CQBnNlpZCgFRekPGXIOEqkC5tJTqz8MzcUs9mWtjz+I=;
-        b=4vr5Shc5il0eVKwj+zgp+iu3NPwgvb6L33NSZ+LCCzo3QwlSnnc6o+zXobQvnpX1Sh
-         Azf1HGasfTxSdyFb7rL3ygtG8GTCwjIWAXFr0pwV/pbjetgXwV+DflmNsjARYnFNr/3G
-         6+R/p5M6qf48TG+TXVWzv2h3dnpGs0MpJf+ZlGuvigJpejNYH8wIx7Q9zt4XS9hUvGhF
-         1tuLhDvbGebk2BOzXNhJSl3yqYWlq4dRyqQ4rjJ7SdWF9cRDGIlco/Mb0kWqiCbY2UbW
-         Wa3mjlOK3mQfrq/npj5vKva3AxE4g6BJr54BkSS+XLPErgiwixWjVoDW78o5iIO6Rfgc
-         2FSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768537418; x=1769142218;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CQBnNlpZCgFRekPGXIOEqkC5tJTqz8MzcUs9mWtjz+I=;
-        b=CkoeDE1v62L8ejh23qz+hP6HQZnFiwGNhARFr6guGbOcEdFKITkrV/kUqohVwB+k+Z
-         ltIH2DnhWCzXeVEcvwfIh3KkYIlp23ZvsVctYWqXqvwaGqE2VL3t4skqpKmRwMomSId0
-         EuT7WzjHGILs5V2ErxHvy86y3mtudTq8IFtoyjebfNuuSVfr38Zx97A08EK8Xu4xDBvz
-         Cqn4vTMZjkZsSpXHZXMtyqHRP+y1jSdsTks/chzHXnuWPa24JmOZPHFwfJK/T/kxT4de
-         MwAJmsSoDXeeRnxavIXFiJ7BhRQwchIq95EcuZVxzMN4ReogGmbYWdTvg3+JQEUYTCQu
-         zxHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWuB03jwg9QOGnmkhvMDrty5aYG5vqmUNjoJmw/gr2vRb1A5+YidfCh8Da7gw/sPod6NClfsmapYByLgB9B5uE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6blrYMQDfBZI6FAIo3WdU9P0AXQDJfEAqD9DAkpzUo7yvIzNQ
-	UlxLg+PodKEY654+GvZxiaUAd9enbw5ZGV5y5CkvimuKUTRSbxw53DI1M0r4GUNywMlDxfXZkKS
-	d5nsHqZrIuMYBTvB/Qe2rJXv9BpCbt0KSMEm98kB8
-X-Gm-Gg: AY/fxX5SXPf2gs+nPqyABWMLB8MYcaePe4CyOxjJY/6s+Lg+5Fqt7IOQk8m3vfVOLa1
-	awo2pSTAhgmsGw13hi5JOzCJbuHWFAS13k23BcXpOJU9anjevisVzz6rWsHH0jhWRrR27lSC1jj
-	SpkHSmMm/dYycKT1ulxz/gAvy0RQ4J0540sfrczfKuJ4e5K/a8ePgkcHtqe2B5zmKNYIZdwFRfE
-	6HW2PEIu0gRgFLJa17IgAa3RUis5HcO1FKHtzac2YKy9BoVrfZJWUmNQTqeIvBveGG6G/s=
-X-Received: by 2002:a05:6402:345b:b0:649:8aa1:e524 with SMTP id
- 4fb4d7f45d1cf-655251ec768mr12527a12.11.1768537418027; Thu, 15 Jan 2026
- 20:23:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B81283FDC;
+	Fri, 16 Jan 2026 04:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768539127; cv=none; b=fwBVy+/UBM1QdZiICZnvQs8F5hZe0tchQPF46AjdOvyQIxLlB5xsd8aPFm6mfeaCP2D2fZQEwLnAxS04MS3M6BNSsHeNO6JsccMepXWC0IAOrFMrWPCycjYJJTX2HOVuav8YPpB8ocF6Q6pxIIv05q6PrEk819p5JD3+zuE+57I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768539127; c=relaxed/simple;
+	bh=3ieGGZI5lvCeHVgdVm3wK3pVgPAzpr/26RBrVuSn2j8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q5wDquzmQ7F1MrWCla9FQ/qlFZAn4OjGI3XO1UnjfUQ6z8o1i7ZPGam/smsiGWfoyBIRE+2BnCUhmFHqQRhcFrq3CMjO1fXMTnxdgAs+ghMENs9DqwjwBZXjGgMJhZTrZzLkgHI09o9s2BBI/Zkydgw4YO4xl63QppHn4x0Gjak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Yfu6VLrh; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60FMsdK0012338;
+	Fri, 16 Jan 2026 04:50:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=0uK4L3
+	bV6NbtcBfGaSQys6UAirTXMSjVohFC5GErS84=; b=Yfu6VLrhfHMwF0crq8e2Pi
+	19D3X3bWRrr5qgSp6b7tqVtRwZIX2r/ntPIiEsQ5VWAhXX/HUQK30uzKCXCzGCpp
+	gSitqRWhD1yHUd1xzdsWVJOGUK8B8JKZpdNsQgzfmrTVLH3si/itCyIdqMRVAe4w
+	FY7sV6UHWwSN+bW1ggpO46JooJO1D8GDbo7nrNqPNhN1bYVIUQoSRqG/OgP0Dxer
+	ftx64ruHxG4T6+TVsEJlZ6aya7JVj6EGEcwffICu19lKd9LacN5se9kfomFXSQ5B
+	kDTk2KCdCKDv+xdcXEyOL9RGuz/wRouHuHP5nf8//XIVJ/GanXCc8lfRn77lxRww
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bq9emrwbw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 04:50:15 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60G4oFoA004242;
+	Fri, 16 Jan 2026 04:50:15 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bq9emrwbu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 04:50:15 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60G4mcAj025848;
+	Fri, 16 Jan 2026 04:50:14 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm2kkv5s6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Jan 2026 04:50:14 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60G4o90615335774
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 16 Jan 2026 04:50:09 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CA7C020049;
+	Fri, 16 Jan 2026 04:50:09 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1756E2004B;
+	Fri, 16 Jan 2026 04:50:04 +0000 (GMT)
+Received: from [9.43.87.191] (unknown [9.43.87.191])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 16 Jan 2026 04:50:03 +0000 (GMT)
+Message-ID: <78536979-e924-4be3-b847-332802ad82e2@linux.ibm.com>
+Date: Fri, 16 Jan 2026 10:20:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115232154.3021475-1-jmattson@google.com> <20260115232154.3021475-7-jmattson@google.com>
-In-Reply-To: <20260115232154.3021475-7-jmattson@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Thu, 15 Jan 2026 20:23:26 -0800
-X-Gm-Features: AZwV_QiDkq2kwy7nbR9fUAEWefj2zSCFllDeLOP7A8FMqaeIEAaTMQ6drundYUU
-Message-ID: <CALMp9eRGSoQGu9R7CYqgRERY=x-_=59bHvEab-t519u8n6nmWA@mail.gmail.com>
-Subject: Re: [PATCH v2 6/8] KVM: x86: nSVM: Save/restore gPAT with KVM_{GET,SET}_NESTED_STATE
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/6] powerpc64/bpf: Support tailcalls with subprogs
+To: adubey <adubey@imap.linux.ibm.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        naveen@kernel.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, memxor@gmail.com, iii@linux.ibm.com,
+        shuah@kernel.org
+References: <20260114114450.30405-1-adubey@linux.ibm.com>
+ <20260114114450.30405-3-adubey@linux.ibm.com>
+ <42d41a0d-9d26-4eeb-af46-200083261c09@kernel.org>
+ <2d242f4476b61373da236d24272b0ec3@imap.linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <2d242f4476b61373da236d24272b0ec3@imap.linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=KvJAGGWN c=1 sm=1 tr=0 ts=6969c387 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=eFhwI4I6t5nqxJZgoi0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDAzNiBTYWx0ZWRfXyNdY8OH3qwUa
+ Wmk7O8yMAMG8zqZGrEAud86lfcmCIdlTWHPORgz1UlWreq1+B8ky/C6AtG2ilL5jsb512ceChDu
+ oNPllOX8c5Io11WvNlBhe6wJ3ltMKlFDCXw8BIoapfnThaX4RNlgaao+y9I/tKDmfPAUcd3zSPY
+ qsYyw40OcDk4ElXF/jZNlDqtm4ISWJIXCfKtNljSCIh0k+9zMCq6XuzkSh2aj/90jIjAgwkaWx8
+ 52gtXrJ0JczAouJRR+aYyjZeNIV3DKlTfMxbKBqRMjGb8POPv2s2JY4oGJEh2+Rl9v55MbD3IXb
+ k5KiQ+8uM0pPuceWQ66TEpZ/+vlZXOUWF+kOWS4pdrGmVH5RbnpSc61VAmntQ42P59lk5JFgPIO
+ URI25/COZB38Y0bOf3rSCsl/7cgAIoCv4jEQVjUUyThNR6IeDtleIDAHLuADcDNjq4BanT2wFHW
+ /UbwKOc6tm19zJDQe8Q==
+X-Proofpoint-GUID: AQXGaDG4Cy44T-ozuMiMUs-pFjS042QU
+X-Proofpoint-ORIG-GUID: MBurlCyVuJKrV5vthp7Xdb_Z1jqQF_L8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-16_01,2026-01-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 impostorscore=0 phishscore=0
+ adultscore=0 clxscore=1011 spamscore=0 bulkscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601160036
 
-On Thu, Jan 15, 2026 at 3:22=E2=80=AFPM Jim Mattson <jmattson@google.com> w=
-rote:
->
-> Add a 'flags' field to the SVM nested state header, and use bit 0 of the
-> flags to indicate that gPAT is stored in the nested state.
->
-> If in guest mode with NPT enabled, store the current vmcb->save.g_pat val=
-ue
-> into the vmcb save area of the nested state, and set the flag.
->
-> Note that most of the vmcb save area in the nested state is populated wit=
-h
-> dead (and potentially already clobbered) vmcb01 state. A few fields hold =
-L1
-> state to be restored at VMEXIT. Previously, the g_pat field was in the
-> former category.
->
-> Also note that struct kvm_svm_nested_state_hdr is included in a union
-> padded to 120 bytes, so there is room to add the flags field without
-> changing any offsets.
->
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  arch/x86/include/uapi/asm/kvm.h |  3 +++
->  arch/x86/kvm/svm/nested.c       | 13 ++++++++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/=
-kvm.h
-> index 7ceff6583652..80157b9597db 100644
-> --- a/arch/x86/include/uapi/asm/kvm.h
-> +++ b/arch/x86/include/uapi/asm/kvm.h
-> @@ -495,6 +495,8 @@ struct kvm_sync_regs {
->
->  #define KVM_STATE_VMX_PREEMPTION_TIMER_DEADLINE        0x00000001
->
-> +#define KVM_STATE_SVM_VALID_GPAT       BIT(0)
-> +
->  /* vendor-independent attributes for system fd (group 0) */
->  #define KVM_X86_GRP_SYSTEM             0
->  #  define KVM_X86_XCOMP_GUEST_SUPP     0
-> @@ -530,6 +532,7 @@ struct kvm_svm_nested_state_data {
->
->  struct kvm_svm_nested_state_hdr {
->         __u64 vmcb_pa;
-> +       __u32 flags;
->  };
->
->  /* for KVM_CAP_NESTED_STATE */
-> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-> index 5fb31faf2b46..c50fb7172672 100644
-> --- a/arch/x86/kvm/svm/nested.c
-> +++ b/arch/x86/kvm/svm/nested.c
-> @@ -1789,6 +1789,8 @@ static int svm_get_nested_state(struct kvm_vcpu *vc=
-pu,
->         /* First fill in the header and copy it out.  */
->         if (is_guest_mode(vcpu)) {
->                 kvm_state.hdr.svm.vmcb_pa =3D svm->nested.vmcb12_gpa;
-> +               if (nested_npt_enabled(svm))
-> +                       kvm_state.hdr.svm.flags |=3D KVM_STATE_SVM_VALID_=
-GPAT;
->                 kvm_state.size +=3D KVM_STATE_NESTED_SVM_VMCB_SIZE;
->                 kvm_state.flags |=3D KVM_STATE_NESTED_GUEST_MODE;
->
-> @@ -1823,6 +1825,11 @@ static int svm_get_nested_state(struct kvm_vcpu *v=
-cpu,
->         if (r)
->                 return -EFAULT;
->
-> +       /*
-> +        * vmcb01->save.g_pat is dead now, so it is safe to overwrite it =
-with
-> +        * vmcb02->save.g_pat, whether or not nested NPT is enabled.
-> +        */
-> +       svm->vmcb01.ptr->save.g_pat =3D svm->vmcb->save.g_pat;
 
-Is this too disgusting? Should I extend the payload by 8 bytes
-instead? It seems like such a waste, since most of the save area is
-dead/unused. Maybe I could define a new sparse save state structure,
-with the ~200 bytes that are currently used, surrounded by padding for
-the other 500+ bytes. Then, I could just grab 8 bytes of the padding,
-and it wouldn't seem quite as hacky .
 
->         if (copy_to_user(&user_vmcb->save, &svm->vmcb01.ptr->save,
->                          sizeof(user_vmcb->save)))
->                 return -EFAULT;
-> @@ -1904,7 +1911,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vc=
-pu,
->                 goto out_free;
->
->         /*
-> -        * Validate host state saved from before VMRUN (see
-> +        * Validate host state saved from before VMRUN and gPAT (see
->          * nested_svm_check_permissions).
->          */
->         __nested_copy_vmcb_save_to_cache(&save_cached, save);
-> @@ -1951,6 +1958,10 @@ static int svm_set_nested_state(struct kvm_vcpu *v=
-cpu,
->         if (ret)
->                 goto out_free;
->
-> +       if (is_guest_mode(vcpu) && nested_npt_enabled(svm) &&
-> +           (kvm_state.hdr.svm.flags & KVM_STATE_SVM_VALID_GPAT))
-> +               svm->vmcb->save.g_pat =3D save_cached.g_pat;
-> +
->         svm->nested.force_msr_bitmap_recalc =3D true;
->
->         kvm_make_request(KVM_REQ_GET_NESTED_STATE_PAGES, vcpu);
-> --
-> 2.52.0.457.g6b5491de43-goog
->
+On 14/01/26 6:33 pm, adubey wrote:
+> On 2026-01-14 17:57, Christophe Leroy (CS GROUP) wrote:
+>> Le 14/01/2026 à 12:44, adubey@linux.ibm.com a écrit :
+>>> From: Abhishek Dubey <adubey@linux.ibm.com>
+>>>
+>>> Enabling tailcalls with subprog combinations by referencing
+>>> method. The actual tailcall count is always maintained in the
+>>> tail_call_info variable present in the frame of main function
+>>> (also called entry function). The tail_call_info variables in
+>>> the frames of all other subprog contains reference to the
+>>> tail_call_info present in frame of main function.
+>>>
+>>> Dynamic resolution interprets the tail_call_info either as
+>>> value or reference depending on the context of active frame
+>>> while tailcall is invoked.
+>>>
+>>> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+>>> ---
+>>>   arch/powerpc/net/bpf_jit.h        | 12 +++++-
+>>>   arch/powerpc/net/bpf_jit_comp.c   | 10 ++++-
+>>>   arch/powerpc/net/bpf_jit_comp64.c | 68 +++++++++++++++++++++++--------
+>>>   3 files changed, 70 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+>>> index 45d419c0ee73..5d735bc5e6bd 100644
+>>> --- a/arch/powerpc/net/bpf_jit.h
+>>> +++ b/arch/powerpc/net/bpf_jit.h
+>>> @@ -51,6 +51,12 @@
+>>>           EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | 
+>>> (offset & 0xfffc));                    \
+>>>       } while (0)
+>>>   +/* Same as PPC_BCC_SHORT, except valid dest is known prior to 
+>>> call. */
+>>> +#define PPC_COND_BRANCH(cond, dest)         \
+>>> +    do {                                      \
+>>> +        long offset = (long)(dest) - CTX_NIA(ctx);              \
+>>> +        EMIT(PPC_INST_BRANCH_COND | (((cond) & 0x3ff) << 16) | 
+>>> (offset & 0xfffc));    \
+>>> +    } while (0)
+>>
+>> I don't like the idea of duplicating PPC_BCC_SHORT() to just kick the
+>> verification out. Now we will have two macros doing the exact same
+>> thing with one handling failure case and one ignoring failure case.
+>> There is a big risk that one day or another someone will use the wrong
+>> macro.
+>>
+>> Could you change bpf_jit_build_prologue() to return an int add use
+>> PPC_BCC_SHORT() instead of that new PPC_COND_BRANCH() ?
+> I implemented exactly same change in bpf_jit_build_prologue(). But, 
+> during internal review, @HariBathini suggested
+> to have separate macro with a caution note.
+> 
+> @Hari please suggest here!
+
+Not just about the change of return type but the check seems like an
+overkill for cases where the offset is known and within branch range.
+How about using BUILD_BUG_ON() to avoid unecessary checks and
+return type change for places where the branch offset is known
+and is a constant?
+
+>>
+>>>   /*
+>>>    * Sign-extended 32-bit immediate load
+>>>    *
+>>> @@ -75,6 +81,8 @@
+>>>     /* for tailcall counter */
+>>>   #define BPF_PPC_TAILCALL        8
+>>> +/* for gpr non volatile registers BPG_REG_6 to 10 */
+>>> +#define BPF_PPC_STACK_SAVE      (6*8)
+>>
+>> Add spaces before and after the *
+>>
+>>>     /* If dummy pass (!image), account for maximum possible 
+>>> instructions */
+>>>   #define PPC_LI64(d, i)        do {                          \
+>>> @@ -170,6 +178,7 @@ struct codegen_context {
+>>>       unsigned int alt_exit_addr;
+>>>       u64 arena_vm_start;
+>>>       u64 user_vm_start;
+>>> +    bool is_subprog;
+>>>   };
+>>>     #define bpf_to_ppc(r)    (ctx->b2p[r])
+>>> @@ -204,11 +213,10 @@ void bpf_jit_build_epilogue(u32 *image, struct 
+>>> codegen_context *ctx);
+>>>   void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context 
+>>> *ctx);
+>>>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
+>>>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, 
+>>> int tmp_reg, long exit_addr);
+>>> -
+>>>   int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32 
+>>> *fimage, int pass,
+>>>                 struct codegen_context *ctx, int insn_idx,
+>>>                 int jmp_off, int dst_reg, u32 code);
+>>> -
+>>
+>> Not sure why this patch needs to remove those blank lines here and above.
+>>
+>>> +int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx);
+>>>   #endif
+>>>     #endif
+>>> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/ 
+>>> bpf_jit_comp.c
+>>> index 5e976730b2f5..069a8822c30d 100644
+>>> --- a/arch/powerpc/net/bpf_jit_comp.c
+>>> +++ b/arch/powerpc/net/bpf_jit_comp.c
+>>> @@ -206,6 +206,7 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+>>> bpf_prog *fp)
+>>>       cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
+>>>       cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux- 
+>>> >arena);
+>>>       cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
+>>> +    cgctx.is_subprog = bpf_is_subprog(fp);
+>>>         /* Scouting faux-generate pass 0 */
+>>>       if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+>>> @@ -435,6 +436,11 @@ void bpf_jit_free(struct bpf_prog *fp)
+>>>       bpf_prog_unlock_free(fp);
+>>>   }
+>>>   +bool bpf_jit_supports_subprog_tailcalls(void)
+>>> +{
+>>> +    return IS_ENABLED(CONFIG_PPC64);
+>>> +}
+>>> +
+>>>   bool bpf_jit_supports_kfunc_call(void)
+>>>   {
+>>>       return true;
+>>> @@ -604,7 +610,7 @@ static void 
+>>> bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_contex
+>>>                              int func_frame_offset, int r4_off)
+>>>   {
+>>>       if (IS_ENABLED(CONFIG_PPC64)) {
+>>> -        /* See bpf_jit_stack_tailcallcnt() */
+>>> +        /* See bpf_jit_stack_tailcallinfo_offset() */
+>>>           int tailcallcnt_offset = 7 * 8;
+>>>             EMIT(PPC_RAW_LL(_R3, _R1, func_frame_offset - 
+>>> tailcallcnt_offset));
+>>> @@ -619,7 +625,7 @@ static void 
+>>> bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_cont
+>>>                            int func_frame_offset, int r4_off)
+>>>   {
+>>>       if (IS_ENABLED(CONFIG_PPC64)) {
+>>> -        /* See bpf_jit_stack_tailcallcnt() */
+>>> +        /* See bpf_jit_stack_tailcallinfo_offset() */
+>>>           int tailcallcnt_offset = 7 * 8;
+>>>             EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
+>>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/ 
+>>> bpf_jit_comp64.c
+>>> index 39061cd742c1..cebf81fbd59f 100644
+>>> --- a/arch/powerpc/net/bpf_jit_comp64.c
+>>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+>>> @@ -26,8 +26,12 @@
+>>>    * Ensure the top half (upto local_tmp_var) stays consistent
+>>>    * with our redzone usage.
+>>>    *
+>>> + * tail_call_info - stores tailcall count value in main program's
+>>> + *                  frame, stores reference to tail_call_info of
+>>> + *                  main's frame in sub-prog's frame.
+>>> + *
+>>>    *        [    prev sp        ] <-------------
+>>> - *        [    tail_call_cnt    ] 8        |
+>>> + *        [    tail_call_info    ] 8        |
+>>>    *        [   nv gpr save area    ] 6*8        |
+>>>    *        [    local_tmp_var    ] 24        |
+>>>    * fp (r31) -->    [   ebpf stack space    ] upto 512    |
+>>> @@ -35,8 +39,6 @@
+>>>    * sp (r1) --->    [    stack pointer    ] --------------
+>>>    */
+>>>   -/* for gpr non volatile registers BPG_REG_6 to 10 */
+>>> -#define BPF_PPC_STACK_SAVE    (6*8)
+>>>   /* for bpf JIT code internal usage */
+>>>   #define BPF_PPC_STACK_LOCALS    24
+>>>   /* stack frame excluding BPF stack, ensure this is quadword aligned */
+>>> @@ -98,7 +100,7 @@ static inline bool bpf_has_stack_frame(struct 
+>>> codegen_context *ctx)
+>>>    *        [    prev sp        ] <-------------
+>>>    *        [      ...           ]         |
+>>>    * sp (r1) --->    [    stack pointer    ] --------------
+>>> - *        [    tail_call_cnt    ] 8
+>>> + *        [    tail_call_info    ] 8
+>>>    *        [   nv gpr save area    ] 6*8
+>>>    *        [    local_tmp_var    ] 24
+>>>    *        [   unused red zone    ] 224
+>>> @@ -114,7 +116,7 @@ static int bpf_jit_stack_local(struct 
+>>> codegen_context *ctx)
+>>>       }
+>>>   }
+>>>   -static int bpf_jit_stack_tailcallcnt(struct codegen_context *ctx)
+>>> +int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx)
+>>>   {
+>>>       return bpf_jit_stack_local(ctx) + BPF_PPC_STACK_LOCALS + 
+>>> BPF_PPC_STACK_SAVE;
+>>>   }
+>>> @@ -147,17 +149,32 @@ void bpf_jit_build_prologue(u32 *image, struct 
+>>> codegen_context *ctx)
+>>>   #endif
+>>>         /*
+>>> -     * Initialize tail_call_cnt if we do tail calls.
+>>> -     * Otherwise, put in NOPs so that it can be skipped when we are
+>>> -     * invoked through a tail call.
+>>> +     * Tail call count(tcc) is saved & updated only in main
+>>> +     * program's frame and the address of tcc in main program's
+>>> +     * frame (tcc_ptr) is saved in subprogs frame.
+>>> +     *
+>>> +     * Offset of tail_call_info on any frame will be interpreted
+>>> +     * as either tcc_ptr or tcc value depending on whether it is
+>>> +     * greater than MAX_TAIL_CALL_CNT or not.
+>>>        */
+>>> -    if (ctx->seen & SEEN_TAILCALL) {
+>>> +    if (!ctx->is_subprog) {
+>>>           EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG_1), 0));
+>>>           /* this goes in the redzone */
+>>>           EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, - 
+>>> (BPF_PPC_TAILCALL)));
+>>>       } else {
+>>> -        EMIT(PPC_RAW_NOP());
+>>> -        EMIT(PPC_RAW_NOP());
+>>> +        /*
+>>> +         * if tail_call_info < MAX_TAIL_CALL_CNT
+>>> +         *     main prog calling first subprog -> copy reference
+>>> +         * else
+>>> +         *     subsequent subprog calling another subprog -> 
+>>> directly copy content
+>>> +         */
+>>> +        EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_2), _R1, 0));
+>>> +        EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), 
+>>> bpf_to_ppc(TMP_REG_2), -(BPF_PPC_TAILCALL)));
+>>> +        EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
+>>> +        PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
+>>> +        EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2),
+>>> +                            -(BPF_PPC_TAILCALL)));
+>>> +        EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, - 
+>>> (BPF_PPC_TAILCALL)));
+>>>       }
+>>>         if (bpf_has_stack_frame(ctx)) {
+>>> @@ -352,19 +369,38 @@ static int bpf_jit_emit_tail_call(u32 *image, 
+>>> struct codegen_context *ctx, u32 o
+>>>       EMIT(PPC_RAW_CMPLW(b2p_index, bpf_to_ppc(TMP_REG_1)));
+>>>       PPC_BCC_SHORT(COND_GE, out);
+>>>   +    EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R1, 
+>>> bpf_jit_stack_tailcallinfo_offset(ctx)));
+>>> +    EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
+>>> +    PPC_COND_BRANCH(COND_LE, CTX_NIA(ctx) + 8);
+>>> +
+>>> +    /* dereference TMP_REG_1 */
+>>> +    EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_1), 0));
+>>> +
+>>>       /*
+>>> -     * if (tail_call_cnt >= MAX_TAIL_CALL_CNT)
+>>> +     * if (tail_call_info == MAX_TAIL_CALL_CNT)
+>>>        *   goto out;
+>>>        */
+>>> -    EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R1, 
+>>> bpf_jit_stack_tailcallcnt(ctx)));
+>>>       EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_1), MAX_TAIL_CALL_CNT));
+>>> -    PPC_BCC_SHORT(COND_GE, out);
+>>> +    PPC_COND_BRANCH(COND_EQ, out);
+>>>         /*
+>>> -     * tail_call_cnt++;
+>>> +     * tail_call_info++; <- Actual value of tcc here
+>>>        */
+>>>       EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_1), 
+>>> 1));
+>>> -    EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, 
+>>> bpf_jit_stack_tailcallcnt(ctx)));
+>>> +
+>>> +    /*
+>>> +     * Before writing updated tail_call_info, distinguish if current 
+>>> frame
+>>> +     * is storing a reference to tail_call_info or actual tcc value in
+>>> +     * tail_call_info.
+>>> +     */
+>>> +    EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_2), _R1, 
+>>> bpf_jit_stack_tailcallinfo_offset(ctx)));
+>>> +    EMIT(PPC_RAW_CMPLWI(bpf_to_ppc(TMP_REG_2), MAX_TAIL_CALL_CNT));
+>>> +    PPC_COND_BRANCH(COND_GT, CTX_NIA(ctx) + 8);
+>>> +
+>>> +    /* First get address of tail_call_info */
+>>> +    EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), _R1, 
+>>> bpf_jit_stack_tailcallinfo_offset(ctx)));
+>>> +    /* Writeback updated value to tail_call_info */
+>>> +    EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), bpf_to_ppc(TMP_REG_2), 0));
+>>>         /* prog = array->ptrs[index]; */
+>>>       EMIT(PPC_RAW_MULI(bpf_to_ppc(TMP_REG_1), b2p_index, 8));
+> -Abhishek
+
 
