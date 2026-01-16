@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-49123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D29B9D2DDF6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:17:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E894BD2DD42
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:15:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 28B6B3021548
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:12:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0D45A3069038
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332FC2FF661;
-	Fri, 16 Jan 2026 08:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37648307AF4;
+	Fri, 16 Jan 2026 08:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3HKbG5s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KLPh054z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C2E2F8BC3;
-	Fri, 16 Jan 2026 08:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11BF02FFF9C;
+	Fri, 16 Jan 2026 08:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768551126; cv=none; b=g+u3hWmcsprfixNdsazs3gEycOHPX+CtWvRGfjHYRgjlwmac7t8Vh0ttLEQvTt/h1eWmiE8CjVIlHD972Wmh662Gpo2bX1JlvzA91G1Ez4Mxdb83FgNMQSBvuwgMRPAucGg5mcuCnljdA0rbeRJefkUX/Jx/4a1YOBmAHr26q6U=
+	t=1768551129; cv=none; b=qGcacqFnylIvJLBgSTPtfwxKAcxCHVOVo3tJCw104EHQcG6IGDGNOa6CnSs9JH90uvXZafl4ByXIWRlMxKHU4ZDOAp6DW9uRHRbrqCQ9gMbttP0mkjb5l+lCWcbWSjyQm4zOJAqDV+c0Tc2AOxMhtLHV7OwPTAB9l4HHG4iPL5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768551126; c=relaxed/simple;
-	bh=oleKZCrD+Q1YjsXErAMRTh03iiXXqBdvvaG8jWLHuBA=;
+	s=arc-20240116; t=1768551129; c=relaxed/simple;
+	bh=3wWqog/hH+uf26p1Ea1XMOzG0f11uU/kA8DJrrsfFEk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZXGjPO+9tlCoByvJYxGDF1Ehkv8rherZGSccisR4ivYMXGD0XVCEvBKoijLMNCeMElIIGtxvAM1Wb8C8Zk1ViiV4DnQ24562+EJyirbSnHZYz3GZnGGgZG045aHbP2AMkDhlmJp08zyR5hwhSRbp2I0JHAeu9fXZEff7Q3JBNxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3HKbG5s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B52C116C6;
-	Fri, 16 Jan 2026 08:12:02 +0000 (UTC)
+	 MIME-Version; b=ba5lXnkeV1C4cHuLc5G8HPXfDtdfZHz8CBu30I0vEimrlYEr42wcwZfEir/j8YM9IKiszZWExixrReXkzQ4sWtvSHv9OgaUtzJnD+I35PxHqQVS0G9F4wK8jsmH19w6v6x9rwx99AkCCIxlJXAyezKIJY4HfCcI1RE+7RQRSmGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KLPh054z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF097C19421;
+	Fri, 16 Jan 2026 08:12:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768551125;
-	bh=oleKZCrD+Q1YjsXErAMRTh03iiXXqBdvvaG8jWLHuBA=;
+	s=k20201202; t=1768551128;
+	bh=3wWqog/hH+uf26p1Ea1XMOzG0f11uU/kA8DJrrsfFEk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J3HKbG5skQYvv3jPQ2ObXMcA+7vaDn0gfYohtMGrKAg0Blraad/Sq9NesvJKoerWT
-	 jEU9DZwExPV/fWageQ0z7eK8MJFboebjL39kQg62OjszgltUqfYIdshkY278tFKVZT
-	 1v6c45azOCDpEi80MEGzOd/AvDTrKsENfdG5oXnREXbKa6B//zlFn6IDAXlk0OFN9P
-	 C2SKhX4GH08JBka/C9z/IVj43mZXNy1/DYiMj+ckUHRstHe3FDjtnTXJqEFb1blYkc
-	 XsG4CArJe/bTbBWOx3dwdK4eGX0ORcESJxjyPl4KPxb8dusvhFa7lFTh5eJXv7QDVV
-	 LE3W6Mn8IM+xg==
+	b=KLPh054zT8+E3J2ETrOGD8c98u4RKLVaGM40R9u4/eaum+07wsXMKQ3lFTiCjDHzy
+	 9CJ326fQ+LcCiDnZf9oBwbDDh3eGJpIGiRagW1hhokeoXSCJlZj3TEoySn+kemsxLl
+	 Eq8zrFrZNXvkgp5LbFbX8HIFbQZ3qQ1R2rGAbMs49cKwkFSOJJDYaWo9Qe2Etox/jo
+	 BM+RobkCZB8NocYEBwKA7wZCRzvd5XymiVB8ZK5+dqpWcpyjN4bu+/o0yCaMq1NCJs
+	 CtDB2xiO9o5Bhsulokc8cA0arIpq46J75Rydmsye0KdtKkLmpbVOQwKDdxwHKjcIO5
+	 Rbe67sweQkz5Q==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -59,9 +59,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Jason Gunthorpe <jgg@nvidia.com>,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH 19/23] revocable: Support to define revocable consumer handle on stack
-Date: Fri, 16 Jan 2026 08:10:32 +0000
-Message-ID: <20260116081036.352286-20-tzungbi@kernel.org>
+Subject: [PATCH 20/23] revocable: Add Kunit test case for DEFINE_REVOCABLE()
+Date: Fri, 16 Jan 2026 08:10:33 +0000
+Message-ID: <20260116081036.352286-21-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
 In-Reply-To: <20260116081036.352286-1-tzungbi@kernel.org>
 References: <20260116081036.352286-1-tzungbi@kernel.org>
@@ -73,194 +73,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Support a way to define a revocable consumer handle on stack.  Under
-some circumstances, the user wouldn't like to use dynamic memory
-allocation for consumer handles.
+Add Kunit test case to verify DEFINE_REVOCABLE() can successfully access
+the resource and drop the reference count.
 
-This makes the struct revocable no longer opaque.
+A way to run the test:
+$ ./tools/testing/kunit/kunit.py run \
+        --kconfig_add CONFIG_REVOCABLE_KUNIT_TEST=y \
+        revocable_test
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- .../driver-api/driver-model/revocable.rst     |  5 +-
- drivers/base/revocable.c                      | 60 +++++++++++++------
- include/linux/revocable.h                     | 30 +++++++++-
- 3 files changed, 74 insertions(+), 21 deletions(-)
+ drivers/base/revocable_test.c | 54 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/Documentation/driver-api/driver-model/revocable.rst b/Documentation/driver-api/driver-model/revocable.rst
-index 22a442cc8d7f..fff081dbd296 100644
---- a/Documentation/driver-api/driver-model/revocable.rst
-+++ b/Documentation/driver-api/driver-model/revocable.rst
-@@ -84,7 +84,7 @@ For Resource Providers
+diff --git a/drivers/base/revocable_test.c b/drivers/base/revocable_test.c
+index 28d46ce1ba0c..e0efffe6e04f 100644
+--- a/drivers/base/revocable_test.c
++++ b/drivers/base/revocable_test.c
+@@ -14,10 +14,15 @@
+  *
+  * - Try Access Macro: Same as "Revocation" but uses the
+  *   REVOCABLE_TRY_ACCESS_WITH() and REVOCABLE_TRY_ACCESS_SCOPED().
++ *
++ * - Define Macro: Verifies DEFINE_REVOCABLE() can successfully access the
++ *   resource and drop the reference count.
+  */
  
- For Resource Consumers
- ----------------------
--.. kernel-doc:: drivers/base/revocable.c
-+.. kernel-doc:: include/linux/revocable.h
-    :identifiers: revocable
+ #include <kunit/test.h>
++#include <linux/kref.h>
+ #include <linux/revocable.h>
++#include <linux/srcu.h>
  
- .. kernel-doc:: drivers/base/revocable.c
-@@ -93,6 +93,9 @@ For Resource Consumers
- .. kernel-doc:: drivers/base/revocable.c
-    :identifiers: revocable_free
+ static void revocable_test_basic(struct kunit *test)
+ {
+@@ -123,11 +128,60 @@ static void revocable_test_try_access_macro2(struct kunit *test)
+ 	revocable_free(rev);
+ }
  
-+.. kernel-doc:: include/linux/revocable.h
-+   :identifiers: DEFINE_REVOCABLE
++static void revocable_test_define_macro(struct kunit *test)
++{
++	/* To access the opaque struct */
++	struct {
++		struct srcu_struct srcu;
++		void *res;
++		struct kref kref;
++	} *_rp;
++	struct revocable_provider *rp;
++	void *real_res = (void *)0x12345678, *res;
 +
- .. kernel-doc:: drivers/base/revocable.c
-    :identifiers: revocable_try_access
- 
-diff --git a/drivers/base/revocable.c b/drivers/base/revocable.c
-index f6cece275aac..93c925252665 100644
---- a/drivers/base/revocable.c
-+++ b/drivers/base/revocable.c
-@@ -71,16 +71,6 @@ struct revocable_provider {
- 	struct kref kref;
++	rp = revocable_provider_alloc(real_res);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rp);
++
++	_rp = (void *)rp;
++	KUNIT_EXPECT_EQ(test, kref_read(&_rp->kref), 1);
++
++	{
++		DEFINE_REVOCABLE(rev, rp);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rev);
++		KUNIT_EXPECT_EQ(test, kref_read(&_rp->kref), 2);
++
++		REVOCABLE_TRY_ACCESS_WITH(rev, res);
++		KUNIT_EXPECT_PTR_EQ(test, res, real_res);
++	}
++	KUNIT_EXPECT_EQ(test, kref_read(&_rp->kref), 1);
++
++	{
++		bool accessed = false;
++
++		DEFINE_REVOCABLE(rev, rp);
++		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, rev);
++		KUNIT_EXPECT_EQ(test, kref_read(&_rp->kref), 2);
++
++		REVOCABLE_TRY_ACCESS_SCOPED(rev, res) {
++			KUNIT_EXPECT_PTR_EQ(test, res, real_res);
++			accessed = true;
++		}
++		KUNIT_EXPECT_TRUE(test, accessed);
++
++		revocable_provider_revoke(rp);
++		KUNIT_EXPECT_EQ(test, kref_read(&_rp->kref), 1);
++
++		REVOCABLE_TRY_ACCESS_WITH(rev, res);
++		KUNIT_EXPECT_PTR_EQ(test, res, NULL);
++	}
++}
++
+ static struct kunit_case revocable_test_cases[] = {
+ 	KUNIT_CASE(revocable_test_basic),
+ 	KUNIT_CASE(revocable_test_revocation),
+ 	KUNIT_CASE(revocable_test_try_access_macro),
+ 	KUNIT_CASE(revocable_test_try_access_macro2),
++	KUNIT_CASE(revocable_test_define_macro),
+ 	{}
  };
  
--/**
-- * struct revocable - A handle for resource consumer.
-- * @rp: The pointer of resource provider.
-- * @idx: The index for the RCU critical section.
-- */
--struct revocable {
--	struct revocable_provider *rp;
--	int idx;
--};
--
- /**
-  * revocable_provider_alloc() - Allocate struct revocable_provider.
-  * @res: The pointer of resource.
-@@ -170,11 +160,47 @@ struct revocable_provider *devm_revocable_provider_alloc(struct device *dev,
- EXPORT_SYMBOL_GPL(devm_revocable_provider_alloc);
- 
- /**
-- * revocable_alloc() - Allocate struct revocable.
-+ * revocable_init() - Initialize struct revocable.
-+ * @rev: The pointer of struct revocable.
-  * @rp: The pointer of resource provider.
-  *
-  * This holds a refcount to the resource provider.
-  *
-+ * Don't call this function directly.  Use revocable_alloc() or
-+ * DEFINE_REVOCABLE().
-+ */
-+void revocable_init(struct revocable *rev, struct revocable_provider *rp)
-+{
-+	rev->rp = rp;
-+	kref_get(&rp->kref);
-+}
-+EXPORT_SYMBOL_GPL(revocable_init);
-+
-+/**
-+ * revocable_deinit() - Deinitialize struct revocable.
-+ * @rev: The pointer of struct revocable.
-+ *
-+ * This drops a refcount to the resource provider.  If it is the final
-+ * reference, revocable_provider_release() will be called to free the struct.
-+ *
-+ * Don't call this function directly.  revocable_free() or DEFINE_REVOCABLE()
-+ * should help to do so.
-+ */
-+void revocable_deinit(struct revocable *rev)
-+{
-+	struct revocable_provider *rp = rev->rp;
-+
-+	kref_put(&rp->kref, revocable_provider_release);
-+}
-+EXPORT_SYMBOL_GPL(revocable_deinit);
-+
-+/**
-+ * revocable_alloc() - Allocate struct revocable.
-+ * @rp: The pointer of resource provider.
-+ *
-+ * Allocate a struct revocable and call revocable_init() to holds a refcount
-+ * to the resource provider.
-+ *
-  * Return: The pointer of struct revocable.  NULL on errors.
-  */
- struct revocable *revocable_alloc(struct revocable_provider *rp)
-@@ -185,9 +211,7 @@ struct revocable *revocable_alloc(struct revocable_provider *rp)
- 	if (!rev)
- 		return NULL;
- 
--	rev->rp = rp;
--	kref_get(&rp->kref);
--
-+	revocable_init(rev, rp);
- 	return rev;
- }
- EXPORT_SYMBOL_GPL(revocable_alloc);
-@@ -196,14 +220,12 @@ EXPORT_SYMBOL_GPL(revocable_alloc);
-  * revocable_free() - Free struct revocable.
-  * @rev: The pointer of struct revocable.
-  *
-- * This drops a refcount to the resource provider.  If it is the final
-- * reference, revocable_provider_release() will be called to free the struct.
-+ * Call revocable_deinit() to drop a refcount to the resource provider and
-+ * free the struct revocable.
-  */
- void revocable_free(struct revocable *rev)
- {
--	struct revocable_provider *rp = rev->rp;
--
--	kref_put(&rp->kref, revocable_provider_release);
-+	revocable_deinit(rev);
- 	kfree(rev);
- }
- EXPORT_SYMBOL_GPL(revocable_free);
-diff --git a/include/linux/revocable.h b/include/linux/revocable.h
-index 659ba01c58db..89bb1a5c74e4 100644
---- a/include/linux/revocable.h
-+++ b/include/linux/revocable.h
-@@ -10,19 +10,47 @@
- #include <linux/cleanup.h>
- 
- struct device;
--struct revocable;
- struct revocable_provider;
- 
-+/**
-+ * struct revocable - A handle for resource consumer.
-+ * @rp: The pointer of resource provider.
-+ * @idx: The index for the RCU critical section.
-+ */
-+struct revocable {
-+	struct revocable_provider *rp;
-+	int idx;
-+};
-+
- struct revocable_provider *revocable_provider_alloc(void *res);
- void revocable_provider_revoke(struct revocable_provider *rp);
- struct revocable_provider *devm_revocable_provider_alloc(struct device *dev,
- 							 void *res);
- 
-+void revocable_init(struct revocable *rev, struct revocable_provider *rp);
-+void revocable_deinit(struct revocable *rev);
- struct revocable *revocable_alloc(struct revocable_provider *rp);
- void revocable_free(struct revocable *rev);
- void *revocable_try_access(struct revocable *rev) __acquires(&rev->rp->srcu);
- void revocable_withdraw_access(struct revocable *rev) __releases(&rev->rp->srcu);
- 
-+DEFINE_FREE(define_rev, struct revocable *, revocable_deinit(_T))
-+
-+#define _DEFINE_REVOCABLE(_rev, _name, _rp)					\
-+	struct revocable _name;							\
-+	struct revocable *_rev __free(define_rev) = &_name;			\
-+	revocable_init(_rev, _rp)
-+
-+/**
-+ * DEFINE_REVOCABLE() - A helper for defining a revocable consumer on stack
-+ * @_rev: The variable name to ``struct revocable *``.
-+ * @_rp: The provider's ``struct revocable_provider *`` handle.
-+ *
-+ * The macro declares and defines a revocable consumer handle on stack.
-+ */
-+#define DEFINE_REVOCABLE(_rev, _rp)						\
-+	_DEFINE_REVOCABLE(_rev, __UNIQUE_ID(name), _rp)
-+
- DEFINE_FREE(access_rev, struct revocable *, if (_T) revocable_withdraw_access(_T))
- 
- /**
 -- 
 2.52.0.457.g6b5491de43-goog
 
