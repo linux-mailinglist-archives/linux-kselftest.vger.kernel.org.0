@@ -1,179 +1,230 @@
-Return-Path: <linux-kselftest+bounces-49211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49212-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B312ED38925
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 23:20:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7254CD38934
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 23:28:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B00CE3033F86
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 22:20:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8BE0A300C282
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 22:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E483731076B;
-	Fri, 16 Jan 2026 22:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B22311940;
+	Fri, 16 Jan 2026 22:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jl6fwD5X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fnGZbEP2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1BF30F552
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 22:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F01429E0E6
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 22:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768602048; cv=pass; b=JoOOv2ervLRNZmdT9h5nKcmEo9QdqGy16jWGhuCKiwcKw8YdBtB+t2BdUYQRlrd+Mz2KNWgMrIOGl/UcJotubZCRQyZnkYrdoeAw2M7WNc3scbjMquX8otJoHuEI4WgpYJA6xfJX9eUZsnL/SAK3Uykj4/uTkTBUtWmjHQvgl9I=
+	t=1768602487; cv=pass; b=QcVZMONZaWw4R+ER37m2TWdo8Po2Rk5lJa+i37fu/92jqpN/MQG4bQffkWBdk6qf7rRLfgBDAXoaqxxBySxy3BvLONOZV5bQAOfgfOTakQ9AMWWfwXe7jPv+pi/mY697D8TRjei8AxgnR9k0TJDjkzDH9fT2VbTPRmeh7sET1Ys=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768602048; c=relaxed/simple;
-	bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
+	s=arc-20240116; t=1768602487; c=relaxed/simple;
+	bh=e5O3aFYeIvcKbfg0/jZu7gJTJoVVq8BY3YqjjOKcV04=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=chEwJbHmkT1okyAj6shs50yBLUAEpCWXmp8kZsUnZ3IXrUG4xKdMG85deVkWsuiZ8RfI5wUiw4TYIUHSTIw1GqJMQ3mWoQbjXWOHncPbjRJgFqJvzd+iYelSTmbB1SfV9IOuDPen1sDyQnhM8j5ctE0sCmpl78kDZm4v+30D+Bg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jl6fwD5X; arc=pass smtp.client-ip=209.85.215.172
+	 To:Cc:Content-Type; b=iFf2az50I5pQ1qcp8qD4SrBfgBjKzq8oWL9BSSaJ4l/yNuC7oHJMo92nxS2qug2uWwVW5zIzTo0O0/knUr76v6Uxup+BfAOl+3kpUmDf2npUFqkEraziSCH7IKOuNbmKPn9Wj+mVaz4ZL7nZP6p4lh24N3cpPxsQcnI5irKdBio=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fnGZbEP2; arc=pass smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-bc0d7255434so994912a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 14:20:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768602047; cv=none;
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34c71f462d2so1770875a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Jan 2026 14:28:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768602485; cv=none;
         d=google.com; s=arc-20240605;
-        b=ITT0aVtRksszEsAFb7d/s07ld1uLhOOELy4FoPswxSgL8IDuhw9+hXDsebLJnw6VyT
-         zrSNLYj4QrmWKW064ECPFLGOwv1v4WOksUZa+Jf4ysVp6BHpOc/FsGEVvkYGJ4yV66aH
-         lI6aNW75KPp5TKaoJqq+7BadDbVXfdOoZEgPJ8jteKKE4kC/AdUN6Le2l0GGOz1zt78h
-         Pjty1cL+B+LQnrlEWZTjXTKr19KzjCAzr9JW1ZapCD+CwLg4EJq5UQm7ssMYlohQP4xY
-         HvdYKy1WrWQ6azF/+i1WzvIiuxuMHIzXBfh5a93Mpzso5t3BT55ZMGYewhWBdOP8sCkg
-         Quhw==
+        b=WBeznVl/Gn9265qwm3EGC8Awm/YiyNi/s90MD8OgLg9ZGqI8QZo2couCiBLxrIHtRa
+         GXLJOeDJZ1X2LGdNBbJyOVEpk6Qvotw/5zVERcIiPwBJakgmxUoeAJm1o+8gNnBqqtCz
+         QRcEbWhu1r9XN/SbrOLDcPwBOESCO6vBjSRpn1Bx44y/umkbpGbRlzsv1FLWKicc4op5
+         vwl9eLv5xSW6qv8O+QJ5qSK5/nkDkvLElBKCtTVS5+kRBuErK5gvOkCp760n4PizHc3n
+         bHy7S6ZxGv28lb8tD9RIR2D3BI/MV7nMZHWuDFcDP60XdoEgmrCfaHBs32BiLn0GE90w
+         E97Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
-        fh=qbOZE1PzxQqDrERrhBvyg9uLZUJ8I69VPBb1e38aLJQ=;
-        b=GrM/dWWx4HZs1HfaJ/fcIgCBOkmTB5DJWA3PdQ7LcWB8otcGkaaeL9rMvl4bf1ThXq
-         ZM0Sui+9PZNvOO/8fCkEdnWS1KhkIMeJgrs0vzsqJZaqpmDvPxWpFZOVDUHEiucgICAg
-         bfd8r0amM69XZI2q8WU1xTpn7wsP6BcXNS4lPj0PLTWL41pC8iJaIIBbFscpM/cRfZWe
-         13EcP5R0VUn6dkbo+DjRIFCLlzbHxz3+QZDltx2ws09AkOqnLwaVEeicLD5ylSlC1dvU
-         V+XBatYFaRsMmgnWIvrDcESkEtfTAa2fHKZJC1JS+IYM+Xn2eGNnRDjhaxJpf1ZcsmOf
-         P3Gw==;
+        bh=mhIrDxLvEVi4Sv2JLQc+7wy2/rTmaDaiC7LdgHxYqR0=;
+        fh=MpQNKF2iqqT6BgEA9bgBGPdhxK6J629PfCLlRyQngMc=;
+        b=XFmKq8JW+yjs/8L+YPJlN3uMupNbcfpORmKGDStdolcR5h8eQM63XHqrsDFwkYaDDM
+         B/ZgXqQCWuKvEzJs/E4loBwU8WO90q6RT2LTe+a4XM1AtJXJ9evowBGQrbQQ8DSghdw0
+         zHDIVhtkVy/Jp8XEBaShsvfpDSViTh1Czu5CIBwlXDcda7fMUwO1vt11cc1UrRjDxN9B
+         3+veX9EQLwLcbJxbp4E8ts66CP61yftdUr3cNBjzbv8GT7RoQqTyCOPdf/VcCH0VVObi
+         21mPpE8GO0N3ppFSy4goWU08Gsqzuje/lvcDigTF+sgcAursAszNAqj9JekIydySwuUb
+         S5Tw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768602047; x=1769206847; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768602485; x=1769207285; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
-        b=jl6fwD5XuK8nNz0w8naADUnEY83g5YEz8a/AJMTNwsu+p/9darZgynRx3h0TTCIPkU
-         fQx5WKc/uQ9iHsZ2qE0eLzF4K6sHagBAuuYCAaJ4bPvgacdNyLKMwj7FuUh+UvvebEsB
-         ujlvGefiQ16jpeIIsompuWkHE7czowuBkO+1XE8cmmFURBz1Jmhw+8ifaVXBzAMXjIEt
-         svjgdadT9xkGnr25ipuogSTgwFcAdgyPf0ucI3nyrMQmpbNDj/BqDdZMj6YZDAXsxRWU
-         9lgtgKxFEtEY9PBkgyhT3AHgvXFp3hrVdvONvtAw4w9uPXrpQQrNyYu6CTevJhN9i459
-         5UBw==
+        bh=mhIrDxLvEVi4Sv2JLQc+7wy2/rTmaDaiC7LdgHxYqR0=;
+        b=fnGZbEP2krZR1mRqomojCpv8Yth1Dn/wRHLNNiTicWzmKaC07xWWXh6xAUJfdzK6yx
+         sglAtpEw8+CQ90x3RXACz9OsOSJBmiY9bJr8sXnATUZ/n3i0AZZ4nZyd2Ae1LOcJeNuT
+         d8v8bduZqTERy5oPEU1IatabyHD/YbRqn5sX8ixtyCM0PWq3tYA4xXxorczeO4cVdL9K
+         BkUT493Xj3C5yokH0YpXn07V40fanlJs7jnp6+fpsY9N5Gp8Q5gyiXYbkIVE91/uklyt
+         Y5rR7RecrvDRhhOFB4E8j8egChyoERbEtJAK0p8kdokyN0lYvTZxowWdf+O4PWcHCP8u
+         XBNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768602047; x=1769206847;
+        d=1e100.net; s=20230601; t=1768602485; x=1769207285;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=o5En9a8wP5By67GXNTiNQjIPnUWaBuLHMV9zVL0xjhM=;
-        b=a/HwBpILImd6KbUkNSoM7GZ1Fe+YvmLKwW2yVYY1eZcr4IccxXsK8xw8sRemlhbPJU
-         o/KfMYk9EHNryZLQ4JYbYx1F8IHW52nufv72Mqc7LhiPCOkfZPOnikOuyOwD5o2yP+RY
-         ONKLLbnZ4EtQNygwXPeGiUQB9rrGtdMW2YL1vmTRAqiojDAT69gZH+tzAYTwKfWsFKIW
-         +0zHjUJcrTXsJJMpZlRKiYMETDRpCB+hMZ1/jQ0OE2W6iYg0h2NvQSHZnMrMqDernb5c
-         RRMy7xropy/752zNkR6clddHB/I1X8qBxKPfxGwZ1fKYEfg/0bXV3HmQjXw/nhbmmW+R
-         E3IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUzQfSyzP8HqBs1aNBkpyoZPgLYACGvQHlzlfA9J+T8ZghLM75W7C90SILgOHZDtKfhnzF0gpzSvNAWJWJqxk0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywiss12P91Ek1pFAM3HcqDY+U41B0Wh1s2ngjG4u2+u/c9hNpBp
-	0DTFRj7Ni2G9C2BIxWkG3gZew0UH4ms6UVo0XQm8KkuSexgwoBUwNPrzxBecDF07LjzEOiKpMSV
-	zmCaBNjPgYGQAJ2IzYCPAHM9MdQHI86E=
-X-Gm-Gg: AY/fxX4COeKSYO62iIyLNbqXuw9sS8Td1KbazWopg9CyW70IyzTLU37BynC5BK1suVx
-	YyCzat+lPM84OYpazdb5A3DbWeKt7yBLphNVwgUNVUuueArvlmOe5aaH3c9rOnRtvMfTc2GSZSc
-	lCx3fJJIFflL6W4Mb5RE5tUB3GQJw3EkcELB5lomDURymJepJRhAC0cOiOMpwAQHRfYJFl2UF8M
-	wXKhvABGBmJM7t+CoBDNiHDH0jTp6VQ1YF5U0L9s2yP7jeLQ+Tce4XDWXQa32U5xdHQg43vZm3c
-	PtWloLltliil2Kv9QFD3oQ==
-X-Received: by 2002:a17:903:3888:b0:295:c2e7:7199 with SMTP id
- d9443c01a7336-2a7175a63fdmr36859055ad.29.1768602046673; Fri, 16 Jan 2026
- 14:20:46 -0800 (PST)
+        bh=mhIrDxLvEVi4Sv2JLQc+7wy2/rTmaDaiC7LdgHxYqR0=;
+        b=TaUtzgrVkjyw6TIW/5YL3yGBf8zoblCX7rcZlwqcb/oHpNQwZaZH3mOWxFkdpndPWO
+         sKeK2S9ZkaLqDDphWvcmBSjoh06BJvLDH7GEXK7jvtMv1PdNDTlqSu+VHm6JRko0feGR
+         QgjmvGoNqaxp1ANf2lF3vH7vihCzGrQ9r+iKMqF/9wv8pgY0gRjLYoiITFVh3lBpQku9
+         sblNNpOoj3mcEDSiEhB0B2M/PV618Al5kfgxaOIxxBOV7bCts62LEUGo5iY8fd00xPNc
+         tKM/if1f4S8d3TlGPn9GUcAnB0NcFI7Vq7yUrMbLyEEHZM7au596TgQezGIKIV2K1Bmy
+         wghg==
+X-Forwarded-Encrypted: i=1; AJvYcCWVe3RQ7gaksw9aF38lGkt9yBknvqBjxbn94vmL2CiqL/a9c5tgcfHDSMGkeHSlH9FNYzvqUP1JT7HQWRS7Lfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEcKNkPuygS2Gtv7/XR07PR7bjeCRPZfKQaKTKlchn9SYfH4/t
+	jQvRqtp+6dlHFq6TeI3iFF9CNI0uYtuzuAtXYmVZJL7WLvrjyvQydnP/OvYA0C0AX9wak5RiXtg
+	AckMeu6eXFlaR9VZ7b24c93D+Vq3pa/Y=
+X-Gm-Gg: AY/fxX5nKUn1j2J4TmxT4PNrQfkhaBmuw7qXGdh6XRcXCiBPnixXRlT6Ul3zPTAcBWv
+	9Ib3ISWh8gJMFvlZvTATGGMJ/p91w2+KVKcoEobp4VnzhO+LTlfuWJoeE4UvvzwIem/32j0ewcV
+	l2m2zxYJVeMSX0zReCcuHEnUERSK38Chxv8CrMar3rh6pAniGUcDYNXEupd39aOSgGdPNom1Ny1
+	XedQk110Znldy9tYlu0J4bOgoix1URcwPucCipvNKDnJPhdtcUxoEjtqbWrAelOxjf55rzHlSni
+	N5EByBiDbNw=
+X-Received: by 2002:a17:90b:3c85:b0:340:b86b:39c7 with SMTP id
+ 98e67ed59e1d1-3527317db23mr3752920a91.11.1768602484921; Fri, 16 Jan 2026
+ 14:28:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260114-bpftool-tests-v1-0-cfab1cc9beaf@bootlin.com>
- <CAEf4BzYvZsjSpsDHXAuZ9G3=r4e27+c_LDpSUampw-fTfKA2=g@mail.gmail.com> <DFPUQZ5PNXKA.12KADC78HCRQ5@bootlin.com>
-In-Reply-To: <DFPUQZ5PNXKA.12KADC78HCRQ5@bootlin.com>
+References: <20260112145616.44195-1-leon.hwang@linux.dev> <20260112145616.44195-3-leon.hwang@linux.dev>
+ <CAEf4BzYRC+=J05C6QDwgzbJ7gO7gZD4xcEcj9ixCaJ=xaRuSsQ@mail.gmail.com> <3b0fa14d-a11d-4ed7-8f28-2e99d74f6b46@linux.dev>
+In-Reply-To: <3b0fa14d-a11d-4ed7-8f28-2e99d74f6b46@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 16 Jan 2026 14:20:33 -0800
-X-Gm-Features: AZwV_Qj7HA8GkrLxttMYt-BAKc2j92CUeTQrxpfNtW9oL8TZwLQvAQc9j6gMlZ8
-Message-ID: <CAEf4BzbT-7iRezzNRQPvQpRDA3BmkesCSijT4mPXuWb2ua=9ag@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/4] selftests/bpf: add a new runner for bpftool tests
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Fri, 16 Jan 2026 14:27:38 -0800
+X-Gm-Features: AZwV_QiRj9jk-5uJ87ReS5F4IFipAEUi6jE4X1Cajov5CAwqsqjl7f0Fw_saIUU
+Message-ID: <CAEf4Bzbig7bZoaOgOWvcv1W46iUe6m77NpToghu+vZCvQYsMpA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 2/9] libbpf: Add support for extended bpf syscall
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
+	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
+	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
+	Rong Tao <rongtao@cestc.cn>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 15, 2026 at 11:57=E2=80=AFPM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
+On Fri, Jan 16, 2026 at 5:58=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> Hi Andrii,
 >
-> On Thu Jan 15, 2026 at 6:58 PM CET, Andrii Nakryiko wrote:
-> > On Wed, Jan 14, 2026 at 12:59=E2=80=AFAM Alexis Lothor=C3=A9 (eBPF Foun=
-dation)
-> > <alexis.lothore@bootlin.com> wrote:
+>
+> On 2026/1/16 08:42, Andrii Nakryiko wrote:
+> > On Mon, Jan 12, 2026 at 6:58=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
 > >>
-> >> Hello,
-> >> this series is part of the larger effort aiming to convert all
-> >> standalone tests to the CI runners so that they are properly executed =
-on
-> >> patches submission.
+> >> To support the extended BPF syscall introduced in the previous commit,
+> >> introduce the following internal APIs:
 > >>
-> >> Some of those tests are validating bpftool behavior(test_bpftool_map.s=
-h,
-> >> test_bpftool_metadata.sh, test_bpftool_synctypes.py, test_bpftool.py..=
-.)
-> >> and so they do not integrate well in test_progs. This series proposes =
-to
+> >> * 'sys_bpf_ext()'
+> >> * 'sys_bpf_ext_fd()'
+> >>   They wrap the raw 'syscall()' interface to support passing extended
+> >>   attributes.
+> >> * 'probe_sys_bpf_ext()'
+> >>   Check whether current kernel supports the extended attributes.
+> >>
+> >> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> >> ---
+> >>  tools/lib/bpf/bpf.c             | 34 ++++++++++++++++++++++++++++++++=
++
+> >>  tools/lib/bpf/features.c        |  8 ++++++++
+> >>  tools/lib/bpf/libbpf_internal.h |  3 +++
+> >>  3 files changed, 45 insertions(+)
+> >>
+> >> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> >> index 21b57a629916..d44e667aaf02 100644
+> >> --- a/tools/lib/bpf/bpf.c
+> >> +++ b/tools/lib/bpf/bpf.c
+> >> @@ -69,6 +69,40 @@ static inline __u64 ptr_to_u64(const void *ptr)
+> >>         return (__u64) (unsigned long) ptr;
+> >>  }
+> >>
+> >> +static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
+> >> +                             unsigned int size,
+> >> +                             struct bpf_common_attr *common_attr,
 > >
-> > Can you elaborate why they do not integrate well? In my mind,
-> > test_progs should be the only runner into which we invest effort
-> > (parallel tests, all the different filtering, etc; why would we have
-> > to reimplement subsets of this). The fact that we have test_maps and
-> > test_verifier is historical and if we had enough time we'd merge all
-> > of them into test_progs.
+> > nit: kernel uses consistent attr_common/size_common pattern, but here
+> > you are inverting attr_common -> common_attr, let's not?
 > >
-> > What exactly in test_progs would prevent us from implementing bpftool
-> > test runner?
 >
-> I don't think there is any strong technical blocker preventing from
-> integrating those tests directly into test_progs. That's rather about
-> the fact that test_progs tests depends (almost) exclusively on
-> libbpf/skeletons. Those bpftool tests rather need to directly execute
+> Ack.
+>
+> I'll keep the same pattern.
+>
+> >> +                             unsigned int size_common)
+> >> +{
+> >> +       cmd =3D common_attr ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_C=
+OMMON_ATTRS);
+> >> +       return syscall(__NR_bpf, cmd, attr, size, common_attr, size_co=
+mmon);
+> >> +}
+> >> +
+> >> +static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *at=
+tr,
+> >> +                                unsigned int size,
+> >> +                                struct bpf_common_attr *common_attr,
+> >> +                                unsigned int size_common)
+> >> +{
+> >> +       int fd;
+> >> +
+> >> +       fd =3D sys_bpf_ext(cmd, attr, size, common_attr, size_common);
+> >> +       return ensure_good_fd(fd);
+> >> +}
+> >> +
+> >> +int probe_sys_bpf_ext(void)
+> >> +{
+> >> +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_toke=
+n_fd);
+> >> +       union bpf_attr attr;
+> >> +       int fd;
+> >> +
+> >> +       memset(&attr, 0, attr_sz);
+> >> +       fd =3D syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &at=
+tr, attr_sz, NULL,
+> >> +                    sizeof(struct bpf_common_attr));
+> >> +       if (fd >=3D 0)
+> >> +               close(fd);
+> >
+> > hm... close can change errno, this is fragile. If fd >=3D 0, something
+> > is wrong with our detection, just return error right away?
+> >
+>
+> How about capture errno before closing?
+>
+> err =3D errno;
+> if (fd >=3D 0)
+>         close(fd);
+> return err =3D EFAULT;
 
-There are actually plenty of test in test_progs that do networking
-setups, calling system() to launch various binaries, etc. So it never
-was purely for libbpf/skeletons/whatnot.
+not sure what this code is trying to do, but yes, preserving errno is
+one way to fix an immediate problem.
 
-So yeah, I think bpftool testing should still be implemented as one
-(or many) test_progs tests (and maybe subtests), utilizing
-test_progs's generic multi-process testing setup, filtering,
-reporting, etc infrastructure. No need to add extra runners.
+But fd should really not be >=3D 0, and if it is -- it's some problem,
+so I'd return an error in that case to keep us aware, which is why I'm
+saying I'd just return inside if (fd >=3D 0) { }
 
-> bpftool and parse its stdout output, so I thought that it made sense to
-> have a dedicated runner for this. If I'm wrong and so if those tests
-> should rather be moved in the test_progs runner (eg to avoid duplicating
-> the runner features), I'm fine with it. Any additional opinion on this
-> is welcome.
 >
-> Thanks,
+> Then, we can wrap all details in probe_sys_bpf_ext().
 >
-> Alexis
-> --
-> Alexis Lothor=C3=A9, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+> >> +       return errno =3D=3D EFAULT;
+> >> +}
+> >> +
+
+[...]
 
