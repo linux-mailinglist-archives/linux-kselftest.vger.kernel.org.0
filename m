@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-49109-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 678E5D2DCDE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:14:18 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4889CD2DC2B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:12:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3126130DD350
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:11:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 33CAF301F4BA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9512F6193;
-	Fri, 16 Jan 2026 08:11:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520F02FB962;
+	Fri, 16 Jan 2026 08:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U0XcCk/r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZU2JTU3U"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B40B2F5473;
-	Fri, 16 Jan 2026 08:11:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292B32F1FEA;
+	Fri, 16 Jan 2026 08:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768551083; cv=none; b=D1Xo4StTbKiGl+YEDsZDIzf7MaN47Wtd78l1Gj8amk9J/vfMPVjFMCDN4TT1VqiRFdcK7FNfHT6HHKfFUfS6C6FU9GL0Wz9x06P126Kop/6DxCUytJ9GdCX3IUAEKE8KvJ+Yl2uq9B223Ug+53vgxLvmPIOzPvQcz7+hc4/mkmg=
+	t=1768551086; cv=none; b=m0CNhDJP+WCgDYEHD8+e3l6rSK88piadDUkHAdcIIgh7ilCETAQ0rX4H/kxHA+dxbYer+XdxxrsFblC6i0sV/n8Y+FmMrXOsfujqTKYgJ/4kBg5Omk9OyzQNZfZm00U2XXiTPTNEzui6wHEWL/zPVoctcwErw2QcCHGPf7CcUj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768551083; c=relaxed/simple;
-	bh=o6I48bINS/v0ZTjAILAUj4HkI//FxW9C0s2E5MLeE2c=;
+	s=arc-20240116; t=1768551086; c=relaxed/simple;
+	bh=fTYVnQxEYS1t/0ZMJZL2v8EXREbfgEEsWwMOvi95LOI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SWt+5mUpWSlB+7IjoSVoirg3P0tN1v4/S44CtHXjEKQKRQXXj/6fAjd7YhXObVFuwlriDn966EbCucU4/1uIxcO1poT51Xv2GbYDehWQsdEOgFkW1fsxcY1AhIT2pJ9tQ/kztyOjgubuS4dWnRfOKM6UD/eZr6vXMnR7vA8NZg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U0XcCk/r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC33C19424;
-	Fri, 16 Jan 2026 08:11:20 +0000 (UTC)
+	 MIME-Version; b=Iw2riRgI0dmnrs/wjQp4NU0AtQs4Zww/DKFpD+6qoO3pdTOjsL8LKjVuBvPSgUI7izggYXAMZLeHeAj7vnWVWF/FxfSx3NUihvzucWrcW0dhIHa/kOoeIflLIm9f+0ecLM1aJfcxpOOsXJVzoC9sVtJbUSvQWb3KcH1n7pPD/TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZU2JTU3U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2462DC19421;
+	Fri, 16 Jan 2026 08:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768551082;
-	bh=o6I48bINS/v0ZTjAILAUj4HkI//FxW9C0s2E5MLeE2c=;
+	s=k20201202; t=1768551085;
+	bh=fTYVnQxEYS1t/0ZMJZL2v8EXREbfgEEsWwMOvi95LOI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U0XcCk/rwnoy5MgbxpLbRnzCKPzQYVvv5lG6LTSQIwuYRvQWYKtZ+yTCprXMpupx1
-	 yZpWF7MacgzE7ZzijpOXlMpXDwbb1bKfuUbTJcAJLdre9UEckP34MA9KRkEZHl1IGX
-	 Se0LxvvFy8PgVee6RRNTAfWIJ/IOEG1Riwe8SVGaQBzMHTCFA/dIXEyJMbkIQ9SA7x
-	 VhmgfqFxTLAhJSFQmS/wYfEkmaR4S6x6qjDVJdnzRkzOEQWxHMoDlL/gwwOI/aTZnu
-	 yw6K8/Tt97xAxNfMP/QeZB/7LjptIfGiTXVcV5R8EzVIrsbRmgIYajbuswY+hkLt26
-	 /exGaWCUUpWaA==
+	b=ZU2JTU3UikNeUg/65/kqPwX/u1kBvveAHxU438lR+3bUHn1nhxH18nRJX9nPzXrXe
+	 LDE3Y5+LEGxcbo9G8P73eTVmb4ALiGokX1r3yE6m/De5mouLJagO3yE4wp/7lJrxP1
+	 ELB/F6VrET77PcnGz11YbVAx6CvfDzQL/h94GkPwSbqqzQw3pjC37N+HFWDE3Igdpb
+	 NG+nHOYqNGNilS4RECr6HVTDGLiAl7YWubPSEX0lSIqvLyyUFIcmOejlvUivobH3vM
+	 1zJyrt69fPkeFgsaFG4xQEeWxGnMEbZYQujnTO1388gnjCuak+I+kAZNU+8Z8nqaMD
+	 gsUVkCUlFGnhw==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -59,9 +59,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Jason Gunthorpe <jgg@nvidia.com>,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH 05/23] gpiolib: cdev: Correct return code on memory allocation failure
-Date: Fri, 16 Jan 2026 08:10:18 +0000
-Message-ID: <20260116081036.352286-6-tzungbi@kernel.org>
+Subject: [PATCH 06/23] gpiolib: Access `gpio_bus_type` in gpiochip_setup_dev()
+Date: Fri, 16 Jan 2026 08:10:19 +0000
+Message-ID: <20260116081036.352286-7-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
 In-Reply-To: <20260116081036.352286-1-tzungbi@kernel.org>
 References: <20260116081036.352286-1-tzungbi@kernel.org>
@@ -73,28 +73,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
--ENOMEM is a more appropriate return code for memory allocation
-failures.  Correct it.
+To make the intent clear, access `gpio_bus_type` only when it's ready in
+gpiochip_setup_dev().
 
-Fixes: 20bddcb40b2b ("gpiolib: cdev: replace locking wrappers for gpio_device with guards")
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/gpio/gpiolib-cdev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpiolib.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
-index 6196aab5ed74..66bd260c68e9 100644
---- a/drivers/gpio/gpiolib-cdev.c
-+++ b/drivers/gpio/gpiolib-cdev.c
-@@ -2699,7 +2699,7 @@ static int gpio_chrdev_open(struct inode *inode, struct file *file)
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 6fac59716405..3242644eebc6 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -902,6 +902,8 @@ static int gpiochip_setup_dev(struct gpio_device *gdev)
+ 	struct fwnode_handle *fwnode = dev_fwnode(&gdev->dev);
+ 	int ret;
  
- 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
- 	if (!cdev)
--		return -ENODEV;
-+		return -ENOMEM;
++	gdev->dev.bus = &gpio_bus_type;
++
+ 	/*
+ 	 * If fwnode doesn't belong to another device, it's safe to clear its
+ 	 * initialized flag.
+@@ -1096,7 +1098,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ 	device_initialize(&gdev->dev);
+ 	/* From this point, the .release() function cleans up gdev->dev */
+ 	gdev->dev.type = &gpio_dev_type;
+-	gdev->dev.bus = &gpio_bus_type;
+ 	gdev->dev.parent = gc->parent;
+ 	device_set_node(&gdev->dev, gpiochip_choose_fwnode(gc));
  
- 	cdev->watched_lines = bitmap_zalloc(gdev->ngpio, GFP_KERNEL);
- 	if (!cdev->watched_lines)
+@@ -1217,8 +1218,8 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+ 	 * we get a device node entry in sysfs under
+ 	 * /sys/bus/gpio/devices/gpiochipN/dev that can be used for
+ 	 * coldplug of device nodes and other udev business.
+-	 * We can do this only if gpiolib has been initialized.
+-	 * Otherwise, defer until later.
++	 * We can do this only if gpiolib has been initialized
++	 * (i.e., `gpio_bus_type` is ready).  Otherwise, defer until later.
+ 	 */
+ 	if (gpiolib_initialized) {
+ 		ret = gpiochip_setup_dev(gdev);
 -- 
 2.52.0.457.g6b5491de43-goog
 
