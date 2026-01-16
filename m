@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-49122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF9B4D2DD16
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:15:06 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D29B9D2DDF6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 09:17:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4A38A309FF46
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:12:34 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 28B6B3021548
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 08:12:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1315304BB3;
-	Fri, 16 Jan 2026 08:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332FC2FF661;
+	Fri, 16 Jan 2026 08:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6UgG//i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J3HKbG5s"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5B22F8BCA;
-	Fri, 16 Jan 2026 08:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C2E2F8BC3;
+	Fri, 16 Jan 2026 08:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768551122; cv=none; b=UQuejwD5HC0iT0kgn5kzUKkwAt1b9Sj3RwKqnJjHQjpWFoQWMcR/RWUne1MJhN9qVvgCi8/MJBz6zbEDXemYM/oAvs5Hlgian+8zqpk+o61G/hvniCX21iW8INiwy/DC52Z/gU1KK68jxUBY4LviQdTo09brLs46wI2fhenjYms=
+	t=1768551126; cv=none; b=g+u3hWmcsprfixNdsazs3gEycOHPX+CtWvRGfjHYRgjlwmac7t8Vh0ttLEQvTt/h1eWmiE8CjVIlHD972Wmh662Gpo2bX1JlvzA91G1Ez4Mxdb83FgNMQSBvuwgMRPAucGg5mcuCnljdA0rbeRJefkUX/Jx/4a1YOBmAHr26q6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768551122; c=relaxed/simple;
-	bh=M97oTgnSw1sfrxSklOHkGQxBKG5c3HS0FDf1iP0ruEQ=;
+	s=arc-20240116; t=1768551126; c=relaxed/simple;
+	bh=oleKZCrD+Q1YjsXErAMRTh03iiXXqBdvvaG8jWLHuBA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SZyMJJHrhWF6bLMYWnYwO083x1TsmCEv8BsmgAY9xACUev9/U5cXg8RqSiQadAxbL5ig1L7joQ2PDfu9U55WrmPMLKRyr0rMix/qizAsCrsLIxhA/havUA7r1RXpeNf3o78LNPA3FKBUtx6Nm6C5swhaz4xrE7d+hA9KK0wezrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6UgG//i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7501C116C6;
-	Fri, 16 Jan 2026 08:11:59 +0000 (UTC)
+	 MIME-Version; b=ZXGjPO+9tlCoByvJYxGDF1Ehkv8rherZGSccisR4ivYMXGD0XVCEvBKoijLMNCeMElIIGtxvAM1Wb8C8Zk1ViiV4DnQ24562+EJyirbSnHZYz3GZnGGgZG045aHbP2AMkDhlmJp08zyR5hwhSRbp2I0JHAeu9fXZEff7Q3JBNxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J3HKbG5s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B52C116C6;
+	Fri, 16 Jan 2026 08:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768551122;
-	bh=M97oTgnSw1sfrxSklOHkGQxBKG5c3HS0FDf1iP0ruEQ=;
+	s=k20201202; t=1768551125;
+	bh=oleKZCrD+Q1YjsXErAMRTh03iiXXqBdvvaG8jWLHuBA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=T6UgG//iLeUIMluCggL3whL1Zmotux70J3SW+L+WErFMIyvBdcvfE04jj1OX3fbRH
-	 UYuAXwPx+wWPo+/7SIw9YFu1tm48Ug6pRH9cRfQhvx2KghKCoVBNYIt13z8mz3EA8L
-	 ecRms+75hOxbfG/O9hykqcOy/AbAVdbg+/vH5wRoqOqhkhRA/XTP+Ka0tQY9LRkZTz
-	 6FsHEnMdc4/++tM7JqEV0Nl2t9R0T/kWWOk4yn8vphGy1p6WWcJAVsLbwoqM229/75
-	 LknmArbRz5R1i3yfS7ms/sgJxSedLHRBWIrL/AXsd7iTrLypcsiKN0LX5FDw9TRp6w
-	 jK6x18bF/Knug==
+	b=J3HKbG5skQYvv3jPQ2ObXMcA+7vaDn0gfYohtMGrKAg0Blraad/Sq9NesvJKoerWT
+	 jEU9DZwExPV/fWageQ0z7eK8MJFboebjL39kQg62OjszgltUqfYIdshkY278tFKVZT
+	 1v6c45azOCDpEi80MEGzOd/AvDTrKsENfdG5oXnREXbKa6B//zlFn6IDAXlk0OFN9P
+	 C2SKhX4GH08JBka/C9z/IVj43mZXNy1/DYiMj+ckUHRstHe3FDjtnTXJqEFb1blYkc
+	 XsG4CArJe/bTbBWOx3dwdK4eGX0ORcESJxjyPl4KPxb8dusvhFa7lFTh5eJXv7QDVV
+	 LE3W6Mn8IM+xg==
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Benson Leung <bleung@chromium.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -59,9 +59,9 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Dan Williams <dan.j.williams@intel.com>,
 	Jason Gunthorpe <jgg@nvidia.com>,
 	linux-gpio@vger.kernel.org
-Subject: [PATCH 18/23] gpiolib: Leverage revocable for gpiolib_sops
-Date: Fri, 16 Jan 2026 08:10:31 +0000
-Message-ID: <20260116081036.352286-19-tzungbi@kernel.org>
+Subject: [PATCH 19/23] revocable: Support to define revocable consumer handle on stack
+Date: Fri, 16 Jan 2026 08:10:32 +0000
+Message-ID: <20260116081036.352286-20-tzungbi@kernel.org>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
 In-Reply-To: <20260116081036.352286-1-tzungbi@kernel.org>
 References: <20260116081036.352286-1-tzungbi@kernel.org>
@@ -73,62 +73,194 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Struct gpio_device now provides a revocable provider to the underlying
-struct gpio_chip.  Leverage revocable for gpiolib_sops so that it
-doesn't need to handle the synchronization by accessing the SRCU
-explicitly.
+Support a way to define a revocable consumer handle on stack.  Under
+some circumstances, the user wouldn't like to use dynamic memory
+allocation for consumer handles.
+
+This makes the struct revocable no longer opaque.
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- drivers/gpio/gpiolib.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ .../driver-api/driver-model/revocable.rst     |  5 +-
+ drivers/base/revocable.c                      | 60 +++++++++++++------
+ include/linux/revocable.h                     | 30 +++++++++-
+ 3 files changed, 74 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 6226dc738281..cd18ff42b610 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -5376,6 +5376,7 @@ static void gpiolib_dbg_show(struct seq_file *s, struct gpio_chip *gc)
- struct gpiolib_seq_priv {
- 	bool newline;
- 	int idx;
-+	struct revocable *chip_rev;
+diff --git a/Documentation/driver-api/driver-model/revocable.rst b/Documentation/driver-api/driver-model/revocable.rst
+index 22a442cc8d7f..fff081dbd296 100644
+--- a/Documentation/driver-api/driver-model/revocable.rst
++++ b/Documentation/driver-api/driver-model/revocable.rst
+@@ -84,7 +84,7 @@ For Resource Providers
+ 
+ For Resource Consumers
+ ----------------------
+-.. kernel-doc:: drivers/base/revocable.c
++.. kernel-doc:: include/linux/revocable.h
+    :identifiers: revocable
+ 
+ .. kernel-doc:: drivers/base/revocable.c
+@@ -93,6 +93,9 @@ For Resource Consumers
+ .. kernel-doc:: drivers/base/revocable.c
+    :identifiers: revocable_free
+ 
++.. kernel-doc:: include/linux/revocable.h
++   :identifiers: DEFINE_REVOCABLE
++
+ .. kernel-doc:: drivers/base/revocable.c
+    :identifiers: revocable_try_access
+ 
+diff --git a/drivers/base/revocable.c b/drivers/base/revocable.c
+index f6cece275aac..93c925252665 100644
+--- a/drivers/base/revocable.c
++++ b/drivers/base/revocable.c
+@@ -71,16 +71,6 @@ struct revocable_provider {
+ 	struct kref kref;
  };
  
- static void *gpiolib_seq_start(struct seq_file *s, loff_t *pos)
-@@ -5397,8 +5398,12 @@ static void *gpiolib_seq_start(struct seq_file *s, loff_t *pos)
- 
- 	list_for_each_entry_srcu(gdev, &gpio_devices, list,
- 				 srcu_read_lock_held(&gpio_devices_srcu)) {
--		if (index-- == 0)
-+		if (index-- == 0) {
-+			priv->chip_rev = revocable_alloc(gdev->chip_rp);
-+			if (!priv->chip_rev)
-+				return NULL;
- 			return gdev;
-+		}
- 	}
- 
- 	return NULL;
-@@ -5425,6 +5430,8 @@ static void gpiolib_seq_stop(struct seq_file *s, void *v)
- 	if (!priv)
- 		return;
- 
-+	if (priv->chip_rev)
-+		revocable_free(priv->chip_rev);
- 	srcu_read_unlock(&gpio_devices_srcu, priv->idx);
- 	kfree(priv);
- }
-@@ -5439,9 +5446,7 @@ static int gpiolib_seq_show(struct seq_file *s, void *v)
- 	if (priv->newline)
- 		seq_putc(s, '\n');
- 
--	guard(srcu)(&gdev->srcu);
+-/**
+- * struct revocable - A handle for resource consumer.
+- * @rp: The pointer of resource provider.
+- * @idx: The index for the RCU critical section.
+- */
+-struct revocable {
+-	struct revocable_provider *rp;
+-	int idx;
+-};
 -
--	gc = srcu_dereference(gdev->chip, &gdev->srcu);
-+	REVOCABLE_TRY_ACCESS_WITH(priv->chip_rev, gc);
- 	if (!gc) {
- 		seq_printf(s, "%s: (dangling chip)\n", dev_name(&gdev->dev));
- 		return 0;
+ /**
+  * revocable_provider_alloc() - Allocate struct revocable_provider.
+  * @res: The pointer of resource.
+@@ -170,11 +160,47 @@ struct revocable_provider *devm_revocable_provider_alloc(struct device *dev,
+ EXPORT_SYMBOL_GPL(devm_revocable_provider_alloc);
+ 
+ /**
+- * revocable_alloc() - Allocate struct revocable.
++ * revocable_init() - Initialize struct revocable.
++ * @rev: The pointer of struct revocable.
+  * @rp: The pointer of resource provider.
+  *
+  * This holds a refcount to the resource provider.
+  *
++ * Don't call this function directly.  Use revocable_alloc() or
++ * DEFINE_REVOCABLE().
++ */
++void revocable_init(struct revocable *rev, struct revocable_provider *rp)
++{
++	rev->rp = rp;
++	kref_get(&rp->kref);
++}
++EXPORT_SYMBOL_GPL(revocable_init);
++
++/**
++ * revocable_deinit() - Deinitialize struct revocable.
++ * @rev: The pointer of struct revocable.
++ *
++ * This drops a refcount to the resource provider.  If it is the final
++ * reference, revocable_provider_release() will be called to free the struct.
++ *
++ * Don't call this function directly.  revocable_free() or DEFINE_REVOCABLE()
++ * should help to do so.
++ */
++void revocable_deinit(struct revocable *rev)
++{
++	struct revocable_provider *rp = rev->rp;
++
++	kref_put(&rp->kref, revocable_provider_release);
++}
++EXPORT_SYMBOL_GPL(revocable_deinit);
++
++/**
++ * revocable_alloc() - Allocate struct revocable.
++ * @rp: The pointer of resource provider.
++ *
++ * Allocate a struct revocable and call revocable_init() to holds a refcount
++ * to the resource provider.
++ *
+  * Return: The pointer of struct revocable.  NULL on errors.
+  */
+ struct revocable *revocable_alloc(struct revocable_provider *rp)
+@@ -185,9 +211,7 @@ struct revocable *revocable_alloc(struct revocable_provider *rp)
+ 	if (!rev)
+ 		return NULL;
+ 
+-	rev->rp = rp;
+-	kref_get(&rp->kref);
+-
++	revocable_init(rev, rp);
+ 	return rev;
+ }
+ EXPORT_SYMBOL_GPL(revocable_alloc);
+@@ -196,14 +220,12 @@ EXPORT_SYMBOL_GPL(revocable_alloc);
+  * revocable_free() - Free struct revocable.
+  * @rev: The pointer of struct revocable.
+  *
+- * This drops a refcount to the resource provider.  If it is the final
+- * reference, revocable_provider_release() will be called to free the struct.
++ * Call revocable_deinit() to drop a refcount to the resource provider and
++ * free the struct revocable.
+  */
+ void revocable_free(struct revocable *rev)
+ {
+-	struct revocable_provider *rp = rev->rp;
+-
+-	kref_put(&rp->kref, revocable_provider_release);
++	revocable_deinit(rev);
+ 	kfree(rev);
+ }
+ EXPORT_SYMBOL_GPL(revocable_free);
+diff --git a/include/linux/revocable.h b/include/linux/revocable.h
+index 659ba01c58db..89bb1a5c74e4 100644
+--- a/include/linux/revocable.h
++++ b/include/linux/revocable.h
+@@ -10,19 +10,47 @@
+ #include <linux/cleanup.h>
+ 
+ struct device;
+-struct revocable;
+ struct revocable_provider;
+ 
++/**
++ * struct revocable - A handle for resource consumer.
++ * @rp: The pointer of resource provider.
++ * @idx: The index for the RCU critical section.
++ */
++struct revocable {
++	struct revocable_provider *rp;
++	int idx;
++};
++
+ struct revocable_provider *revocable_provider_alloc(void *res);
+ void revocable_provider_revoke(struct revocable_provider *rp);
+ struct revocable_provider *devm_revocable_provider_alloc(struct device *dev,
+ 							 void *res);
+ 
++void revocable_init(struct revocable *rev, struct revocable_provider *rp);
++void revocable_deinit(struct revocable *rev);
+ struct revocable *revocable_alloc(struct revocable_provider *rp);
+ void revocable_free(struct revocable *rev);
+ void *revocable_try_access(struct revocable *rev) __acquires(&rev->rp->srcu);
+ void revocable_withdraw_access(struct revocable *rev) __releases(&rev->rp->srcu);
+ 
++DEFINE_FREE(define_rev, struct revocable *, revocable_deinit(_T))
++
++#define _DEFINE_REVOCABLE(_rev, _name, _rp)					\
++	struct revocable _name;							\
++	struct revocable *_rev __free(define_rev) = &_name;			\
++	revocable_init(_rev, _rp)
++
++/**
++ * DEFINE_REVOCABLE() - A helper for defining a revocable consumer on stack
++ * @_rev: The variable name to ``struct revocable *``.
++ * @_rp: The provider's ``struct revocable_provider *`` handle.
++ *
++ * The macro declares and defines a revocable consumer handle on stack.
++ */
++#define DEFINE_REVOCABLE(_rev, _rp)						\
++	_DEFINE_REVOCABLE(_rev, __UNIQUE_ID(name), _rp)
++
+ DEFINE_FREE(access_rev, struct revocable *, if (_T) revocable_withdraw_access(_T))
+ 
+ /**
 -- 
 2.52.0.457.g6b5491de43-goog
 
