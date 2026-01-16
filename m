@@ -1,413 +1,193 @@
-Return-Path: <linux-kselftest+bounces-49184-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9318D378D8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 18:19:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 530C1D37A0A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 18:28:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6257C3026B13
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 17:19:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 01438302F6A9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Jan 2026 17:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE22C33CE80;
-	Fri, 16 Jan 2026 17:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FDC33469FE;
+	Fri, 16 Jan 2026 17:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="d5Z0XwF9"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ZLRsFVDj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.178.143.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838A233B95A;
-	Fri, 16 Jan 2026 17:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A899633ADA9;
+	Fri, 16 Jan 2026 17:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.178.143.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768583976; cv=none; b=CtqoY9dBT3ztUw8oxVV21VyQkIZ5ni1DcHitIxi5Jik9TmKIwqHaJh0r6xgNOxGr+3SVwF+WT7pjAtohZIVTD4PACdJ/grjAlz590yeNx6xURvORuMbXWb53sAaG+lL9JSLQ0W4GJLmue+5H0IKv4uhJwwpcnCKrINggd09amyQ=
+	t=1768584514; cv=none; b=RMNHdtfb1sm9DrLySK1WpYJBlYNL0oGKO4BjTlWAsTc4TdacWOXHlVTErZORSKe2NR3O9CZoqUESayYGsM8whzrxyMrApe14U2q5g+7oAOskUhatIW1qq7O8f0bG/ZBn6tYZqwOSlbXSIbmBx2gM/SKTZrVpKsrz/nS8mY3Jji0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768583976; c=relaxed/simple;
-	bh=XpDpPoWzbNPEaCNFY4nueroDruTKYy0mxr6Vpho7Iao=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UP4FtrhFX1Li1kf2KFV8o5mW60+l9OQEW8g8KCUc7JNWcH/iaettOp8FOlFYQ7LNZNzYncn1XowsOrRw8DtIk+zzx4GoAyNcVF+D9dTRNEJ6KDGYNaRC8IL8s9UPX/W1/WCmEkjuej14TM+dvvgAuP9Hv5afHcy3PUiKVt71vuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=d5Z0XwF9; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=5Pr7/xueEK3tP328BBekBdOt85PazUkdjcprj8yio4c=; t=1768583974;
-	x=1769188774; b=d5Z0XwF9l50Wsb+vDOJzeHiC18+eZi8JMAGT7dn+PC5YWcOlmffECKFKy30sJ
-	piZN87ieKoGg/6SbTXpw95oHf6ieZ6FydHNNOR/qqC93fZTIkcYc0gMlj2tKlrrwtZu6v7FrzSbvO
-	Es2pqzNGI7XdLeqn2Qn/k7Gq7RaqlNpOVufmlAG2esxosqeWlnZZZToqbW74803+RorqoPfnSKK3O
-	XyuAV6lvNpC1gHRMB6OYIzL7iLdbDMrxFLFWO/xhZrxuaIPmzplkVCWwVq6E1quPTFxAFDKrzCT2P
-	rJUe4+BNlijKtiZcc96Hqigv9mk04ItCMAIN7w4kpdOTjr7JlA==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1vgnTw-00000003d7y-3Mck; Fri, 16 Jan 2026 18:19:32 +0100
-Received: from p5dc55f29.dip0.t-ipconnect.de ([93.197.95.41] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1vgnTw-00000000j8J-26SM; Fri, 16 Jan 2026 18:19:32 +0100
-Message-ID: <ab9a570f5c3098237a82f6e0dca61d284eb2d072.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 2/3] sparc: Add architecture support for clone3
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Ludwig Rydberg <ludwig.rydberg@gaisler.com>, davem@davemloft.net, 
-	andreas@gaisler.com, brauner@kernel.org, shuah@kernel.org
-Cc: sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, arnd@arndb.de, geert@linux-m68k.org, 
-	schuster.simon@siemens-energy.com
-Date: Fri, 16 Jan 2026 18:19:31 +0100
-In-Reply-To: <20260116153051.21678-3-ludwig.rydberg@gaisler.com>
-References: <20260116153051.21678-1-ludwig.rydberg@gaisler.com>
-	 <20260116153051.21678-3-ludwig.rydberg@gaisler.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 
+	s=arc-20240116; t=1768584514; c=relaxed/simple;
+	bh=4v4BzucaIF1lo4RO/U0n/TNkpEdnblnTY4xoTJ1ZwN4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pWt7ST1CU8m0yro3SbEuqlS8rd0Tw9ZzjuI3JheJuXmmfnMRuC9S2Z23zqeh1yCHeOe13Jt/Tbyje0Mh4rpJ2MKXr5z2TMElEAqA7E46p9qVY+E57pR8K5JBlSsBfNmYMVcFoeRswUg65XYJhcNC8JXdL8PftJlYetscUJftwtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ZLRsFVDj; arc=none smtp.client-ip=63.178.143.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1768584512; x=1800120512;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=iixAuY6QcleXCDLiS0osecYXCL2wD+IcnkmdhMNMceE=;
+  b=ZLRsFVDjzKyBWAmAa9raNcUxUdC3DS4qoix1Ox/WxUWZ+Xc73vJBkpQu
+   K+6Hq8H+N9Et1PLf0A+jOAU2uZg04cgglcjqROJ9rvBG7R+u7PyxFA5mS
+   3E3F1h99dHlf85Q+APayS1FpOFl2Z67EjkGdpdyexCuM9UnrZ+wjUN80x
+   zI8mKFTLPsEQP3sYG3K0wQrpRR/IPLeXwy9652Ik3lv4YOgCBZNSCHYL8
+   1wr8+bV/ShsSeUzP2sEAFSc3HZSJkpS7Jyc/6xC/Kq9+UzZgC9lQYE7ed
+   DNRx4jjFSXWabspNKcowIW7g/QqIHj56QzIWKctqDqqxqmKy4T7RSKA/M
+   Q==;
+X-CSE-ConnectionGUID: Qy9RLilmSb6mwlMCH/r26Q==
+X-CSE-MsgGUID: FqlFUMb2T4mzbA9VY5PHdA==
+X-IronPort-AV: E=Sophos;i="6.21,231,1763424000"; 
+   d="scan'208";a="7924510"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-010.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2026 17:28:13 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.236:17818]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.21.80:2525] with esmtp (Farcaster)
+ id 2ee969a8-f047-4c24-83b9-0d6192b592bb; Fri, 16 Jan 2026 17:28:13 +0000 (UTC)
+X-Farcaster-Flow-ID: 2ee969a8-f047-4c24-83b9-0d6192b592bb
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUC002.ant.amazon.com (10.252.51.245) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Fri, 16 Jan 2026 17:28:13 +0000
+Received: from [192.168.12.13] (10.106.82.9) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35; Fri, 16 Jan 2026
+ 17:28:08 +0000
+Message-ID: <318407ba-ecb6-4691-8911-645fb8c20250@amazon.com>
+Date: Fri, 16 Jan 2026 17:28:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v9 07/13] KVM: guest_memfd: Add flag to remove from direct
+ map
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, "kalyazin@amazon.co.uk"
+	<kalyazin@amazon.co.uk>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>
+CC: "david@kernel.org" <david@kernel.org>, "svens@linux.ibm.com"
+	<svens@linux.ibm.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "jgross@suse.com"
+	<jgross@suse.com>, "surenb@google.com" <surenb@google.com>, "vbabka@suse.cz"
+	<vbabka@suse.cz>, "riel@surriel.com" <riel@surriel.com>, "pfalcato@suse.de"
+	<pfalcato@suse.de>, "x86@kernel.org" <x86@kernel.org>, "rppt@kernel.org"
+	<rppt@kernel.org>, "thuth@redhat.com" <thuth@redhat.com>,
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, "maz@kernel.org"
+	<maz@kernel.org>, "peterx@redhat.com" <peterx@redhat.com>, "ast@kernel.org"
+	<ast@kernel.org>, "Annapurve, Vishal" <vannapurve@google.com>,
+	"pjw@kernel.org" <pjw@kernel.org>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "hca@linux.ibm.com"
+	<hca@linux.ibm.com>, "willy@infradead.org" <willy@infradead.org>,
+	"wyihan@google.com" <wyihan@google.com>, "ryan.roberts@arm.com"
+	<ryan.roberts@arm.com>, "yang@os.amperecomputing.com"
+	<yang@os.amperecomputing.com>, "jolsa@kernel.org" <jolsa@kernel.org>,
+	"jmattson@google.com" <jmattson@google.com>, "luto@kernel.org"
+	<luto@kernel.org>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"haoluo@google.com" <haoluo@google.com>, "patrick.roy@linux.dev"
+	<patrick.roy@linux.dev>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"mhocko@suse.com" <mhocko@suse.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, "hpa@zytor.com"
+	<hpa@zytor.com>, "song@kernel.org" <song@kernel.org>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "maobibo@loongson.cn"
+	<maobibo@loongson.cn>, "peterz@infradead.org" <peterz@infradead.org>,
+	"oupton@kernel.org" <oupton@kernel.org>, "lorenzo.stoakes@oracle.com"
+	<lorenzo.stoakes@oracle.com>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "jthoughton@google.com"
+	<jthoughton@google.com>, "Jonathan.Cameron@huawei.com"
+	<Jonathan.Cameron@huawei.com>, "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>, "prsampat@amd.com" <prsampat@amd.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"itazur@amazon.co.uk" <itazur@amazon.co.uk>, "suzuki.poulose@arm.com"
+	<suzuki.poulose@arm.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "gor@linux.ibm.com" <gor@linux.ibm.com>,
+	"jackabt@amazon.co.uk" <jackabt@amazon.co.uk>, "daniel@iogearbox.net"
+	<daniel@iogearbox.net>, "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+	"andrii@kernel.org" <andrii@kernel.org>, "mingo@redhat.com"
+	<mingo@redhat.com>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"joey.gouly@arm.com" <joey.gouly@arm.com>, "derekmn@amazon.com"
+	<derekmn@amazon.com>, "xmarcalx@amazon.co.uk" <xmarcalx@amazon.co.uk>,
+	"kpsingh@kernel.org" <kpsingh@kernel.org>, "sdf@fomichev.me"
+	<sdf@fomichev.me>, "jackmanb@google.com" <jackmanb@google.com>,
+	"bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
+	"ackerleytng@google.com" <ackerleytng@google.com>, "jannh@google.com"
+	<jannh@google.com>, "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"kas@kernel.org" <kas@kernel.org>, "will@kernel.org" <will@kernel.org>,
+	"seanjc@google.com" <seanjc@google.com>
+References: <20260114134510.1835-1-kalyazin@amazon.com>
+ <20260114134510.1835-8-kalyazin@amazon.com>
+ <e619ded526a2f9a4cec4f74383cef31519624935.camel@intel.com>
+ <294bca75-2f3e-46db-bb24-7c471a779cc1@amazon.com>
+ <bb58a21f91113ca39f8888d718d4450a5fd72808.camel@intel.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <bb58a21f91113ca39f8888d718d4450a5fd72808.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D004EUC001.ant.amazon.com (10.252.51.190) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-Hi Ludwig,
 
-On Fri, 2026-01-16 at 16:30 +0100, Ludwig Rydberg wrote:
-> Add support for the clone3 system call to the SPARC architectures.
->=20
-> The implementation follows the pattern of the original clone syscall.
-> However, instead of explicitly calling kernel_clone, the clone3
-> handler calls the generic sys_clone3 handler in kernel/fork.
-> In case no stack is provided, the parents stack is reused.
->=20
-> The return call conventions for clone on SPARC are kept for clone3:
->   Parent -->  %o0 =3D=3D child's  pid, %o1 =3D=3D 0
->   Child  -->  %o0 =3D=3D parent's pid, %o1 =3D=3D 1
->=20
-> Closes: https://github.com/sparclinux/issues/issues/10
-> Signed-off-by: Ludwig Rydberg <ludwig.rydberg@gaisler.com>
-> ---
->  arch/sparc/include/asm/syscalls.h      |  1 +
->  arch/sparc/include/asm/unistd.h        |  2 --
->  arch/sparc/kernel/entry.S              | 15 +++++++++++++++
->  arch/sparc/kernel/kernel.h             |  1 +
->  arch/sparc/kernel/process.c            | 25 +++++++++++++++++++++++++
->  arch/sparc/kernel/process_32.c         |  2 +-
->  arch/sparc/kernel/process_64.c         |  2 +-
->  arch/sparc/kernel/syscalls.S           |  6 ++++++
->  arch/sparc/kernel/syscalls/syscall.tbl |  2 +-
->  9 files changed, 51 insertions(+), 5 deletions(-)
->=20
-> diff --git a/arch/sparc/include/asm/syscalls.h b/arch/sparc/include/asm/s=
-yscalls.h
-> index 35575fbfb9dc..282e62b66518 100644
-> --- a/arch/sparc/include/asm/syscalls.h
-> +++ b/arch/sparc/include/asm/syscalls.h
-> @@ -7,5 +7,6 @@ struct pt_regs;
->  asmlinkage long sparc_fork(struct pt_regs *regs);
->  asmlinkage long sparc_vfork(struct pt_regs *regs);
->  asmlinkage long sparc_clone(struct pt_regs *regs);
-> +asmlinkage long sparc_clone3(struct pt_regs *regs);
-> =20
->  #endif /* _SPARC64_SYSCALLS_H */
-> diff --git a/arch/sparc/include/asm/unistd.h b/arch/sparc/include/asm/uni=
-std.h
-> index 3380411a4537..d6bc76706a7a 100644
-> --- a/arch/sparc/include/asm/unistd.h
-> +++ b/arch/sparc/include/asm/unistd.h
-> @@ -49,8 +49,6 @@
->  #define __ARCH_WANT_COMPAT_STAT
->  #endif
-> =20
-> -#define __ARCH_BROKEN_SYS_CLONE3
-> -
->  #ifdef __32bit_syscall_numbers__
->  /* Sparc 32-bit only has the "setresuid32", "getresuid32" variants,
->   * it never had the plain ones and there is no value to adding those
-> diff --git a/arch/sparc/kernel/entry.S b/arch/sparc/kernel/entry.S
-> index a3fdee4cd6fa..ea51ef52c952 100644
-> --- a/arch/sparc/kernel/entry.S
-> +++ b/arch/sparc/kernel/entry.S
-> @@ -907,6 +907,21 @@ flush_patch_four:
->  	jmpl	%l1 + %lo(sparc_vfork), %g0
->  	 add	%sp, STACKFRAME_SZ, %o0
-> =20
-> +	.globl	__sys_clone3, flush_patch_five
-> +__sys_clone3:
-> +	mov	%o7, %l5
-> +flush_patch_five:
-> +	FLUSH_ALL_KERNEL_WINDOWS;
-> +	ld	[%curptr + TI_TASK], %o4
-> +	rd	%psr, %g4
-> +	WRITE_PAUSE
-> +	rd	%wim, %g5
-> +	WRITE_PAUSE
-> +	std	%g4, [%o4 + AOFF_task_thread + AOFF_thread_fork_kpsr]
-> +	add	%sp, STACKFRAME_SZ, %o0
-> +	call	sparc_clone3
-> +	 mov	%l5, %o7
-> +
->          .align  4
->  linux_sparc_ni_syscall:
->  	sethi   %hi(sys_ni_syscall), %l7
-> diff --git a/arch/sparc/kernel/kernel.h b/arch/sparc/kernel/kernel.h
-> index 8328a3b78a44..4ee85051521a 100644
-> --- a/arch/sparc/kernel/kernel.h
-> +++ b/arch/sparc/kernel/kernel.h
-> @@ -18,6 +18,7 @@ extern int ncpus_probed;
->  asmlinkage long sparc_clone(struct pt_regs *regs);
->  asmlinkage long sparc_fork(struct pt_regs *regs);
->  asmlinkage long sparc_vfork(struct pt_regs *regs);
-> +asmlinkage long sparc_clone3(struct pt_regs *regs);
-> =20
->  #ifdef CONFIG_SPARC64
->  /* setup_64.c */
-> diff --git a/arch/sparc/kernel/process.c b/arch/sparc/kernel/process.c
-> index 7d69877511fa..b8e23295db69 100644
-> --- a/arch/sparc/kernel/process.c
-> +++ b/arch/sparc/kernel/process.c
-> @@ -12,6 +12,7 @@
->  #include <linux/sched/task.h>
->  #include <linux/sched/task_stack.h>
->  #include <linux/signal.h>
-> +#include <linux/syscalls.h>
-> =20
->  #include "kernel.h"
-> =20
-> @@ -118,3 +119,27 @@ asmlinkage long sparc_clone(struct pt_regs *regs)
-> =20
->  	return ret;
->  }
-> +
-> +asmlinkage long sparc_clone3(struct pt_regs *regs)
-> +{
-> +	unsigned long sz;
-> +	long ret;
-> +	struct clone_args __user *cl_args;
-> +
-> +	synchronize_user_stack();
-> +
-> +	cl_args =3D (struct clone_args __user *)regs->u_regs[UREG_I0];
-> +	sz =3D regs->u_regs[UREG_I1];
-> +
-> +	ret =3D sys_clone3(cl_args, sz);
-> +
-> +	/* If we get an error and potentially restart the system
-> +	 * call, we're screwed because copy_thread() clobbered
-> +	 * the parent's %o1.  So detect that case and restore it
-> +	 * here.
-> +	 */
-> +	if ((unsigned long)ret >=3D -ERESTART_RESTARTBLOCK)
-> +		regs->u_regs[UREG_I1] =3D sz;
-> +
-> +	return ret;
-> +}
-> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_3=
-2.c
-> index 5a28c0e91bf1..216c07971c81 100644
-> --- a/arch/sparc/kernel/process_32.c
-> +++ b/arch/sparc/kernel/process_32.c
-> @@ -261,11 +261,11 @@ extern void ret_from_kernel_thread(void);
->  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
-rgs)
->  {
->  	u64 clone_flags =3D args->flags;
-> -	unsigned long sp =3D args->stack;
->  	unsigned long tls =3D args->tls;
->  	struct thread_info *ti =3D task_thread_info(p);
->  	struct pt_regs *childregs, *regs =3D current_pt_regs();
->  	char *new_stack;
-> +	unsigned long sp =3D args->stack ? args->stack : regs->u_regs[UREG_FP];
-> =20
->  #ifndef CONFIG_SMP
->  	if(last_task_used_math =3D=3D current) {
-> diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_6=
-4.c
-> index 25781923788a..885d617ba29d 100644
-> --- a/arch/sparc/kernel/process_64.c
-> +++ b/arch/sparc/kernel/process_64.c
-> @@ -568,13 +568,13 @@ void fault_in_user_windows(struct pt_regs *regs)
->  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
-rgs)
->  {
->  	u64 clone_flags =3D args->flags;
-> -	unsigned long sp =3D args->stack;
->  	unsigned long tls =3D args->tls;
->  	struct thread_info *t =3D task_thread_info(p);
->  	struct pt_regs *regs =3D current_pt_regs();
->  	struct sparc_stackf *parent_sf;
->  	unsigned long child_stack_sz;
->  	char *child_trap_frame;
-> +	unsigned long sp =3D args->stack ? args->stack : regs->u_regs[UREG_FP];
-> =20
->  	/* Calculate offset to stack_frame & pt_regs */
->  	child_stack_sz =3D (STACKFRAME_SZ + TRACEREG_SZ);
-> diff --git a/arch/sparc/kernel/syscalls.S b/arch/sparc/kernel/syscalls.S
-> index 0e8ab0602c36..c8d374a37f98 100644
-> --- a/arch/sparc/kernel/syscalls.S
-> +++ b/arch/sparc/kernel/syscalls.S
-> @@ -103,6 +103,12 @@ sys_clone:
->  	ba,pt	%xcc, sparc_clone
->  	 add	%sp, PTREGS_OFF, %o0
-> =20
-> +	.align	32
-> +__sys_clone3:
-> +	flushw
-> +	ba,pt	%xcc, sparc_clone3
-> +	 add	%sp, PTREGS_OFF, %o0
-> +
->  	.globl	ret_from_fork
->  ret_from_fork:
->  	/* Clear current_thread_info()->new_child. */
-> diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/s=
-yscalls/syscall.tbl
-> index 39aa26b6a50b..c0307bb09892 100644
-> --- a/arch/sparc/kernel/syscalls/syscall.tbl
-> +++ b/arch/sparc/kernel/syscalls/syscall.tbl
-> @@ -480,7 +480,7 @@
->  432	common	fsmount				sys_fsmount
->  433	common	fspick				sys_fspick
->  434	common	pidfd_open			sys_pidfd_open
-> -# 435 reserved for clone3
-> +435	common	clone3				__sys_clone3
->  436	common	close_range			sys_close_range
->  437	common	openat2			sys_openat2
->  438	common	pidfd_getfd			sys_pidfd_getfd
 
-Applied on top of 6.19-rc5, tested on a Sun Netra 240 (UltraSPARC IIIi).
+On 16/01/2026 15:34, Edgecombe, Rick P wrote:
+> On Fri, 2026-01-16 at 15:00 +0000, Nikita Kalyazin wrote:
+>>> Does this assume the folio would not have been split after it was
+>>> zapped? As in, if it was zapped at 2MB granularity (no 4KB direct
+>>> map split required) but then restored at 4KB (split required)? Or
+>>> it gets merged somehow before this?
+>>
+>> AFAIK it can't be zapped at 2MB granularity as the zapping code will
+>> inevitably cause splitting because guest_memfd faults occur at the
+>> base page granularity as of now.
+> 
+> Ah, right since there are no huge pages currently. Then the huge page
+> series will need to keep this in mind and figure out some solution.
+> Probably worth a comment on that assumption to help anyone that changes
+> it.
 
-Running the kernel selftest for clone3 works fine:
+Makes sense.  I'll leave a comment.
 
-root@raverin:/usr/src/linux/tools/testing/selftests/clone3# uname -a
-Linux raverin 6.19.0-rc5+ #18 Fri Jan 16 16:02:10 UTC 2026 sparc64 GNU/Linu=
-x
-root@raverin:/usr/src/linux/tools/testing/selftests/clone3# make
-  CC       clone3
-  CC       clone3_clear_sighand
-  CC       clone3_set_tid
-  CC       clone3_cap_checkpoint_restore
-root@raverin:/usr/src/linux/tools/testing/selftests/clone3# ./clone3
-TAP version 13
-1..19
-# clone3() syscall supported
-# Running test 'simple clone3()'
-# [1385] Trying clone3() with flags 0 (size 0)
-# I am the parent (1385). My child's pid is 1386
-# I am the child, my PID is 1386
-# [1385] clone3() with flags says: 0 expected 0
-ok 1 simple clone3()
-# Running test 'clone3() in a new PID_NS'
-# [1385] Trying clone3() with flags 0x20000000 (size 0)
-# I am the child, my PID is 1
-# I am the parent (1385). My child's pid is 1387
-# [1385] clone3() with flags says: 0 expected 0
-ok 2 clone3() in a new PID_NS
-# Running test 'CLONE_ARGS_SIZE_VER0'
-# [1385] Trying clone3() with flags 0 (size 64)
-# I am the parent (1385). My child's pid is 1388
-# I am the child, my PID is 1388
-# [1385] clone3() with flags says: 0 expected 0
-ok 3 CLONE_ARGS_SIZE_VER0
-# Running test 'CLONE_ARGS_SIZE_VER0 - 8'
-# [1385] Trying clone3() with flags 0 (size 56)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 4 CLONE_ARGS_SIZE_VER0 - 8
-# Running test 'sizeof(struct clone_args) + 8'
-# [1385] Trying clone3() with flags 0 (size 96)
-# I am the parent (1385). My child's pid is 1389
-# I am the child, my PID is 1389
-# [1385] clone3() with flags says: 0 expected 0
-ok 5 sizeof(struct clone_args) + 8
-# Running test 'exit_signal with highest 32 bits non-zero'
-# [1385] Trying clone3() with flags 0 (size 0)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 6 exit_signal with highest 32 bits non-zero
-# Running test 'negative 32-bit exit_signal'
-# [1385] Trying clone3() with flags 0 (size 0)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 7 negative 32-bit exit_signal
-# Running test 'exit_signal not fitting into CSIGNAL mask'
-# [1385] Trying clone3() with flags 0 (size 0)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 8 exit_signal not fitting into CSIGNAL mask
-# Running test 'NSIG < exit_signal < CSIG'
-# [1385] Trying clone3() with flags 0 (size 0)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 9 NSIG < exit_signal < CSIG
-# Running test 'Arguments sizeof(struct clone_args) + 8'
-# [1385] Trying clone3() with flags 0 (size 96)
-# I am the parent (1385). My child's pid is 1390
-# I am the child, my PID is 1390
-# [1385] clone3() with flags says: 0 expected 0
-ok 10 Arguments sizeof(struct clone_args) + 8
-# Running test 'Arguments sizeof(struct clone_args) + 16'
-# [1385] Trying clone3() with flags 0 (size 104)
-# Argument list too long - Failed to create new process
-# [1385] clone3() with flags says: -7 expected -7
-ok 11 Arguments sizeof(struct clone_args) + 16
-# Running test 'Arguments sizeof(struct clone_arg) * 2'
-# [1385] Trying clone3() with flags 0 (size 104)
-# Argument list too long - Failed to create new process
-# [1385] clone3() with flags says: -7 expected -7
-ok 12 Arguments sizeof(struct clone_arg) * 2
-# Running test 'Arguments > page size'
-# [1385] Trying clone3() with flags 0 (size 8200)
-# Argument list too long - Failed to create new process
-# [1385] clone3() with flags says: -7 expected -7
-ok 13 Arguments > page size
-# Running test 'CLONE_ARGS_SIZE_VER0 in a new PID NS'
-# [1385] Trying clone3() with flags 0x20000000 (size 64)
-# I am the parent (1385). My child's pid is 1391
-# I am the child, my PID is 1
-# [1385] clone3() with flags says: 0 expected 0
-ok 14 CLONE_ARGS_SIZE_VER0 in a new PID NS
-# Running test 'CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS'
-# [1385] Trying clone3() with flags 0x20000000 (size 56)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 15 CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS
-# Running test 'sizeof(struct clone_args) + 8 in a new PID NS'
-# [1385] Trying clone3() with flags 0x20000000 (size 96)
-# I am the parent (1385). My child's pid is 1392
-# I am the child, my PID is 1
-# [1385] clone3() with flags says: 0 expected 0
-ok 16 sizeof(struct clone_args) + 8 in a new PID NS
-# Running test 'Arguments > page size in a new PID NS'
-# [1385] Trying clone3() with flags 0x20000000 (size 8200)
-# Argument list too long - Failed to create new process
-# [1385] clone3() with flags says: -7 expected -7
-ok 17 Arguments > page size in a new PID NS
-# Time namespaces are not supported
-ok 18 # SKIP New time NS
-# Running test 'exit signal (SIGCHLD) in flags'
-# [1385] Trying clone3() with flags 0x14 (size 0)
-# Invalid argument - Failed to create new process
-# [1385] clone3() with flags says: -22 expected -22
-ok 19 exit signal (SIGCHLD) in flags
-# 1 skipped test(s) detected. Consider enabling relevant config options to =
-improve coverage.
-# Totals: pass:18 fail:0 xfail:0 xpass:0 skip:1 error:0
-root@raverin:/usr/src/linux/tools/testing/selftests/clone3#
+> 
+> I imagine this feature is really targeted towards machines running a
+> bunch of untrusted VMs, so cloud hypervisors really. In that case the
+> direct map will probably be carved up pretty quick. Did you consider
+> just breaking the full direct map to 4k at the start when it's in use?
 
-Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-
-Thanks,
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+That's an interesting point, I haven't thought about it from this 
+perspective.  We should run some tests internally to see if it'd help. 
+This will likely change with support for huge pages coming in though.
 
