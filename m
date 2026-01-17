@@ -1,153 +1,144 @@
-Return-Path: <linux-kselftest+bounces-49242-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E65D39118
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jan 2026 22:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 557D4D3916F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 00:05:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E4F563011A72
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jan 2026 21:24:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1532D3015A9E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Jan 2026 23:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D712DF701;
-	Sat, 17 Jan 2026 21:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 874682D238F;
+	Sat, 17 Jan 2026 23:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="C6wwJ3b0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wmrl3Fk0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6746719D07E;
-	Sat, 17 Jan 2026 21:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63553137932;
+	Sat, 17 Jan 2026 23:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768685052; cv=none; b=aj0QkSE3zaKaCf7Aoql7kb7WkVb44Ai4v25wBE0e6VWvY029Q3YytL5AFXWFukaiF7U92PyOP12+wZ0JTOCHZq6dLGxL5oseEB8xCGzP7JZ4DQjnIMO3sb7rH+o7rNc5F/YuffFBuHDF5ZGWgb42ZIOR/HVC0ZQm0glKTj8Fo8Q=
+	t=1768691127; cv=none; b=MWBBwQDvxgbD+aMF3Kn40Bp3QlOd8BkZEsXje/OWstw119vIoV8s+4tVDcLqdP76wIpuaFfNuF3hYnX1QCG8g4vZWRUgXY1Vcqbd5lRqHJFPvtHofpAgRvIODTx3HUb3led+CwCHjLB6+mcQ/8+uBORhbCc889jFlDhxdAXI4/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768685052; c=relaxed/simple;
-	bh=damT640QIAWrw1UUgwC9nWxAU9FsTXSNlOmgazewMp4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aAqI9tnoAdYZfP7EWqbXhe004R32XOfFiJQc7mpovkTYOoxZa1NiZac1yt1e3x82La8elrSFRMVkWWXpw0qTQeCKiWxlllpczhkLWiVr1GmrvNEGD2QyBSH6C35EqkExfcD9VLHx/uYB3SEEB3Hr+51RxqqkNyA+8MqEeLhZqBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=C6wwJ3b0; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=ZS9eqf8cBY1x3wIhISPjotjhoDBTuzHKisMxjnWJ7Ws=; t=1768685049;
-	x=1769289849; b=C6wwJ3b0JsFWZuF4govybDQuLanb5g8bLnHitueyrNjNZ+t0AX5M3l43TsFxz
-	9NzsvIwAhj8LuJL+/ODpcDRErxAWt4xTPwCjjaY6bjXo3CoQsDj7XUnJC+hYDidmjq0KmlAd5CM6x
-	w1UShDhwrzbQnD8/EtiIPMtobSj0DfYikkZjimEwmp6idbSOcgfLlO8luirooDyq4M2Jo/3bCrpMV
-	62rlcNbKkiW7kHjytpa0XelbGmR45mcgU/G1E0RPqY7trdcSC3vSpkNfM4QQweesawXrmgsdUMBRe
-	SxsP8XaQSodwmvSVYsaS667064Fd6eGKxy8NeQbnXfm2fgwM8w==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.99)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1vhDm2-00000000VUy-2911; Sat, 17 Jan 2026 22:23:58 +0100
-Received: from p5dc55f29.dip0.t-ipconnect.de ([93.197.95.41] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.99)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1vhDm2-00000003XZ7-18rV; Sat, 17 Jan 2026 22:23:58 +0100
-Message-ID: <a06fe615e4790134e29954ab016b6ec11f24d62c.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 2/3] sparc: Add architecture support for clone3
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Jessica Clarke <jrtc27@jrtc27.com>, Ludwig Rydberg
-	 <ludwig.rydberg@gaisler.com>
-Cc: davem@davemloft.net, andreas@gaisler.com, brauner@kernel.org, 
-	shuah@kernel.org, sparclinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org,
- arnd@arndb.de, geert@linux-m68k.org, 	schuster.simon@siemens-energy.com
-Date: Sat, 17 Jan 2026 22:23:57 +0100
-In-Reply-To: <aWprkg0fRoYQl5DP@Jessicas-MacBook-Pro>
-References: <20260116153051.21678-1-ludwig.rydberg@gaisler.com>
-	 <20260116153051.21678-3-ludwig.rydberg@gaisler.com>
-	 <aWprkg0fRoYQl5DP@Jessicas-MacBook-Pro>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 
+	s=arc-20240116; t=1768691127; c=relaxed/simple;
+	bh=1A8dFk0aQVRS9g0Xa6m7E/rKMvXo2/Q1LIy58aB437w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=I++TBdB9M9iXQ80/Gum94+r7i0l1F8QemMe6lkMa1qjDiTNDBAGdabAZaMIVjqbHBP+/2hvx0f3PrIYGFPyXYxus88Zu0Aj0P3BCTMB/rGgTEcPx0ub/VZx4EcmRG3MtfshjJfaU3InDrPUiTZEDkX1vg0Dth2OKDyKRBYFBuC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wmrl3Fk0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E6F7C4CEF7;
+	Sat, 17 Jan 2026 23:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768691127;
+	bh=1A8dFk0aQVRS9g0Xa6m7E/rKMvXo2/Q1LIy58aB437w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Wmrl3Fk046VwoMSZ+LIGD+uSCPGX4C/O1hTzRqKyVcmpdYKZJxP1N/wJYm1gveC3n
+	 Pb4W8ZnjotgpYZjT2DRprkaJo1A4UsN0/qq6LjLv23VBDRz+gTrCWa8qjpeCYaeLNE
+	 LjGejFu52smvRiSmhTe/Wc0DxR7KXOCA4BImWCLEfD0KVZqHMlL+kD8UV6rQ/xUXZ6
+	 ofPskswQ0cv8n9GZUEM8haWhf/+OS3VlOq/MbGvLLrKzQXiPRrsv52mK+dt4/4iexJ
+	 5EQdqUyLKJN5TUyRgCibFydKU29FoD1gfvR3t8faIiCo5vw95eJHLuTCFRHD21ctjl
+	 eeewd7bsg8CbA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: lorenzo@kernel.org
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	kadlec@netfilter.org,
+	edumazet@google.com,
+	dsahern@kernel.org,
+	davem@davemloft.net,
+	netfilter-devel@vger.kernel.org,
+	fw@strlen.de,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	phil@nwl.cc,
+	horms@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	pablo@netfilter.org,
+	pabeni@redhat.com
+Subject: Re: [nf-next,v3,3/5] netfilter: flowtable: Add IP6IP6 rx sw acceleration
+Date: Sat, 17 Jan 2026 15:05:21 -0800
+Message-ID: <20260117230521.990884-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260116-b4-flowtable-offload-ip6ip6-v3-3-c1fcad85a905@kernel.org>
+References: <20260116-b4-flowtable-offload-ip6ip6-v3-3-c1fcad85a905@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Transfer-Encoding: 8bit
 
-Hi,
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-On Fri, 2026-01-16 at 16:47 +0000, Jessica Clarke wrote:
-> On Fri, Jan 16, 2026 at 04:30:50PM +0100, Ludwig Rydberg wrote:
-> > Add support for the clone3 system call to the SPARC architectures.
-> >=20
-> > The implementation follows the pattern of the original clone syscall.
-> > However, instead of explicitly calling kernel_clone, the clone3
-> > handler calls the generic sys_clone3 handler in kernel/fork.
-> > In case no stack is provided, the parents stack is reused.
-> >=20
-> > The return call conventions for clone on SPARC are kept for clone3:
-> >   Parent -->  %o0 =3D=3D child's  pid, %o1 =3D=3D 0
-> >   Child  -->  %o0 =3D=3D parent's pid, %o1 =3D=3D 1
->=20
-> One of the benefits of having a new clone3 is that the interface can be
-> made the same across all architectures*, unlike clone, which both passes
-> the arguments in different orders for different architectures and, in
-> the case of SPARC, has this weird return convention inherited from the
-> SunOS syscall interface. Is there a good reason to deviate for clone3
-> too and keep this annoying oddity going, that requires special-casing
-> SPARC when other architectures can just syscall(__NR_clone3, ...)?
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+netfilter: flowtable: Add IP6IP6 rx sw acceleration
 
-Very good point. Since clone3() is a new syscall, I think it would make mor=
-e
-sense to use the same interface as all the other architectures.
+This patch introduces software acceleration for the RX path of IP6IP6
+tunnels using the netfilter flowtable infrastructure.
 
-The weird syscall interface was already the reason why we had to write cust=
-om
-code for systemd on SPARC in order to use the raw clone() syscall.
+> diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
+> index 7ee6b2e597c1..73ec8cb88285 100644
+> --- a/net/netfilter/nf_flow_table_ip.c
+> +++ b/net/netfilter/nf_flow_table_ip.c
 
-I think the proposed implementation of clone3() for SPARC would actually br=
-eak
-the libcamera build which calls clone3() using the syscall handler [1]:
+[ ... ]
 
-FAILED: [code=3D1] src/libcamera/libcamera.so.0.6.0.p/process.cpp.o=20
-c++ -Isrc/libcamera/libcamera.so.0.6.0.p -Isrc/libcamera -I../src/libcamera=
- -Iinclude -I../include -Iinclude/libcamera -Iinclude/libcamera/ipa -Iinclu=
-de/libcamera/internal -Isrc/libcamera/proxy -
-I/usr/include/p11-kit-1 -I/usr/include/sparc64-linux-gnu -fdiagnostics-colo=
-r=3Dalways -D_GLIBCXX_ASSERTIONS=3D1 -D_FILE_OFFSET_BITS=3D64 -Wall -Winval=
-id-pch -Wextra -Werror -std=3Dc++17 -Wnon-virtual-dtor -
-Wno-redundant-move -Wmissing-declarations -Wshadow -include /build/reproduc=
-ible-path/libcamera-0.6.0/obj-sparc64-linux-gnu/config.h -g -O2 -ffile-pref=
-ix-map=3D/build/reproducible-path/libcamera-0.6.0=3D.
--fstack-protector-strong -Wformat -Werror=3Dformat-security -Wno-error -Wda=
-te-time -D_FORTIFY_SOURCE=3D2 -fPIC -DLIBCAMERA_BASE_PRIVATE -MD -MQ src/li=
-bcamera/libcamera.so.0.6.0.p/process.cpp.o -MF
-src/libcamera/libcamera.so.0.6.0.p/process.cpp.o.d -o src/libcamera/libcame=
-ra.so.0.6.0.p/process.cpp.o -c ../src/libcamera/process.cpp
-../src/libcamera/process.cpp: In member function =E2=80=98int libcamera::Pr=
-ocess::start(const std::string&, libcamera::Span<const std::__cxx11::basic_=
-string<char> >, libcamera::Span<const int>)=E2=80=99:
-../src/libcamera/process.cpp:160:33: error: =E2=80=98SYS_clone3=E2=80=99 wa=
-s not declared in this scope; did you mean =E2=80=98SYS_clone=E2=80=99?
-  160 |         long childPid =3D syscall(SYS_clone3, &cargs, sizeof(cargs)=
-);
-      |                                 ^~~~~~~~~~
-      |                                 SYS_clone
+> @@ -326,10 +340,45 @@ static bool nf_flow_ip4_tunnel_proto(struct nf_flowtable_ctx *ctx,
+>  	return true;
+>  }
+>
+> -static void nf_flow_ip4_tunnel_pop(struct nf_flowtable_ctx *ctx,
+> -				   struct sk_buff *skb)
+> +static bool nf_flow_ip6_tunnel_proto(struct nf_flowtable_ctx *ctx,
+> +				     struct sk_buff *skb)
+> +{
+> +#if IS_ENABLED(CONFIG_IPV6)
+> +	struct ipv6hdr *ip6h, _ip6h;
+> +	__be16 frag_off;
+> +	u8 nexthdr;
+> +	int hdrlen;
+> +
+> +	ip6h = skb_header_pointer(skb, ctx->offset, sizeof(*ip6h), &_ip6h);
+> +	if (!ip6h)
+> +		return false;
+> +
+> +	if (ip6h->hop_limit <= 1)
+> +		return false;
+> +
+> +	nexthdr = ipv6_hdr(skb)->nexthdr;
+                 ^^^^^^^^^^^^
 
-I'll verify that and report back.
+When ctx->offset is non-zero (e.g., VLAN-encapsulated traffic where
+nf_flow_skb_encap_protocol() sets ctx->offset += VLAN_HLEN), ip6h points
+to the IPv6 header at ctx->offset, but ipv6_hdr(skb) returns
+skb_network_header(skb) which is at offset 0.
 
-Adrian
+Should this be ip6h->nexthdr instead of ipv6_hdr(skb)->nexthdr?
 
-> [1] https://buildd.debian.org/status/fetch.php?pkg=3Dlibcamera&arch=3Dspa=
-rc64&ver=3D0.6.0-2&stamp=3D1766489678&raw=3D0
+The IPv4 analog nf_flow_ip4_tunnel_proto() uses iph->protocol where iph
+is calculated as (skb_network_header(skb) + ctx->offset), which correctly
+accounts for the encapsulation offset.
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+> +	hdrlen = ipv6_skip_exthdr(skb, sizeof(*ip6h) + ctx->offset, &nexthdr,
+> +				  &frag_off);
+> +	if (hdrlen < 0)
+> +		return false;
+> +
+> +	if (nexthdr == IPPROTO_IPV6) {
+> +		ctx->tun.hdr_size = hdrlen;
+> +		ctx->tun.proto = IPPROTO_IPV6;
+> +	}
+> +	ctx->offset += ctx->tun.hdr_size;
+> +
+> +	return true;
+> +#else
+> +	return false;
+> +#endif /* IS_ENABLED(CONFIG_IPV6) */
+> +}
+
+[ ... ]
 
