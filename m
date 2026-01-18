@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-49300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0ADDD396FF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 15:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37E55D39703
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 15:18:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 04C99312990F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:03:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D70AC3080470
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804DD3590BA;
-	Sun, 18 Jan 2026 13:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E455359702;
+	Sun, 18 Jan 2026 13:56:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="JcWvAA/5"
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="r7TkEiAA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11021096.outbound.protection.outlook.com [52.101.125.96])
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11021122.outbound.protection.outlook.com [40.107.74.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ED1355803;
-	Sun, 18 Jan 2026 13:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05250356A3F;
+	Sun, 18 Jan 2026 13:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.122
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768744562; cv=fail; b=XN7OcHIPDb3ElxImJhnj2w/4Wydybtdw0AfprVbcwxbu2/qbnDnrA/+UpaPeH8cmVnDtdpRH0LvBUWDN79G3iWqqfIHkQP0q4EEKKNLIA/QX5imxItMFgflkziQ5BpIMxoEWzBPfu9zSOSAv9vcTRvr83CbebMF/9w6A2okCyRA=
+	t=1768744563; cv=fail; b=Pg0L6wwMezAOQOdxfsLsH27wIapZJgiLxAlEKkTWyDzQ8h5FOEpDXMK2ebeKayNKhAwe7orZc3tHIS2zB6zhP34vhi0l+ULxg5W3iAxONDPdb5Azkh3os0hw5HFkiYHTrn+hZI+9GDot6KwBqjxOeUkBGlaVa2A6uPi2R+8VKYw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768744562; c=relaxed/simple;
-	bh=MVwPZuZYEpSG3ra6ABX3PUl45GDo33m41PSL4rh0d3c=;
+	s=arc-20240116; t=1768744563; c=relaxed/simple;
+	bh=PliObw7ITt9wZG5z9s0riRCW6osMpW6/LUn1A8rxark=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=U7Eccx/dPijK1++AdkubUOha47311fyEFF8rk7x+rC5igUFDKgmWOZQFNOMu4DXV8I+2GjavtxZY291Px8+waKs41pNmMGQ4CIjyJIAwPT6X06Cao5u5ynVN73oNYnHB0J1xQ09Tixi0rJZU1uuX1xwjWdA7x4LfVM/G9ySDxy8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=JcWvAA/5; arc=fail smtp.client-ip=52.101.125.96
+	 Content-Type:MIME-Version; b=D35lN42YkoRYfLePS3VSW7mO+oJdf327hNcPgtvzeXPbT4klvUsTIG8BFvHfsdG2kuZ+WRO4Lto0qqOaCY05nDrcEsoD4j/J+4pBeZFz32jldb0hqEecjc+L73CJEbNhYZrLQKkCex1PUHn8icSgiwqk1f+kHr3K69hH2Ab0fv4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=r7TkEiAA; arc=fail smtp.client-ip=40.107.74.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=w7FRzkpzf4LIXqA5Kb/TCHXiDQ/+UVCKxXvB6U1RpDdjOY0d6LzmQptSIAIgj35sZGBUuEafmeH1DPxp6JyxL3v7pq6XYLAFXAExyN6b17KXhRhZCkG9LSN2ei/oLQy9rVukEF4Txfsh0X+XU6HuExWdhvCWtXjo+F9UIrDcqBwwgNfgvQ4YOvAvwC0aFxW+lz25XXFTpiC5p0nTNp8WN3qKpkWpXidncETKaON8+CyBriCr6eLlSQh6sHXoiOnZkra7Hee2s5yZ1bEallZ7MM7ar5jczHkM72Wocui4EvhyFO3kwbFIungKGam8i5J8cfBTif0gSy30Pwfa1uS0Gw==
+ b=jf9FLu2/HNf0Inu4k2b1ByYr1lMo3VB1EF+GjIl4SF9CV6cJWvy27ESfNz9OH2IYSCx70vhT48ZvbbrhibXDpqkRA+duTAFv93FBOucgXsskdH3Fxg07VOG1F93RDkrllLHRR7GyLncE6Yx0DistBIb0opINTc4inpUEy2dpc3iO9sPKCMoGT1TZxjBMRvQauAopWElC6edRH0sG8n4+B8+I/sCTa2CyGWFJWvoyNxJnoVuxl3vZkSbNQh6TPb2g9TtCUB1FnADRetxFv3esQdGrcyGOAMPhOPmOo8Ct1j5q1NRvSlvaxbnlSwOQB6UF6nbxrsoM6lJIDZQikTd16w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kfi79sfUOdAnx8ZsNbiXW15ZQ35ni+Hpcru6fYrwKvo=;
- b=V0X/lFzEP5sx+ZgfQfR1dzt4C2P2tjxfMcUDu9PibS6cQFHpx3XapDA1uUUCPh/UxyNO4KGxeA117ONUqoKPIzdHvOhFEq7cgymZcE73J3eq1Z7flkC94lwfhVOA0raJOazjyPaTblb85wDDf6Hrt6Dfq+9x/8VIQPVIifWoHO7Z6jvO18wYcNqg55SOWPurXmXTp2J9jnIEV6OLV7cXWyRWhVN0I6NpthucyNeoskA6hWNX+WpMZWEM6yxqk5yBgryK049z6WvkI4TjQVtZkYdI4aGZdhyfYWmZ0+HHXKpxdBaLm7lxXwqkJO+yzDrrPYAmlY7gZHVDlClI209q2g==
+ bh=VwEohNI2VgVjRtwolgshdET/NuOPsD/aCuM1nzBIp+Q=;
+ b=RIPlSwdUcDYeS4wUBRSU4T9XmHOgQZWiDVTpbszcpqKF7F8CKl4qhRcLUTzjf8KKmBlC/ffrNeh5+Jyq9gULq8Ej3IWOunyZc2veIUl5Ru3/vLWhrdnfCzApwcV/stWscxZ/RDNiNkHlq98KEuCUm4Gj7lciWNvL2du5JJeS3Dv6z+Te5U3PgskMjbjMexPzFol0WGX1t0bEtjvA6Uw2PeaNBonoN37R7PIiH7p6qxj2xSLSBTSdNCIBw1Ao10DEoq2h0hn8Nx5G7U3MHOOfzUwMEUFE9kJjUpyIwgvijKUpc4Njl6huLChXEFevQBVYpTDClAvj79X0lMAcyO82SQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
  header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kfi79sfUOdAnx8ZsNbiXW15ZQ35ni+Hpcru6fYrwKvo=;
- b=JcWvAA/5Mv2nY+iK8Ri1mTy9WIFYsNmFONzHG5t/OxhajLnY0TL5tn3RYZqakOQSYxysPNnA1s1R+Vh4ReXm60+J+x8URW1DsUKsFOtfupmO5TY+TBrPdAdHqxOxwfHz40Wb17ya3yRPNsqXmZ6YGNhjyL1F3vR40+TDfi4yhiA=
+ bh=VwEohNI2VgVjRtwolgshdET/NuOPsD/aCuM1nzBIp+Q=;
+ b=r7TkEiAADYdl9g1SM/BAxAiLcFfrUscThrO2xXouHNUG+O3chqax3jpaNtqvzljGjMGiUQB7yLlOIa13hp69Bja5VQdJ6LGIE/e6oCt+41NlfNqNh8xDaeuy4pITT7nex3lXU13T17pA3edT+EuaV1SgLoWqta0rThBp1ZgDfjQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=valinux.co.jp;
 Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
@@ -93,16 +93,16 @@ Cc: linux-pci@vger.kernel.org,
 	andriy.shevchenko@linux.intel.com,
 	jbrunet@baylibre.com,
 	utkarsh02t@gmail.com
-Subject: [RFC PATCH v4 36/38] PCI: endpoint: pci-epf-test: Add remote eDMA-backed mode
-Date: Sun, 18 Jan 2026 22:54:38 +0900
-Message-ID: <20260118135440.1958279-37-den@valinux.co.jp>
+Subject: [RFC PATCH v4 37/38] misc: pci_endpoint_test: Add remote eDMA transfer test mode
+Date: Sun, 18 Jan 2026 22:54:39 +0900
+Message-ID: <20260118135440.1958279-38-den@valinux.co.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260118135440.1958279-1-den@valinux.co.jp>
 References: <20260118135440.1958279-1-den@valinux.co.jp>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TY4P286CA0102.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:405:380::16) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-ClientProxiedBy: TY4P301CA0075.JPNP301.PROD.OUTLOOK.COM
+ (2603:1096:405:36f::13) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -112,191 +112,188 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|OSZP286MB2093:EE_
-X-MS-Office365-Filtering-Correlation-Id: ebca2904-09bd-4ee8-2e98-08de569938cf
+X-MS-Office365-Filtering-Correlation-Id: 8dcc5b43-04e8-4497-afa8-08de56993945
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|10070799003|1800799024|921020|18082099003;
+	BCL:0;ARA:13230040|366016|376014|7416014|10070799003|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?AhJFMcH+imY+eGvaqFOizAbPT6NkaBsKQeV4IkXXHU9Jui5tDXYEFqJ26PVR?=
- =?us-ascii?Q?PoLUKIq9qWI6kM+tvupLbsebtsT8yqOhzfGtoKmdp/UQZhk9siten9bPVF85?=
- =?us-ascii?Q?A7Jsk+JTBwHUl8TrsOgCC9ILQH29C0TCqK3dAYi83/GhH5QSPaeHbIJReJEB?=
- =?us-ascii?Q?ku/Ko4AUpNVj4lt07QKhhD/WHvZPUPQwN4Ncuv+GM2BSvpf5QLJwQV+i5TnM?=
- =?us-ascii?Q?vliuC8D1fX4ZxJdt3m+mn8yHWyNiJH54zQiA8iRzwuQa5DoUbxso9OHdz+Al?=
- =?us-ascii?Q?Z1SEoGDvnZvhE/pvDaxL+RaSiT2JTIoH/md0SGhXZqaQS2TLTcHwchk/NlqE?=
- =?us-ascii?Q?x/No9oTChURfCD3LCYb2isHRIceaEfEqjzvSJPNDmbOBfxHHHnqt9INfi+A3?=
- =?us-ascii?Q?wAuORlq4+GgqIoF103P3FVZ/jolwN8Ituf7wrN+F5WO0nXzDjFWETkt0o+5J?=
- =?us-ascii?Q?jIOpO/yKzriXdjhgzaiQqFR+PS5Dy3pryd0AsJouTYfoNtFLbma18AgCQrtF?=
- =?us-ascii?Q?sjgpoCGocSBz1ic6stZTKv2WKo73H1MUE+r/j2fQGuFrR+JPVqrYep2sY1Vs?=
- =?us-ascii?Q?5gLBlZDP92b1A8pjCQptdT+kfqOdhR186RJuVWIyeznil8AlcZLZui0/QYWY?=
- =?us-ascii?Q?Dd4vOuQ74v62o0OaeQTrLjKoQNdTQUQQwU4bnZJl5zoasOIGB7erw0pInFJ8?=
- =?us-ascii?Q?aKg6c8NC+57738nk/ow/3l78cbvH3OZpurUY1yzv6jLSAIUBBNRdf3udvalB?=
- =?us-ascii?Q?wYPTGrydvT/TL3nc5rxPM/U2cb+wSmQwl3dcI2MPsvzAeKBARgvEfYRDl61l?=
- =?us-ascii?Q?vAfacBwAlBZiy39FR8pm8lO5pqgisihuUa/orfsjNFIzMEqAMCap4/sQoyP7?=
- =?us-ascii?Q?7gQHAoXvQu8uSN633HARqZ+JggYZBmYfWVpOE2lBjepjeKhg5oWQwi9Xghc6?=
- =?us-ascii?Q?IMzcgdD4eL0z0GEW2vsdqIlJ1qVItrectvW/HjLjsrIouI0V2bDGMsBoHRr7?=
- =?us-ascii?Q?m/7sd90d1RGbC99al9cte5waTOF9dyzB0UTJY9gijqHVfIA8FdrR1HhDNu2R?=
- =?us-ascii?Q?ORVswRbZIcghDEFNhJbDPMltsa2q0WcPI6gLnIQIjrp593LLdFARUaE511yH?=
- =?us-ascii?Q?0G4sVsxfwHg23uHRKgt/wIbPdCSc9gW45rBFGPvgTwxbYLUyClEgXAH1W/AN?=
- =?us-ascii?Q?ZwBJDbDagy7+PkVblkAZJYGU/gXhNv0FUjjNLQh1+4dlGWDU3OA6oAWHYzMZ?=
- =?us-ascii?Q?92hIME5lDspEockHh6jnzl8DpCJCdfIv6ujO0Nc0YhiOhztbYDNzIwTkupAv?=
- =?us-ascii?Q?1t1nYDYvc/tX3JLb+qb/Itgi1jsBTtaU7kaAJv0quhbSYsi5bRyRPeYzTqbz?=
- =?us-ascii?Q?3C+kB+2xDU13LxxxppLTs4wCqexO9V9vYaO4QhNuTgBehebTFKWwXMClybyG?=
- =?us-ascii?Q?ypDWEktNwa2hVeh2ZcAkIQEhTVtNyUKQIURQ4noVzRg8iIunON6QKQ/QgQAe?=
- =?us-ascii?Q?s/S6Mvi2e8BWkp4Q4zwi9o1TctEOngXmvC+w/CKKq4s+LhtouuCGSM8lJOYm?=
- =?us-ascii?Q?Br3ctw4jvs8bR2m/S+nnTQY9uQh8sV8JuKbPUJ2q9uAxvOaIEzzWA7AY0XX4?=
- =?us-ascii?Q?tg=3D=3D?=
+	=?us-ascii?Q?b8IBbYYXjfZ6VTZMWlN8uO+mmKS/gqmybx9+JIIX5aJ/vmcaRcobK4X9NEQ6?=
+ =?us-ascii?Q?b0e5XbX8bq59ZPdrOckmA6K29SUD7eldualX/Vlfw3ckh7qg8LrHVJ7B/jW5?=
+ =?us-ascii?Q?5QmiQRornrRKsyNIqwz7NWPRRe/g3HnlbNMleYRaVbm3KXx1bTnkYVewgs+Q?=
+ =?us-ascii?Q?WQCssFkvsQyKdFNDGmhXgeMpPlet6FeYfskVdBNgmuZdKLa6dcFomGSGHOKS?=
+ =?us-ascii?Q?30jQZkAOGa5nT1sPRowYB4lpaQDOqAZTJuLHDOkHs2u2ZMX8Ry11oRHZ23t3?=
+ =?us-ascii?Q?Ui0U+gg99i0yLaLVATlRVJ6VYKh93tjbBLY5aRRNlHasUULFRDFd1VAD8DKZ?=
+ =?us-ascii?Q?RRe29XMogP/wNXC8y84zW35VYyEMoVy6U5OGJz2QZ3ZE9GeQqOmY6ZwU9VRK?=
+ =?us-ascii?Q?a9w8FgxqboW9H4RgTvA3lFmGpR0ZQow8cOsd3f85nccaja/W7xX/HmpZpPAu?=
+ =?us-ascii?Q?wDa3TJjCVrP4V6UQjSF/r9yut3MeuEb7mvHCFpxWyXaMBKotCXk/quc88XBr?=
+ =?us-ascii?Q?buxVvZBY4z0zTiLd/gl0nOCMi+/nbO2pdkrCRcssN0xIknMw30U1uN6gvKFk?=
+ =?us-ascii?Q?+o1uYYOmB+WC613gH87zjkXfhGyIS0sTSj6lC02s2KLZLZs3YVmYRSl8v0xM?=
+ =?us-ascii?Q?+BNpptJjQAuxQskxPRg3WdIQs6pvAkXydIdZRCPdGW2iZLWFtzz+TD2sRlIp?=
+ =?us-ascii?Q?5155CGtqOz0dxOJZ0S3OmKjcHMhPIusbogfshoutzPYG1Mom+mYfFusJxNv9?=
+ =?us-ascii?Q?cHX4/684j5ZgAKq8fCM4W1jLj5t2MJY47sb8QIc9exR2qhUUujvyg3N43h+9?=
+ =?us-ascii?Q?HCg/1PGPrdEniscQck4eVtr83DPhM5SJ9EdzZDlA1lbcVLJzkmYZsQyPNeB2?=
+ =?us-ascii?Q?y3KQ/iAjy3fYTuc906hoVZV6av4gOKvOxROTrr9mECA1JY4KoOV+TMO5Rc5X?=
+ =?us-ascii?Q?axPGemlQx44mpvvt0TcQOffFeA3yokgMpNKXj9eP7n8LXIxfze1SI585ZiW3?=
+ =?us-ascii?Q?QfntCA1TbbscxH2+t2Agd7gkFdAVmstmoXMdc+C2k+bt2wFunRzgVRkxVZJW?=
+ =?us-ascii?Q?/EiQQohknbmVfq8q/h2lt8oeQOKlhLOPWmM42Ahn0kmaaXFPqB7PrefwKtLB?=
+ =?us-ascii?Q?UQ4tsU3DEx/tHAQVF/VU5+zxTZx6OBxDjzDkgVKA8bm4oFp+XrWo9hcSb/xF?=
+ =?us-ascii?Q?Rs5SHSy1HfcooqwGzWCLeAPGxkn4s4iUrykmxq3GsknzB/va0mDdKWOMsgHz?=
+ =?us-ascii?Q?Fc5DvSp4XuEDR6wtXOr4WYtpEuCPVGir57KWfAbAzSxsi2pCJO7b2NHIXTBu?=
+ =?us-ascii?Q?9aaKzJZu6ci5mYVb0mx9Vphtu/OlMryKbW3BllzXwXtqLMy2MYWPv7I5bb3S?=
+ =?us-ascii?Q?cWJ0I2nRzrituAMWP75MQsHcJyMllKhwmK0D/+utepm1SmC8AC8CyMPm24uv?=
+ =?us-ascii?Q?6Xh7rCjrLFFUulUbKz5TyGQN36NyYPmhi0NTrXqPlUZadVvF6J1jRYcPORuq?=
+ =?us-ascii?Q?dwvYuYDMLMZXa7zVg+kVCUc+TorpHEucyWb2ybnOjV+/CMVkq7WSd3eudXrD?=
+ =?us-ascii?Q?IVt6PM2Zaia+TDNHpb6yHSzDmhN0AQ82iMEiGfQ868HBBJ9FDXrkvYr4KK0W?=
+ =?us-ascii?Q?KA=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(10070799003)(1800799024)(921020)(18082099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(10070799003)(1800799024)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?s0cYtpIMPX8FahMFdeWMbiQ6ekLFdY8Cl15mHd5oQ79g21/yBVYi88QeprUb?=
- =?us-ascii?Q?i5mVIFGKKkhF5vvrld3i2AHgriwfnzSMtTBPtA8p5FbqKnpkHcf+oUwN9uYI?=
- =?us-ascii?Q?3oBhaX15DQcpkaf7nhNji+pUUHFY8Di9VFN7NZnZ25/50/9oMOerzbgJbft8?=
- =?us-ascii?Q?jKMDKk9v4YWTD7BXdcbp19ZJpda/l9pQxWXoFL/HPyBehx858kjfC6qQ8YNM?=
- =?us-ascii?Q?56lksjtiChl2SDdNtNDHlN9LvZsnS/9JQ0GPEihl+LFlQYeyJMnkkJ40hcVi?=
- =?us-ascii?Q?BM4cDXEQy9daRBYtt4dVRZXWf+R10/GAE7Y9Pfc1b4zbUaIn2erl6uQwkffO?=
- =?us-ascii?Q?NNcrhaWYUTlk72c1FHU+km2UJlcsC4fOaGz192TBG71MhW8NC1Fs7BrwSly2?=
- =?us-ascii?Q?h/v+uPm4hexsY79F2QsG06Ap+hcsw6d4uU4TiqkCasuZvI9mcjUpBG0Lm1Kt?=
- =?us-ascii?Q?KnUgtkOznDrkVFP2xehAgiedcTwEGUM1LMoCVOxBwVdhvAPbHAfA1JFIJe+W?=
- =?us-ascii?Q?hfRZYrC3dYMbO9LT1AXRbL1d8w6M4Ugtd6HXiNHf76MMxm5Kyim0Wx8+DPWi?=
- =?us-ascii?Q?EJjBgwLymenSZtskU/Arh2e8KljQMP0gGdjyd5yUVE4Lt5XuRrBBM2RU4w83?=
- =?us-ascii?Q?lU/HeOAmuI3IzuqHInO6Xl1JaFpuZoLaVaRAyEj0kY1NaI5dd+RAykwBUYt3?=
- =?us-ascii?Q?yFsKJ/PTjhwHW4ZP3/yHP8HmCqDOcpGNKpVD5XG0T0AfskZ7+7spDqT3YiQf?=
- =?us-ascii?Q?sHotkN0h6ELzLJ1SG/ecW7X9zIfEvpP9FzjbrDt4OlljteKcnGuiVAuO4fi+?=
- =?us-ascii?Q?MJsvgehYtaVbdNlx8p+6BO2u0sg/o4R4Rp2HcC/lM8yz4Kq21po13yXsVn6q?=
- =?us-ascii?Q?33gjFx/21YRvd7Z+d2UCwpg6CaMcto6Wgr/NPkmnaQqC4+y+Vp4sqiwxAFR0?=
- =?us-ascii?Q?KE5LYe2fjqIbv6ZM9vhjNzJte8r4/fscxzqoX9DU38rybIJQyCnsAGHtHoH4?=
- =?us-ascii?Q?ee/Pdx67r5frgN6uIxRzfPXbwYjrpd4FFd7KXbZachKLKc71QZU+LeFjC8Xi?=
- =?us-ascii?Q?e4g4zyIBtnx/GwCqQ5jBVxlSUys7pGIxw5zEmVsw9AiqmZtxJ40qRg311fzq?=
- =?us-ascii?Q?+5Lb2mDXxt8SHkLRTN7nulmrBOCjJOE/tdFAGAy9z1ghe6fElfl3hHGnP1JS?=
- =?us-ascii?Q?mym95TJSwvvh8x6OkOnD/5k0dhgn5c0d+9PzbJ8GjxhFECMYZkMSdHW3Ubia?=
- =?us-ascii?Q?HxMb8obEeL2Py/qZJCdIqZpdDsCW/WO0CbiR32d2JIGrHIXV+Uk9M3EAfSMw?=
- =?us-ascii?Q?EP2JOv9V50hl+TP+LfoL4aAvySWySGFjERjQJtFQk41HJn6ODU05pMdDr3ym?=
- =?us-ascii?Q?sVHp6nE+kDUGsi29svocndXH6Ew6OmCeR2SlMKPoc5M1HpvjkMJAYHNkMxy6?=
- =?us-ascii?Q?j4hscWJ4ormnoYwx0Qlc0I+uJqsenQO1qapBP40Ewkpro6z+Z9BkI1Xj1Q6I?=
- =?us-ascii?Q?56gcugOL7IK/oOsT1Nqv/Tt2TN3VQBdsIlMbetmuNkr2ZcycZHkLZaPazpmZ?=
- =?us-ascii?Q?/0fyaXWA3i/q8F2BUqcLZ6mddUfPnP+PifBGzHYtzuVGWlpyV5UIXhA/48AZ?=
- =?us-ascii?Q?AWxXlW6BRJ+EcA+cE79L8e0yz88zgHM/WcSgoCWh+W68EtQbSJyS/HyUAPfB?=
- =?us-ascii?Q?hDA1/0kMbpwXiwoJ0endU8Jq+K9MqqxFhMsScY0PXliuFZjDx/TaFJUj3Ur1?=
- =?us-ascii?Q?cQU1qSdqbzuIIws+bmK0fTh3JQWlYPpbyeffZUjtZoV2Y0Bh5XYC?=
+	=?us-ascii?Q?5z3xShoQLEx+EO4iw4mnU9NqBOArob6OqNnseORrqPR3e39U2aauML2TulJM?=
+ =?us-ascii?Q?m56AdrXyQEeCVX/+Nux11bqk9CKvCH6IegtAePUVgfX0cMJYE7PxGvdBLB9K?=
+ =?us-ascii?Q?xSEqx8FIQZHa6l2a6l+b7TIwzYvo7ssWgkbLIQMdqN10qg3thfClQMVLJocJ?=
+ =?us-ascii?Q?z7FybpNpp/BC6gnfW/8eru+wpTevRbU3SuvH1gXZPZ0ubUJ+R8wks4pJ7qHk?=
+ =?us-ascii?Q?FEGAA/4cEv8LqDrseCiPolgC20pCRO5d08wFUZmKiX3GFJCpqm9b/Jc5LEyd?=
+ =?us-ascii?Q?QgPi0Uih+HX3/xPC568coAX9FYG3dajXiD6Pdzub5Na4o1qzUu1ZHU8KbaZu?=
+ =?us-ascii?Q?9qKeeDcnzMvbsHfPbIjgDkLa3XYgQKc3anSsxMh2xQKIhtJg+BoEDxfjjco0?=
+ =?us-ascii?Q?W6wJdhwnmZisSO72HtgfScPyhlUDGj2vljt8a0emjPwtd6WZ8oSDwECOMZ4F?=
+ =?us-ascii?Q?mHuBdSiRfI69rmCN8Bmy/NFWNT/h51n2v4UFbx1etHEaD1VvxaUAQ/bBzVrI?=
+ =?us-ascii?Q?VOjuev/SW9RZSjFUjLoB2/o9bzqhx5chD5iHYiqBbtnfpF84ovamW/+BG9+H?=
+ =?us-ascii?Q?Jhx1Bu0zMckYdgrfDwGH5EU+gw6HmtjbJ3uc78qIhHmW0DU98W7ISUxe2uuf?=
+ =?us-ascii?Q?hDL721Nv5FKghwPFY4ea7/eLa0uCqLpYfZIkaFeh1ciCfZVvJZSur+iOLle6?=
+ =?us-ascii?Q?BuSARjt5XJyYucnrfUmhT141purSgrENRQguUQah5dJmhefk9a4i/k2G/fD8?=
+ =?us-ascii?Q?01+m0xC6k/gUcJqy5x0UK5WcCHSuaBwAC8AVfXCaszVL/4peHznpdsj1vvJS?=
+ =?us-ascii?Q?SB1mgyDhPU9P5TlSLPJeT+4L1Qs/Z+mWE9OQRVwmDrJaZvTkhKefyG6/ptJx?=
+ =?us-ascii?Q?0FU199727FmTzkXzhS7fzHouKwgCaj9HmsolRGTVwFzW/I7nayJLqdSXWmin?=
+ =?us-ascii?Q?RPfyNFj3AdS4GoJrC/QDLHpctoCPXd1G5OSXFrGpMv0hBRK5Pz4W7IUARdHU?=
+ =?us-ascii?Q?rxRsoOhcjrzXkjUCFrgefbugRPt2Z1J1yH3K78w5S8O1QRXKfe45hwTf1iRv?=
+ =?us-ascii?Q?7wo0eQv54X27iRaJbocW0jZXJbixsx1e8MamKF1cC2qv6HbnC/fQaMsra5jR?=
+ =?us-ascii?Q?34M0kAZVgz+B9Srk0ZIk9mgvLVVA0D5+qd+X6wWq7VdjuoFX3z+aGyc9YpWl?=
+ =?us-ascii?Q?zEh+rfA1ObcB//d1t1U/Azv6/PhoGIT92vybsBoW3/O1UD6AK2lbKp6iYeUD?=
+ =?us-ascii?Q?QIGQSp/bummSmgfH3/oaBAzDB6vSgnL4ApxGDY82n3lQ0irT5f8QqEByEah7?=
+ =?us-ascii?Q?X4oavOBzHbO+H9X+fXN9HK5/lXZnUoNbLx+8X3cyhlZIjfofI869FzK9I/bw?=
+ =?us-ascii?Q?5NoyaISyaGc25iFWFUd4FVqs+K7SN2mF3yPw7ILc0boyZ6tweQCGIxpwdZGS?=
+ =?us-ascii?Q?AwDnxgMpP6eJmvkSp5I1jV7GRbjavXAqf/QOxGJGLxGWVI92Cb0ZmFzaCB1j?=
+ =?us-ascii?Q?e4pY750J6WE5OG4/31VOOe1wazRpImLWrFrW1v7Hep980QIBxycQdQEdtSyA?=
+ =?us-ascii?Q?Uq0/q46vemgP1J7tc0p3xg9NPrIXXSu/W71CSwwB3J18b26f+9a1NT5zuLa9?=
+ =?us-ascii?Q?ZmLB7cwdBA/QVWDWBtH5cBvlSKWdzmahnfpmyIceTKSxEP8wFFvLXZOY2LwO?=
+ =?us-ascii?Q?Pl0iODmC4Np196T2QvNwTv/K4muHgOGQSbRsPlXbJROl6vi482P72jqbNz4f?=
+ =?us-ascii?Q?fbDW94ZreVgmi/0PTr7kgcP4LBscSjes73F3XTqT1VXKtU4j1+FV?=
 X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: ebca2904-09bd-4ee8-2e98-08de569938cf
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dcc5b43-04e8-4497-afa8-08de56993945
 X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:55:21.6738
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:55:22.4553
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ANluYPIADkgQVRSKbXOWBr+J66hZDmvsbsjx+rjm3OqidfSYEC2ZguPsf6BBqrkro/O0GIIhJhHMzXCTzpPW2w==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6JBvEHVNqqmPLMrHGFCL2XJEruwKlFpKPQYIw94jOzbhFBO+6yJf1akBdItZjhqY5quhe+QAtdGlfn5T1LcGwA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB2093
 
-Some DesignWare-based endpoints integrate an eDMA engine that can be
-programmed by the host via MMIO. The upcoming NTB transport remote-eDMA
-backend relies on this capability, but there is currently no upstream
-test coverage for the end-to-end control and data path.
+Add a new test mode controlled by a flag, PCITEST_FLAGS_USE_REMOTE_EDMA.
+When requested, the driver:
+- Issues COMMAND_REMOTE_EDMA_SETUP to the endpoint and locates the BAR
+  containing a pcitest_edma_info header (magic/version).
+- Creates a remote dw-edma instance by ioremapping the endpoint's
+  exposed eDMA registers and linked-list regions and probing dw-edma on
+  top of it.
+- Requests one DMA_SLAVE channel per direction and performs the
+  transfer.
+- Uses COMMAND_REMOTE_EDMA_CHECKSUM to validate the result when the
+  transfer direction is host-to-endpoint. For the opposite direction,
+  the endpoint provides the expected checksum up front.
 
-Extend pci-epf-test with an optional remote eDMA test backend (built when
-CONFIG_DW_EDMA is enabled).
+One MSI/MSI-X vector is reserved for the remote dw-edma instance by
+freeing the last test IRQ vector. This keeps existing MSI/MSI-X tests
+unchanged unless the remote-eDMA mode is invoked.
 
-- Reserve a spare BAR and expose a small 'pcitest_edma_info' header at
-  BAR offset 0. The header carries a magic/version and describes the
-  endpoint eDMA register window, per-direction linked-list (LL)
-  locations and an endpoint test buffer.
-- Map the eDMA registers and LL locations into that BAR using BAR
-  subrange mappings (address-match inbound iATU).
-
-To run this extra testing, two new endpoint commands are added:
-  * COMMAND_REMOTE_EDMA_SETUP
-  * COMMAND_REMOTE_EDMA_CHECKSUM
-
-When the former command is received, the endpoint prepares for the
-remote eDMA transfer. The CHECKSUM command is useful for Host-to-EP
-transfer testing, as the endpoint side is not expected to receive the
-DMA completion interrupt directly. Instead, the host asks the endpoint
-to compute a CRC32 over the transferred data.
-
-This backend is exercised by the host-side pci_endpoint_test driver via a
-new UAPI flag.
+BAR read/write tests skip the BAR reserved for remote-eDMA metadata to
+avoid corrupting the eDMA window.
 
 Signed-off-by: Koichiro Den <den@valinux.co.jp>
 ---
- drivers/pci/endpoint/functions/pci-epf-test.c | 477 ++++++++++++++++++
- 1 file changed, 477 insertions(+)
+ drivers/misc/pci_endpoint_test.c | 633 +++++++++++++++++++++++++++++++
+ include/uapi/linux/pcitest.h     |   3 +-
+ 2 files changed, 635 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index e560c3becebb..eea10bddcd2a 100644
---- a/drivers/pci/endpoint/functions/pci-epf-test.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
- #include <linux/dmaengine.h>
- #include <linux/io.h>
-+#include <linux/iommu.h>
- #include <linux/module.h>
- #include <linux/msi.h>
- #include <linux/slab.h>
-@@ -33,6 +34,8 @@
- #define COMMAND_COPY			BIT(5)
- #define COMMAND_ENABLE_DOORBELL		BIT(6)
- #define COMMAND_DISABLE_DOORBELL	BIT(7)
-+#define COMMAND_REMOTE_EDMA_SETUP	BIT(8)
-+#define COMMAND_REMOTE_EDMA_CHECKSUM	BIT(9)
+diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
+index 1c0fd185114f..52d700374ac6 100644
+--- a/drivers/misc/pci_endpoint_test.c
++++ b/drivers/misc/pci_endpoint_test.c
+@@ -8,7 +8,10 @@
  
- #define STATUS_READ_SUCCESS		BIT(0)
- #define STATUS_READ_FAIL		BIT(1)
-@@ -48,6 +51,10 @@
- #define STATUS_DOORBELL_ENABLE_FAIL	BIT(11)
- #define STATUS_DOORBELL_DISABLE_SUCCESS BIT(12)
- #define STATUS_DOORBELL_DISABLE_FAIL	BIT(13)
+ #include <linux/crc32.h>
+ #include <linux/cleanup.h>
++#include <linux/completion.h>
+ #include <linux/delay.h>
++#include <linux/dma-mapping.h>
++#include <linux/dmaengine.h>
+ #include <linux/fs.h>
+ #include <linux/io.h>
+ #include <linux/interrupt.h>
+@@ -17,6 +20,7 @@
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/random.h>
++#include <linux/scatterlist.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/pci.h>
+@@ -39,6 +43,8 @@
+ #define COMMAND_COPY				BIT(5)
+ #define COMMAND_ENABLE_DOORBELL			BIT(6)
+ #define COMMAND_DISABLE_DOORBELL		BIT(7)
++#define COMMAND_REMOTE_EDMA_SETUP		BIT(8)
++#define COMMAND_REMOTE_EDMA_CHECKSUM		BIT(9)
+ 
+ #define PCI_ENDPOINT_TEST_STATUS		0x8
+ #define STATUS_READ_SUCCESS			BIT(0)
+@@ -55,6 +61,10 @@
+ #define STATUS_DOORBELL_ENABLE_FAIL		BIT(11)
+ #define STATUS_DOORBELL_DISABLE_SUCCESS		BIT(12)
+ #define STATUS_DOORBELL_DISABLE_FAIL		BIT(13)
 +#define STATUS_REMOTE_EDMA_SETUP_SUCCESS	BIT(14)
 +#define STATUS_REMOTE_EDMA_SETUP_FAIL		BIT(15)
 +#define STATUS_REMOTE_EDMA_CHECKSUM_SUCCESS	BIT(16)
 +#define STATUS_REMOTE_EDMA_CHECKSUM_FAIL	BIT(17)
  
- #define FLAG_USE_DMA			BIT(0)
- 
-@@ -77,6 +84,9 @@ struct pci_epf_test {
- 	bool			dma_private;
- 	const struct pci_epc_features *epc_features;
- 	struct pci_epf_bar	db_bar;
+ #define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
+ #define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
+@@ -130,6 +140,9 @@ struct pci_endpoint_test {
+ 	size_t alignment;
+ 	u32 ep_caps;
+ 	const char *name;
 +
 +	/* For extended tests that rely on vendor-specific features */
 +	void *data;
  };
  
- struct pci_epf_test_reg {
-@@ -117,6 +127,454 @@ static enum pci_barno pci_epf_test_next_free_bar(struct pci_epf_test *epf_test)
- 	return bar;
+ struct pci_endpoint_test_data {
+@@ -149,6 +162,610 @@ static inline void pci_endpoint_test_writel(struct pci_endpoint_test *test,
+ 	writel(value, test->base + offset);
  }
  
++static irqreturn_t pci_endpoint_test_irqhandler(int irq, void *dev_id);
++
 +#if IS_REACHABLE(CONFIG_DW_EDMA)
 +#include <linux/dma/edma.h>
 +
 +#define PCITEST_EDMA_INFO_MAGIC		0x414d4445U /* 'EDMA' */
 +#define PCITEST_EDMA_INFO_VERSION	0x00010000U
-+#define PCITEST_EDMA_TEST_BUF_SIZE	(1024 * 1024)
 +
-+struct pci_epf_test_edma {
-+	/* Remote eDMA test resources */
-+	bool			enabled;
-+	enum pci_barno		bar;
-+	void			*info;
-+	size_t			total_size;
-+	void			*test_buf;
-+	dma_addr_t		test_buf_phys;
-+	size_t			test_buf_size;
++struct pci_endpoint_test_edma {
++	bool			probed;
++	void __iomem		*bar_base;
++	int			irq;
 +
-+	/* DW eDMA specifics */
-+	phys_addr_t		reg_phys;
-+	size_t			reg_submap_sz;
-+	unsigned long		reg_iova;
-+	size_t			reg_iova_sz;
-+	phys_addr_t		ll_rd_phys;
-+	size_t			ll_rd_sz_aligned;
-+	phys_addr_t		ll_wr_phys;
-+	size_t			ll_wr_sz_aligned;
++	/* Remote dw-edma instance */
++	struct dw_edma_chip	chip;
++
++	/* One channel per direction */
++	struct dma_chan		*m2d;
++	struct dma_chan		*d2m;
 +};
 +
 +struct pcitest_edma_info {
@@ -318,471 +315,645 @@ index e560c3becebb..eea10bddcd2a 100644
 +	__le32 test_buf_size;
 +};
 +
-+static bool pci_epf_test_bar_is_reserved(struct pci_epf_test *test,
-+					 enum pci_barno barno)
-+{
-+	struct pci_epf_test_edma *edma = test->data;
++struct pci_endpoint_test_edma_filter {
++	struct device *dma_dev;
++	unsigned long direction;
++};
 +
-+	if (!edma)
++static bool test_edma_filter_fn(struct dma_chan *chan, void *param)
++{
++	struct pci_endpoint_test_edma_filter *filter = param;
++	u32 dir = filter->direction;
++	struct dma_slave_caps caps;
++	int ret;
++
++	if (chan->device->dev != filter->dma_dev)
 +		return false;
 +
-+	return barno == edma->bar;
++	ret = dma_get_slave_caps(chan, &caps);
++	if (ret < 0)
++		return false;
++
++	return !!(caps.directions & dir);
 +}
 +
-+static void pci_epf_test_clear_submaps(struct pci_epf_bar *bar)
++static int pci_endpoint_test_edma_irq_vector(struct device *dev, unsigned int nr)
 +{
-+	kfree(bar->submap);
-+	bar->submap = NULL;
-+	bar->num_submap = 0;
++	struct pci_dev *pdev = to_pci_dev(dev);
++	struct pci_endpoint_test *test = pci_get_drvdata(pdev);
++	struct pci_endpoint_test_edma *edma;
++
++	if (!test)
++		return -EINVAL;
++
++	edma = test->data;
++	if (!edma)
++		return -EINVAL;
++
++	/*
++	 * Only one vector is reserved for remote eDMA use, thus 'nr' is
++	 * ignored. See pci_endpoint_test_edma_reserve_irq().
++	 */
++	return pci_irq_vector(pdev, edma->irq);
 +}
 +
-+static int pci_epf_test_add_submap(struct pci_epf_bar *bar, phys_addr_t phys,
-+				   size_t size)
++static enum pci_barno pci_endpoint_test_edma_bar(struct pci_dev *pdev)
 +{
-+	struct pci_epf_bar_submap *submap, *new;
++	int bar;
 +
-+	new = krealloc_array(bar->submap, bar->num_submap + 1, sizeof(*new),
-+			     GFP_KERNEL);
++	for (bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
++		void __iomem *base;
++		u32 magic;
++
++		if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM))
++			continue;
++		if (!pci_resource_len(pdev, bar))
++			continue;
++
++		base = pci_iomap_range(pdev, bar, 0, sizeof(u32));
++		if (!base)
++			continue;
++
++		magic = ioread32(base);
++		pci_iounmap(pdev, base);
++
++		if (magic == PCITEST_EDMA_INFO_MAGIC)
++			return bar;
++	}
++	return NO_BAR;
++}
++
++static bool pci_endpoint_test_bar_is_reserved(struct pci_endpoint_test *test,
++					      enum pci_barno barno)
++{
++	struct pci_dev *pdev = test->pdev;
++	enum pci_barno edma_bar = pci_endpoint_test_edma_bar(pdev);
++
++	return barno == NO_BAR || barno == edma_bar;
++}
++
++static void pci_endpoint_test_dw_edma_cleanup(struct pci_endpoint_test *test,
++					      struct pci_endpoint_test_edma *edma)
++{
++	if (!edma)
++		return;
++
++	if (edma->m2d) {
++		dmaengine_terminate_sync(edma->m2d);
++		dma_release_channel(edma->m2d);
++		edma->m2d = NULL;
++	}
++
++	if (edma->d2m) {
++		dmaengine_terminate_sync(edma->d2m);
++		dma_release_channel(edma->d2m);
++		edma->d2m = NULL;
++	}
++
++	if (edma->probed) {
++		dw_edma_remove(&edma->chip);
++		edma->probed = false;
++	}
++
++	if (edma->bar_base) {
++		pci_iounmap(test->pdev, edma->bar_base);
++		edma->bar_base = NULL;
++	}
++}
++
++static void pci_endpoint_test_remote_edma_teardown(struct pci_endpoint_test *test)
++{
++	struct pci_endpoint_test_edma *edma = test->data;
++
++	pci_endpoint_test_dw_edma_cleanup(test, edma);
++	kfree(edma);
++	test->data = NULL;
++}
++
++/*
++ * Reserve exactly one IRQ vector for dw-edma by freeing the last handler.
++ * This avoids changing existing MSI/MSI-X tests unless remote eDMA is used.
++ */
++static int pci_endpoint_test_edma_reserve_irq(struct pci_endpoint_test *test)
++{
++	struct pci_dev *pdev = test->pdev;
++
++	if (test->irq_type != PCITEST_IRQ_TYPE_MSI &&
++	    test->irq_type != PCITEST_IRQ_TYPE_MSIX)
++		return -EOPNOTSUPP;
++
++	if (test->num_irqs < 2)
++		return -ENOSPC;
++
++	/* use the last vector for remote eDMA use */
++	free_irq(pci_irq_vector(pdev, test->num_irqs - 1), test);
++	return test->num_irqs - 1;
++}
++
++static void pci_endpoint_test_edma_restore_irq(struct pci_endpoint_test *test)
++{
++	struct pci_dev *pdev = test->pdev;
++	int ret;
++
++	ret = request_irq(pci_irq_vector(pdev, test->num_irqs - 1),
++			  pci_endpoint_test_irqhandler, IRQF_SHARED, test->name,
++			  test);
++	if (ret)
++		dev_warn(&pdev->dev,
++			 "failed to restore IRQ vector %d after remote eDMA: %d\n",
++			 test->num_irqs - 1, ret);
++}
++
++static const struct dw_edma_plat_ops test_edma_ops = {
++	.irq_vector     = pci_endpoint_test_edma_irq_vector,
++};
++
++static int pci_endpoint_test_dw_edma_setup(struct pci_endpoint_test *test)
++{
++	struct pci_endpoint_test_edma *edma = test->data;
++	struct pci_endpoint_test_edma_filter f;
++	struct pci_endpoint_test_edma *new;
++	struct pci_dev *pdev = test->pdev;
++	struct device *dev = &pdev->dev;
++	struct pcitest_edma_info info;
++	resource_size_t bar_size;
++	u32 ll_rd_off, ll_rd_size;
++	u32 ll_wr_off, ll_wr_size;
++	u32 reg_off, reg_size;
++	dma_cap_mask_t mask;
++	enum pci_barno bar;
++	int ret;
++
++	if (edma && edma->probed)
++		return 0;
++
++	new = kzalloc_obj(*new, GFP_KERNEL);
 +	if (!new)
 +		return -ENOMEM;
 +
-+	bar->submap = new;
-+	submap = &bar->submap[bar->num_submap];
-+	submap->phys_addr = phys;
-+	submap->size = size;
-+	bar->num_submap++;
++	ret = pci_endpoint_test_edma_reserve_irq(test);
++	if (ret < 0)
++		goto err_free;
++	new->irq = ret;
++
++	bar = pci_endpoint_test_edma_bar(pdev);
++	if (bar == NO_BAR) {
++		ret = -EOPNOTSUPP;
++		goto err_restore_irq;
++	}
++
++	new->bar_base = pci_iomap(pdev, bar, 0);
++	if (!new->bar_base) {
++		ret = -ENOMEM;
++		goto err_restore_irq;
++	}
++	bar_size = pci_resource_len(pdev, bar);
++
++	/* Snapshot the info (avoid repeated __iomem reads). */
++	memcpy_fromio(&info, new->bar_base, sizeof(info));
++	if (le32_to_cpu(info.magic) != PCITEST_EDMA_INFO_MAGIC ||
++	    le32_to_cpu(info.version) != PCITEST_EDMA_INFO_VERSION) {
++		dev_err(&pdev->dev, "Invalid eDMA info\n");
++		ret = -EINVAL;
++		goto err_cleanup;
++	}
++
++	reg_off = le32_to_cpu(info.reg_off);
++	reg_size = le32_to_cpu(info.reg_size);
++	ll_rd_off = le32_to_cpu(info.ll_rd_off);
++	ll_rd_size = le32_to_cpu(info.ll_rd_size);
++	ll_wr_off = le32_to_cpu(info.ll_wr_off);
++	ll_wr_size = le32_to_cpu(info.ll_wr_size);
++
++	if (reg_off > bar_size || reg_size > bar_size - reg_off ||
++	    ll_rd_off > bar_size || ll_rd_size > bar_size - ll_rd_off ||
++	    ll_wr_off > bar_size || ll_wr_size > bar_size - ll_wr_off) {
++		dev_err(&pdev->dev, "eDMA info offsets out of BAR range\n");
++		ret = -EINVAL;
++		goto err_cleanup;
++	}
++
++	memset(&new->chip, 0, sizeof(new->chip));
++	new->chip.dev = &pdev->dev;
++	new->chip.mf = EDMA_MF_EDMA_UNROLL;
++	new->chip.nr_irqs = 1;
++	new->chip.ops = &test_edma_ops;
++	new->chip.reg_base = new->bar_base + reg_off;
++	new->chip.ll_rd_cnt = 1;
++	new->chip.ll_region_rd[0].paddr = le64_to_cpu(info.ll_rd_phys);
++	new->chip.ll_region_rd[0].vaddr.io = new->bar_base + ll_rd_off;
++	new->chip.ll_region_rd[0].sz = ll_rd_size;
++	new->chip.ll_wr_cnt = 1;
++	new->chip.ll_region_wr[0].paddr = le64_to_cpu(info.ll_wr_phys);
++	new->chip.ll_region_wr[0].vaddr.io = new->bar_base + ll_wr_off;
++	new->chip.ll_region_wr[0].sz = ll_wr_size;
++
++	test->data = new;
++	ret = dw_edma_probe(&new->chip);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to probe eDMA: %d\n", ret);
++		goto err_cleanup;
++	}
++	new->probed = true;
++
++	/* Request one channel per direction. */
++	dma_cap_zero(mask);
++	dma_cap_set(DMA_SLAVE, mask);
++	f.dma_dev = dev;
++	f.direction = BIT(DMA_MEM_TO_DEV);
++	new->m2d = dma_request_channel(mask, test_edma_filter_fn, &f);
++	f.direction = BIT(DMA_DEV_TO_MEM);
++	new->d2m = dma_request_channel(mask, test_edma_filter_fn, &f);
++	if (!new->m2d || !new->d2m) {
++		ret = -ENODEV;
++		goto err_cleanup;
++	}
++
++	/*
++	 * Best-effort attempt, ie. even if it fails for some reason, the
++	 * endpoint will ignore endpoint-local interrupts (edma_int bus).
++	 */
++	dw_edma_chan_irq_config(new->m2d, DW_EDMA_CH_IRQ_REMOTE);
++	dw_edma_chan_irq_config(new->d2m, DW_EDMA_CH_IRQ_REMOTE);
 +
 +	return 0;
-+}
-+
-+static void pci_epf_test_clean_remote_edma(struct pci_epf_test *test)
-+{
-+	struct pci_epf_test_edma *edma = test->data;
-+	struct pci_epf *epf = test->epf;
-+	struct pci_epc *epc = epf->epc;
-+	struct device *dev = epc->dev.parent;
-+	struct iommu_domain *dom;
-+	struct pci_epf_bar *bar;
-+	enum pci_barno barno;
-+
-+	if (!edma)
-+		return;
-+
-+	barno = edma->bar;
-+	if (barno == NO_BAR)
-+		return;
-+
-+	bar = &epf->bar[barno];
-+
-+	dom = iommu_get_domain_for_dev(dev);
-+	if (dom && edma->reg_iova_sz) {
-+		iommu_unmap(dom, edma->reg_iova, edma->reg_iova_sz);
-+		edma->reg_iova = 0;
-+		edma->reg_iova_sz = 0;
-+	}
-+
-+	if (edma->test_buf) {
-+		dma_free_coherent(dev, edma->test_buf_size,
-+				  edma->test_buf,
-+				  edma->test_buf_phys);
-+		edma->test_buf = NULL;
-+		edma->test_buf_phys = 0;
-+		edma->test_buf_size = 0;
-+	}
-+
-+	if (edma->info) {
-+		pci_epf_free_space(epf, edma->info, barno, PRIMARY_INTERFACE);
-+		edma->info = NULL;
-+	}
-+
-+	pci_epf_test_clear_submaps(bar);
-+	pci_epc_clear_bar(epc, epf->func_no, epf->vfunc_no, bar);
-+
-+	edma->bar = NO_BAR;
-+	edma->enabled = false;
-+}
-+
-+static int pci_epf_test_init_remote_edma(struct pci_epf_test *test)
-+{
-+	const struct pci_epc_features *epc_features = test->epc_features;
-+	struct pci_epf_test_edma *edma;
-+	struct pci_epf *epf = test->epf;
-+	struct pci_epc *epc = epf->epc;
-+	struct pcitest_edma_info *info;
-+	struct device *dev = epc->dev.parent;
-+	struct dw_edma_region region;
-+	struct iommu_domain *dom;
-+	size_t reg_sz_aligned, ll_rd_sz_aligned, ll_wr_sz_aligned;
-+	phys_addr_t phys, ll_rd_phys, ll_wr_phys;
-+	size_t ll_rd_size, ll_wr_size;
-+	resource_size_t reg_size;
-+	unsigned long iova;
-+	size_t off, size;
-+	int ret;
-+
-+	if (!test->dma_chan_tx || !test->dma_chan_rx)
-+		return -ENODEV;
-+
-+	edma = devm_kzalloc(&epf->dev, sizeof(*edma), GFP_KERNEL);
-+	if (!edma)
-+		return -ENOMEM;
-+	test->data = edma;
-+
-+	edma->bar = pci_epf_test_next_free_bar(test);
-+	if (edma->bar == NO_BAR) {
-+		dev_err(&epf->dev, "No spare BAR for remote eDMA (remote eDMA disabled)\n");
-+		ret = -ENOSPC;
-+		goto err;
-+	}
-+
-+	ret = dw_edma_get_reg_window(epc, &edma->reg_phys, &reg_size);
-+	if (ret) {
-+		dev_err(dev, "failed to get edma reg window: %d\n", ret);
-+		goto err;
-+	}
-+	dom = iommu_get_domain_for_dev(dev);
-+	if (dom) {
-+		phys = edma->reg_phys & PAGE_MASK;
-+		size = PAGE_ALIGN(reg_size + edma->reg_phys - phys);
-+		iova = phys;
-+
-+		ret = iommu_map(dom, iova, phys, size,
-+				IOMMU_READ | IOMMU_WRITE | IOMMU_MMIO,
-+				GFP_KERNEL);
-+		if (ret) {
-+			dev_err(dev, "failed to direct map eDMA reg: %d\n", ret);
-+			goto err;
-+		}
-+		edma->reg_iova = iova;
-+		edma->reg_iova_sz = size;
-+	}
-+
-+	/* Get LL location addresses and sizes */
-+	ret = dw_edma_chan_get_ll_region(test->dma_chan_rx, &region);
-+	if (ret) {
-+		dev_err(dev, "failed to get edma ll region for rx: %d\n", ret);
-+		goto err;
-+	}
-+	ll_rd_phys = region.paddr;
-+	ll_rd_size = region.sz;
-+
-+	ret = dw_edma_chan_get_ll_region(test->dma_chan_tx, &region);
-+	if (ret) {
-+		dev_err(dev, "failed to get edma ll region for tx: %d\n", ret);
-+		goto err;
-+	}
-+	ll_wr_phys = region.paddr;
-+	ll_wr_size = region.sz;
-+
-+	edma->test_buf_size = PCITEST_EDMA_TEST_BUF_SIZE;
-+	edma->test_buf = dma_alloc_coherent(dev, edma->test_buf_size,
-+					    &edma->test_buf_phys, GFP_KERNEL);
-+	if (!edma->test_buf) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
-+
-+	reg_sz_aligned = PAGE_ALIGN(reg_size);
-+	ll_rd_sz_aligned = PAGE_ALIGN(ll_rd_size);
-+	ll_wr_sz_aligned = PAGE_ALIGN(ll_wr_size);
-+	edma->total_size = PAGE_SIZE + reg_sz_aligned + ll_rd_sz_aligned +
-+			   ll_wr_sz_aligned;
-+	size = roundup_pow_of_two(edma->total_size);
-+
-+	info = pci_epf_alloc_space(epf, size, edma->bar,
-+				   epc_features, PRIMARY_INTERFACE);
-+	if (!info) {
-+		ret = -ENOMEM;
-+		goto err;
-+	}
-+	memset(info, 0, size);
-+
-+	off = PAGE_SIZE;
-+	info->magic = cpu_to_le32(PCITEST_EDMA_INFO_MAGIC);
-+	info->version = cpu_to_le32(PCITEST_EDMA_INFO_VERSION);
-+
-+	info->reg_off = cpu_to_le32(off);
-+	info->reg_size = cpu_to_le32(reg_size);
-+	off += reg_sz_aligned;
-+
-+	info->ll_rd_phys = cpu_to_le64(ll_rd_phys);
-+	info->ll_rd_off = cpu_to_le32(off);
-+	info->ll_rd_size = cpu_to_le32(ll_rd_size);
-+	off += ll_rd_sz_aligned;
-+
-+	info->ll_wr_phys = cpu_to_le64(ll_wr_phys);
-+	info->ll_wr_off = cpu_to_le32(off);
-+	info->ll_wr_size = cpu_to_le32(ll_wr_size);
-+	off += ll_wr_sz_aligned;
-+
-+	info->test_buf_phys = cpu_to_le64(edma->test_buf_phys);
-+	info->test_buf_size = cpu_to_le32(edma->test_buf_size);
-+
-+	edma->info = info;
-+	edma->reg_submap_sz = reg_sz_aligned;
-+	edma->ll_rd_phys = ll_rd_phys;
-+	edma->ll_wr_phys = ll_wr_phys;
-+	edma->ll_rd_sz_aligned = ll_rd_sz_aligned;
-+	edma->ll_wr_sz_aligned = ll_wr_sz_aligned;
-+
-+	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no,
-+			      &epf->bar[edma->bar]);
-+	if (ret) {
-+		dev_err(dev,
-+			"failed to init BAR%d for remote eDMA: %d\n",
-+			edma->bar, ret);
-+		goto err;
-+	}
-+	dev_info(dev, "BAR%d initialized for remote eDMA\n", edma->bar);
-+
-+	return 0;
-+
-+err:
-+	pci_epf_test_clean_remote_edma(test);
-+	devm_kfree(&epf->dev, edma);
++err_cleanup:
++	pci_endpoint_test_dw_edma_cleanup(test, new);
++err_restore_irq:
++	pci_endpoint_test_edma_restore_irq(test);
++err_free:
++	kfree(new);
 +	test->data = NULL;
 +	return ret;
 +}
 +
-+static int pci_epf_test_map_remote_edma(struct pci_epf_test *test)
++static int pci_endpoint_test_remote_edma_setup(struct pci_endpoint_test *test,
++					       size_t size)
 +{
-+	struct pci_epf_test_edma *edma = test->data;
-+	struct pcitest_edma_info *info;
-+	struct pci_epf *epf = test->epf;
-+	struct pci_epc *epc = epf->epc;
-+	struct pci_epf_bar *bar;
-+	enum pci_barno barno;
-+	struct device *dev = epc->dev.parent;
++	struct pci_dev *pdev = test->pdev;
++	struct device *dev = &pdev->dev;
++	unsigned long left;
++	u32 status;
++
++	/* Same rule as existing tests: IRQ type must be configured first */
++	if (test->irq_type != PCITEST_IRQ_TYPE_MSI &&
++	    test->irq_type != PCITEST_IRQ_TYPE_MSIX) {
++		dev_err(dev, "Invalid IRQ type for remote eDMA\n");
++		return -EINVAL;
++	}
++
++	/* Need one spare vector for dw-edma */
++	if (test->num_irqs < 2)
++		return -ENOSPC;
++
++	/*
++	 * Ensure EP command handler won't reject us due to stale flags.
++	 * (remote-eDMA setup itself is not "FLAG_USE_DMA")
++	 */
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_FLAGS, 0);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_TYPE,
++				 test->irq_type);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_IRQ_NUMBER, 1);
++
++	reinit_completion(&test->irq_raised);
++	test->last_irq = -ENODATA;
++
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
++				 COMMAND_REMOTE_EDMA_SETUP);
++
++	left = wait_for_completion_timeout(&test->irq_raised,
++					   msecs_to_jiffies(1000));
++	if (!left)
++		return -ETIMEDOUT;
++
++	status = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
++	if (status & STATUS_REMOTE_EDMA_SETUP_FAIL) {
++		dev_err(dev, "Endpoint failed to setup remote eDMA window\n");
++		return -EIO;
++	}
++	if (!(status & STATUS_REMOTE_EDMA_SETUP_SUCCESS)) {
++		dev_err(dev,
++			"Endpoint did not report remote eDMA setup success\n");
++		return -EIO;
++	}
++
++	return pci_endpoint_test_dw_edma_setup(test);
++}
++
++static int pci_endpoint_test_edma_xfer(struct pci_dev *pdev,
++				       struct pci_endpoint_test_edma *edma,
++				       void *buf, size_t len,
++				       dma_addr_t dev_addr,
++				       enum dma_transfer_direction dir)
++{
++	struct dma_async_tx_descriptor *tx;
++	enum dma_data_direction map_dir;
++	struct device *dev = &pdev->dev;
++	struct dma_slave_config cfg;
++	struct completion done;
++	struct dma_chan *chan;
++	struct scatterlist sg;
++	dma_cookie_t cookie;
 +	int ret;
 +
-+	if (!edma)
-+		return -ENODEV;
++	memset(&cfg, 0, sizeof(cfg));
++	if (dir == DMA_MEM_TO_DEV) {
++		chan = edma->m2d;
++		map_dir = DMA_TO_DEVICE;
++		cfg.direction = DMA_MEM_TO_DEV;
++		cfg.dst_addr = dev_addr;
++	} else if (dir == DMA_DEV_TO_MEM) {
++		chan = edma->d2m;
++		map_dir = DMA_FROM_DEVICE;
++		cfg.direction = DMA_DEV_TO_MEM;
++		cfg.src_addr = dev_addr;
++	} else {
++		return -EINVAL;
++	}
 +
-+	info = edma->info;
-+	barno = edma->bar;
-+
-+	if (barno == NO_BAR)
-+		return -ENOSPC;
-+	if (!info || !edma->test_buf)
-+		return -ENODEV;
-+
-+	bar = &epf->bar[barno];
-+	pci_epf_test_clear_submaps(bar);
-+
-+	ret = pci_epf_test_add_submap(bar, bar->phys_addr, PAGE_SIZE);
++	ret = dmaengine_slave_config(chan, &cfg);
 +	if (ret)
 +		return ret;
 +
-+	ret = pci_epf_test_add_submap(bar, edma->reg_phys, edma->reg_submap_sz);
-+	if (ret)
-+		goto err_submap;
-+
-+	ret = pci_epf_test_add_submap(bar, edma->ll_rd_phys,
-+				      edma->ll_rd_sz_aligned);
-+	if (ret)
-+		goto err_submap;
-+
-+	ret = pci_epf_test_add_submap(bar, edma->ll_wr_phys,
-+				      edma->ll_wr_sz_aligned);
-+	if (ret)
-+		goto err_submap;
-+
-+	if (bar->size > edma->total_size) {
-+		ret = pci_epf_test_add_submap(bar, 0,
-+					      bar->size - edma->total_size);
-+		if (ret)
-+			goto err_submap;
++	sg_init_one(&sg, buf, len);
++	if (!dma_map_sg(dev, &sg, 1, map_dir)) {
++		dev_err(dev, "unable to map local address\n");
++		return -EIO;
 +	}
 +
-+	ret = pci_epc_set_bar(epc, epf->func_no, epf->vfunc_no, bar);
++	tx = dmaengine_prep_slave_sg(chan, &sg, 1, dir,
++				     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	if (!tx) {
++		dev_err(dev, "failed to prepare slave for sg\n");
++		ret = -EIO;
++		goto unmap;
++	}
++
++	init_completion(&done);
++	tx->callback = (dma_async_tx_callback)complete;
++	tx->callback_param = &done;
++
++	cookie = dmaengine_submit(tx);
++	ret = dma_submit_error(cookie);
 +	if (ret) {
-+		dev_err(dev, "failed to map BAR%d: %d\n", barno, ret);
-+		goto err_submap;
++		dev_err(dev, "remote eDMA submission error: %d\n", ret);
++		goto unmap;
 +	}
 +
-+	/*
-+	 * Endpoint-local interrupts must be ignored even if the host fails to
-+	 * mask them.
-+	 */
-+	ret = dw_edma_chan_irq_config(test->dma_chan_tx, DW_EDMA_CH_IRQ_REMOTE);
-+	if (ret) {
-+		dev_err(dev, "failed to set irq mode for tx channel: %d\n",
-+			ret);
-+		goto err_bar;
-+	}
-+	ret = dw_edma_chan_irq_config(test->dma_chan_rx, DW_EDMA_CH_IRQ_REMOTE);
-+	if (ret) {
-+		dev_err(dev, "failed to set irq mode for rx channel: %d\n",
-+			ret);
-+		goto err_bar;
++	dma_async_issue_pending(chan);
++
++	if (!wait_for_completion_timeout(&done, msecs_to_jiffies(5000))) {
++		dev_err(dev, "remote eDMA transfer timeout\n");
++		dmaengine_terminate_sync(chan);
++		ret = -ETIMEDOUT;
++		goto unmap;
 +	}
 +
-+	return 0;
-+err_bar:
-+	pci_epc_clear_bar(epc, epf->func_no, epf->vfunc_no, &epf->bar[barno]);
-+err_submap:
-+	pci_epf_test_clear_submaps(bar);
++	ret = 0;
++unmap:
++	dma_unmap_sg(dev, &sg, 1, map_dir);
 +	return ret;
 +}
 +
-+static void pci_epf_test_remote_edma_setup(struct pci_epf_test *epf_test,
-+					   struct pci_epf_test_reg *reg)
++static int pci_endpoint_test_edma_write(struct pci_endpoint_test *test,
++					size_t size)
 +{
-+	struct pci_epf_test_edma *edma = epf_test->data;
-+	size_t size = le32_to_cpu(reg->size);
-+	void *buf;
++	struct pci_endpoint_test_edma *edma;
++	struct pci_dev *pdev = test->pdev;
++	struct device *dev = &pdev->dev;
++	struct pcitest_edma_info info;
++	u32 reg, crc32, peer_crc32;
++	unsigned long left;
 +	int ret;
 +
-+	if (!edma || !edma->test_buf || size > edma->test_buf_size) {
-+		reg->status = cpu_to_le32(STATUS_REMOTE_EDMA_SETUP_FAIL);
-+		return;
++	/*
++	 * Note that test->alignment does not apply here. If some vendor
++	 * dmaengine for remote use may impose some alignment restriction, we
++	 * may as well introduce another field such as
++	 * test->remote_dma_alignment.
++	 */
++	void *orig_addr __free(kfree) = kzalloc(size, GFP_KERNEL);
++	if (!orig_addr)
++		return -ENOMEM;
++
++	ret = pci_endpoint_test_remote_edma_setup(test, size);
++	if (ret)
++		return ret;
++
++	edma = test->data;
++	if (!edma) {
++		ret = -ENODEV;
++		goto err;
 +	}
 +
-+	buf = edma->test_buf;
++	get_random_bytes(orig_addr, size);
 +
-+	if (!edma->enabled) {
-+		/* NB. Currently DW eDMA is the only supported backend */
-+		ret = pci_epf_test_map_remote_edma(epf_test);
-+		if (ret) {
-+			WRITE_ONCE(reg->status,
-+				   cpu_to_le32(STATUS_REMOTE_EDMA_SETUP_FAIL));
-+			return;
-+		}
-+		edma->enabled = true;
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_STATUS, 0);
++
++	memcpy_fromio(&info, edma->bar_base, sizeof(info));
++	if (le32_to_cpu(info.test_buf_size) < size) {
++		ret = -EINVAL;
++		goto err;
 +	}
 +
-+	/* Populate the test buffer with random data */
-+	get_random_bytes(buf, size);
-+	reg->checksum = cpu_to_le32(crc32_le(~0, buf, size));
++	ret = pci_endpoint_test_edma_xfer(test->pdev, edma, orig_addr, size,
++					  le64_to_cpu(info.test_buf_phys),
++					  DMA_MEM_TO_DEV);
++	if (ret) {
++		dev_err(dev, "pci_endpoint_test_edma_xfer error: %d\n", ret);
++		goto err;
++	}
 +
-+	WRITE_ONCE(reg->status, cpu_to_le32(STATUS_REMOTE_EDMA_SETUP_SUCCESS));
++	reinit_completion(&test->irq_raised);
++
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_STATUS, 0);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_SIZE, size);
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_COMMAND,
++				 COMMAND_REMOTE_EDMA_CHECKSUM);
++
++	left = wait_for_completion_timeout(&test->irq_raised,
++					   msecs_to_jiffies(1000));
++
++	reg = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_STATUS);
++
++	if (!left || !(reg & STATUS_REMOTE_EDMA_CHECKSUM_SUCCESS)) {
++		dev_err(dev, "Failed to get checksum\n");
++		ret = -EINVAL;
++		goto err;
++	}
++
++	crc32 = crc32_le(~0, orig_addr, size);
++	peer_crc32 = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM);
++	if (crc32 != peer_crc32) {
++		dev_err(dev,
++			"Checksum mismatch: %#x vs %#x\n", crc32, peer_crc32);
++		ret = -EINVAL;
++	}
++err:
++	pci_endpoint_test_remote_edma_teardown(test);
++	pci_endpoint_test_edma_restore_irq(test);
++	return ret;
 +}
 +
-+static void pci_epf_test_remote_edma_checksum(struct pci_epf_test *epf_test,
-+					      struct pci_epf_test_reg *reg)
++static int pci_endpoint_test_edma_read(struct pci_endpoint_test *test,
++				       size_t size)
 +{
-+	struct pci_epf_test_edma *edma = epf_test->data;
-+	u32 status = le32_to_cpu(reg->status);
-+	size_t size;
-+	void *addr;
-+	u32 crc32;
++	struct pci_endpoint_test_edma *edma;
++	struct pci_dev *pdev = test->pdev;
++	struct device *dev = &pdev->dev;
++	struct pcitest_edma_info info;
++	u32 crc32, peer_crc32;
++	int ret;
 +
-+	size = le32_to_cpu(reg->size);
-+	if (!edma || !edma->test_buf || size > edma->test_buf_size) {
-+		status |= STATUS_REMOTE_EDMA_CHECKSUM_FAIL;
-+		reg->status = cpu_to_le32(status);
-+		return;
++	/*
++	 * Note that test->alignment does not apply here. If some vendor
++	 * dmaengine for remote use may impose some alignment restriction, we
++	 * may as well introduce another field such as
++	 * test->remote_dma_alignment.
++	 */
++	void *orig_addr __free(kfree) = kzalloc(size, GFP_KERNEL);
++	if (!orig_addr)
++		return -ENOMEM;
++
++	ret = pci_endpoint_test_remote_edma_setup(test, size);
++	if (ret)
++		return ret;
++
++	peer_crc32 = pci_endpoint_test_readl(test, PCI_ENDPOINT_TEST_CHECKSUM);
++
++	edma = test->data;
++	if (!edma) {
++		ret = -ENODEV;
++		goto err;
 +	}
 +
-+	addr = edma->test_buf;
-+	crc32 = crc32_le(~0, addr, size);
-+	status |= STATUS_REMOTE_EDMA_CHECKSUM_SUCCESS;
++	pci_endpoint_test_writel(test, PCI_ENDPOINT_TEST_STATUS, 0);
 +
-+	reg->checksum = cpu_to_le32(crc32);
-+	reg->status = cpu_to_le32(status);
-+}
++	memcpy_fromio(&info, edma->bar_base, sizeof(info));
++	if (le32_to_cpu(info.test_buf_size) < size) {
++		ret = -EINVAL;
++		goto err;
++	}
 +
-+static void pci_epf_test_reset_dma_chan(struct dma_chan *chan)
-+{
-+	dw_edma_chan_irq_config(chan, DW_EDMA_CH_IRQ_DEFAULT);
++	ret = pci_endpoint_test_edma_xfer(test->pdev, edma, orig_addr, size,
++					  le64_to_cpu(info.test_buf_phys),
++					  DMA_DEV_TO_MEM);
++	if (ret) {
++		dev_err(dev, "pci_endpoint_test_edma_xfer error: %d\n", ret);
++		goto err;
++	}
++
++	crc32 = crc32_le(~0, orig_addr, size);
++	if (crc32 != peer_crc32) {
++		dev_err(dev,
++			"Checksum mismatch: %#x vs %#x\n", crc32, peer_crc32);
++		ret = -EINVAL;
++	}
++err:
++	pci_endpoint_test_remote_edma_teardown(test);
++	pci_endpoint_test_edma_restore_irq(test);
++	return ret;
 +}
 +#else
-+static bool pci_epf_test_bar_is_reserved(struct pci_epf_test *test,
-+					 enum pci_barno barno)
++static bool pci_endpoint_test_bar_is_reserved(struct pci_endpoint_test *test,
++					      enum pci_barno barno)
 +{
-+	return false;
++	return 0;
 +}
 +
-+static void pci_epf_test_clean_remote_edma(struct pci_epf_test *test)
++static void pci_endpoint_test_remote_edma_teardown(struct pci_endpoint_test *test)
 +{
 +}
 +
-+static int pci_epf_test_init_remote_edma(struct pci_epf_test *test)
++static int pci_endpoint_test_edma_write(struct pci_endpoint_test *test,
++					size_t size)
 +{
 +	return -EOPNOTSUPP;
 +}
 +
-+static void pci_epf_test_remote_edma_setup(struct pci_epf_test *epf_test,
-+					   struct pci_epf_test_reg *reg)
++static int pci_endpoint_test_edma_read(struct pci_endpoint_test *test,
++				       size_t size)
 +{
-+	reg->status = cpu_to_le32(STATUS_REMOTE_EDMA_SETUP_FAIL);
-+}
-+
-+static void pci_epf_test_remote_edma_checksum(struct pci_epf_test *epf_test,
-+					      struct pci_epf_test_reg *reg)
-+{
-+	reg->status = cpu_to_le32(STATUS_REMOTE_EDMA_CHECKSUM_FAIL);
-+}
-+
-+static void pci_epf_test_reset_dma_chan(struct dma_chan *chan)
-+{
++	return -EOPNOTSUPP;
 +}
 +#endif
 +
- static void pci_epf_test_dma_callback(void *param)
+ static irqreturn_t pci_endpoint_test_irqhandler(int irq, void *dev_id)
  {
- 	struct pci_epf_test *epf_test = param;
-@@ -168,6 +626,8 @@ static int pci_epf_test_data_transfer(struct pci_epf_test *epf_test,
- 		return -EINVAL;
- 	}
+ 	struct pci_endpoint_test *test = dev_id;
+@@ -307,6 +924,9 @@ static int pci_endpoint_test_bar(struct pci_endpoint_test *test,
+ 	if (barno == test->test_reg_bar)
+ 		bar_size = 0x4;
  
-+	pci_epf_test_reset_dma_chan(chan);
++	if (pci_endpoint_test_bar_is_reserved(test, barno))
++		return -EOPNOTSUPP;
 +
- 	if (epf_test->dma_private) {
- 		sconf.direction = dir;
- 		if (dir == DMA_MEM_TO_DEV)
-@@ -870,6 +1330,14 @@ static void pci_epf_test_cmd_handler(struct work_struct *work)
- 		pci_epf_test_disable_doorbell(epf_test, reg);
- 		pci_epf_test_raise_irq(epf_test, reg);
- 		break;
-+	case COMMAND_REMOTE_EDMA_SETUP:
-+		pci_epf_test_remote_edma_setup(epf_test, reg);
-+		pci_epf_test_raise_irq(epf_test, reg);
-+		break;
-+	case COMMAND_REMOTE_EDMA_CHECKSUM:
-+		pci_epf_test_remote_edma_checksum(epf_test, reg);
-+		pci_epf_test_raise_irq(epf_test, reg);
-+		break;
- 	default:
- 		dev_err(dev, "Invalid command 0x%x\n", command);
- 		break;
-@@ -961,6 +1429,10 @@ static int pci_epf_test_epc_init(struct pci_epf *epf)
- 	if (ret)
- 		epf_test->dma_supported = false;
+ 	/*
+ 	 * Allocate a buffer of max size 1MB, and reuse that buffer while
+ 	 * iterating over the whole BAR size (which might be much larger).
+@@ -354,6 +974,9 @@ static void pci_endpoint_test_bars_write_bar(struct pci_endpoint_test *test,
+ 	if (barno == test->test_reg_bar)
+ 		size = 0x4;
  
-+	ret = pci_epf_test_init_remote_edma(epf_test);
-+	if (ret && ret != -EOPNOTSUPP)
-+		dev_warn(dev, "Remote eDMA setup failed\n");
++	if (pci_endpoint_test_bar_is_reserved(test, barno))
++		return;
 +
- 	if (epf->vfunc_no <= 1) {
- 		ret = pci_epc_write_header(epc, epf->func_no, epf->vfunc_no, header);
- 		if (ret) {
-@@ -1007,6 +1479,7 @@ static void pci_epf_test_epc_deinit(struct pci_epf *epf)
- 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+ 	for (j = 0; j < size; j += 4)
+ 		writel_relaxed(bar_test_pattern_with_offset(barno, j),
+ 			       test->bar[barno] + j);
+@@ -372,6 +995,9 @@ static int pci_endpoint_test_bars_read_bar(struct pci_endpoint_test *test,
+ 	if (barno == test->test_reg_bar)
+ 		size = 0x4;
  
- 	cancel_delayed_work_sync(&epf_test->cmd_handler);
-+	pci_epf_test_clean_remote_edma(epf_test);
- 	pci_epf_test_clean_dma_chan(epf_test);
- 	pci_epf_test_clear_bar(epf);
- }
-@@ -1076,6 +1549,9 @@ static int pci_epf_test_alloc_space(struct pci_epf *epf)
- 		if (bar == test_reg_bar)
- 			continue;
- 
-+		if (pci_epf_test_bar_is_reserved(epf_test, bar))
-+			continue;
++	if (pci_endpoint_test_bar_is_reserved(test, barno))
++		return 0;
 +
- 		if (epc_features->bar[bar].type == BAR_FIXED)
- 			test_reg_size = epc_features->bar[bar].fixed_size;
- 		else
-@@ -1146,6 +1622,7 @@ static void pci_epf_test_unbind(struct pci_epf *epf)
+ 	for (j = 0; j < size; j += 4) {
+ 		u32 expected = bar_test_pattern_with_offset(barno, j);
  
- 	cancel_delayed_work_sync(&epf_test->cmd_handler);
- 	if (epc->init_complete) {
-+		pci_epf_test_clean_remote_edma(epf_test);
- 		pci_epf_test_clean_dma_chan(epf_test);
- 		pci_epf_test_clear_bar(epf);
- 	}
+@@ -645,6 +1271,9 @@ static int pci_endpoint_test_write(struct pci_endpoint_test *test,
+ 
+ 	size = param.size;
+ 
++	if (param.flags & PCITEST_FLAGS_USE_REMOTE_EDMA)
++		return pci_endpoint_test_edma_write(test, size);
++
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+ 	if (use_dma)
+ 		flags |= FLAG_USE_DMA;
+@@ -742,6 +1371,9 @@ static int pci_endpoint_test_read(struct pci_endpoint_test *test,
+ 
+ 	size = param.size;
+ 
++	if (param.flags & PCITEST_FLAGS_USE_REMOTE_EDMA)
++		return pci_endpoint_test_edma_read(test, size);
++
+ 	use_dma = !!(param.flags & PCITEST_FLAGS_USE_DMA);
+ 	if (use_dma)
+ 		flags |= FLAG_USE_DMA;
+@@ -1139,6 +1771,7 @@ static void pci_endpoint_test_remove(struct pci_dev *pdev)
+ 	if (id < 0)
+ 		return;
+ 
++	pci_endpoint_test_remote_edma_teardown(test);
+ 	pci_endpoint_test_release_irq(test);
+ 	pci_endpoint_test_free_irq_vectors(test);
+ 
+diff --git a/include/uapi/linux/pcitest.h b/include/uapi/linux/pcitest.h
+index d6023a45a9d0..c72d999cecf7 100644
+--- a/include/uapi/linux/pcitest.h
++++ b/include/uapi/linux/pcitest.h
+@@ -30,7 +30,8 @@
+ #define PCITEST_IRQ_TYPE_MSIX		2
+ #define PCITEST_IRQ_TYPE_AUTO		3
+ 
+-#define PCITEST_FLAGS_USE_DMA	0x00000001
++#define PCITEST_FLAGS_USE_DMA		0x00000001
++#define PCITEST_FLAGS_USE_REMOTE_EDMA	0x00000002
+ 
+ struct pci_endpoint_test_xfer_param {
+ 	unsigned long size;
 -- 
 2.51.0
 
