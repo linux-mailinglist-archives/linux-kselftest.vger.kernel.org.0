@@ -1,332 +1,232 @@
-Return-Path: <linux-kselftest+bounces-49252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4BA4D39428
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 11:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A6115D39450
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 12:00:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 936C6304485F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 10:29:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5C0D73009AB6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 11:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07522EC096;
-	Sun, 18 Jan 2026 10:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0E15314B77;
+	Sun, 18 Jan 2026 11:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAg8SQ34"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Je814rp/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7088F2E6116;
-	Sun, 18 Jan 2026 10:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F36428AAEE
+	for <linux-kselftest@vger.kernel.org>; Sun, 18 Jan 2026 11:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768732179; cv=none; b=UoiJ65AT1/R8C1MU+ByvbjApshgMvZbo+Hglfdt4hXGXIygQgWoGMT4YqgbcqCiM7aJV1WeG/fum5Ty7eIdIashmWyPYGNe0b5VHGEBepmzVoM/X5FXiHBXeC9lRQIZKiCVY6V80+fMn0o58bgv72TZl1fXoUp4JkX7ry4tlajM=
+	t=1768734029; cv=none; b=KlYWkvNKmlGHdccI9njO4d3cRVnuqF+gZxyRk71RnZcR1gO6U1e3p3I4/u56AJJd6KAQIeQ55QtoT9yfEsgZMfd4SSDREh4QKX9P/nbK0l+e/39vJrBYcbP4Xv0c7b347rLqQMGvrsTLSWOoaoxsZglUroj9GZvtI3O9IVS/sPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768732179; c=relaxed/simple;
-	bh=gveXft6/1suUPTPK6+A5Xp+d6HUxC5Rum+LnGx54Z34=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p4pVXQ5YJNNI7ZdgulZ82k2JjWHW/Iu1ESBCo3YQCy83jd4Idp02I+b59RCc0HR+HBYwXNxQyUV6UDiJWM7Jv2oQc3b9koMySojlJhbLjLITl2HGOjXvd/YR+6LLE/t+0IXoO8iVWwnRTRXsBCpQyUKXdgwueeXyJitFH4d+Utk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAg8SQ34; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EB4C116D0;
-	Sun, 18 Jan 2026 10:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768732179;
-	bh=gveXft6/1suUPTPK6+A5Xp+d6HUxC5Rum+LnGx54Z34=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PAg8SQ34N7V5zfoeO5GtoEL9UQifKC7eLdMV2frsoTrL8LU4axpA8CeiRRhKTvq0m
-	 oaA7gw0kzauZOCwu7oub2ydchUcB95crLuKOdu+NimK0ZISO1gvmweNctcNJ0MbVGP
-	 4QrUX0iKOzH070KN41Ag79BznCu67CanxXYthxrHsOcxtTOc+f/7PeCdmMcOWqBR+P
-	 PnMNVg2phw3srLl9lmct5H0JQy/dK21KKHO1zP3JceVCkr+HV+i4wd7PVYH8eKYGQW
-	 3kXWnap2jurM+o8iuPDNECi52Oi2vguIsyk/IUQtsTr2XSn1RiPRq20u6y0MCoNO8x
-	 KOOD8zahmrgYQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vhQ2K-00000003I58-1NCe;
-	Sun, 18 Jan 2026 10:29:36 +0000
-Date: Sun, 18 Jan 2026 10:29:35 +0000
-Message-ID: <87ldhvdxio.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Thomson, Jack" <jackabt.amazon@gmail.com>
-Cc: oliver.upton@linux.dev,
-	pbonzini@redhat.com,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	isaku.yamahata@intel.com,
-	xmarcalx@amazon.co.uk,
-	kalyazin@amazon.co.uk,
-	jackabt@amazon.com,
-	Vladimir Murzin <vladimir.murzin@arm.com>
-Subject: Re: [PATCH v4 1/3] KVM: arm64: Add pre_fault_memory implementation
-In-Reply-To: <ea7786e4-8b67-4a9f-b2c6-c0e4cd325cc3@gmail.com>
-References: <20260113152643.18858-1-jackabt.amazon@gmail.com>
-	<20260113152643.18858-2-jackabt.amazon@gmail.com>
-	<86jyxjkxus.wl-maz@kernel.org>
-	<ea7786e4-8b67-4a9f-b2c6-c0e4cd325cc3@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1768734029; c=relaxed/simple;
+	bh=j/O/ZdXNE/AJ9XmfXXavSQWdNO19Kh4bM+xEHlKCQS8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OBqnER+LWEr/5eVw0WePUe7La8NW5UNitNIEb3zFBbazL4crPCKHt+5CWFL91pTAvAWDOHtgxOvKTaAF6eQT24MXs2bqfls92fKnE3W4CMZFomTR0MKQHoXfB3CmBMFofguFHmLiRPsGfT0pWnd4uUon6ZSr4JmVBmP7Jkv9Gzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Je814rp/; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-430f2ee2f00so1599815f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Jan 2026 03:00:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768734026; x=1769338826; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C2QflZZM30fHvvXvMmYMqyrigzgY4KSpjxPmG1MN9fo=;
+        b=Je814rp/qRiR5TEltjiSP/Kh2wX/QbXC0D7+pnha98qCSP/2q3ccJsDxL4nqtociqH
+         x4DADlYVlwKnBQS76Tq//qffXSivmJcyLUFS2YQEQ2c3DYXq1IaVxYZ5ZXkIo35XehbK
+         yhDBGx4Za5GCpVCTr++TgnHm+19pgKR3WjM5DjO4mTk6tSU+YNJDWZnsznxWvnSYf8Ng
+         WZVs7TTONf7TnGOsCsavGFIrnjPsr2VTzl6gt0qds+4jWBC4qv0yvoo505kRlRmKGyoK
+         YIZDMgR/1zJ1JQqiWtQTWa0QEM6Nd08SZdnD5uZXGXL/2LS+SAgr0k7Y5/lm28v5uwNZ
+         HOPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768734026; x=1769338826;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C2QflZZM30fHvvXvMmYMqyrigzgY4KSpjxPmG1MN9fo=;
+        b=Zm9SZGeXO/RUAihn3/MZSHbgrUUa8Q1ty1JQ+yFKsIzCQM16MY8xPZwomTL+qmHpu8
+         i69CbUmBoxv2Xavixl/HhJc0rSJMWLA/gxU/HQvzEFQxCIFe4nV3NJmtQupCWAJySglh
+         v00CgHQt+kgT3ft/YNmjWuGvP40Z0JPxgFfmmFxcD5/FH+ErqnVR9U8tesXZZdZv/DHf
+         ai7/Hhe3fmB/o/qz2Zu0N7R/7JdqCqZFm/WYio6fBhabwifUPM1TSxE8ZW1UtdmLHM4K
+         7oT3+K91Qw0dkdTGajVR7mKbV647thYmef61VhuZw3hwFoy0TfFlphAvA4JortCva5Qk
+         hDJA==
+X-Forwarded-Encrypted: i=1; AJvYcCXdVidlUNY0sK0ud3nFfYuKKV4DRAd65r1ybPcR+7ecoexZFUO7bcCGNKoRtgoLwXoYouQvzCGgZ5PNE0vcYP0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzzXs8txgYXczorsfshp0gP64g6eeZYr7v9KzI9NU7GLk5SyQ3
+	+JcfzNVv3zjFKTnn5j+TtUsPnQKNGsJPBzO1ACkmE3Eunnp9oai/6pKdqQ3BdZ8tBAQ=
+X-Gm-Gg: AY/fxX6r2p72EwR0eDJrdQOXxkQ1mxHrCjCHk/E5SVx57p260RggIiiRggTDQ/8Mocs
+	ceFuAEjITUP+I7uGU+I+NYYECyNnTgwLd6X8VeQRJdKzJqk/dqJlKf4aQsdrI36jjdWgGgAQ6EO
+	ORqEoRsFZpovxG7G7DlhBspw4cj/gusKzd8/SiDvweciXya0f0lKxiO8b3SbdSq6/VoCYA2XtVs
+	KG09HFQfF1Q2TFDOmbDUMrwK2tmxl2eabprOqWsJVvLbaU9Vn55P/eU3jY8HsQlFSSxUBMdTsdd
+	4IwQRU7ZIZrb1Ghvtsn56DQTJtXYJKrj1kuCpq8qitsaGwdESjGEEMsd9BuZQmUjIXW/m8ConiB
+	hFZ55Jz5E0/iBFz3iUTqPMj+yl/z2aCnJCLkftb8jQEVj4SZBfMsWi5UtjbhHY6ep1rfJ/tB66q
+	MgoZSGafvCKI16+A==
+X-Received: by 2002:a5d:5d89:0:b0:42b:2ac7:7942 with SMTP id ffacd0b85a97d-43569972ec5mr11440987f8f.5.1768734026180;
+        Sun, 18 Jan 2026 03:00:26 -0800 (PST)
+Received: from [192.168.1.243] ([143.58.192.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356992201csm16864635f8f.2.2026.01.18.03.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jan 2026 03:00:25 -0800 (PST)
+From: Andre Carvalho <asantostc@gmail.com>
+Subject: [PATCH net-next v11 0/7] netconsole: support automatic target
+ recovery
+Date: Sun, 18 Jan 2026 11:00:20 +0000
+Message-Id: <20260118-netcons-retrigger-v11-0-4de36aebcf48@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: jackabt.amazon@gmail.com, oliver.upton@linux.dev, pbonzini@redhat.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, isaku.yamahata@intel.com, xmarcalx@amazon.co.uk, kalyazin@amazon.co.uk, jackabt@amazon.com, vladimir.murzin@arm.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23SyWrDMBAG4FcJOtdlNFos9dT3KD1osyNo7CIbk
+ xLy7p0YWoSjo5b59GuYG1tSyWlhb6cbK2nLS54nWnD+cmLh7KYxdTnSBkNABYbrbkprmKelK2k
+ teRxT6ZwclOz9EIzuGdV9lzTk645+MLpOJdeVfdLJOS/rXH721za+n++uBdtwN95BJ1xyFqRFH
+ Yb38eLy12uYL7u2YSUgbwlIgoNkJIBG0T8J4l/gvJ1BkMC1kgENeJ/0UZCV0OzOJklQaMGrgUs
+ IeBRULTQzKBIw9DE6DUrFpwy6Etp90CTYAGJQDn3UT33oa6H5i/7Rh2h09M4Iz8NRMLVgWoIhA
+ XwIfpBBC6OOgv0TNHCQLcE+5sE4p6WIiEYcBQ4VwbE5UpShiwYTjSuNjUi1cb/ffwGFKybjEQM
+ AAA==
+X-Change-ID: 20250816-netcons-retrigger-a4f547bfc867
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768734024; l=5665;
+ i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
+ bh=j/O/ZdXNE/AJ9XmfXXavSQWdNO19Kh4bM+xEHlKCQS8=;
+ b=3yLjTs5FCZwgBaXzT5NYtLsUs/Scbb5lae31ukx8HNtOrzSCOkpN/+T3rG/j660RORtOw+1cM
+ 395/2UjqrKNBCUa66mIB6LlEvQYrDdiX0psENA0KO6wSCaw5syLi9A7
+X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
+ pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-On Fri, 16 Jan 2026 14:33:42 +0000,
-"Thomson, Jack" <jackabt.amazon@gmail.com> wrote:
-> 
-> 
-> Hey Marc,
-> 
-> Thanks for the review.
-> 
-> On 15/01/2026 9:51 am, Marc Zyngier wrote:
-> > [+ Vladimir, who was also looking at this patch]
-> > 
-> > On Tue, 13 Jan 2026 15:26:40 +0000,
-> > Jack Thomson <jackabt.amazon@gmail.com> wrote:
-> >> 
-> >> From: Jack Thomson <jackabt@amazon.com>
-> >> 
-> >> Add kvm_arch_vcpu_pre_fault_memory() for arm64. The implementation hands
-> >> off the stage-2 faulting logic to either gmem_abort() or
-> >> user_mem_abort().
-> >> 
-> >> Add an optional page_size output parameter to user_mem_abort() to
-> >> return the VMA page size, which is needed when pre-faulting.
-> >> 
-> >> Update the documentation to clarify x86 specific behaviour.
-> >> 
-> >> Signed-off-by: Jack Thomson <jackabt@amazon.com>
-> >> ---
-> >>   Documentation/virt/kvm/api.rst |  3 +-
-> >>   arch/arm64/kvm/Kconfig         |  1 +
-> >>   arch/arm64/kvm/arm.c           |  1 +
-> >>   arch/arm64/kvm/mmu.c           | 79 ++++++++++++++++++++++++++++++++--
-> >>   4 files changed, 79 insertions(+), 5 deletions(-)
-> >> 
-> >> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> >> index 01a3abef8abb..44cfd9e736bb 100644
-> >> --- a/Documentation/virt/kvm/api.rst
-> >> +++ b/Documentation/virt/kvm/api.rst
-> >> @@ -6493,7 +6493,8 @@ Errors:
-> >>   KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
-> >>   for the current vCPU state.  KVM maps memory as if the vCPU generated a
-> >>   stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
-> >> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
-> >> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
-> >> +Accessed.
-> >>     In the case of confidential VM types where there is an initial
-> >> set up of
-> >>   private guest memory before the guest is 'finalized'/measured, this ioctl
-> >> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> >> index 4f803fd1c99a..6872aaabe16c 100644
-> >> --- a/arch/arm64/kvm/Kconfig
-> >> +++ b/arch/arm64/kvm/Kconfig
-> >> @@ -25,6 +25,7 @@ menuconfig KVM
-> >>   	select HAVE_KVM_CPU_RELAX_INTERCEPT
-> >>   	select KVM_MMIO
-> >>   	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> >> +	select KVM_GENERIC_PRE_FAULT_MEMORY
-> >>   	select VIRT_XFER_TO_GUEST_WORK
-> >>   	select KVM_VFIO
-> >>   	select HAVE_KVM_DIRTY_RING_ACQ_REL
-> >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> >> index 4f80da0c0d1d..19bac68f737f 100644
-> >> --- a/arch/arm64/kvm/arm.c
-> >> +++ b/arch/arm64/kvm/arm.c
-> >> @@ -332,6 +332,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-> >>   	case KVM_CAP_COUNTER_OFFSET:
-> >>   	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
-> >>   	case KVM_CAP_ARM_SEA_TO_USER:
-> >> +	case KVM_CAP_PRE_FAULT_MEMORY:
-> >>   		r = 1;
-> >>   		break;
-> >>   	case KVM_CAP_SET_GUEST_DEBUG2:
-> >> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> >> index 48d7c372a4cd..499b131f794e 100644
-> >> --- a/arch/arm64/kvm/mmu.c
-> >> +++ b/arch/arm64/kvm/mmu.c
-> >> @@ -1642,8 +1642,8 @@ static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
-> >>     static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t
-> >> fault_ipa,
-> >>   			  struct kvm_s2_trans *nested,
-> >> -			  struct kvm_memory_slot *memslot, unsigned long hva,
-> >> -			  bool fault_is_perm)
-> >> +			  struct kvm_memory_slot *memslot, unsigned long *page_size,
-> >> +			  unsigned long hva, bool fault_is_perm)
-> >>   {
-> >>   	int ret = 0;
-> >>   	bool topup_memcache;
-> >> @@ -1923,6 +1923,9 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
-> >>   	kvm_release_faultin_page(kvm, page, !!ret, writable);
-> >>   	kvm_fault_unlock(kvm);
-> >>   +	if (page_size)
-> >> +		*page_size = vma_pagesize;
-> >> +
-> >>   	/* Mark the page dirty only if the fault is handled successfully */
-> >>   	if (writable && !ret)
-> >>   		mark_page_dirty_in_slot(kvm, memslot, gfn);
-> >> @@ -2196,8 +2199,8 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
-> >>   		ret = gmem_abort(vcpu, fault_ipa, nested, memslot,
-> >>   				 esr_fsc_is_permission_fault(esr));
-> >>   	else
-> >> -		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, hva,
-> >> -				     esr_fsc_is_permission_fault(esr));
-> >> +		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, NULL,
-> >> +				     hva, esr_fsc_is_permission_fault(esr));
-> >>   	if (ret == 0)
-> >>   		ret = 1;
-> >>   out:
-> >> @@ -2573,3 +2576,71 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
-> >>     	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled,
-> >> now_enabled);
-> >>   }
-> >> +
-> >> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-> >> +				    struct kvm_pre_fault_memory *range)
-> >> +{
-> >> +	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
-> >> +	struct kvm_s2_trans nested_trans, *nested = NULL;
-> >> +	unsigned long page_size = PAGE_SIZE;
-> >> +	struct kvm_memory_slot *memslot;
-> >> +	phys_addr_t ipa = range->gpa;
-> >> +	phys_addr_t end;
-> >> +	hva_t hva;
-> >> +	gfn_t gfn;
-> >> +	int ret;
-> >> +
-> >> +	if (vcpu_is_protected(vcpu))
-> >> +		return -EOPNOTSUPP;
-> > 
-> > This feels pretty odd. If you have advertised the capability, then
-> > saying "not supported" at this stage is not on.
-> > 
-> 
-> Thanks good point, I think I can actually just drop this completely since
-> kvm_pvm_ext_allowed() would already exclude this as a capacility.
->
+This patchset introduces target resume capability to netconsole allowing
+it to recover targets when underlying low-level interface comes back
+online.
 
-I think you still need some runtime handling, just in case userspace
-is acting silly.
+The patchset starts by refactoring netconsole state representation in
+order to allow representing deactivated targets (targets that are
+disabled due to interfaces unregister).
 
-> >> +
-> >> +	/*
-> >> +	 * We may prefault on a shadow stage 2 page table if we are
-> >> +	 * running a nested guest.  In this case, we have to resolve the L2
-> >> +	 * IPA to the L1 IPA first, before knowing what kind of memory should
-> >> +	 * back the L1 IPA.
-> >> +	 *
-> >> +	 * If the shadow stage 2 page table walk faults, then we return
-> >> +	 * -EFAULT
-> >> +	 */
-> >> +	if (kvm_is_nested_s2_mmu(vcpu->kvm, vcpu->arch.hw_mmu) &&
-> >> +	    vcpu->arch.hw_mmu->nested_stage2_enabled) {
-> >> +		ret = kvm_walk_nested_s2(vcpu, ipa, &nested_trans);
-> >> +		if (ret)
-> >> +			return -EFAULT;
-> > 
-> > And then what? Userspace is completely screwed here, with no way to
-> > make any forward progress, because the L1 is in charge of that S2, and
-> > L1 is not running. What's the outcome? Light a candle and pray?
-> > 
-> > Also, the IPA you are passing as a parameter means absolutely nothing
-> > in the context of L2. Userspace doesn't have the faintest clue about
-> > the memory map presented to L2, as that's L1 business. L1 can
-> > absolutely present to L2 a memory map that doesn't have a single
-> > address in common with its own.
-> > 
-> > So this really doesn't work at all.
-> > 
-> Would just returning -EOPNOTSUPP in this case like:
+It then modifies netconsole to handle NETDEV_REGISTER events for such
+targets, setups netpoll and forces the device UP. Targets are matched with
+incoming interfaces depending on how they were bound in netconsole
+(by mac or interface name). For these reasons, we also attempt resuming
+on NETDEV_CHANGENAME.
 
-Absolutely *not*. Userspace has no idea what the guest is doing, and
-cannot influence it (other than disabling nesting altogether). This is
-just as bad a -EFAULT.
+The patchset includes a selftest that validates netconsole target state
+transitions and that target is functional after resumed.
 
-> 
->   if (kvm_is_nested_s2_mmu(vcpu->kvm, vcpu->arch.hw_mmu) &&
->       vcpu->arch.hw_mmu->nested_stage2_enabled)
->     return -EOPNOTSUPP;
->
-> be the best way to continue for now?
+Signed-off-by: Andre Carvalho <asantostc@gmail.com>
+---
+Changes in v11:
+- selftest: Remove dependency on persistent mac addresses for
+  netdevsim devices by saving (when disabling) and restoring (when
+  re-enabling) netdevsim module. This should fix netcons_resume.sh test
+  failure in CI.
+- Link to v10: https://lore.kernel.org/r/20260112-netcons-retrigger-v10-0-d82ebfc2503e@gmail.com
 
-We both know that what you actually mean is "this doesn't match my use
-case, let someone else deal with it". To which my answer is that you
-either fully support pre-faulting, or you don't at all. There is no
-middle ground.
+Changes in v10:
+- Define wrappers around dynamic_netconsole_mutex lock/unlock and use
+  them on process_resume_target to avoid build failures and #ifdefs
+  inside callsite (suggested by Breno).
+- Refactored other dynamic_netconsole_mutex to use the wrappers for
+  consistency.
+- Ensure we cancel pending working during removal of dynamic targets,
+  which requires also holding dynamic_netconsole_mutex.
+- Introduce standalone workqueue to avoid potential leaks during module
+  cleanup, flushing all pending resume events before removing all
+  targets.
+- Link to v9: https://lore.kernel.org/r/20260104-netcons-retrigger-v9-0-38aa643d2283@gmail.com
 
-> >> +
-> >> +		ipa = kvm_s2_trans_output(&nested_trans);
-> >> +		nested = &nested_trans;
-> >> +	}
-> >> +
-> >> +	if (ipa >= kvm_phys_size(vcpu->arch.hw_mmu))
-> >> +		return -ENOENT;
-> >> +
-> >> +	/* Generate a synthetic abort for the pre-fault address */
-> >> +	fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
-> >> +		ESR_ELx_FSC_FAULT_L(KVM_PGTABLE_LAST_LEVEL);
-> > 
-> > Why level 3? You must present a fault that matches the level at which
-> > the emulated fault would actually occur, because the rest of the
-> > infrastructure relies on that (at least on the permission path, and
-> > more to come).
-> > 
-> 
-> Ack, thanks I was relying on the fact `fault_is_perm` was hardcoded to
-> false. I'll replace with something like:
-> 
->   pgt = vcpu->arch.hw_mmu->pgt;
->   ret = kvm_pgtable_get_leaf(pgt, gpa, &pte, &level);
->   if (ret)
->     return ret;
->
->   fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
->     ESR_ELx_FSC_FAULT_L(level);
->   fault_info->hpfar_el2 = HPFAR_EL2_NS |
->     FIELD_PREP(HPFAR_EL2_FIPA, gpa >> 12);
+Changes in v9:
+- Hold dynamic_netconsole_mutex on process_resume_target.
+- Cleanup dev_name as part of netconsole_process_cleanups_core to ensure
+  we correctly resume by mac (for targets bound by mac)
+- Link to v8: https://lore.kernel.org/r/20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com
 
-If a mapping exists, you probably don't want to replay the fault. And
-this needs to occur while the mmu_lock is held.
+Changes in v8:
+- Handle NETDEV_REGISTER/CHANGENAME instead of NETDEV_UP (and force the device
+  UP), to increase the chances of succesfully resuming a target. This
+  requires using a workqueue instead of inline in the event notifier as
+  we can't UP the device otherwise.
+- Link to v7: https://lore.kernel.org/r/20251126-netcons-retrigger-v7-0-1d86dba83b1c@gmail.com
 
-> 
-> > Taking a step back on all this, 90% of the problems are there because
-> > you are trying to support prefaulting a guest that is already running.
-> > If you limited this to actually *pre*-faulting the guest, it would be
-> > the easiest thing ever, and wouldn't suffer from any of the above (you
-> > can't be in a nested context if you haven't run).
-> > 
-> > What prevents you from doing so? I'm perfectly happy to make this a
-> > separate API if this contradicts other implementations. Or are you
-> > relying on other side effects of the "already running" state?
-> 
-> We would need this to work on an already running guest.
+Changes in v7:
+- selftest: use ${EXIT_STATUS} instead of ${ksft_pass} to avoid
+  shellcheck warning
+- Link to v6: https://lore.kernel.org/r/20251121-netcons-retrigger-v6-0-9c03f5a2bd6f@gmail.com
 
-Then you need to fully support pre-faulting the guest even when it is
-in a nested context, without resorting to coping-out in situations
-that do not match your narrow use-case. Which means populating the
-canonical s2_mmu even when you're not in that particular context.
+Changes in v6:
+- Rebase on top of net-next to resolve conflicts, no functional changes.
+- Link to v5: https://lore.kernel.org/r/20251119-netcons-retrigger-v5-0-2c7dda6055d6@gmail.com
 
-Thanks,
+Changes in v5:
+- patch 3: Set (de)enslaved target as DISABLED instead of DEACTIVATED to prevent
+  resuming it.
+- selftest: Fix test cleanup by moving trap line to outside of loop and remove
+  unneeded 'local' keyword
+- Rename maybe_resume_target to resume_target, add netconsole_ prefix to
+  process_resumable_targets.
+- Hold device reference before calling __netpoll_setup.
+- Link to v4: https://lore.kernel.org/r/20251116-netcons-retrigger-v4-0-5290b5f140c2@gmail.com
 
-	M.
+Changes in v4:
+- Simplify selftest cleanup, removing trap setup in loop.
+- Drop netpoll helper (__setup_netpoll_hold) and manage reference inside
+  netconsole.
+- Move resume_list processing logic to separate function.
+- Link to v3: https://lore.kernel.org/r/20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com
 
+Changes in v3:
+- Resume by mac or interface name depending on how target was created.
+- Attempt to resume target without holding target list lock, by moving
+  the target to a temporary list. This is required as netpoll may
+  attempt to allocate memory.
+- Link to v2: https://lore.kernel.org/r/20250921-netcons-retrigger-v2-0-a0e84006237f@gmail.com
+
+Changes in v2:
+- Attempt to resume target in the same thread, instead of using
+workqueue .
+- Add wrapper around __netpoll_setup (patch 4).
+- Renamed resume_target to maybe_resume_target and moved conditionals to
+inside its implementation, keeping code more clear.
+- Verify that device addr matches target mac address when target was
+setup using mac.
+- Update selftest to cover targets bound by mac and interface name.
+- Fix typo in selftest comment and sort tests alphabetically in
+  Makefile.
+- Link to v1:
+https://lore.kernel.org/r/20250909-netcons-retrigger-v1-0-3aea904926cf@gmail.com
+
+---
+Andre Carvalho (5):
+      netconsole: convert 'enabled' flag to enum for clearer state management
+      netconsole: clear dev_name for devices bound by mac
+      netconsole: introduce helpers for dynamic_netconsole_mutex lock/unlock
+      netconsole: resume previously deactivated target
+      selftests: netconsole: validate target resume
+
+Breno Leitao (2):
+      netconsole: add target_state enum
+      netconsole: add STATE_DEACTIVATED to track targets disabled by low level
+
+ drivers/net/netconsole.c                           | 305 ++++++++++++++++-----
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  35 ++-
+ .../selftests/drivers/net/netcons_resume.sh        | 124 +++++++++
+ 4 files changed, 391 insertions(+), 74 deletions(-)
+---
+base-commit: 74ecff77dace0f9aead6aac852b57af5d4ad3b85
+change-id: 20250816-netcons-retrigger-a4f547bfc867
+
+Best regards,
 -- 
-Jazz isn't dead. It just smells funny.
+Andre Carvalho <asantostc@gmail.com>
+
 
