@@ -1,453 +1,332 @@
-Return-Path: <linux-kselftest+bounces-49251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3192FD39332
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 08:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4BA4D39428
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 11:32:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EA9153008E9D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 07:55:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 936C6304485F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 10:29:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A93238166;
-	Sun, 18 Jan 2026 07:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07522EC096;
+	Sun, 18 Jan 2026 10:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PAg8SQ34"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9381E50096A;
-	Sun, 18 Jan 2026 07:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7088F2E6116;
+	Sun, 18 Jan 2026 10:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768722936; cv=none; b=VesB3XmRQhu2mKdHU3vok0hv4WSRiJ4szRtIrfC+mXP/WFcPcIwW7sb03gTsbszqIFKwsTKRUjk03OxiiUs00uR34ELOFO2vvpJWL62fx1obFeeFvmBc/tEuy1nPEgxRSAOy/nDrlb/fF8Pn9u6GARi8eDKy19MjSAIkwyUELvI=
+	t=1768732179; cv=none; b=UoiJ65AT1/R8C1MU+ByvbjApshgMvZbo+Hglfdt4hXGXIygQgWoGMT4YqgbcqCiM7aJV1WeG/fum5Ty7eIdIashmWyPYGNe0b5VHGEBepmzVoM/X5FXiHBXeC9lRQIZKiCVY6V80+fMn0o58bgv72TZl1fXoUp4JkX7ry4tlajM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768722936; c=relaxed/simple;
-	bh=vW/4NFX+kEBiqUl8QQ6BkrmmWFm8yBPd1ZvTj1bH89k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lG7zqtYXUfkqlLklzCZQV20LBovs41YxEsBd0NZLBuOLMptgaBCosSSv6/10YIOMqByVn0ck7cAZPgUg3icwGA6LbGk8bOR4vjdPz7mWIwsVnKuwdfQFKn9BtRLcgkemJhP8fZT/wUTSTc4Gz9w81q44BgUPrYSIo7avZkwRfIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C639E1517;
-	Sat, 17 Jan 2026 23:55:25 -0800 (PST)
-Received: from [10.164.10.251] (unknown [10.164.10.251])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D068E3F694;
-	Sat, 17 Jan 2026 23:55:28 -0800 (PST)
-Message-ID: <5957ae48-87b8-4981-a6f7-8113141e7b6b@arm.com>
-Date: Sun, 18 Jan 2026 13:25:25 +0530
+	s=arc-20240116; t=1768732179; c=relaxed/simple;
+	bh=gveXft6/1suUPTPK6+A5Xp+d6HUxC5Rum+LnGx54Z34=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p4pVXQ5YJNNI7ZdgulZ82k2JjWHW/Iu1ESBCo3YQCy83jd4Idp02I+b59RCc0HR+HBYwXNxQyUV6UDiJWM7Jv2oQc3b9koMySojlJhbLjLITl2HGOjXvd/YR+6LLE/t+0IXoO8iVWwnRTRXsBCpQyUKXdgwueeXyJitFH4d+Utk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PAg8SQ34; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8EB4C116D0;
+	Sun, 18 Jan 2026 10:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768732179;
+	bh=gveXft6/1suUPTPK6+A5Xp+d6HUxC5Rum+LnGx54Z34=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PAg8SQ34N7V5zfoeO5GtoEL9UQifKC7eLdMV2frsoTrL8LU4axpA8CeiRRhKTvq0m
+	 oaA7gw0kzauZOCwu7oub2ydchUcB95crLuKOdu+NimK0ZISO1gvmweNctcNJ0MbVGP
+	 4QrUX0iKOzH070KN41Ag79BznCu67CanxXYthxrHsOcxtTOc+f/7PeCdmMcOWqBR+P
+	 PnMNVg2phw3srLl9lmct5H0JQy/dK21KKHO1zP3JceVCkr+HV+i4wd7PVYH8eKYGQW
+	 3kXWnap2jurM+o8iuPDNECi52Oi2vguIsyk/IUQtsTr2XSn1RiPRq20u6y0MCoNO8x
+	 KOOD8zahmrgYQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vhQ2K-00000003I58-1NCe;
+	Sun, 18 Jan 2026 10:29:36 +0000
+Date: Sun, 18 Jan 2026 10:29:35 +0000
+Message-ID: <87ldhvdxio.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: "Thomson, Jack" <jackabt.amazon@gmail.com>
+Cc: oliver.upton@linux.dev,
+	pbonzini@redhat.com,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	isaku.yamahata@intel.com,
+	xmarcalx@amazon.co.uk,
+	kalyazin@amazon.co.uk,
+	jackabt@amazon.com,
+	Vladimir Murzin <vladimir.murzin@arm.com>
+Subject: Re: [PATCH v4 1/3] KVM: arm64: Add pre_fault_memory implementation
+In-Reply-To: <ea7786e4-8b67-4a9f-b2c6-c0e4cd325cc3@gmail.com>
+References: <20260113152643.18858-1-jackabt.amazon@gmail.com>
+	<20260113152643.18858-2-jackabt.amazon@gmail.com>
+	<86jyxjkxus.wl-maz@kernel.org>
+	<ea7786e4-8b67-4a9f-b2c6-c0e4cd325cc3@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: remove virtual_address_range test
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jackabt.amazon@gmail.com, oliver.upton@linux.dev, pbonzini@redhat.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, isaku.yamahata@intel.com, xmarcalx@amazon.co.uk, kalyazin@amazon.co.uk, jackabt@amazon.com, vladimir.murzin@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
+On Fri, 16 Jan 2026 14:33:42 +0000,
+"Thomson, Jack" <jackabt.amazon@gmail.com> wrote:
+> 
+> 
+> Hey Marc,
+> 
+> Thanks for the review.
+> 
+> On 15/01/2026 9:51 am, Marc Zyngier wrote:
+> > [+ Vladimir, who was also looking at this patch]
+> > 
+> > On Tue, 13 Jan 2026 15:26:40 +0000,
+> > Jack Thomson <jackabt.amazon@gmail.com> wrote:
+> >> 
+> >> From: Jack Thomson <jackabt@amazon.com>
+> >> 
+> >> Add kvm_arch_vcpu_pre_fault_memory() for arm64. The implementation hands
+> >> off the stage-2 faulting logic to either gmem_abort() or
+> >> user_mem_abort().
+> >> 
+> >> Add an optional page_size output parameter to user_mem_abort() to
+> >> return the VMA page size, which is needed when pre-faulting.
+> >> 
+> >> Update the documentation to clarify x86 specific behaviour.
+> >> 
+> >> Signed-off-by: Jack Thomson <jackabt@amazon.com>
+> >> ---
+> >>   Documentation/virt/kvm/api.rst |  3 +-
+> >>   arch/arm64/kvm/Kconfig         |  1 +
+> >>   arch/arm64/kvm/arm.c           |  1 +
+> >>   arch/arm64/kvm/mmu.c           | 79 ++++++++++++++++++++++++++++++++--
+> >>   4 files changed, 79 insertions(+), 5 deletions(-)
+> >> 
+> >> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> >> index 01a3abef8abb..44cfd9e736bb 100644
+> >> --- a/Documentation/virt/kvm/api.rst
+> >> +++ b/Documentation/virt/kvm/api.rst
+> >> @@ -6493,7 +6493,8 @@ Errors:
+> >>   KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
+> >>   for the current vCPU state.  KVM maps memory as if the vCPU generated a
+> >>   stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
+> >> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
+> >> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
+> >> +Accessed.
+> >>     In the case of confidential VM types where there is an initial
+> >> set up of
+> >>   private guest memory before the guest is 'finalized'/measured, this ioctl
+> >> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> >> index 4f803fd1c99a..6872aaabe16c 100644
+> >> --- a/arch/arm64/kvm/Kconfig
+> >> +++ b/arch/arm64/kvm/Kconfig
+> >> @@ -25,6 +25,7 @@ menuconfig KVM
+> >>   	select HAVE_KVM_CPU_RELAX_INTERCEPT
+> >>   	select KVM_MMIO
+> >>   	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+> >> +	select KVM_GENERIC_PRE_FAULT_MEMORY
+> >>   	select VIRT_XFER_TO_GUEST_WORK
+> >>   	select KVM_VFIO
+> >>   	select HAVE_KVM_DIRTY_RING_ACQ_REL
+> >> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> >> index 4f80da0c0d1d..19bac68f737f 100644
+> >> --- a/arch/arm64/kvm/arm.c
+> >> +++ b/arch/arm64/kvm/arm.c
+> >> @@ -332,6 +332,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> >>   	case KVM_CAP_COUNTER_OFFSET:
+> >>   	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
+> >>   	case KVM_CAP_ARM_SEA_TO_USER:
+> >> +	case KVM_CAP_PRE_FAULT_MEMORY:
+> >>   		r = 1;
+> >>   		break;
+> >>   	case KVM_CAP_SET_GUEST_DEBUG2:
+> >> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> >> index 48d7c372a4cd..499b131f794e 100644
+> >> --- a/arch/arm64/kvm/mmu.c
+> >> +++ b/arch/arm64/kvm/mmu.c
+> >> @@ -1642,8 +1642,8 @@ static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+> >>     static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t
+> >> fault_ipa,
+> >>   			  struct kvm_s2_trans *nested,
+> >> -			  struct kvm_memory_slot *memslot, unsigned long hva,
+> >> -			  bool fault_is_perm)
+> >> +			  struct kvm_memory_slot *memslot, unsigned long *page_size,
+> >> +			  unsigned long hva, bool fault_is_perm)
+> >>   {
+> >>   	int ret = 0;
+> >>   	bool topup_memcache;
+> >> @@ -1923,6 +1923,9 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+> >>   	kvm_release_faultin_page(kvm, page, !!ret, writable);
+> >>   	kvm_fault_unlock(kvm);
+> >>   +	if (page_size)
+> >> +		*page_size = vma_pagesize;
+> >> +
+> >>   	/* Mark the page dirty only if the fault is handled successfully */
+> >>   	if (writable && !ret)
+> >>   		mark_page_dirty_in_slot(kvm, memslot, gfn);
+> >> @@ -2196,8 +2199,8 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
+> >>   		ret = gmem_abort(vcpu, fault_ipa, nested, memslot,
+> >>   				 esr_fsc_is_permission_fault(esr));
+> >>   	else
+> >> -		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, hva,
+> >> -				     esr_fsc_is_permission_fault(esr));
+> >> +		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, NULL,
+> >> +				     hva, esr_fsc_is_permission_fault(esr));
+> >>   	if (ret == 0)
+> >>   		ret = 1;
+> >>   out:
+> >> @@ -2573,3 +2576,71 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
+> >>     	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled,
+> >> now_enabled);
+> >>   }
+> >> +
+> >> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
+> >> +				    struct kvm_pre_fault_memory *range)
+> >> +{
+> >> +	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
+> >> +	struct kvm_s2_trans nested_trans, *nested = NULL;
+> >> +	unsigned long page_size = PAGE_SIZE;
+> >> +	struct kvm_memory_slot *memslot;
+> >> +	phys_addr_t ipa = range->gpa;
+> >> +	phys_addr_t end;
+> >> +	hva_t hva;
+> >> +	gfn_t gfn;
+> >> +	int ret;
+> >> +
+> >> +	if (vcpu_is_protected(vcpu))
+> >> +		return -EOPNOTSUPP;
+> > 
+> > This feels pretty odd. If you have advertised the capability, then
+> > saying "not supported" at this stage is not on.
+> > 
+> 
+> Thanks good point, I think I can actually just drop this completely since
+> kvm_pvm_ext_allowed() would already exclude this as a capacility.
+>
 
-On 16/01/26 6:50 pm, Lorenzo Stoakes wrote:
-> This self test is asserting internal implementation details and is highly
-> vulnerable to internal kernel changes as a result.
->
-> It is currently failing locally from at least v6.17, and it seems that it
-> may have been failing for longer in many configurations/hardware as it
-> skips if e.g. CONFIG_ANON_VMA_NAME is not specified.
+I think you still need some runtime handling, just in case userspace
+is acting silly.
 
-True, the test gets skipped for me since the mark_range function was added.
+> >> +
+> >> +	/*
+> >> +	 * We may prefault on a shadow stage 2 page table if we are
+> >> +	 * running a nested guest.  In this case, we have to resolve the L2
+> >> +	 * IPA to the L1 IPA first, before knowing what kind of memory should
+> >> +	 * back the L1 IPA.
+> >> +	 *
+> >> +	 * If the shadow stage 2 page table walk faults, then we return
+> >> +	 * -EFAULT
+> >> +	 */
+> >> +	if (kvm_is_nested_s2_mmu(vcpu->kvm, vcpu->arch.hw_mmu) &&
+> >> +	    vcpu->arch.hw_mmu->nested_stage2_enabled) {
+> >> +		ret = kvm_walk_nested_s2(vcpu, ipa, &nested_trans);
+> >> +		if (ret)
+> >> +			return -EFAULT;
+> > 
+> > And then what? Userspace is completely screwed here, with no way to
+> > make any forward progress, because the L1 is in charge of that S2, and
+> > L1 is not running. What's the outcome? Light a candle and pray?
+> > 
+> > Also, the IPA you are passing as a parameter means absolutely nothing
+> > in the context of L2. Userspace doesn't have the faintest clue about
+> > the memory map presented to L2, as that's L1 business. L1 can
+> > absolutely present to L2 a memory map that doesn't have a single
+> > address in common with its own.
+> > 
+> > So this really doesn't work at all.
+> > 
+> Would just returning -EOPNOTSUPP in this case like:
 
->
-> With these skips and the fact that run_vmtests.sh won't run the tests in
-> certain configurations it is likely we have simply missed this test being
-> broken in CI for a long while.
->
-> I have tried multiple versions of these tests and am unable to find a
-> working bisect as previous versions of the test fail also.
+Absolutely *not*. Userspace has no idea what the guest is doing, and
+cannot influence it (other than disabling nesting altogether). This is
+just as bad a -EFAULT.
 
-Does the test fail for you even for commit 13e860961fd4 ("selftests/mm: virtual_address_range: Switch to ksft_exit_fail_msg").
-I have never observed failure at this.
+> 
+>   if (kvm_is_nested_s2_mmu(vcpu->kvm, vcpu->arch.hw_mmu) &&
+>       vcpu->arch.hw_mmu->nested_stage2_enabled)
+>     return -EOPNOTSUPP;
+>
+> be the best way to continue for now?
 
+We both know that what you actually mean is "this doesn't match my use
+case, let someone else deal with it". To which my answer is that you
+either fully support pre-faulting, or you don't at all. There is no
+middle ground.
 
+> >> +
+> >> +		ipa = kvm_s2_trans_output(&nested_trans);
+> >> +		nested = &nested_trans;
+> >> +	}
+> >> +
+> >> +	if (ipa >= kvm_phys_size(vcpu->arch.hw_mmu))
+> >> +		return -ENOENT;
+> >> +
+> >> +	/* Generate a synthetic abort for the pre-fault address */
+> >> +	fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
+> >> +		ESR_ELx_FSC_FAULT_L(KVM_PGTABLE_LAST_LEVEL);
+> > 
+> > Why level 3? You must present a fault that matches the level at which
+> > the emulated fault would actually occur, because the rest of the
+> > infrastructure relies on that (at least on the permission path, and
+> > more to come).
+> > 
+> 
+> Ack, thanks I was relying on the fact `fault_is_perm` was hardcoded to
+> false. I'll replace with something like:
+> 
+>   pgt = vcpu->arch.hw_mmu->pgt;
+>   ret = kvm_pgtable_get_leaf(pgt, gpa, &pte, &level);
+>   if (ret)
+>     return ret;
 >
-> The tests are essentially mmap()'ing a series of mappings with no hint and
-> asserting what the get_unmapped_area*() functions will come up with, with
-> seemingly few checks for what other mappings may already be in place.
->
-> It then appears to be mmap()'ing with a hint, and making a series of
-> similar assertions about the internal implementation details of the hinting
-> logic.
+>   fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
+>     ESR_ELx_FSC_FAULT_L(level);
+>   fault_info->hpfar_el2 = HPFAR_EL2_NS |
+>     FIELD_PREP(HPFAR_EL2_FIPA, gpa >> 12);
 
-The revelation of internal detail starts at 010409649885 ("selftests/mm: confirm VA exhaustion without reliance on correctness of mmap()").
-All that does is to check whether mmap failure actually means exhaustion. This can reveal bugs in maple tree,
-if it cannot find a 1G chunk in it, even when the gap is present. This is an internal detail which is not
-expected to change - no one reports any breakage (AFAIK, please correct if I am wrong) until after 10 months, at
-commit a005145b9c96 ("selftests/mm: virtual_address_range: mmap() without PROT_WRITE"), that too not at the
-gap assertion code - the breakage happens at the while (start_addr + hop < end_addr) chunk of code. In retrospect I should
-not have added this chunk - the purpose was to check whether the VMAs being advertised in procfs are actually usable, testing
-something which, in case breaks, is extremely easy to figure out and fix, without putting this functionality in the test. And, I
-had no knowledge at the time that this will cause pagetable allocation and will touch physical memory. So commits
-b2a79f62133a and 3bd6137220bb could have simply been avoided by removing the bit of code I mentioned.
+If a mapping exists, you probably don't want to replay the fault. And
+this needs to occur while the mmu_lock is held.
 
->
-> Commit 0ef3783d7558 ("selftests/mm: add support to test 4PB VA on PPC64"),
-> commit 3bd6137220bb ("selftests/mm: virtual_address_range: avoid reading
-> from VM_IO mappings"), and especially commit a005145b9c96 ("selftests/mm:
-> virtual_address_range: mmap() without PROT_WRITE") are good examples of the
-> whack-a-mole nature of maintaining this test.
->
-> The last commit there being particularly pertinent as it was accounting for
-> an internal implementation detail change that really should have no bearing
-> on self-tests, that is commit e93d2521b27f ("x86/vdso: Split virtual clock
-> pages into dedicated mapping").
->
-> The purpose of the mm self-tests are to assert attributes about the API
-> exposed to users, and to ensure that expectations are met.
->
-> This test is emphatically not doing this, rather making a series of
-> assumptions about internal implementation details and asserting them.
->
-> It therefore, sadly, seems that the best course is to remove this test
-> altogether.
+> 
+> > Taking a step back on all this, 90% of the problems are there because
+> > you are trying to support prefaulting a guest that is already running.
+> > If you limited this to actually *pre*-faulting the guest, it would be
+> > the easiest thing ever, and wouldn't suffer from any of the above (you
+> > can't be in a nested context if you haven't run).
+> > 
+> > What prevents you from doing so? I'm perfectly happy to make this a
+> > separate API if this contradicts other implementations. Or are you
+> > relying on other side effects of the "already running" state?
+> 
+> We would need this to work on an already running guest.
 
-The objective of the test is to exhaust VA space and find out bugs in mmap(). It has
-been useful in discovering a bug at [1].
+Then you need to fully support pre-faulting the guest even when it is
+in a nested context, without resorting to coping-out in situations
+that do not match your narrow use-case. Which means populating the
+canonical s2_mmu even when you're not in that particular context.
 
-[1] https://lore.kernel.org/all/20240123171420.3970220-1-ryan.roberts@arm.com/
+Thanks,
 
->
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> ---
->  tools/testing/selftests/mm/.gitignore         |   1 -
->  tools/testing/selftests/mm/Makefile           |   3 -
->  tools/testing/selftests/mm/run_vmtests.sh     |  12 -
->  .../selftests/mm/virtual_address_range.c      | 260 ------------------
->  4 files changed, 276 deletions(-)
->  delete mode 100644 tools/testing/selftests/mm/virtual_address_range.c
->
-> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-> index c2a8586e51a1..702e5723c35d 100644
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -32,7 +32,6 @@ uffd-unit-tests
->  uffd-wp-mremap
->  mlock-intersect-test
->  mlock-random-test
-> -virtual_address_range
->  gup_test
->  va_128TBswitch
->  map_fixed_noreplace
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index de4afc34e3b1..2fdb05e5a56a 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -136,9 +136,6 @@ endif
->  
->  ifneq (,$(filter $(ARCH),arm64 mips64 parisc64 powerpc riscv64 s390x sparc64 x86_64 s390))
->  TEST_GEN_FILES += va_high_addr_switch
-> -ifneq ($(ARCH),riscv64)
-> -TEST_GEN_FILES += virtual_address_range
-> -endif
->  TEST_GEN_FILES += write_to_hugetlbfs
->  endif
->  
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index 2dadbfc6e535..452875db532c 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -399,18 +399,6 @@ CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
->  fi
->  
->  if [ $VADDR64 -ne 0 ]; then
-> -
-> -	# set overcommit_policy as OVERCOMMIT_ALWAYS so that kernel
-> -	# allows high virtual address allocation requests independent
-> -	# of platform's physical memory.
-> -
-> -	if [ -x ./virtual_address_range ]; then
-> -		prev_policy=$(cat /proc/sys/vm/overcommit_memory)
-> -		echo 1 > /proc/sys/vm/overcommit_memory
-> -		CATEGORY="hugevm" run_test ./virtual_address_range
-> -		echo $prev_policy > /proc/sys/vm/overcommit_memory
-> -	fi
-> -
->  	# va high address boundary switch test
->  	CATEGORY="hugevm" run_test bash ./va_high_addr_switch.sh
->  fi # VADDR64
-> diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-> deleted file mode 100644
-> index 4f0923825ed7..000000000000
-> --- a/tools/testing/selftests/mm/virtual_address_range.c
-> +++ /dev/null
-> @@ -1,260 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-only
-> -/*
-> - * Copyright 2017, Anshuman Khandual, IBM Corp.
-> - *
-> - * Works on architectures which support 128TB virtual
-> - * address range and beyond.
-> - */
-> -#include <stdio.h>
-> -#include <stdlib.h>
-> -#include <string.h>
-> -#include <unistd.h>
-> -#include <errno.h>
-> -#include <sys/prctl.h>
-> -#include <sys/mman.h>
-> -#include <sys/time.h>
-> -#include <fcntl.h>
-> -
-> -#include "vm_util.h"
-> -#include "kselftest.h"
-> -
-> -/*
-> - * Maximum address range mapped with a single mmap()
-> - * call is little bit more than 1GB. Hence 1GB is
-> - * chosen as the single chunk size for address space
-> - * mapping.
-> - */
-> -
-> -#define SZ_1GB	(1024 * 1024 * 1024UL)
-> -#define SZ_1TB	(1024 * 1024 * 1024 * 1024UL)
-> -
-> -#define MAP_CHUNK_SIZE	SZ_1GB
-> -
-> -/*
-> - * Address space till 128TB is mapped without any hint
-> - * and is enabled by default. Address space beyond 128TB
-> - * till 512TB is obtained by passing hint address as the
-> - * first argument into mmap() system call.
-> - *
-> - * The process heap address space is divided into two
-> - * different areas one below 128TB and one above 128TB
-> - * till it reaches 512TB. One with size 128TB and the
-> - * other being 384TB.
-> - *
-> - * On Arm64 the address space is 256TB and support for
-> - * high mappings up to 4PB virtual address space has
-> - * been added.
-> - *
-> - * On PowerPC64, the address space up to 128TB can be
-> - * mapped without a hint. Addresses beyond 128TB, up to
-> - * 4PB, can be mapped with a hint.
-> - *
-> - */
-> -
-> -#define NR_CHUNKS_128TB   ((128 * SZ_1TB) / MAP_CHUNK_SIZE) /* Number of chunks for 128TB */
-> -#define NR_CHUNKS_256TB   (NR_CHUNKS_128TB * 2UL)
-> -#define NR_CHUNKS_384TB   (NR_CHUNKS_128TB * 3UL)
-> -#define NR_CHUNKS_3840TB  (NR_CHUNKS_128TB * 30UL)
-> -#define NR_CHUNKS_3968TB  (NR_CHUNKS_128TB * 31UL)
-> -
-> -#define ADDR_MARK_128TB  (1UL << 47) /* First address beyond 128TB */
-> -#define ADDR_MARK_256TB  (1UL << 48) /* First address beyond 256TB */
-> -
-> -#ifdef __aarch64__
-> -#define HIGH_ADDR_MARK  ADDR_MARK_256TB
-> -#define HIGH_ADDR_SHIFT 49
-> -#define NR_CHUNKS_LOW   NR_CHUNKS_256TB
-> -#define NR_CHUNKS_HIGH  NR_CHUNKS_3840TB
-> -#elif defined(__PPC64__)
-> -#define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> -#define HIGH_ADDR_SHIFT 48
-> -#define NR_CHUNKS_LOW   NR_CHUNKS_128TB
-> -#define NR_CHUNKS_HIGH  NR_CHUNKS_3968TB
-> -#else
-> -#define HIGH_ADDR_MARK  ADDR_MARK_128TB
-> -#define HIGH_ADDR_SHIFT 48
-> -#define NR_CHUNKS_LOW   NR_CHUNKS_128TB
-> -#define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
-> -#endif
-> -
-> -static char *hint_addr(void)
-> -{
-> -	int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
-> -
-> -	return (char *) (1UL << bits);
-> -}
-> -
-> -static void validate_addr(char *ptr, int high_addr)
-> -{
-> -	unsigned long addr = (unsigned long) ptr;
-> -
-> -	if (high_addr) {
-> -		if (addr < HIGH_ADDR_MARK)
-> -			ksft_exit_fail_msg("Bad address %lx\n", addr);
-> -		return;
-> -	}
-> -
-> -	if (addr > HIGH_ADDR_MARK)
-> -		ksft_exit_fail_msg("Bad address %lx\n", addr);
-> -}
-> -
-> -static void mark_range(char *ptr, size_t size)
-> -{
-> -	if (prctl(PR_SET_VMA, PR_SET_VMA_ANON_NAME, ptr, size, "virtual_address_range") == -1) {
-> -		if (errno == EINVAL) {
-> -			/* Depends on CONFIG_ANON_VMA_NAME */
-> -			ksft_test_result_skip("prctl(PR_SET_VMA_ANON_NAME) not supported\n");
-> -			ksft_finished();
-> -		} else {
-> -			ksft_exit_fail_perror("prctl(PR_SET_VMA_ANON_NAME) failed\n");
-> -		}
-> -	}
-> -}
-> -
-> -static int is_marked_vma(const char *vma_name)
-> -{
-> -	return vma_name && !strcmp(vma_name, "[anon:virtual_address_range]\n");
-> -}
-> -
-> -static int validate_lower_address_hint(void)
-> -{
-> -	char *ptr;
-> -
-> -	ptr = mmap((void *) (1UL << 45), MAP_CHUNK_SIZE, PROT_READ |
-> -		   PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -
-> -	if (ptr == MAP_FAILED)
-> -		return 0;
-> -
-> -	return 1;
-> -}
-> -
-> -static int validate_complete_va_space(void)
-> -{
-> -	unsigned long start_addr, end_addr, prev_end_addr;
-> -	char line[400];
-> -	char prot[6];
-> -	FILE *file;
-> -	int fd;
-> -
-> -	fd = open("va_dump", O_CREAT | O_WRONLY, 0600);
-> -	unlink("va_dump");
-> -	if (fd < 0) {
-> -		ksft_test_result_skip("cannot create or open dump file\n");
-> -		ksft_finished();
-> -	}
-> -
-> -	file = fopen("/proc/self/maps", "r");
-> -	if (file == NULL)
-> -		ksft_exit_fail_msg("cannot open /proc/self/maps\n");
-> -
-> -	prev_end_addr = 0;
-> -	while (fgets(line, sizeof(line), file)) {
-> -		const char *vma_name = NULL;
-> -		int vma_name_start = 0;
-> -		unsigned long hop;
-> -
-> -		if (sscanf(line, "%lx-%lx %4s %*s %*s %*s %n",
-> -			   &start_addr, &end_addr, prot, &vma_name_start) != 3)
-> -			ksft_exit_fail_msg("cannot parse /proc/self/maps\n");
-> -
-> -		if (vma_name_start)
-> -			vma_name = line + vma_name_start;
-> -
-> -		/* end of userspace mappings; ignore vsyscall mapping */
-> -		if (start_addr & (1UL << 63))
-> -			return 0;
-> -
-> -		/* /proc/self/maps must have gaps less than MAP_CHUNK_SIZE */
-> -		if (start_addr - prev_end_addr >= MAP_CHUNK_SIZE)
-> -			return 1;
-> -
-> -		prev_end_addr = end_addr;
-> -
-> -		if (prot[0] != 'r')
-> -			continue;
-> -
-> -		if (check_vmflag_io((void *)start_addr))
-> -			continue;
-> -
-> -		/*
-> -		 * Confirm whether MAP_CHUNK_SIZE chunk can be found or not.
-> -		 * If write succeeds, no need to check MAP_CHUNK_SIZE - 1
-> -		 * addresses after that. If the address was not held by this
-> -		 * process, write would fail with errno set to EFAULT.
-> -		 * Anyways, if write returns anything apart from 1, exit the
-> -		 * program since that would mean a bug in /proc/self/maps.
-> -		 */
-> -		hop = 0;
-> -		while (start_addr + hop < end_addr) {
-> -			if (write(fd, (void *)(start_addr + hop), 1) != 1)
-> -				return 1;
-> -			lseek(fd, 0, SEEK_SET);
-> -
-> -			if (is_marked_vma(vma_name))
-> -				munmap((char *)(start_addr + hop), MAP_CHUNK_SIZE);
-> -
-> -			hop += MAP_CHUNK_SIZE;
-> -		}
-> -	}
-> -	return 0;
-> -}
-> -
-> -int main(int argc, char *argv[])
-> -{
-> -	char *ptr[NR_CHUNKS_LOW];
-> -	char **hptr;
-> -	char *hint;
-> -	unsigned long i, lchunks, hchunks;
-> -
-> -	ksft_print_header();
-> -	ksft_set_plan(1);
-> -
-> -	for (i = 0; i < NR_CHUNKS_LOW; i++) {
-> -		ptr[i] = mmap(NULL, MAP_CHUNK_SIZE, PROT_READ,
-> -			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -
-> -		if (ptr[i] == MAP_FAILED) {
-> -			if (validate_lower_address_hint())
-> -				ksft_exit_fail_msg("mmap unexpectedly succeeded with hint\n");
-> -			break;
-> -		}
-> -
-> -		mark_range(ptr[i], MAP_CHUNK_SIZE);
-> -		validate_addr(ptr[i], 0);
-> -	}
-> -	lchunks = i;
-> -	hptr = (char **) calloc(NR_CHUNKS_HIGH, sizeof(char *));
-> -	if (hptr == NULL) {
-> -		ksft_test_result_skip("Memory constraint not fulfilled\n");
-> -		ksft_finished();
-> -	}
-> -
-> -	for (i = 0; i < NR_CHUNKS_HIGH; i++) {
-> -		hint = hint_addr();
-> -		hptr[i] = mmap(hint, MAP_CHUNK_SIZE, PROT_READ,
-> -			       MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -
-> -		if (hptr[i] == MAP_FAILED)
-> -			break;
-> -
-> -		mark_range(hptr[i], MAP_CHUNK_SIZE);
-> -		validate_addr(hptr[i], 1);
-> -	}
-> -	hchunks = i;
-> -	if (validate_complete_va_space()) {
-> -		ksft_test_result_fail("BUG in mmap() or /proc/self/maps\n");
-> -		ksft_finished();
-> -	}
-> -
-> -	for (i = 0; i < lchunks; i++)
-> -		munmap(ptr[i], MAP_CHUNK_SIZE);
-> -
-> -	for (i = 0; i < hchunks; i++)
-> -		munmap(hptr[i], MAP_CHUNK_SIZE);
-> -
-> -	free(hptr);
-> -
-> -	ksft_test_result_pass("Test\n");
-> -	ksft_finished();
-> -}
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
 
