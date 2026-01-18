@@ -1,1001 +1,424 @@
-Return-Path: <linux-kselftest+bounces-49308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79F23D397D4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 17:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF6FED3983B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 18:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B551F300B832
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 16:22:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F0918300A1E6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 17:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0F521CC60;
-	Sun, 18 Jan 2026 16:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C468238150;
+	Sun, 18 Jan 2026 17:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEHHzb0s"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="X413uDZ0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013064.outbound.protection.outlook.com [40.107.159.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F87819309C
-	for <linux-kselftest@vger.kernel.org>; Sun, 18 Jan 2026 16:22:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768753377; cv=none; b=SV2pQVHpaQXZq6RghzfW/k5wujsEmGcl4tq6/OuHZKWSX4CTkimsbRhzBZB90Eu8f36QA1WoVHsokp+uXtrPESLoyK7n6cP2o4fxhUVG71iTFJfnevFLyj+kuPFt7mWArIOVzgpDXyb0A+00qBDd4CwzK+DWxwdnDXLLKhwzMfo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768753377; c=relaxed/simple;
-	bh=e7fUuGeW1wuNGHGepqtswibjSkdcGJ8du02jiiziGrU=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=G7DCKvafuQ8sFxvIUBQbqBpitbEPG4ZfHszIKE3Tm7prZ/NqFkam6OwfX177uGTENgUvNJ5DK9pewM74s89qt0easF1+EBQDnymLJGm7Ef5XDNMOvbegqhAh4qU8gH3LIuz5pq7JIlY2yi2ItTFgzq3Bq6yf5cO1LQmPy/HTKtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEHHzb0s; arc=none smtp.client-ip=74.125.224.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-6446c1a7a1cso2791462d50.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Jan 2026 08:22:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768753373; x=1769358173; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y21NJW5o57filpmk98Y9AX6GICZPDBi95+r03OYm9wQ=;
-        b=XEHHzb0soRHmqBRJWtdMlw7LB7QqJBGFfHtIGHPduOkXj6RGC0hy7s4bzdaWQBTi3K
-         A+xEXFImEuduvkdJR8Ju0ImelScFj2tKuOKNEag8GzZSoCaOkzK9ixi97g+/JAYTe5IM
-         CAmJENiCVTMC3bXTJ4UBAK+1bR2eSqxTtwG+nrmVv6DRvSL8Twm508mDp27LCgECNSJw
-         VvCwWrWW2QMdK+ieUGh132QetKb3cQk2Bk07D4r5g8FaRCcCh/Nlea4K70PT055baqkD
-         KzfeolNHbAwNoKumNx+YtA7wlBIqcR0AWeULCThapu6v63iVv7Hy0xHKZeWVgrpXvh6P
-         z0GA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768753373; x=1769358173;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y21NJW5o57filpmk98Y9AX6GICZPDBi95+r03OYm9wQ=;
-        b=FSMHnjY334iHymrhE+7ulaPoqCUxMa0NSJjWsVIYqpd39Ke84BONwgtfAFnbvcCGE0
-         8aSI9BM15uLZnc0frhMNj4wd7geTgTLttvHYxvNFmb4rrYGdo6wXF5pZybZFis29xZlF
-         SSJbGaSuIybeaHEnPNKAClL4wPh9wSyV+B1esd7Dt9NhiLrR+Ya3GJsIR54b1YKiV+/7
-         lklP4+4cA/TZe16rgJ/nuwkI4+h1wuIRSYD5oS/Xo43+fJlL+ZlzqM9LssGtOhEaw1hD
-         WTY9bpNJdoDFebKot99UupWT/G+aNsz9H2qddylzF2+0PqS1Ln1Xp4UDx+TNvq2/OsPY
-         ZI2w==
-X-Gm-Message-State: AOJu0YzeuZpTFWJ14F6njTE2jQi73SDicAgIPPI646riCCBbgrFerbZo
-	WZd7X/AElOIqPmcKK62r+TdhJwARQlTYGuse1q00lHiEFVZAD4kKCYKcTWxkYg==
-X-Gm-Gg: AY/fxX7agaDtUj0tJDGPLdDEKxuzKQkDAlbdRmCQyhMOTsHBsko7xKiC7x1scWyfajM
-	Kats6jUiCUSyMN9wr/mOvSQGGk1rqAgN2MFOaH3yv2d+WhfYty5OxuTTMsm7lW5fVV8s0qoa4K4
-	yHBduvnC/FlVtKVoAuhIKgv5MjurhUu2f3cU7fv2ddeHovSifiV5IAe/UB/W1F4Kzi0jQWTiI+F
-	UFHlFFm68F5InWFYaSsQTOFMCt+pQh4iuBsWIkB8jUImYult/NvtMG7cHrOGujSERpwfsu3GUjN
-	3U35MGzxyamwv4gJHGW1mfsaGCfoDdtFRDKPXRj/52J6rddWP60XRJg51/3ACzl759JbQECl7Xl
-	GaBTuAQ51JhvVf3H2u74/5RMD4DEc8a2jY/wTZ5UPCcGVBH23GGjDOPsP5eara7ICiZ+E0kRtD/
-	Fk/4Y2ja2cDh67c7gvYZT/MIjVuBxP6NziMhQXBdMrUbyPVs8T1EGCsxyAwFXXaTbUP3VM5w==
-X-Received: by 2002:a53:d98a:0:b0:644:6c4e:d06a with SMTP id 956f58d0204a3-649164a0079mr5831503d50.36.1768753373029;
-        Sun, 18 Jan 2026 08:22:53 -0800 (PST)
-Received: from gmail.com (250.4.48.34.bc.googleusercontent.com. [34.48.4.250])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-649170ac7a1sm3926923d50.14.2026.01.18.08.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jan 2026 08:22:52 -0800 (PST)
-Date: Sun, 18 Jan 2026 11:22:51 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Danielle Ratson <danieller@nvidia.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Cc: "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
- "davem@davemloft.net" <davem@davemloft.net>, 
- "edumazet@google.com" <edumazet@google.com>, 
- "kuba@kernel.org" <kuba@kernel.org>, 
- "pabeni@redhat.com" <pabeni@redhat.com>, 
- "horms@kernel.org" <horms@kernel.org>, 
- "shuah@kernel.org" <shuah@kernel.org>, 
- mlxsw <mlxsw@nvidia.com>
-Message-ID: <willemdebruijn.kernel.2ef32666cf33@gmail.com>
-In-Reply-To: <DM6PR12MB451623DAE30582C45BB95A3FD88BA@DM6PR12MB4516.namprd12.prod.outlook.com>
-References: <20260114113141.2522209-1-danieller@nvidia.com>
- <willemdebruijn.kernel.1ad957d6f7314@gmail.com>
- <DM6PR12MB451623DAE30582C45BB95A3FD88BA@DM6PR12MB4516.namprd12.prod.outlook.com>
-Subject: RE: [PATCH net-next] selftests: net: Add kernel selftest for RFC 4884
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419DD1D798E;
+	Sun, 18 Jan 2026 17:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768755819; cv=fail; b=tlAJ4iTWbEmq7mt/rEDfmaglRBjnrQjCnKbJfrTp75udhOYZ1O0CECxWhdbFdC/8JtJWXmiEcVR+mb+0FMfPym8DmhtJL+WcrFlsUzTbWSOPA2EhDu+aRV84+80XlZhimrVZCjfMFGzHmUtAlz57DcEJkuIP8FVo6d3r7+mUGR0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768755819; c=relaxed/simple;
+	bh=LfrX0kbEE7UCSIhWWZwkkGqUWOOetZfWVOb1TqX3pAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=h5v7DwV217ij+FxDEVX23QvBYleO6hC+sTMPnwTMDFB8ej1PnG7whXUv3i+qNvva5vFhukWg1TXwCYB3RFzoi0GDsA9XBD3f1SM3NN4Cp3DCok8MaHsiFCLY16Bgy8ddo9w0WlBU2OBPhg49gnCBq4Mjv31OJa2pb71pqOjXvSI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=X413uDZ0; arc=fail smtp.client-ip=40.107.159.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QR4OLI/GYHh9OtACP0Jv1ogJ6RwT/FilM3k42qauRm4bC/XHiN137hyTwwL/ce+56UEh5eUOQF6ez/DbI1Gi7K1cg3SDulbIKED873lXEc1bhedMOFs2SQ99vBmrjS2zz8mkfMpzVDg0fcDfmPsHsVh+H99ILNDsQjaDtsHxp3Zc2O+x3Kc2UelzkZrtlGE7Iw6fm8/Txwrd7V/POLeIIXA6nbaf7tgGGrGvyEjYDp6j8LHHCy/oP5zl8yxK2Zm+lS3pzO1CxtulxnKI+5F+b+4GXo/Kn0tOt1p9wbV+kkJx4LNFOaY6rjHSgxm0BLjzMRMCtv5ZHIWmrYiMDm1Opw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=60Nd0P530Bopr5WwBuNPczqtZ6QkXRVOkTXm6BPzZPE=;
+ b=a1uyhE+Wx1OajaEWcBb/momu8M3XbXO3v98EF/6VJhY7yTr+L1um8qJZKiq33EPpI2e6QqLBLV78hl4M4jxJzF7PJS5IZXRolw0YwpyQRRVMAxtRm9LpftYxX3olBgHcp9Z1GmSei7zfiRnEHTEzqlpxrgexHW1nVUeDIBSgl19RxWf1m/mRWWGssIQlmV2Lx6gPxst00ubrk5GFnYqMoqfPCyaIwi6shFUoHuV6s1OWsFJ6+kMWig0ZqQF8iemf2kCmmj2MdWi+X6DpjPq3bu3eqvuuY/HwaAX3mBKz7idRjBlASOXm2P1a5NoFxo7m9htNSqcZNonxNBkneH5trw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=60Nd0P530Bopr5WwBuNPczqtZ6QkXRVOkTXm6BPzZPE=;
+ b=X413uDZ0J77fitRfhlGn+7yyBYpRYpFdHVUyZEfSGbUYmreGiJ9QIB5psuaFNnbb9JSf71LgoghwkQKIO31c5K0aCtUgnkflOArE4nSKpmfRO4DQjzCtkl5hgKYjCOnodF4eGWTicAgNib7JJ0h8/kDsdopGMFXArQkyDMyDkXcwNQbkDBFSaTOkmyECNIM22rMzefOg27+miebV68vb92AEI7Us37WU1nlla8E15lhvGFnDeA5ELw7vm9qLemiMDLuFNrGAygBFJ2KA8a5e89PMi5WJ8/SejiSrvKaknMv063sa4boyZG9tru3a1HOoTwtvGPbCMw9FMnbABp65DQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
+ by PR3PR04MB7291.eurprd04.prod.outlook.com (2603:10a6:102:8c::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.11; Sun, 18 Jan
+ 2026 17:03:33 +0000
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9520.006; Sun, 18 Jan 2026
+ 17:03:33 +0000
+Date: Sun, 18 Jan 2026 12:03:19 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Koichiro Den <den@valinux.co.jp>
+Cc: dave.jiang@intel.com, cassel@kernel.org, mani@kernel.org,
+	kwilczynski@kernel.org, kishon@kernel.org, bhelgaas@google.com,
+	geert+renesas@glider.be, robh@kernel.org, vkoul@kernel.org,
+	jdmason@kudzu.us, allenbh@gmail.com, jingoohan1@gmail.com,
+	lpieralisi@kernel.org, linux-pci@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org, iommu@lists.linux.dev,
+	ntb@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, arnd@arndb.de,
+	gregkh@linuxfoundation.org, joro@8bytes.org, will@kernel.org,
+	robin.murphy@arm.com, magnus.damm@gmail.com, krzk+dt@kernel.org,
+	conor+dt@kernel.org, corbet@lwn.net, skhan@linuxfoundation.org,
+	andriy.shevchenko@linux.intel.com, jbrunet@baylibre.com,
+	utkarsh02t@gmail.com
+Subject: Re: [RFC PATCH v4 02/38] dmaengine: dw-edma: Add per-channel
+ interrupt routing control
+Message-ID: <aW0SVx11WCxfTHoY@lizhi-Precision-Tower-5810>
+References: <20260118135440.1958279-1-den@valinux.co.jp>
+ <20260118135440.1958279-3-den@valinux.co.jp>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260118135440.1958279-3-den@valinux.co.jp>
+X-ClientProxiedBy: BYAPR05CA0055.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::32) To DU2PR04MB8951.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|PR3PR04MB7291:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3dcc034-73a7-4800-7044-08de56b382e6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|19092799006|7416014|52116014|366016|1800799024|38350700014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?HDyaE3Qagca0Lq0+6gSqxG76KWhvac6AYEWU5dmNIFmPAUExzPnHrVJZXaWN?=
+ =?us-ascii?Q?h7GHsSq1h5vXd+JWOKukj2t4vUyYfOiLA5ZF3qIP13h95ABQL3++TYK6Jv50?=
+ =?us-ascii?Q?D358kwuDwj7hq69DQUt3Z9e6ihj1znH35LlJdqHm77q3N7k1HZdX9Ftgedxc?=
+ =?us-ascii?Q?HeUbnAvn9Xx3jYNOqVov6d4LX4khPV7OS7nOLXrE0xa9IwrPXplGDHqjI/EU?=
+ =?us-ascii?Q?rLz43yfwnytZxsDCf1/d4ebvG+e59LDTjQYB0xm2YEQlGtmvU4NtGzYIgDmL?=
+ =?us-ascii?Q?bH7F1YOZ+wXoI5t3y2baAdVxJ+PVTrezJlOgc3aiMqo9xgF7ZzGPFiy3ftCT?=
+ =?us-ascii?Q?U3d/kqKYv7P9hf/yS3cnF8dGDezJyhyGZ1d1J9vNHWrXSqDC6LzDAjrAw688?=
+ =?us-ascii?Q?osYDiyjHOA/b2i42mGaBp1a9pmASCs6N+F162RIbQBbAdGs7Nicy92v1SliD?=
+ =?us-ascii?Q?qdvKbpayIDqFG3iDa0RQc9JfQkjBaVLRq2+XZvgr4BRkHbkq6H4cO8xO2o78?=
+ =?us-ascii?Q?aFzy573bnoXOwrqixhRgq+s9xwWCmUpN7uOEANVMvjxeZn1Msf8Ma8GXe2bs?=
+ =?us-ascii?Q?HdV4gfrFR8/E9A9atFDVkQYGSpB5akqFw6cv7TRayLR0JAXqRcv5veEr/cuV?=
+ =?us-ascii?Q?MIxWshkFqeuO7BdVYkswdXijGi1ANLS21Ia1I6Yh3dIxaXKD24CfJCvRNc9U?=
+ =?us-ascii?Q?1hvkZVFkjdd1jDaR2cyVj3kA1Q7q69BPIBNYOnNZl9jt8WGlW5EArSKERHkO?=
+ =?us-ascii?Q?QLoVKbRktQJ8dKTNwu+QR+d7aFAC4fv1D9sDOn+AWzQFV9Lc61Rr1AHpjmK6?=
+ =?us-ascii?Q?Fja7bqWOjheqG4h3xigFmUI5VT9WhJA0sjUtloeII2d0CKKyFjjJdzAMARoA?=
+ =?us-ascii?Q?QTqjSfatm/3kbB9ex7v4AIU4spZ9S0ceaXKCwC3TFBrdQ3fcCnmS72UtizZQ?=
+ =?us-ascii?Q?ryuzPEY7SzXqrBh+Mke+BI2klQwcm6nvvzC6u3fNNIBwuInw5CDtDl+tryBp?=
+ =?us-ascii?Q?sSKSIimu1WOtxuXPNUZMlBvzbx6E6wRBEeRpj3UAVzlpuaXMfYFb8AhbyUPo?=
+ =?us-ascii?Q?xKHyndaMzTCLpewN5h9J8htXKufJfYX1BNo6pP8PFbBM/ij4w1jRnp+PHAbc?=
+ =?us-ascii?Q?04+fbakgqGyVJffGx4DbNN0veoifu5sDKzfnZ5pSv79m7WU45QpWTL8RFhf1?=
+ =?us-ascii?Q?z/wYrrBh6UdDALEX6sBxE9tQmck1wMbJnCyy2xuNaS0hebZzlwznvxiYoGlj?=
+ =?us-ascii?Q?c4is1trEAywnXR1NTYLqdEgIZcJgYdzKhjnnu1aZoFLskMn52xjpH62efjYA?=
+ =?us-ascii?Q?MZvVyo2lPydxzjpgTa7pENfh9Re0PhLK/stf3Uv4zC6dqedLyU0afDaPx2if?=
+ =?us-ascii?Q?/hCGxL1g3FiVSqxsduHVpkjuctmeox+iRr8CyARKBrQlXTqkBYE70EpC/LZS?=
+ =?us-ascii?Q?4mjOCDRqoJIykXyMcIVE/UdsTQhT3T7G6NoDwwL5b3flPyINXZWZQMiMLxr4?=
+ =?us-ascii?Q?4ETihz9hWYJ2v0mSI6k49BK2P2rZoIJHSZPwkWpYld3g0HdiDYc5xPEUdYRG?=
+ =?us-ascii?Q?G91TRwDNK1Ok8kfLTWAAn3kHmeN6udQrd5YQiQXC9seDBFOPqMbhVHywb34b?=
+ =?us-ascii?Q?nm0I1DR8zeIOowdrZ5Nq8Yo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(19092799006)(7416014)(52116014)(366016)(1800799024)(38350700014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xQGb6yzWy4Jr70hM7a7HpB8ixW/2d5869YK3eMnjh2OG1i6ah7FdBs3PtMEz?=
+ =?us-ascii?Q?BtG3YyMQP31M6JJba3P9dxZdoNAj1tj0/yzlzXY9+aiCMsxq7h7FWKbeatEM?=
+ =?us-ascii?Q?dIdOv1CmvTZEv0v7c81hUB+ta3gbDCVhn1rL1mYWhe+F0V7DbYAAY5sipjo3?=
+ =?us-ascii?Q?ons2nJ2ZVDXZ6fw1PC1vC7S9aKImQlbQdVpC56A9N6Mf/bNT+Tt6G4DZmMqb?=
+ =?us-ascii?Q?B3z/xfctIrBVOqYrwXK3Q8K+d2O2InQol83z/6Ivj2xbaku3mdW3MSL9/zuN?=
+ =?us-ascii?Q?hipjcALk+A69rQYhtJ6fVAAQ7hWp8fJsdfGUVNwQGGnnAtwcChLbCXKcwfKQ?=
+ =?us-ascii?Q?vpzYVnpG6sAlmkAP9rjyq2ZY4h0A0yqoIZNMO2VyuLv8FXtIzZ1/NE1GcYQc?=
+ =?us-ascii?Q?tpElU3HidvciLJBm7HGN2TNtYzmkG9UNY1Q80zW93P9zBOdqWCsH8kaMVwGQ?=
+ =?us-ascii?Q?IQo/0mL4VdpNya9CTEopUKDHIIWCeN8XSG/c6PHxS2jbELrtAtNw3JiJLfyc?=
+ =?us-ascii?Q?isrtbEa3L2d3uGmMkvvN7lRQuOurPoAw6koedXuAu9zHZSl9JONgWMEtRbHe?=
+ =?us-ascii?Q?4aIkpE75FHTjBT8tqD6NwM1ItFADOI4PchjwG2/baqEbgko2cMHsWTe4fL1x?=
+ =?us-ascii?Q?BLrf7Wf8ZQO7o2c8d2cILQ39JXfX4UxdmEciV24emrMJRTE3zaWVlYPthN4H?=
+ =?us-ascii?Q?ToC8n+4AuoLG03QJS+p/10eALqN/YK1PSMeXGg8xaD/f7MpU8nOay497ZDOz?=
+ =?us-ascii?Q?/fRTq+r1V7ZRv3IIMQFo5jPhskqHj3xNxwleRTVosLmGARhB9vRAtFv2nJmz?=
+ =?us-ascii?Q?4nhhv8xlIZjhIALCTaW9R5fmiDhdcoYpHyaeGP3VImhLiwKGE/1fgv9Dr2/P?=
+ =?us-ascii?Q?fc6D5v6i/ZaEf21qVy2i4/uJPzYU4nOCVFHenLdxJ6olKKAvwwQtAVSVgOej?=
+ =?us-ascii?Q?B8x/L7qA+H07G6Fo2pgIlpUiUKtKMUq2K508IeiK/H/X+nn46MkjbjuA5u54?=
+ =?us-ascii?Q?3zmIQ3KNO9Dn7pA6ELy1jx8bOw56fo5RfERMXlbNPcUgG8IYNdrPmEjZ/OYI?=
+ =?us-ascii?Q?9uxILG0hdMjeKsfF7IHfzxMd2Koib5RfxTXJ9QK7EPWUegUiG5XOWq2oQud8?=
+ =?us-ascii?Q?GCfZJvL54V0NCa+r3Nnr1fQiPeApLa87O2rJh4efPvyS60AkY6+mzu5AOE5d?=
+ =?us-ascii?Q?dyJaZPAoU9w+CHxPlcEvQPnUMeBQJb6lx3rT7sR3bG8LBLSBiPAe6GMPnmoB?=
+ =?us-ascii?Q?6mtn9udF+FnCxKXC52JwLvFCktAtMbXk51amWG7ntUcCvh+B/0EETfwmJFlb?=
+ =?us-ascii?Q?tUDYTHT3/U5F48aSe2XCLkqrvcdfT+ZQ/B5cAwEnKjOxeeUu/va3QsvDyQjq?=
+ =?us-ascii?Q?1GvN4WSrWy2+OUytq+rUOU357IOxKC82YlO8qD3e/IQFQnxdgui1NeNpByrH?=
+ =?us-ascii?Q?Q7BgmOJZ6viHBtalLjbCwp6LR9kSMwNDPcuUIoXCeiUPD2btp02y6nOUk0i6?=
+ =?us-ascii?Q?DiTcpJsaPJoc7NN3Rp+j6KfIzqt/Zq1a8DLzzOYRZpYqUzOGtZJWFBsV6agR?=
+ =?us-ascii?Q?jmEtOt5WJLsOoC36ih8aDbqAP5Jo9hkJ7lUk3OOSg/BVuc/ag6yV+RXb2EGO?=
+ =?us-ascii?Q?BG+W1EmFUKSi7gTWem/Dp9O4ODjn0DoyWCkNLALsszX7YAUUeuemom7J1bq9?=
+ =?us-ascii?Q?wzcIwQFBLlHrVM7Zm9mgna2tvfrx0iia4BseELCofKgQ9riXduBnk3xFedrV?=
+ =?us-ascii?Q?aS7dKRb+MQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3dcc034-73a7-4800-7044-08de56b382e6
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 17:03:33.1654
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: g/j+S8bYxn6mseNJRGAdwBHkOzz2557HFqMjftvp5pBlQu+JARC0CJcA/qlrQSGM3GUTaiV6XDqVJvT1OeCvvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7291
 
-Danielle Ratson wrote:
-> > -----Original Message-----
-> > From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> > Sent: Thursday, 15 January 2026 16:51
-> > To: Danielle Ratson <danieller@nvidia.com>; netdev@vger.kernel.org
-> > Cc: linux-kselftest@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
-> > pabeni@redhat.com; horms@kernel.org; shuah@kernel.org; mlxsw
-> > <mlxsw@nvidia.com>; Danielle Ratson <danieller@nvidia.com>
-> > Subject: Re: [PATCH net-next] selftests: net: Add kernel selftest for RFC 4884
-> > 
-> > Danielle Ratson wrote:
-> > > RFC 4884 extended certain ICMP messages with a length attribute that
-> > > encodes the length of the "original datagram" field. This is needed so
-> > > that new information could be appended to these messages without
-> > > applications thinking that it is part of the "original datagram" field.
-> > >
-> > > In version 5.9, the kernel was extended with two new socket options
-> > > (SOL_IP/IP_RECVERR_4884 and SOL_IPV6/IPV6_RECVERR_RFC4884) that
-> > allow
-> > > user space to retrieve this length which is basically the offset to
-> > > the ICMP Extension Structure at the end of the ICMP message. This is
-> > > required by user space applications that need to parse the information
-> > > contained in the ICMP Extension Structure. For example, the RFC 5837
-> > > extension for tracepath.
-> > >
-> > > Add a selftest that verifies correct handling of the RFC 4884 length
-> > > field for both IPv4 and IPv6, with and without extension structures,
-> > > and validates that malformed extensions are correctly reported as invalid.
-> > >
-> > > For each address family, the test creates:
-> > >   - a raw socket used to send locally crafted ICMP error packets to the
-> > >     loopback address, and
-> > >   - a datagram socket used to receive the encapsulated original datagram
-> > >     and associated error metadata from the kernel error queue.
-> > >
-> > > ICMP packets are constructed entirely in user space rather than
-> > > relying on kernel-generated errors. This allows the test to exercise
-> > > invalid scenarios (such as corrupted checksums and incorrect length
-> > > fields) and verify that the SO_EE_RFC4884_FLAG_INVALID flag is set as
-> > expected.
-> > >
-> > > Output Example:
-> > >
-> > > $ ./icmp_rfc4884
-> > > Starting 18 tests from 18 test cases.
-> > >   RUN           rfc4884.ipv4_ext_small_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv4_ext_small_payload.rfc4884
-> > > ok 1 rfc4884.ipv4_ext_small_payload.rfc4884
-> > >   RUN           rfc4884.ipv4_ext.rfc4884 ...
-> > >             OK  rfc4884.ipv4_ext.rfc4884 ok 2 rfc4884.ipv4_ext.rfc4884
-> > >   RUN           rfc4884.ipv4_ext_large_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv4_ext_large_payload.rfc4884
-> > > ok 3 rfc4884.ipv4_ext_large_payload.rfc4884
-> > >   RUN           rfc4884.ipv4_no_ext_small_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv4_no_ext_small_payload.rfc4884
-> > > ok 4 rfc4884.ipv4_no_ext_small_payload.rfc4884
-> > >   RUN           rfc4884.ipv4_no_ext_min_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv4_no_ext_min_payload.rfc4884
-> > > ok 5 rfc4884.ipv4_no_ext_min_payload.rfc4884
-> > >   RUN           rfc4884.ipv4_no_ext_large_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv4_no_ext_large_payload.rfc4884
-> > > ok 6 rfc4884.ipv4_no_ext_large_payload.rfc4884
-> > >   RUN           rfc4884.ipv4_invalid_ext_checksum.rfc4884 ...
-> > >             OK  rfc4884.ipv4_invalid_ext_checksum.rfc4884
-> > > ok 7 rfc4884.ipv4_invalid_ext_checksum.rfc4884
-> > >   RUN           rfc4884.ipv4_invalid_ext_length_small.rfc4884 ...
-> > >             OK  rfc4884.ipv4_invalid_ext_length_small.rfc4884
-> > > ok 8 rfc4884.ipv4_invalid_ext_length_small.rfc4884
-> > >   RUN           rfc4884.ipv4_invalid_ext_length_large.rfc4884 ...
-> > >             OK  rfc4884.ipv4_invalid_ext_length_large.rfc4884
-> > > ok 9 rfc4884.ipv4_invalid_ext_length_large.rfc4884
-> > >   RUN           rfc4884.ipv6_ext_small_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv6_ext_small_payload.rfc4884
-> > > ok 10 rfc4884.ipv6_ext_small_payload.rfc4884
-> > >   RUN           rfc4884.ipv6_ext.rfc4884 ...
-> > >             OK  rfc4884.ipv6_ext.rfc4884 ok 11
-> > > rfc4884.ipv6_ext.rfc4884
-> > >   RUN           rfc4884.ipv6_ext_large_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv6_ext_large_payload.rfc4884
-> > > ok 12 rfc4884.ipv6_ext_large_payload.rfc4884
-> > >   RUN           rfc4884.ipv6_no_ext_small_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv6_no_ext_small_payload.rfc4884
-> > > ok 13 rfc4884.ipv6_no_ext_small_payload.rfc4884
-> > >   RUN           rfc4884.ipv6_no_ext_min_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv6_no_ext_min_payload.rfc4884
-> > > ok 14 rfc4884.ipv6_no_ext_min_payload.rfc4884
-> > >   RUN           rfc4884.ipv6_no_ext_large_payload.rfc4884 ...
-> > >             OK  rfc4884.ipv6_no_ext_large_payload.rfc4884
-> > > ok 15 rfc4884.ipv6_no_ext_large_payload.rfc4884
-> > >   RUN           rfc4884.ipv6_invalid_ext_checksum.rfc4884 ...
-> > >             OK  rfc4884.ipv6_invalid_ext_checksum.rfc4884
-> > > ok 16 rfc4884.ipv6_invalid_ext_checksum.rfc4884
-> > >   RUN           rfc4884.ipv6_invalid_ext_length_small.rfc4884 ...
-> > >             OK  rfc4884.ipv6_invalid_ext_length_small.rfc4884
-> > > ok 17 rfc4884.ipv6_invalid_ext_length_small.rfc4884
-> > >   RUN           rfc4884.ipv6_invalid_ext_length_large.rfc4884 ...
-> > >             OK  rfc4884.ipv6_invalid_ext_length_large.rfc4884
-> > > ok 18 rfc4884.ipv6_invalid_ext_length_large.rfc4884
-> > >  PASSED: 18 / 18 tests passed.
-> > >  Totals: pass:18 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > >
-> > > Signed-off-by: Danielle Ratson <danieller@nvidia.com>
-> > > Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+On Sun, Jan 18, 2026 at 10:54:04PM +0900, Koichiro Den wrote:
+> DesignWare EP eDMA can generate interrupts both locally and remotely
+> (LIE/RIE). Remote eDMA users need to decide, per channel, whether
+> completions should be handled locally, remotely, or both. Unless
+> carefully configured, the endpoint and host would race to ack the
+> interrupt.
+>
+> Introduce a per-channel interrupt routing mode and export small APIs to
+> configure and query it. Update v0 programming so that RIE and local
+> done/abort interrupt masking follow the selected mode. The default mode
+> keeps the original behavior, so unless the new APIs are explicitly used,
+> no functional changes.
+>
+> Signed-off-by: Koichiro Den <den@valinux.co.jp>
+> ---
+>  drivers/dma/dw-edma/dw-edma-core.c    | 52 +++++++++++++++++++++++++++
+>  drivers/dma/dw-edma/dw-edma-core.h    |  2 ++
+>  drivers/dma/dw-edma/dw-edma-v0-core.c | 26 +++++++++-----
+>  include/linux/dma/edma.h              | 44 +++++++++++++++++++++++
+>  4 files changed, 116 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index b9d59c3c0cb4..059b3996d383 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -768,6 +768,7 @@ static int dw_edma_channel_setup(struct dw_edma *dw, u32 wr_alloc, u32 rd_alloc)
+>  		chan->configured = false;
+>  		chan->request = EDMA_REQ_NONE;
+>  		chan->status = EDMA_ST_IDLE;
+> +		chan->irq_mode = DW_EDMA_CH_IRQ_DEFAULT;
+>
+>  		if (chan->dir == EDMA_DIR_WRITE)
+>  			chan->ll_max = (chip->ll_region_wr[chan->id].sz / EDMA_LL_SZ);
+> @@ -1062,6 +1063,57 @@ int dw_edma_remove(struct dw_edma_chip *chip)
+>  }
+>  EXPORT_SYMBOL_GPL(dw_edma_remove);
+>
+> +int dw_edma_chan_irq_config(struct dma_chan *dchan,
+> +			    enum dw_edma_ch_irq_mode mode)
+> +{
+> +	struct dw_edma_chan *chan;
+> +
+> +	switch (mode) {
+> +	case DW_EDMA_CH_IRQ_DEFAULT:
+> +	case DW_EDMA_CH_IRQ_LOCAL:
+> +	case DW_EDMA_CH_IRQ_REMOTE:
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!dchan || !dchan->device)
+> +		return -ENODEV;
+> +
+> +	chan = dchan2dw_edma_chan(dchan);
+> +	if (!chan)
+> +		return -ENODEV;
+> +
+> +	chan->irq_mode = mode;
+> +
+> +	dev_vdbg(chan->dw->chip->dev, "Channel: %s[%u] set irq_mode=%u\n",
+> +		 str_write_read(chan->dir == EDMA_DIR_WRITE),
+> +		 chan->id, mode);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(dw_edma_chan_irq_config);
+> +
+> +bool dw_edma_chan_ignore_irq(struct dma_chan *dchan)
+> +{
+> +	struct dw_edma_chan *chan;
+> +	struct dw_edma *dw;
+> +
+> +	if (!dchan || !dchan->device)
+> +		return false;
+> +
+> +	chan = dchan2dw_edma_chan(dchan);
+> +	if (!chan)
+> +		return false;
+> +
+> +	dw = chan->dw;
+> +	if (dw->chip->flags & DW_EDMA_CHIP_LOCAL)
+> +		return chan->irq_mode == DW_EDMA_CH_IRQ_REMOTE;
+> +	else
+> +		return chan->irq_mode == DW_EDMA_CH_IRQ_LOCAL;
+> +}
+> +EXPORT_SYMBOL_GPL(dw_edma_chan_ignore_irq);
+> +
+>  MODULE_LICENSE("GPL v2");
+>  MODULE_DESCRIPTION("Synopsys DesignWare eDMA controller core driver");
+>  MODULE_AUTHOR("Gustavo Pimentel <gustavo.pimentel@synopsys.com>");
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.h b/drivers/dma/dw-edma/dw-edma-core.h
+> index 71894b9e0b15..8458d676551a 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.h
+> +++ b/drivers/dma/dw-edma/dw-edma-core.h
+> @@ -81,6 +81,8 @@ struct dw_edma_chan {
+>
+>  	struct msi_msg			msi;
+>
+> +	enum dw_edma_ch_irq_mode	irq_mode;
+> +
+>  	enum dw_edma_request		request;
+>  	enum dw_edma_status		status;
+>  	u8				configured;
+> diff --git a/drivers/dma/dw-edma/dw-edma-v0-core.c b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> index 2850a9df80f5..80472148c335 100644
+> --- a/drivers/dma/dw-edma/dw-edma-v0-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-v0-core.c
+> @@ -256,8 +256,10 @@ dw_edma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir,
+>  	for_each_set_bit(pos, &val, total) {
+>  		chan = &dw->chan[pos + off];
+>
+> -		dw_edma_v0_core_clear_done_int(chan);
+> -		done(chan);
+> +		if (!dw_edma_chan_ignore_irq(&chan->vc.chan)) {
+> +			dw_edma_v0_core_clear_done_int(chan);
+> +			done(chan);
+> +		}
+>
+>  		ret = IRQ_HANDLED;
+>  	}
+> @@ -267,8 +269,10 @@ dw_edma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir,
+>  	for_each_set_bit(pos, &val, total) {
+>  		chan = &dw->chan[pos + off];
+>
+> -		dw_edma_v0_core_clear_abort_int(chan);
+> -		abort(chan);
+> +		if (!dw_edma_chan_ignore_irq(&chan->vc.chan)) {
+> +			dw_edma_v0_core_clear_abort_int(chan);
+> +			abort(chan);
+> +		}
+>
+>  		ret = IRQ_HANDLED;
+>  	}
+> @@ -331,7 +335,8 @@ static void dw_edma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
+>  		j--;
+>  		if (!j) {
+>  			control |= DW_EDMA_V0_LIE;
+> -			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL))
+> +			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) &&
+> +			    chan->irq_mode != DW_EDMA_CH_IRQ_LOCAL)
+>  				control |= DW_EDMA_V0_RIE;
+>  		}
+>
+> @@ -408,12 +413,17 @@ static void dw_edma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+>  				break;
+>  			}
+>  		}
+> -		/* Interrupt unmask - done, abort */
+> +		/* Interrupt mask/unmask - done, abort */
+>  		raw_spin_lock_irqsave(&dw->lock, flags);
+>
+>  		tmp = GET_RW_32(dw, chan->dir, int_mask);
+> -		tmp &= ~FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id));
+> -		tmp &= ~FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id));
+> +		if (chan->irq_mode == DW_EDMA_CH_IRQ_REMOTE) {
+> +			tmp |= FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id));
+> +			tmp |= FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id));
+> +		} else {
+> +			tmp &= ~FIELD_PREP(EDMA_V0_DONE_INT_MASK, BIT(chan->id));
+> +			tmp &= ~FIELD_PREP(EDMA_V0_ABORT_INT_MASK, BIT(chan->id));
+> +		}
+>  		SET_RW_32(dw, chan->dir, int_mask, tmp);
+>  		/* Linked list error */
+>  		tmp = GET_RW_32(dw, chan->dir, linked_list_err_en);
+> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> index ffad10ff2cd6..6f50165ac084 100644
+> --- a/include/linux/dma/edma.h
+> +++ b/include/linux/dma/edma.h
+> @@ -60,6 +60,23 @@ enum dw_edma_chip_flags {
+>  	DW_EDMA_CHIP_LOCAL	= BIT(0),
+>  };
+>
+> +/*
+> + * enum dw_edma_ch_irq_mode - per-channel interrupt routing control
+> + * @DW_EDMA_CH_IRQ_DEFAULT:   LIE=1/RIE=1, local interrupt unmasked
+> + * @DW_EDMA_CH_IRQ_LOCAL:     LIE=1/RIE=0
+> + * @DW_EDMA_CH_IRQ_REMOTE:    LIE=1/RIE=1, local interrupt masked
+> + *
+> + * Some implementations require using LIE=1/RIE=1 with the local interrupt
+> + * masked to generate a remote-only interrupt (rather than LIE=0/RIE=1).
+> + * See the DesignWare endpoint databook 5.40, "Hint" below "Figure 8-22
+> + * Write Interrupt Generation".
+> + */
+> +enum dw_edma_ch_irq_mode {
+> +	DW_EDMA_CH_IRQ_DEFAULT	= 0,
+> +	DW_EDMA_CH_IRQ_LOCAL,
+> +	DW_EDMA_CH_IRQ_REMOTE,
+> +};
+> +
+>  /**
+>   * struct dw_edma_chip - representation of DesignWare eDMA controller hardware
+>   * @dev:		 struct device of the eDMA controller
+> @@ -105,6 +122,22 @@ struct dw_edma_chip {
+>  #if IS_REACHABLE(CONFIG_DW_EDMA)
+>  int dw_edma_probe(struct dw_edma_chip *chip);
+>  int dw_edma_remove(struct dw_edma_chip *chip);
+> +/**
+> + * dw_edma_chan_irq_config - configure per-channel interrupt routing
+> + * @chan: DMA channel obtained from dma_request_channel()
+> + * @mode: interrupt routing mode
+> + *
+> + * Returns 0 on success, -EINVAL for invalid @mode, or -ENODEV if @chan does
+> + * not belong to the DesignWare eDMA driver.
+> + */
+> +int dw_edma_chan_irq_config(struct dma_chan *chan,
+> +			    enum dw_edma_ch_irq_mode mode);
+> +
+> +/**
+> + * dw_edma_chan_ignore_irq - tell whether local IRQ handling should be ignored
+> + * @chan: DMA channel obtained from dma_request_channel()
+> + */
+> +bool dw_edma_chan_ignore_irq(struct dma_chan *chan);
+>  #else
+>  static inline int dw_edma_probe(struct dw_edma_chip *chip)
+>  {
+> @@ -115,6 +148,17 @@ static inline int dw_edma_remove(struct dw_edma_chip *chip)
+>  {
+>  	return 0;
+>  }
+> +
+> +static inline int dw_edma_chan_irq_config(struct dma_chan *chan,
+> +					  enum dw_edma_ch_irq_mode mode)
+> +{
+> +	return -ENODEV;
+> +}
+> +
+> +static inline bool dw_edma_chan_ignore_irq(struct dma_chan *chan)
+> +{
+> +	return false;
+> +}
 
-I forgot the most obvious point earlier. Thanks for adding these
-tests! It's great to have the coverage.
+I think it'd better go thought
 
-> > > ---
-> > >  tools/testing/selftests/net/.gitignore     |   1 +
-> > >  tools/testing/selftests/net/Makefile       |   1 +
-> > >  tools/testing/selftests/net/icmp_rfc4884.c | 658
-> > > +++++++++++++++++++++
-> > >  3 files changed, 660 insertions(+)
-> > >  create mode 100644 tools/testing/selftests/net/icmp_rfc4884.c
-> > >
-> > > diff --git a/tools/testing/selftests/net/.gitignore
-> > > b/tools/testing/selftests/net/.gitignore
-> > > index 6930fe926c58..97ad4d551d44 100644
-> > > --- a/tools/testing/selftests/net/.gitignore
-> > > +++ b/tools/testing/selftests/net/.gitignore
-> > > @@ -7,6 +7,7 @@ cmsg_sender
-> > >  epoll_busy_poll
-> > >  fin_ack_lat
-> > >  hwtstamp_config
-> > > +icmp_rfc4884
-> > >  io_uring_zerocopy_tx
-> > >  ioam6_parser
-> > >  ip_defrag
-> > > diff --git a/tools/testing/selftests/net/Makefile
-> > > b/tools/testing/selftests/net/Makefile
-> > > index b66ba04f19d9..fe7937dc5f45 100644
-> > > --- a/tools/testing/selftests/net/Makefile
-> > > +++ b/tools/testing/selftests/net/Makefile
-> > > @@ -166,6 +166,7 @@ TEST_GEN_PROGS := \
-> > >  	bind_timewait \
-> > >  	bind_wildcard \
-> > >  	epoll_busy_poll \
-> > > +	icmp_rfc4884 \
-> > >  	ipv6_fragmentation \
-> > >  	proc_net_pktgen \
-> > >  	reuseaddr_conflict \
-> > > diff --git a/tools/testing/selftests/net/icmp_rfc4884.c
-> > > b/tools/testing/selftests/net/icmp_rfc4884.c
-> > > new file mode 100644
-> > > index 000000000000..043965289116
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/net/icmp_rfc4884.c
-> > > @@ -0,0 +1,658 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +#include <linux/icmp.h>
-> > > +#include <linux/icmpv6.h>
-> > > +#include <linux/in6.h>
-> > > +#include <linux/ip.h>
-> > > +#include <linux/ipv6.h>
-> > > +#include <linux/errqueue.h>
-> > 
-> > no need to respin but tiny: alphabetical ordering
-> 
-> Ok.
-> 
-> > 
-> > > +#include <sched.h>
-> > > +#include <stdbool.h>
-> > > +#include <stdint.h>
-> > > +#include <stdio.h>
-> > > +#include <stdlib.h>
-> > > +#include <sys/ioctl.h>
-> > > +#include <sys/socket.h>
-> > > +#include <netinet/in.h>
-> > > +#include <netinet/udp.h>
-> > > +
-> > > +#include "../kselftest_harness.h"
-> > > +
-> > > +#define SRC_PORT 44444
-> > > +#define DST_PORT 55555
-> > > +#define MIN_ORIG_DGRAM_LEN 128
-> > > +#define MIN_PAYLOAD_LEN_V4	\
-> > > +	(MIN_ORIG_DGRAM_LEN - sizeof(struct iphdr) - sizeof(struct
-> > udphdr))
-> > > +#define MIN_PAYLOAD_LEN_V6	\
-> > > +	(MIN_ORIG_DGRAM_LEN - sizeof(struct ipv6hdr) - sizeof(struct
-> > > +udphdr)) #define ORIG_PAYLOAD_BYTE 0xAA
-> > 
-> > only if respinning: prefer typed (const) variables over macros
-> 
-> Ok
-> 
-> > 
-> > > +
-> > > +struct sockaddr_inet {
-> > > +	union {
-> > > +		struct sockaddr_in6 v6;
-> > > +		struct sockaddr_in v4;
-> > > +		struct sockaddr sa;
-> > > +	};
-> > > +	socklen_t len;
-> > > +};
-> > > +
-> > > +struct ip_case_info {
-> > > +	int	domain;
-> > > +	int	level;
-> > > +	int	opt1;
-> > > +	int	opt2;
-> > > +	int	proto;
-> > > +	int	(*build_func)(uint8_t *buf, ssize_t buflen, bool with_ext,
-> > > +			      int payload_len, bool bad_csum, bool bad_len,
-> > > +			      bool smaller_len);
-> > > +	int	min_payload;
-> > > +};
-> > > +
-> > > +static int bringup_loopback(void)
-> > > +{
-> > > +	struct ifreq ifr = {
-> > > +		.ifr_name = "lo"
-> > > +	};
-> > > +	int fd;
-> > > +
-> > > +	fd = socket(AF_INET, SOCK_DGRAM, 0);
-> > > +	if (fd < 0)
-> > > +		return -1;
-> > > +
-> > > +	if (ioctl(fd, SIOCGIFFLAGS, &ifr) < 0)
-> > > +		goto err;
-> > > +
-> > > +	ifr.ifr_flags = ifr.ifr_flags | IFF_UP;
-> > > +
-> > > +	if (ioctl(fd, SIOCSIFFLAGS, &ifr) < 0)
-> > > +		goto err;
-> > > +
-> > > +	close(fd);
-> > > +	return 0;
-> > > +
-> > > +err:
-> > > +	close(fd);
-> > > +	return -1;
-> > > +}
-> > > +
-> > > +static uint16_t csum(const void *buf, size_t len) {
-> > > +	const uint8_t *data = buf;
-> > > +	uint32_t sum = 0;
-> > > +
-> > > +	while (len > 1) {
-> > > +		sum += (data[0] << 8) | data[1];
-> > > +		data += 2;
-> > > +		len -= 2;
-> > > +	}
-> > > +
-> > > +	if (len == 1)
-> > > +		sum += data[0] << 8;
-> > > +
-> > > +	while (sum >> 16)
-> > > +		sum = (sum & 0xFFFF) + (sum >> 16);
-> > > +
-> > > +	return ~sum & 0xFFFF;
-> > > +}
-> > > +
-> > > +static void set_addr(struct sockaddr_inet *addr, int domain, int
-> > > +port) {
-> > > +	memset(addr, 0, sizeof(*addr));
-> > > +
-> > > +	switch (domain) {
-> > > +	case AF_INET:
-> > > +		addr->v4.sin_family = AF_INET;
-> > > +		addr->v4.sin_port = htons(port);
-> > > +		addr->v4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-> > > +		addr->len = sizeof(addr->v4);
-> > > +		break;
-> > > +	case AF_INET6:
-> > > +		addr->v6.sin6_family = AF_INET6;
-> > > +		addr->v6.sin6_port = htons(port);
-> > > +		addr->v6.sin6_addr = in6addr_loopback;
-> > > +		addr->len = sizeof(addr->v6);
-> > > +		break;
-> > > +	}
-> > > +}
-> > > +
-> > > +static int bind_to_loopback(int fd, const struct ip_case_info *info)
-> > > +{
-> > > +	struct sockaddr_inet addr;
-> > > +	int opt = 1;
-> > > +
-> > > +	set_addr(&addr, info->domain, SRC_PORT);
-> > > +
-> > > +	if (setsockopt(fd, info->level, info->opt1, &opt, sizeof(opt)) < 0)
-> > > +		return -1;
-> > > +
-> > > +	if (setsockopt(fd, info->level, info->opt2, &opt, sizeof(opt)) < 0)
-> > > +		return -1;
-> > > +
-> > 
-> > no need to respin just for this but nit: this does more than the function name
-> > covers. I was looking for where IPV6_RECVERR was set.
-> 
-> Will do.
-> 
-> > 
-> > > +	return bind(fd, &addr.sa, addr.len); }
-> > > +
-> > > +static int build_rfc4884_ext(uint8_t *buf, size_t buflen, bool bad_csum,
-> > > +			     bool bad_len, bool smaller_len) {
-> > > +	struct icmp_extobj_hdr *objh;
-> > > +	struct icmp_ext_hdr *exthdr;
-> > > +	size_t obj_len, ext_len;
-> > > +	uint16_t sum;
-> > > +
-> > > +	/* Use an object payload of 4 bytes */
-> > > +	obj_len = sizeof(*objh) + sizeof(uint32_t);
-> > > +	ext_len = sizeof(*exthdr) + obj_len;
-> > > +
-> > > +	if (ext_len > buflen)
-> > > +		return -EINVAL;
-> > > +
-> > > +	exthdr = (struct icmp_ext_hdr *)buf;
-> > > +	objh = (struct icmp_extobj_hdr *)(buf + sizeof(*exthdr));
-> > > +
-> > > +	exthdr->version = 2;
-> > > +	/* When encoding a bad object length, either encode a length too
-> > small
-> > > +	 * to fit the object header or too big to fit in the packet.
-> > > +	 */
-> > > +	if (bad_len)
-> > > +		obj_len = smaller_len ? sizeof(*objh) - 1 : obj_len * 2;
-> > > +	objh->length = htons(obj_len);
-> > > +
-> > > +	sum = csum(buf, ext_len);
-> > > +	exthdr->checksum = htons(bad_csum ? sum - 1 : sum);
-> > > +
-> > > +	return ext_len;
-> > > +}
-> > > +
-> > > +static int build_orig_dgram_v4(uint8_t *buf, ssize_t buflen, int
-> > > +payload_len) {
-> > > +	struct udphdr *udph;
-> > > +	struct iphdr *iph;
-> > > +	size_t len = 0;
-> > > +
-> > > +	len = sizeof(*iph) + sizeof(*udph) + payload_len;
-> > > +	if (len > buflen)
-> > > +		return -EINVAL;
-> > > +
-> > > +	iph = (struct iphdr *)buf;
-> > > +	udph = (struct udphdr *)(buf + sizeof(*iph));
-> > > +
-> > > +	iph->version = 4;
-> > > +	iph->ihl = 5;
-> > > +	iph->protocol = IPPROTO_UDP;
-> > > +	iph->saddr = htonl(INADDR_LOOPBACK);
-> > > +	iph->daddr = htonl(INADDR_LOOPBACK);
-> > > +	iph->tot_len = htons(len);
-> > > +	iph->check = htons(csum(iph, sizeof(*iph)));
-> > > +
-> > > +	udph->source = htons(SRC_PORT);
-> > > +	udph->dest = htons(DST_PORT);
-> > > +	udph->len = htons(sizeof(*udph) + payload_len);
-> > > +
-> > > +	memset(buf + sizeof(*iph) + sizeof(*udph), ORIG_PAYLOAD_BYTE,
-> > > +	       payload_len);
-> > > +
-> > > +	return len;
-> > > +}
-> > > +
-> > > +static int build_orig_dgram_v6(uint8_t *buf, ssize_t buflen, int
-> > > +payload_len) {
-> > > +	struct udphdr *udph;
-> > > +	struct ipv6hdr *iph;
-> > > +	size_t len = 0;
-> > > +
-> > > +	len = sizeof(*iph) + sizeof(*udph) + payload_len;
-> > > +	if (len > buflen)
-> > > +		return -EINVAL;
-> > > +
-> > > +	iph = (struct ipv6hdr *)buf;
-> > > +	udph = (struct udphdr *)(buf + sizeof(*iph));
-> > > +
-> > > +	iph->version = 6;
-> > > +	iph->payload_len = htons(sizeof(*udph) + payload_len);
-> > > +	iph->nexthdr = IPPROTO_UDP;
-> > > +	iph->saddr = in6addr_loopback;
-> > > +	iph->daddr = in6addr_loopback;
-> > > +
-> > > +	udph->source = htons(SRC_PORT);
-> > > +	udph->dest = htons(DST_PORT);
-> > > +	udph->len = htons(sizeof(*udph) + payload_len);
-> > > +
-> > > +	memset(buf + sizeof(*iph) + sizeof(*udph), ORIG_PAYLOAD_BYTE,
-> > > +	       payload_len);
-> > > +
-> > > +	return len;
-> > > +}
-> > > +
-> > > +static int build_icmpv4_pkt(uint8_t *buf, ssize_t buflen, bool with_ext,
-> > > +			    int payload_len, bool bad_csum, bool bad_len,
-> > > +			    bool smaller_len)
-> > > +{
-> > > +	struct icmphdr *icmph;
-> > > +	int len, ret;
-> > > +
-> > > +	len = sizeof(*icmph);
-> > > +	memset(buf, 0, buflen);
-> > > +
-> > > +	icmph = (struct icmphdr *)buf;
-> > > +	icmph->type = ICMP_DEST_UNREACH;
-> > > +	icmph->code = ICMP_PORT_UNREACH;
-> > > +	icmph->checksum = 0;
-> > > +
-> > > +	ret = build_orig_dgram_v4(buf + len, buflen - len, payload_len);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	len += ret;
-> > > +
-> > > +	icmph->un.reserved[1] = (len - sizeof(*icmph)) / sizeof(uint32_t);
-> > > +
-> > > +	if (with_ext) {
-> > > +		ret = build_rfc4884_ext(buf + len, buflen - len,
-> > > +					bad_csum, bad_len, smaller_len);
-> > > +		if (ret < 0)
-> > > +			return ret;
-> > > +
-> > > +		len += ret;
-> > > +	}
-> > > +
-> > > +	icmph->checksum = htons(csum(icmph, len));
-> > > +	return len;
-> > > +}
-> > > +
-> > > +static int build_icmpv6_pkt(uint8_t *buf, ssize_t buflen, bool with_ext,
-> > > +			    int payload_len, bool bad_csum, bool bad_len,
-> > > +			    bool smaller_len)
-> > > +{
-> > > +	struct icmp6hdr *icmph;
-> > > +	int len, ret;
-> > > +
-> > > +	len = sizeof(*icmph);
-> > > +	memset(buf, 0, buflen);
-> > > +
-> > > +	icmph = (struct icmp6hdr *)buf;
-> > > +	icmph->icmp6_type = ICMPV6_DEST_UNREACH;
-> > > +	icmph->icmp6_code = ICMPV6_PORT_UNREACH;
-> > > +	icmph->icmp6_cksum = 0;
-> > > +
-> > > +	ret = build_orig_dgram_v6(buf + len, buflen - len, payload_len);
-> > > +	if (ret < 0)
-> > > +		return ret;
-> > > +
-> > > +	len += ret;
-> > > +
-> > > +	icmph->icmp6_datagram_len = (len - sizeof(*icmph)) /
-> > > +sizeof(uint64_t);
-> > > +
-> > > +	if (with_ext) {
-> > > +		ret = build_rfc4884_ext(buf + len, buflen - len,
-> > > +					bad_csum, bad_len, smaller_len);
-> > > +		if (ret < 0)
-> > > +			return ret;
-> > > +
-> > > +		len += ret;
-> > > +	}
-> > > +
-> > > +	icmph->icmp6_cksum = htons(csum(icmph, len));
-> > > +	return len;
-> > > +}
-> > > +
-> > > +FIXTURE(rfc4884) {};
-> > > +
-> > > +FIXTURE_SETUP(rfc4884)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	ret = unshare(CLONE_NEWNET);
-> > > +	ASSERT_EQ(ret, 0) {
-> > > +		TH_LOG("unshare(CLONE_NEWNET) failed: %s",
-> > strerror(errno));
-> > > +	}
-> > > +
-> > > +	ret = bringup_loopback();
-> > > +	ASSERT_EQ(ret, 0) TH_LOG("Failed to bring up loopback interface"); }
-> > > +
-> > > +FIXTURE_TEARDOWN(rfc4884)
-> > > +{
-> > > +}
-> > > +
-> > > +const struct ip_case_info ipv4_info = {
-> > > +	.domain		= AF_INET,
-> > > +	.level		= SOL_IP,
-> > > +	.opt1		= IP_RECVERR,
-> > > +	.opt2		= IP_RECVERR_RFC4884,
-> > > +	.proto		= IPPROTO_ICMP,
-> > > +	.build_func	= build_icmpv4_pkt,
-> > > +	.min_payload	= MIN_PAYLOAD_LEN_V4,
-> > > +};
-> > > +
-> > > +const struct ip_case_info ipv6_info = {
-> > > +	.domain		= AF_INET6,
-> > > +	.level		= SOL_IPV6,
-> > > +	.opt1		= IPV6_RECVERR,
-> > > +	.opt2		= IPV6_RECVERR_RFC4884,
-> > > +	.proto		= IPPROTO_ICMPV6,
-> > > +	.build_func	= build_icmpv6_pkt,
-> > > +	.min_payload	= MIN_PAYLOAD_LEN_V6,
-> > > +};
-> > > +
-> > > +FIXTURE_VARIANT(rfc4884) {
-> > > +	/* IPv4/v6 related information */
-> > > +	struct ip_case_info	info;
-> > > +	/* Whether to append an ICMP extension or not */
-> > > +	bool			with_ext;
-> > > +	/* UDP payload length */
-> > > +	int			payload_len;
-> > > +	/* Whether to generate a bad checksum in the ICMP extension
-> > structure */
-> > > +	bool			bad_csum;
-> > > +	/* Whether to generate a bad length in the ICMP object header */
-> > > +	bool			bad_len;
-> > > +	/* Whether it is too small to fit the object header or too big to fit
-> > > +	 * in the packet
-> > > +	 */
-> > > +	bool			smaller_len;
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv4 error message with extension and the
-> > > +original
-> > > + * datagram is smaller than 128 bytes, generates an error with zero
-> > > +offset,
-> > > + * and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_ext_small_payload) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= 64,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv4 error message with extension and 128
-> > > +bytes original
-> > > + * datagram, generates an error with the expected offset, and does
-> > > +not raise the
-> > > + * SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_ext) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V4,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv4 error message with extension and the
-> > > +original
-> > > + * datagram is larger than 128 bytes, generates an error with the
-> > > +expected
-> > > + * offset, and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_ext_large_payload) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= 256,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv4 error message without extension and the
-> > > +original
-> > > + * datagram is smaller than 128 bytes, generates an error with zero
-> > > +offset,
-> > > + * and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_no_ext_small_payload) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= false,
-> > > +	.payload_len	= 64,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv4 error message without extension and 128
-> > > +bytes
-> > > + * original datagram, generates an error with zero offset, and does
-> > > +not raise
-> > > + * the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_no_ext_min_payload) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= false,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V4,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv4 error message without extension and the
-> > > +original
-> > > + * datagram is larger than 128 bytes, generates an error with zero
-> > > +offset,
-> > > + * and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_no_ext_large_payload) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= false,
-> > > +	.payload_len	= 256,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that an ICMPv4 error message with extension and an invalid
-> > > +checksum,
-> > > + * generates an error with the expected offset, and raises the
-> > > + * SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_invalid_ext_checksum) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V4,
-> > > +	.bad_csum	= true,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that an ICMPv4 error message with extension and an object
-> > > +length
-> > > + * smaller than the object header, generates an error with the
-> > > +expected offset,
-> > > + * and raises the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_invalid_ext_length_small) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V4,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= true,
-> > > +	.smaller_len	= true,
-> > > +};
-> > > +
-> > > +/* Tests that an ICMPv4 error message with extension and an object
-> > > +length that
-> > > + * is too big to fit in the packet, generates an error with the
-> > > +expected offset,
-> > > + * and raises the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv4_invalid_ext_length_large) {
-> > > +	.info		= ipv4_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V4,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= true,
-> > > +	.smaller_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv6 error message with extension and the
-> > > +original
-> > > + * datagram is smaller than 128 bytes, generates an error with zero
-> > > +offset,
-> > > + * and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_ext_small_payload) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= 64,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv6 error message with extension and 128
-> > > +bytes original
-> > > + * datagram, generates an error with the expected offset, and does
-> > > +not raise the
-> > > + * SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_ext) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V6,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv6 error message with extension and the
-> > > +original
-> > > + * datagram is larger than 128 bytes, generates an error with the
-> > > +expected
-> > > + * offset, and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_ext_large_payload) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= 256,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +/* Tests that a valid ICMPv6 error message without extension and the
-> > > +original
-> > > + * datagram is smaller than 128 bytes, generates an error with zero
-> > > +offset,
-> > > + * and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_no_ext_small_payload) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= false,
-> > > +	.payload_len	= 64,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv6 error message without extension and 128
-> > > +bytes
-> > > + * original datagram, generates an error with zero offset, and does
-> > > +not
-> > > + * raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_no_ext_min_payload) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= false,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V6,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that a valid ICMPv6 error message without extension and the
-> > > +original
-> > > + * datagram is larger than 128 bytes, generates an error with zero
-> > > +offset,
-> > > + * and does not raise the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_no_ext_large_payload) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= false,
-> > > +	.payload_len	= 256,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that an ICMPv6 error message with extension and an invalid
-> > > +checksum,
-> > > + * generates an error with the expected offset, and raises the
-> > > + * SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_invalid_ext_checksum) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V6,
-> > > +	.bad_csum	= true,
-> > > +	.bad_len	= false,
-> > > +};
-> > > +
-> > > +/* Tests that an ICMPv6 error message with extension and an object
-> > > +length
-> > > + * smaller than the object header, generates an error with the
-> > > +expected offset,
-> > > + * and raises the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_invalid_ext_length_small) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V6,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= true,
-> > > +	.smaller_len	= true,
-> > > +};
-> > > +
-> > > +/* Tests that an ICMPv6 error message with extension and an object
-> > > +length that
-> > > + * is too big to fit in the packet, generates an error with the
-> > > +expected offset,
-> > > + * and raises the SO_EE_RFC4884_FLAG_INVALID flag.
-> > > + */
-> > > +FIXTURE_VARIANT_ADD(rfc4884, ipv6_invalid_ext_length_large) {
-> > > +	.info		= ipv6_info,
-> > > +	.with_ext	= true,
-> > > +	.payload_len	= MIN_PAYLOAD_LEN_V6,
-> > > +	.bad_csum	= false,
-> > > +	.bad_len	= true,
-> > > +	.smaller_len	= false,
-> > > +};
-> > > +
-> > > +static void
-> > > +check_rfc4884_offset(struct __test_metadata *_metadata, int sock,
-> > > +		     const FIXTURE_VARIANT(rfc4884) *v) {
-> > > +	char rxbuf[1024];
-> > > +	char ctrl[1024];
-> > > +	struct iovec iov = {
-> > > +		.iov_base = rxbuf,
-> > > +		.iov_len = sizeof(rxbuf)
-> > > +	};
-> > > +	struct msghdr msg = {
-> > > +		.msg_iov = &iov,
-> > > +		.msg_iovlen = 1,
-> > > +		.msg_control = ctrl,
-> > > +		.msg_controllen = sizeof(ctrl),
-> > > +	};
-> > > +	struct cmsghdr *cmsg;
-> > > +	int recv;
-> > > +
-> > > +	recv = recvmsg(sock, &msg, MSG_ERRQUEUE);
-> > 
-> > Reading from the error queue does not block.
-> > 
-> > Is it assured that the ICMP packet is queued on return from sendmsg?
-> > Or does this need a poll to be on the safe side wrt flakes.
-> 
-> Will add a poll, thanks.
+struct dma_slave_config {
+	...
+        void *peripheral_config;
+	size_t peripheral_size;
 
-Thanks. The sendmsg() is not a single linear function stack up to
-the enqueue to the UDP socket receive queue: xmit_loopback calls
-netif_rx, which calls enqueue_to_backlog and schedules a softirq for
-the Rx path.
+};
 
-> 
-> > 
-> > > +	ASSERT_GE(recv, 0) TH_LOG("recvmsg(MSG_ERRQUEUE) failed");
-> > > +
-> > > +	for (cmsg = CMSG_FIRSTHDR(&msg); cmsg; cmsg =
-> > CMSG_NXTHDR(&msg, cmsg)) {
-> > > +		bool is_invalid, expected_invalid;
-> > > +		struct sock_extended_err *ee;
-> > > +		int expected_off;
-> > > +		uint16_t off;
-> > > +
-> > > +		if (cmsg->cmsg_level != v->info.level &&
-> > > +		    cmsg->cmsg_type != v->info.opt1)
-> > > +			continue;
-> > 
-> > Do we expect any other cmsg? Else just fail if encountering them, to make the
-> > test more strict?
-> 
-> We do not expect any other control messages in this case. However, I prefer not to fail the test on unrelated ancillary data, as this would make the test more brittle.
-> Ignoring unknown cmsg entries makes the test more robust against unrelated kernel behavior changes, while still validating the information we care about.
+So DMA consumer can use standard DMAengine API, dmaengine_slave_config().
 
-I understand. When side-effects are highly unlikely, it can be
-preferable to fail hard. Or middle ground is to at least log.
-Up to you.
-
-> > 
-> > > +
-> > > +		ee = (struct sock_extended_err *)CMSG_DATA(cmsg);
-> > > +		off = ee->ee_rfc4884.len;
-> > > +		is_invalid = ee->ee_rfc4884.flags &
-> > SO_EE_RFC4884_FLAG_INVALID;
-> > > +
-> > > +		expected_invalid = v->bad_csum || v->bad_len;
-> > > +		ASSERT_EQ(is_invalid, expected_invalid) {
-> > > +			TH_LOG("Expected invalidity flag to be %d, but got
-> > %d",
-> > > +			       expected_invalid, is_invalid);
-> > > +		}
-> > > +
-> > > +		expected_off =
-> > > +			(v->with_ext && v->payload_len >= v-
-> > >info.min_payload) ?
-> > > +			v->payload_len : 0;
-> > > +		ASSERT_EQ(off, expected_off) {
-> > > +			TH_LOG("Expected RFC4884 offset %u, got %u",
-> > > +			       expected_off, off);
-> > > +		}
-> > > +		break;
-> > > +	}
-> > > +}
-> > > +
-> > > +TEST_F(rfc4884, rfc4884)
-> > > +{
-> > > +	const typeof(variant) v = variant;
-> > > +	struct sockaddr_inet addr;
-> > > +	uint8_t pkt[1024];
-> > > +	int dgram, raw;
-> > > +	int len, sent;
-> > > +	int err;
-> > > +
-> > > +	dgram = socket(v->info.domain, SOCK_DGRAM, 0);
-> > > +	ASSERT_GE(dgram, 0) TH_LOG("Opening datagram socket failed");
-> > > +
-> > > +	err = bind_to_loopback(dgram, &v->info);
-> > > +	ASSERT_EQ(err, 0) TH_LOG("Bind failed");
-> > > +
-> > > +	raw = socket(v->info.domain, SOCK_RAW, v->info.proto);
-> > > +	ASSERT_GE(raw, 0) TH_LOG("Opening raw socket failed");
-> > > +
-> > > +	len = v->info.build_func(pkt, sizeof(pkt), v->with_ext, v->payload_len,
-> > > +				 v->bad_csum, v->bad_len, v->smaller_len);
-> > > +	ASSERT_GT(len, 0) TH_LOG("Building packet failed");
-> > > +
-> > > +	set_addr(&addr, v->info.domain, 0);
-> > > +	sent = sendto(raw, pkt, len, 0, &addr.sa, addr.len);
-> > > +	ASSERT_EQ(len, sent) TH_LOG("Sending packet failed");
-> > > +
-> > > +	check_rfc4884_offset(_metadata, dgram, v);
-> > > +
-> > > +	close(dgram);
-> > > +	close(raw);
-> > > +}
-> > > +
-> > > +TEST_HARNESS_MAIN
-> > > --
-> > > 2.51.0
-> > >
-> > 
-> 
-
-
+Frank
+>  #endif /* CONFIG_DW_EDMA */
+>
+>  struct pci_epc;
+> --
+> 2.51.0
+>
 
