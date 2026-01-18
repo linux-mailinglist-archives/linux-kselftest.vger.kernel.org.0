@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-49273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7264ED395D3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F35AD395DC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:58:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6AAAD3009AB7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 13:56:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2ECA6303A001
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 13:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD43337686;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCDD337B92;
 	Sun, 18 Jan 2026 13:55:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="bYBWNLmn"
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="D1sMSOYo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11021073.outbound.protection.outlook.com [40.107.74.73])
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11020076.outbound.protection.outlook.com [52.101.229.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F008334C34;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF17334C2D;
 	Sun, 18 Jan 2026 13:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.73
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768744516; cv=fail; b=kheZlAmOq8cLPOTqXFT2g1Dn91GLaLYZWYQZtO5KxR8E5euVfG+6nmjvxWn2ox0gSYFOmT9vT+FhoSdf4rvz7WbIAQo2pAVzGYYni8pA+S1nOlUmJLSP2xT11uvvwwZqPyUz3eaIaobMBTpZuOLnXeWlYTz09jZuIWYqNHFTCVY=
+	t=1768744516; cv=fail; b=q+YNM2wDGT0Q+PQbbuuvSmEZDi4l8Bsx1xEfu8d6P6iRnD1QvauoyNVjJMuv14LbJCo1liePkfH2mmsctzI4O9CAaq78czAR/blKboZV2c3p51z81V7V4xlSlkis5PrXLSTztXkQd2TQ2+tbZrX2S7cS9WCU7VW1X9BtqcLhlp4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768744516; c=relaxed/simple;
-	bh=cLAViSjhao4QvjW/zPzAXev/FWT8MW049AIrZB5rn3I=;
+	bh=j3v/oCrCieCIMH3ghUYx0Es65h8tq+lZ4jZvw5nIk/s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=janjYRhn8vaZi7j4uIsoBZG2fSdVuyA4Vc3GtmA/fdD//oKjPFY/9y49zeALTsddri2nw5B4AaFoX+NT1bHmUWcYiXyfRC6fPZ7ACsLrga4AOLrFM1d+KOQ1S9YORTPMZcNMTXhunte3iEjp2XaECb+AxCrFNOMKGfe5eGmIr3o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=bYBWNLmn; arc=fail smtp.client-ip=40.107.74.73
+	 Content-Type:MIME-Version; b=slaEN/rYM32jL/T4tM/6bXZw7TphM/d/+xKORaYzzl58frx4KFyd/3U5HBobQl23qju42rl2yJzm+j/ByqsjMKNGotumZ97OcX/nXgqvTyo+a9ZRD6PPVcyLi+mvS2mr8QYREYe+mKoGub2u8Yo/hcUa2es95q3iNyUuEtdJSoY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=D1sMSOYo; arc=fail smtp.client-ip=52.101.229.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vDUo46QEpzierYgcs893UQE0Eyig61BR0PCNWZP5iT4bTxi81QCDUjCms9b0VrZ2A7dK8+d6DfbnHe2IboAXioJiTKSiNzKJstEsfF3hWSxA2U+YEjtbOVsCow5Gcol7aWz/jJORkPyzNASzbI068silYVqo7DTcuVMCfdR0keXGDBkc7mZAxX2JjIhJtHMuvL27MiHsSURXAZfs7bSPiA+3Ez2jkqdJm9eQ5IHCLaL6Z7qio30TEtWHIVWK/lguWlrEgNDNIhv/O0KtpaDD4jFXgHH+4S6L67rK9IMvlSuKjlWJzj69CiogsKBmpqnFWT5aXBjdRU8tOUrv0ofTZQ==
+ b=jn8GgfgCvXN2OgoRex1DBYDWvp0hdFp5xQ9jRtM5ja3la7akTdtl9Y5vUmyJ+dAlm38W1LrOFzZuNTogQ1J2EqhoWIR8PZgPJtcxRM6/PIgnI4IDayPAvp+Q8+cipcPWkYPpAj/78BCVFd02Hj8UmNQLCldNy6vbWO/yYi4yi2HXlXGKp+9LJYDOjm3QJFzofF3h71rOmMSlZolz3qDGF9baCQqLMB83JxE/FfYv/lvYndguk+6iMsdBECxRrNFqQc2PGWdYk4W+VFgeLptsJBcBZFuYEox8dhY0O5+3EJuSarFOurnPppDQjG8652IWsP/yUcIKNWYvoNDW92/2Sg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+67+cYoMVE0Yg2nOZH8eOjKF2/2Yp9GhBnnurvRKWqg=;
- b=KtyF23uFlDTb8xkHddzPEpMrOlj4+UDoO1ep/UrrhRvlfjW4+5y9yRawJfmL3pRYQh0/YEtzRJG37gP62Zz9joqETejbhRVpzeSxrf2sb0e95vNjQiwakIM8QdnCUB1SAZLlweCW3ko8eeslua0ErcQrwJ4IqHOqf0SnzcWfbXMZFuGQCx9a/agdNrmpRANEsfGKPAoHgM+OwCkAkovcK+U4xmM4Jw/BGyGDzQ07QfLECXhXKdjHosoYUMt46wZe6Ix6bwUVbtFkIrJZGy0A9MBhSiNxXwDDYhtser/JTJa4+KPvvGuLAwagF5NwMkctTRd1sminUWwPqH66dZ/lMw==
+ bh=uPH1ItS4tEnUncYycsAP50Ucy9MlDzeZ2R3I57PWSdc=;
+ b=RZ5kNupW9ZfZnBfFYp7RiNMHG3SWb7LWl23HPOB94DC9kofYk2+8OV8b2DU+DjSQVhn/++PUZDGKnN5QiKsmDvZTxSdDjpogN+sduWpH7/vxKpz/RGjAV58kUgDtHLivrJuFtylxpEyxVk8E9FaQYUzo5cWhqV8OWOut+iscMRYwceva/Fj/SSY6wfTplw4G4hlLP3KoqGzBOMBVAADr6mtF6wf82ddB45bnPoOzBsrGT3jK7J5yfwTqc7+m0LrOCRXHJ2Durarayid/RzHSH2YG6/5UQkHJ6DXO7Dq0/74xISDHVbNdIL3jz7/Vhpk7JpzlDu5AT57gsPq2IZNkGw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
  header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+67+cYoMVE0Yg2nOZH8eOjKF2/2Yp9GhBnnurvRKWqg=;
- b=bYBWNLmnydtgJlp9wWNVB1KzRxae4BfaqvYJLlmxVUsvoVdZYLqHfNQCNW5+rFUZrVKfXbhznC1XTvtrkmBwLa17Jl+0cOiN7mOoVnNKQN567cgN3y32dUk4Mx/++HcMrvNuFo3MxMpmeyUb/k3U6qpg1vVK1d3ew5Dx+kTGngo=
+ bh=uPH1ItS4tEnUncYycsAP50Ucy9MlDzeZ2R3I57PWSdc=;
+ b=D1sMSOYoP7uxJ2p6ByoCiBpJNEZeMKAW3tpmwPS8Szzd7j0Al9ZOraIIlwEtjcx/uuDNOyXiPu7YWoCqITRZr0Li1MQjIr9bpSe0ysCNh4OyYUAL31Er1iao8MFs6+iHLd8bAp6OXQA9sozisEh50x2SwvK0N6xEaf0dOU0843s=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=valinux.co.jp;
 Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
  by OS7P286MB7353.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:440::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.11; Sun, 18 Jan
- 2026 13:54:58 +0000
+ 2026 13:54:59 +0000
 Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9520.009; Sun, 18 Jan 2026
- 13:54:58 +0000
+ 13:54:59 +0000
 From: Koichiro Den <den@valinux.co.jp>
 To: Frank.Li@nxp.com,
 	dave.jiang@intel.com,
@@ -93,16 +93,17 @@ Cc: linux-pci@vger.kernel.org,
 	andriy.shevchenko@linux.intel.com,
 	jbrunet@baylibre.com,
 	utkarsh02t@gmail.com
-Subject: [RFC PATCH v4 08/38] NTB: epf: Provide db_vector_count/db_vector_mask callbacks
-Date: Sun, 18 Jan 2026 22:54:10 +0900
-Message-ID: <20260118135440.1958279-9-den@valinux.co.jp>
+Subject: [RFC PATCH v4 09/38] NTB: core: Add mw_set_trans_ranges() for subrange programming
+Date: Sun, 18 Jan 2026 22:54:11 +0900
+Message-ID: <20260118135440.1958279-10-den@valinux.co.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260118135440.1958279-1-den@valinux.co.jp>
 References: <20260118135440.1958279-1-den@valinux.co.jp>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TYCPR01CA0010.jpnprd01.prod.outlook.com (2603:1096:405::22)
- To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
+X-ClientProxiedBy: TY4P286CA0022.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:2b0::18) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -111,268 +112,186 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|OS7P286MB7353:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ffe6ebe-881c-4a48-f988-08de56992b24
+X-MS-Office365-Filtering-Correlation-Id: 86bd0cda-dc0c-4132-188e-08de56992b98
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|7416014|376014|1800799024|10070799003|366016|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6mhejKgg1mwXaG/rPwv3ekA/Po1O2rq07FalHlGYtP84KEE0VJaDW8otpzs4?=
- =?us-ascii?Q?7Cpqb3gCIPGl/IL7mfpEIFJ/u6Ao/hszijdvlDg7wR8YPF/9MoaZWNMop3le?=
- =?us-ascii?Q?qm+0QNKX9Hdgoo/Wh8I0Gt4FrWJOzK5mupjB5lYLC3Za1jYMJvRyNuPS84ud?=
- =?us-ascii?Q?1xUTWSf4jL95nWEMnwPskaXqCwd72XIMu2S6GcvqtQjJyUDIG+aL5/M5UcS8?=
- =?us-ascii?Q?LZcJkK9ClKqDONvLFJw8sb5DH7gC1A2zrFpvMpvuC6VX7VnLpsJ2Fzrl7WEu?=
- =?us-ascii?Q?e4kW33OSfwz/K+vGr+SCOYNG5940fWlYkt9/GqVBABuOtQhfie50AEP25jZ+?=
- =?us-ascii?Q?fiomi3rBDi6YrR+/x32L6EJvmDMPRI2rHPWa7jFXHcTEdSerx3Wup2NhrdKJ?=
- =?us-ascii?Q?B+smkC8edgL1dqDXiZ3019E3WDYe/B31vHFmaeo1U2JHZ3pxI2lpvAgIO1lq?=
- =?us-ascii?Q?d1/K5Yq/LNvN+SVMRbujY2PSkxCBXkE1aCV+bjiXyVpbnkNE5fFbTtdRZiEA?=
- =?us-ascii?Q?GHfJroaaMUOofAzJqDxyCKTaLhuElB7QA7VDzdPc+TemlUt6pbldizTLDFU4?=
- =?us-ascii?Q?QliT0ZNCP36+VhWV+B6GlRqYP23OXVZnR6vl1bgQpTqKW9i8yIZr+bxDRWWO?=
- =?us-ascii?Q?qOUWoqZtS44ckjBHAQ+efCVnfd3OxiT7+z+nxAIds3+1+7nT+XW2osg7UN1a?=
- =?us-ascii?Q?BXhsnD5VxL7Z1dV7j44prjHwBwSavLhmb0S7ltkgqX6Mw8E7BRLzLzp2YNSE?=
- =?us-ascii?Q?2t/EbUjJ0cxVIVa2aVO/LkxPshWHRQaZC7ixR/GGGr9HFNmMc/7KnqrEImrf?=
- =?us-ascii?Q?/g8jivVJeB3E4SDY213VtX09Gnb2UxjybXMe3BH8gkUiHwcWxcDqHMBUFwDP?=
- =?us-ascii?Q?8LNGtGEtxQ5Hc3n2AcI624yPhYLmmoGeWd1NSfiduSITs05IWcNRRbz43KfO?=
- =?us-ascii?Q?n+9fTgp7SfnBowuXI5GXM3Z+BT4hGg3+DtPNBHLivLZXhqM3LUCJxhG8CPYZ?=
- =?us-ascii?Q?En21O2xRMnJDqTY5nbLTxRKwPh69qAPmFnBERkbeyjuIRvD/3bcIBOAXbiKf?=
- =?us-ascii?Q?gy/SnApCd+NmvL1sWWvjXcLuV7CetW7qEVv2wjD7n2p1uPLLmqxdRKJKVVgg?=
- =?us-ascii?Q?TY1RmDPfjETHIqtUwNGWfoKuvh6U6PdgoDirdX/SUDUIGI8tdvypNQA73tEO?=
- =?us-ascii?Q?kso2TQGFlRBBeSfVcZ6HEPsxfo+n5VuBSgUUxVGSt+XGLPlTdksZNSIQSI+1?=
- =?us-ascii?Q?p7S1ZvOnqI3bkKZ4/dX3LhX+4pMg1l5P9TgKOiiZsWFlMIwoOGyKJT5Bpgqn?=
- =?us-ascii?Q?bdOqtn8SrpLFtG3RGpXi3UzgvdM6janeUv7dUqZCHR7ic02pOFVLGAhLbzgV?=
- =?us-ascii?Q?PrGyMCzQtP/42h2xE6ehHy4EPdMQb/uiaBzD4bWHbCNHGhYTBmhODoK35ozw?=
- =?us-ascii?Q?rWdm/qDGOe4EY73skpJqV7oc9NMXe3wK4Rkw7Cblado2RRkfq3WQzGrtmHQp?=
- =?us-ascii?Q?j+6SMrJ2tB8RbHmirJXpG6t15JntZ4z+J3NeueTbO67af4G5YScFzj5E3y7i?=
- =?us-ascii?Q?4D1/aTRk9OJMGfx28j1LSezkZ391wxiXIauT3RQrYFMoqHzVBz7Fh7lKvbR8?=
- =?us-ascii?Q?yQ=3D=3D?=
+	=?us-ascii?Q?XzpEOy2u4UUcQu5x6VURIyTSaRB3qKllqPXtD3tsP5soXBDwUpzyDY+iDitW?=
+ =?us-ascii?Q?NdJeyUUCvqa8dE7I8ZwjAU9Ij7MrFJUoHHKQ3nFCYHRwT2aYrk05uY0ZJcL3?=
+ =?us-ascii?Q?1KcRvHmQ9r8s/nhXK+QrHtJ6+B85VUTA6gmHw1V8ctbP185HbsjaDMnt3vo3?=
+ =?us-ascii?Q?EkUG599LuPTL1LJjfKDXDzWxaWzo1gvL2BwjwbPGzQK9uPRFeRkI6LpeYiyI?=
+ =?us-ascii?Q?X5J53JFmNR7eEPl8wtlWjhiRrVqBPEk9UD92lGnRl0GIZAjPWkERdw5zSFNe?=
+ =?us-ascii?Q?l29jMrEBfoCx1bEjV+WJDjRNz+kkYWnjD0q5OxE0q8jOMZH93PZpCwWUCags?=
+ =?us-ascii?Q?C8tA3Wp4XuZyeSK9oxXIzScO/ZjjrOQByVbfyuOYSs1w03SH5FX0yW6Td+Cs?=
+ =?us-ascii?Q?6rgoOvBLpJH2KSW95gg6pETlVXqWqoE1EPLV/U0oprhkrYBeLFV3e80GSvMm?=
+ =?us-ascii?Q?0F+rNk1gAFAlPB13FO48wSBnoOglWXdd8Lh3bGuju3cNyj3Jwn7BmH1HcHeB?=
+ =?us-ascii?Q?7yDHG/3RuZhYmKwfQi6Dz245mDFhjpjPBQ4E0gxBHcohBRJew4697BpL37zj?=
+ =?us-ascii?Q?qwUQ1KYRj2cSwfR7QT0o0jCZfTwkLpCIy3NMAplvXR2RLL/O/UDfysFWiF/S?=
+ =?us-ascii?Q?5OcGdiNbJ/Qui+oPIJju9cBFdZFgDKIPkjuFmI86LFXwkU9gAWl/19Q0D8XD?=
+ =?us-ascii?Q?qVjBAbSWz/H8ZWkvTPAOSKsQecUy3hpl9gEqjZ4VZ1Fm/HTZ5bPjP8U2cs0h?=
+ =?us-ascii?Q?QxJR7+Pvy7BHKQPFR2UiIotOPCx8FkHqUXoN3kVu1b2ExpZKE3MxUCODLE3N?=
+ =?us-ascii?Q?ISfbXTHusytd8D5tBuEpBGvnAccmOuEwR328tzws6xxbCmEfLmPsweAo2Dnp?=
+ =?us-ascii?Q?AhBkkjcz9RUXZr87TCUz/0I5QAPZOGwFPYOMfB4ZpLfPok1iwYVcjdurON66?=
+ =?us-ascii?Q?eU16YLY2cszShESVKHsLy9JaU3l3UODAp7kIQ2312VwMXL8LD9JD666AL00U?=
+ =?us-ascii?Q?b5k3XQhxz0fvzaTufsiFkBWmrBuF+x/rVEGW1te1YYP4ObxPlDdY0HGSUUH4?=
+ =?us-ascii?Q?5UR5WUh3hmUO+2ANH/Zh1xkHe5+c4iBcJDyMdEZJUH4SMUTyo0zuh+WTO5kt?=
+ =?us-ascii?Q?Tnbdwvjzt9vZ36XV5sGrtUGPBt1PnoS8bCyqYOU25emNliCJXk1rGVtbLwk9?=
+ =?us-ascii?Q?knHd69o6LnOtkWUjqOR3HMVWHzGqTZti7zvRSCnJiLo5FpqPYvZZylI8bzPy?=
+ =?us-ascii?Q?ZEkxleRcRPHrITeV1aqlT0fUIbmdYQcCJ1AO2MMoM+nPcmIRyG/A0bpnsHCr?=
+ =?us-ascii?Q?hq/LTV7HqnH7/KB8ne9LOxYM9nFhIHKOswa/6bYUtklr8EEV290BWUGhPcNa?=
+ =?us-ascii?Q?/PisThjLlgF+QBpR150mixnfCW5tMVkE4oOJdOSfOQ3D8hUCuksboTjNY2UO?=
+ =?us-ascii?Q?ytFEf2ip1opHTxujS5NaQD6VZWt99rm5SpSbROECgnxTYnW3Np43AtryglI5?=
+ =?us-ascii?Q?dovIp9PdsxuIvIjSSJBO3doEoMs3mi4+Ts8BMIOd7CcHla5MplMkLE0L/z/R?=
+ =?us-ascii?Q?5aLFkZ8c35jTwYjQJ7cYzGG8lrTtb1c99Qv/hjE2iPU7vwnDEcN28UyXncME?=
+ =?us-ascii?Q?0A=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(10070799003)(366016)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?iiEp8MbtmD/6kwYu6+9RzafVtGOrFRa/IB9kn36aBFNJUhQ/fMyyeqAd2ItZ?=
- =?us-ascii?Q?9tppN7AHM1FmXEnku2SqNosMBemvU701Bux//n/i/2yGp6i9QcLHimxlsk4l?=
- =?us-ascii?Q?EMfxX+ldiBQ5BfUIcr2b3EJlh+0dYQvCj35+CMqGrEpcdVO5t9fMsBRk6U7K?=
- =?us-ascii?Q?wk4e+kDBTmO37jqT6s0b5CVa2zTD9FfdmvIQ5v61xZqYJyG/YBhH9qcw723S?=
- =?us-ascii?Q?OyxbQZsgXO4E3hDLe4BcBArFC6NHF/iORGF1M1fLFXKRwtS16Sdrv1hFo4vj?=
- =?us-ascii?Q?6jLcD3EAeG5k8DQ/ey0vs4gOc/dSqiY4BI8f1X4Prf6b441NslsNExqj0/hR?=
- =?us-ascii?Q?YM5iHMRzHVMHnlbEW564Nc9KSrGG8fdVE+eBIBuZm6GdOy/6o6H8GrF9JQAI?=
- =?us-ascii?Q?nnPaQ545JhzI3pcH8aUPAyoR61Cd6lI0ImsPF56q1wi6VJc5mCeXRDl81Dk8?=
- =?us-ascii?Q?u3VSdtAguKL3+6DEzqsgchUaN+sbD8TgExDsPZNhAX92jPnLiUPVay+wqwPO?=
- =?us-ascii?Q?KxREoJi/wQkZL5myQAJjdXkPsojKQPUENgJ6MVj06tTZlVGrx7u8TxaT/VkV?=
- =?us-ascii?Q?GfDYK8KIKkzrYSYlmIT4yYDSze+4L6fqi0+3Dab9X/TTS/iuGRLuhARy4Klt?=
- =?us-ascii?Q?q/E5XQIRtw57RroQ70PSeV9fBvVShnJA9N3eaGNum6VpLCY8xyn9Xx3UioVl?=
- =?us-ascii?Q?/+ROPouOWaw3RTzkpI0yszKmXIbCb9yEEzvghQJjbaKrAz04YKvAd8cjfFUh?=
- =?us-ascii?Q?HwylWXRlv1FjR3QdAfliTlN3YdF8u4BBGdemAUUkVP+fjMqnRXAzJbeHU3TV?=
- =?us-ascii?Q?VtQHWuskNoLE0ZbMv5pHONAVAkRLg0bqowmHJeNI4smJyaOuxDCQsoeHNuW+?=
- =?us-ascii?Q?ILn+X2YX8FK6EVLMsK80bcghArfHo0C57ysuJ3AhnEqXQcXogmOs75V19A9r?=
- =?us-ascii?Q?4dZgUMUGH4L7sQh8vKw6iabju1BOj6fztvYhMBXMgkTsVp/ZCAUBQ/JYs43I?=
- =?us-ascii?Q?rl6BCQ01KjR/eFqIC6O93AElEV5YQZErYj341jIfHe1vBViDCoNnXsRs+zs6?=
- =?us-ascii?Q?ZgU9Fwl8cU9GRf+YffZwznJJcUtLWeBX1uVDyBbZqWdRFc89v6lbmq3yFuZI?=
- =?us-ascii?Q?tPbJQq/4phRTBpvZOrFlQDV3Hp+TVgm+9HHHRN8qHky9BS8fJ/UwwpmtZ/o/?=
- =?us-ascii?Q?IgZNBpESKCWQjKNhB6OmXPk5SMHnETirzl3r8ccYYoglkoog4cxEtxOzrR2/?=
- =?us-ascii?Q?0fT6AqAetetrB+VaTgZcRedYKvLlkC9z/zMtQsKXsVoNhOPBTmiocsIBBbS1?=
- =?us-ascii?Q?w+M+OGdZSKJso8s18U92uYWu9fG/n6l3iYmw4ZgrwwIQI7aV8f6cL1oBQApm?=
- =?us-ascii?Q?FZ6TPWbQJxcHUI3BvWq6Kb7OAIRTXCrNarIYe/f6jtHmLw3Y7e7IXv2LThdv?=
- =?us-ascii?Q?ifeSfwq1Q/Vt1Ms09QgReMXu3mdjQt7ZvR+6+ZduaIJAUiv3OdxjxDwClzyi?=
- =?us-ascii?Q?DV2rNMevI88bdbUDEFEaUHUIctWEzEAXFhDV+MPbrG5vSIn87wf6xcasx+9+?=
- =?us-ascii?Q?0q/GIXmVmv0hIsSdvffPQ2b9nMUzKDRvlQcVVKsr13Z+S6QePsepi3PN5+Ve?=
- =?us-ascii?Q?8QUJ1G73OpHoYAlusNt8X2yCXBO69eE5NMIkpVRvm68RsxR2EKk9fKr+FXZ6?=
- =?us-ascii?Q?93NzrVbMNLmGgClIPzaiDIYNas6vHT0ulmMfvdZgaJ7b5Q4ZBbkFxy4tvpw1?=
- =?us-ascii?Q?9RLF1S+BKFJnZdB4kGg8hPw0y9MddU2X/8f0acakqATGbgwi2WmI?=
+	=?us-ascii?Q?1/FVsohvKkQvgKtTmhJ2/f+UIXL3ZLKcEKo6HCWxTet7rxWNgGlQjIu2YlyH?=
+ =?us-ascii?Q?zQOA1Or6dZiCRCwUE0z7bLYueY5rmgNuHEEZPoQr96OHDvbhTeZgKH0Zd0KP?=
+ =?us-ascii?Q?fuJh1d7gP3t3YUYSNXbHUmxJ/KgiUOYtqnL9nim+27o/Or9MA9RhmJL35dD4?=
+ =?us-ascii?Q?pteM+isUwPrkLsmTfuNxs3RThBJmIUq5JLDlmXy6pRQdc27IWs+syk0lhv+/?=
+ =?us-ascii?Q?NWbIaxITvzGdc4/8Q30yh+Mz0Kskw99fNzWvQ+UTjawCopNGgSA7kDnoQEGy?=
+ =?us-ascii?Q?XOnnu9WP1Po3zARl3X4en4O75QlWnNvNDtJAOKjQ5Ad4bSe2T93KcMUsc6+2?=
+ =?us-ascii?Q?aJBu4VYkiQI3v+83sktbmQQzsDmmu2JtGXRTbqXZjRNzd2FikC+YPRSUS0Ad?=
+ =?us-ascii?Q?XKzzbbOplHY9vSNv9sg+aKddr+ifEFKfTKDuwJPasZt2kYnRRKDesvMGPiz4?=
+ =?us-ascii?Q?NsnY1T4U4JUFA2yLbFpAE8U2eR8rGbm3xGeDuKVDcIBit+V7hBG4YtmLVJoK?=
+ =?us-ascii?Q?5f6ZOHseUEzUpw68UfXnKDHu66g9+FWwvzbyUNs8siBiQEF3Qvh7Rs31FdkZ?=
+ =?us-ascii?Q?xmjxosH/V9isT9QNZWBaNX5YOWTklwsN2NIMxDucVhQD9Z9p1SQH+aqd4ALh?=
+ =?us-ascii?Q?jq3yF4QQL9RCjAyd6YFm2ecyIJuJ3pFYT9Rnq60xhBtMFI9FaUeETka25YtC?=
+ =?us-ascii?Q?ChKd7HXc+MdNwSqMSWaOAp1hkWyyS/G32MrbetFSwjJGRFJlAL83wY2Is/1F?=
+ =?us-ascii?Q?KLx5WQ+4X0aS1ZEjfVBnGdqid7pXDMP4vS4eqN/quZZHuQ21KZvIe0O5zYbV?=
+ =?us-ascii?Q?fWFt+YfbWDLlhiTgBN62go7vwRniCMm+haf3mwOavXitDwe4K7TiAyC4QRte?=
+ =?us-ascii?Q?CenB64+VIK3HUXL4PKk3njdM3n851YLPgCk/bLY8AxON59LCmp9Am8soG3ZZ?=
+ =?us-ascii?Q?pSHSnxossUb/zbSZLKHpx7URqytjLpW4XuVsHDdf5tPStOdU2vUvytp1zkFa?=
+ =?us-ascii?Q?YE22CzlEv+Vt/78/cUfv5jLlTc0fzbUJd3uYkfKkUe+GzceIfsXe6HlX0WOo?=
+ =?us-ascii?Q?YhjzUgPFo6nv28r7z1+CutF6h7bDEvtAPFnCAbe1Kt85qslXK11P1YbKUtz4?=
+ =?us-ascii?Q?cG0mBcL1JqlUwBMu+WBrYhTnABqgDl8A3cYoGSqT/Zo7f8rxDX2Lt737Obf3?=
+ =?us-ascii?Q?6gNA2QDNLcBxOCop+littRmd4OJUOS6jwKNxdycySRkIksgU6vFEAzs+Sb6F?=
+ =?us-ascii?Q?GWYbK7hx4ZSkhhq9GZQlmtE654gqvtq5nYdM0bV+NNF69lrsWHYD1rUJ5VkA?=
+ =?us-ascii?Q?euxChzZQwIvswe6qARan2aXT8oIPwDfs1da+dq0vsqa5NzwQQQMTnOcyttjB?=
+ =?us-ascii?Q?UMPSqFnMHT6bgPjDlkabNbswwj4CJOZUdq5Dza0fipgiFPQNPEmFMrtgGbol?=
+ =?us-ascii?Q?Fbvot7Bnrw0DzdjSpnR3pril5fUO3Hvzt+tR6sGzFDEQE5jTmCYQiSrigABH?=
+ =?us-ascii?Q?Mpjz701SMkd5GTqvhQod/smpFzOMSBamwQllLkz8DDLximvAFd1+L4To+ecZ?=
+ =?us-ascii?Q?9Q/99L2MpJis18iKMaupHKw1l7vfu0AzJB1sOADBmj3z1isDt7yt7UXns9uK?=
+ =?us-ascii?Q?Pb7+Zbv+5iO8dWH0WKUMxhU2tbovl1NyC3UpFs22rWIzSoqwQyENCdntdhW8?=
+ =?us-ascii?Q?bY5a+OlB+1Dw6x6HsRjbBliAjI+AirwQZH8CxkvLy0NY/qdfIHLMKgPbXFO9?=
+ =?us-ascii?Q?QBFhWA/C7OMuZmEio8+qsigpmxg2lhnombLP2ihIHAfzn2RhHMFW?=
 X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ffe6ebe-881c-4a48-f988-08de56992b24
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86bd0cda-dc0c-4132-188e-08de56992b98
 X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:54:58.7451
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:54:59.5197
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BlXc9cbXgKcFa77yzk61ynrcjtZi8P4lVBzRth7lZ3vBnL1f8JpW18Zx8akqLMJENE38kU7RGbNy7keStfBEIg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: wXIlt0n92TCfclsbezcgkKIhO6oxE6MrlrMc9c+16dEJXQ+fydSHxOC2Bssek0ER1g5rVtmKF1M9pKvSVOA+ew==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7P286MB7353
 
-Provide db_vector_count() and db_vector_mask() implementations for both
-ntb_hw_epf and pci-epf-vntb so that ntb_transport can map MSI vectors to
-doorbell bits. Without them, the upper layer cannot identify which
-doorbell vector fired and ends up scheduling rxc_db_work() for all queue
-pairs, resulting in a thundering-herd effect when multiple queue pairs
-(QPs) are enabled.
+At the BAR level, multiple MWs may be packed into a single BAR. In
+addition, a single MW may itself be subdivided into multiple address
+subranges, each of which can be mapped independently by the underlying
+NTB hardware.
 
-With this change, .peer_db_set() must honor the db_bits mask and raise
-all requested doorbell interrupts, so update those implementations
-accordingly.
+Introduce an optional ntb_dev_ops callback, .mw_set_trans_ranges(), to
+describe and program such layouts explicitly. The helper allows an NTB
+driver to provide, for each MW, a list of contiguous subranges that
+together cover the MW address space.
 
 Signed-off-by: Koichiro Den <den@valinux.co.jp>
 ---
- drivers/ntb/hw/epf/ntb_hw_epf.c               | 47 ++++++++++++-------
- drivers/pci/endpoint/functions/pci-epf-vntb.c | 41 +++++++++++++---
- 2 files changed, 64 insertions(+), 24 deletions(-)
+ include/linux/ntb.h | 46 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/ntb/hw/epf/ntb_hw_epf.c b/drivers/ntb/hw/epf/ntb_hw_epf.c
-index dbb5bebe63a5..c37ede4063dc 100644
---- a/drivers/ntb/hw/epf/ntb_hw_epf.c
-+++ b/drivers/ntb/hw/epf/ntb_hw_epf.c
-@@ -381,7 +381,7 @@ static int ntb_epf_init_isr(struct ntb_epf_dev *ndev, int msi_min, int msi_max)
- 		}
- 	}
- 
--	ndev->db_count = irq;
-+	ndev->db_count = irq - 1;
- 
- 	ret = ntb_epf_send_command(ndev, CMD_CONFIGURE_DOORBELL,
- 				   argument | irq);
-@@ -415,6 +415,22 @@ static u64 ntb_epf_db_valid_mask(struct ntb_dev *ntb)
- 	return ntb_ndev(ntb)->db_valid_mask;
+diff --git a/include/linux/ntb.h b/include/linux/ntb.h
+index 8ff9d663096b..84908753f446 100644
+--- a/include/linux/ntb.h
++++ b/include/linux/ntb.h
+@@ -206,6 +206,11 @@ static inline int ntb_ctx_ops_is_valid(const struct ntb_ctx_ops *ops)
+ 		1;
  }
  
-+static int ntb_epf_db_vector_count(struct ntb_dev *ntb)
-+{
-+	return ntb_ndev(ntb)->db_count;
-+}
++struct ntb_mw_subrange {
++	dma_addr_t	addr;
++	resource_size_t	size;
++};
 +
-+static u64 ntb_epf_db_vector_mask(struct ntb_dev *ntb, int db_vector)
-+{
-+	struct ntb_epf_dev *ndev = ntb_ndev(ntb);
-+
-+	db_vector--; /* vector 0 is reserved for link events */
-+	if (db_vector < 0 || db_vector >= ndev->db_count)
-+		return 0;
-+
-+	return ndev->db_valid_mask & BIT_ULL(db_vector);
-+}
-+
- static int ntb_epf_db_set_mask(struct ntb_dev *ntb, u64 db_bits)
- {
- 	return 0;
-@@ -507,26 +523,21 @@ static int ntb_epf_peer_mw_get_addr(struct ntb_dev *ntb, int idx,
- static int ntb_epf_peer_db_set(struct ntb_dev *ntb, u64 db_bits)
- {
- 	struct ntb_epf_dev *ndev = ntb_ndev(ntb);
--	u32 interrupt_num = ffs(db_bits) + 1;
--	struct device *dev = ndev->dev;
-+	u32 interrupt_num;
- 	u32 db_entry_size;
- 	u32 db_offset;
- 	u32 db_data;
--
--	if (interrupt_num >= ndev->db_count) {
--		dev_err(dev, "DB interrupt %d greater than Max Supported %d\n",
--			interrupt_num, ndev->db_count);
--		return -EINVAL;
--	}
-+	unsigned long i;
- 
- 	db_entry_size = readl(ndev->ctrl_reg + NTB_EPF_DB_ENTRY_SIZE);
- 
--	db_data = readl(ndev->ctrl_reg + NTB_EPF_DB_DATA(interrupt_num));
--	db_offset = readl(ndev->ctrl_reg + NTB_EPF_DB_OFFSET(interrupt_num));
--
--	writel(db_data, ndev->db_reg + (db_entry_size * interrupt_num) +
--	       db_offset);
--
-+	for_each_set_bit(i, (unsigned long *)&db_bits, ndev->db_count) {
-+		interrupt_num = i + 1;
-+		db_data = readl(ndev->ctrl_reg + NTB_EPF_DB_DATA(interrupt_num));
-+		db_offset = readl(ndev->ctrl_reg + NTB_EPF_DB_OFFSET(interrupt_num));
-+		writel(db_data, ndev->db_reg + (db_entry_size * interrupt_num) +
-+		       db_offset);
-+	}
- 	return 0;
+ /**
+  * struct ntb_dev_ops - ntb device operations
+  * @port_number:	See ntb_port_number().
+@@ -218,6 +223,7 @@ static inline int ntb_ctx_ops_is_valid(const struct ntb_ctx_ops *ops)
+  * @mw_count:		See ntb_mw_count().
+  * @mw_get_align:	See ntb_mw_get_align().
+  * @mw_set_trans:	See ntb_mw_set_trans().
++ * @mw_set_trans_ranges:See ntb_mw_set_trans_ranges().
+  * @mw_clear_trans:	See ntb_mw_clear_trans().
+  * @peer_mw_count:	See ntb_peer_mw_count().
+  * @peer_mw_get_addr:	See ntb_peer_mw_get_addr().
+@@ -276,6 +282,9 @@ struct ntb_dev_ops {
+ 			    resource_size_t *size_max);
+ 	int (*mw_set_trans)(struct ntb_dev *ntb, int pidx, int widx,
+ 			    dma_addr_t addr, resource_size_t size);
++	int (*mw_set_trans_ranges)(struct ntb_dev *ntb, int pidx, int widx,
++				   unsigned int num_ranges,
++				   const struct ntb_mw_subrange *ranges);
+ 	int (*mw_clear_trans)(struct ntb_dev *ntb, int pidx, int widx);
+ 	int (*peer_mw_count)(struct ntb_dev *ntb);
+ 	int (*peer_mw_get_addr)(struct ntb_dev *ntb, int widx,
+@@ -350,6 +359,7 @@ static inline int ntb_dev_ops_is_valid(const struct ntb_dev_ops *ops)
+ 		ops->mw_get_align			&&
+ 		(ops->mw_set_trans			||
+ 		 ops->peer_mw_set_trans)		&&
++		/* ops->mw_set_trans_ranges		&& */
+ 		/* ops->mw_clear_trans			&& */
+ 		ops->peer_mw_count			&&
+ 		ops->peer_mw_get_addr			&&
+@@ -860,6 +870,42 @@ static inline int ntb_mw_set_trans(struct ntb_dev *ntb, int pidx, int widx,
+ 	return ntb->ops->mw_set_trans(ntb, pidx, widx, addr, size);
  }
  
-@@ -556,6 +567,8 @@ static const struct ntb_dev_ops ntb_epf_ops = {
- 	.spad_count		= ntb_epf_spad_count,
- 	.peer_mw_count		= ntb_epf_peer_mw_count,
- 	.db_valid_mask		= ntb_epf_db_valid_mask,
-+	.db_vector_count	= ntb_epf_db_vector_count,
-+	.db_vector_mask		= ntb_epf_db_vector_mask,
- 	.db_set_mask		= ntb_epf_db_set_mask,
- 	.mw_set_trans		= ntb_epf_mw_set_trans,
- 	.mw_clear_trans		= ntb_epf_mw_clear_trans,
-@@ -607,8 +620,8 @@ static int ntb_epf_init_dev(struct ntb_epf_dev *ndev)
- 	int ret;
- 
- 	/* One Link interrupt and rest doorbell interrupt */
--	ret = ntb_epf_init_isr(ndev, NTB_EPF_MIN_DB_COUNT + NTB_EPF_IRQ_RESERVE,
--			       NTB_EPF_MAX_DB_COUNT + NTB_EPF_IRQ_RESERVE);
-+	ret = ntb_epf_init_isr(ndev, NTB_EPF_MIN_DB_COUNT + 1 + NTB_EPF_IRQ_RESERVE,
-+			       NTB_EPF_MAX_DB_COUNT + 1 + NTB_EPF_IRQ_RESERVE);
- 	if (ret) {
- 		dev_err(dev, "Failed to init ISR\n");
- 		return ret;
-diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-index 4927faa28255..39e784e21236 100644
---- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-@@ -1384,6 +1384,22 @@ static u64 vntb_epf_db_valid_mask(struct ntb_dev *ntb)
- 	return BIT_ULL(ntb_ndev(ntb)->db_count) - 1;
- }
- 
-+static int vntb_epf_db_vector_count(struct ntb_dev *ntb)
++/**
++ * ntb_mw_set_trans_ranges() - set the translations of an inbound memory
++ *                             window, composed of multiple subranges.
++ * @ntb:	NTB device context.
++ * @pidx:	Port index of peer device.
++ * @widx:	Memory window index.
++ * @num_ranges:	The number of ranges described by @ranges array.
++ * @ranges:	Array of subranges. The subranges are interpreted in ascending
++ *		window offset order (i.e. ranges[0] maps the first part of the MW,
++ *		ranges[1] the next part, ...).
++ *
++ * Return: Zero on success, otherwise an error number. If the driver does
++ *         not implement the callback, return -EOPNOTSUPP.
++ */
++static inline int ntb_mw_set_trans_ranges(struct ntb_dev *ntb, int pidx, int widx,
++					  unsigned int num_ranges,
++					  const struct ntb_mw_subrange *ranges)
 +{
-+	return ntb_ndev(ntb)->db_count;
++	if (!num_ranges || !ranges)
++		return -EINVAL;
++
++	if (ntb->ops->mw_set_trans_ranges)
++		return ntb->ops->mw_set_trans_ranges(ntb, pidx, widx,
++						     num_ranges, ranges);
++
++	/*
++	 * Fallback for drivers that only support the legacy single-range
++	 * translation API.
++	 */
++	if (num_ranges == 1)
++		return ntb_mw_set_trans(ntb, pidx, widx,
++					ranges[0].addr, ranges[0].size);
++
++	return -EOPNOTSUPP;
 +}
 +
-+static u64 vntb_epf_db_vector_mask(struct ntb_dev *ntb, int db_vector)
-+{
-+	struct epf_ntb *ndev = ntb_ndev(ntb);
-+
-+	db_vector--; /* vector 0 is reserved for link events */
-+	if (db_vector < 0 || db_vector >= ndev->db_count)
-+		return 0;
-+
-+	return BIT_ULL(db_vector);
-+}
-+
- static int vntb_epf_db_set_mask(struct ntb_dev *ntb, u64 db_bits)
- {
- 	return 0;
-@@ -1487,20 +1503,29 @@ static int vntb_epf_peer_spad_write(struct ntb_dev *ndev, int pidx, int idx, u32
- 
- static int vntb_epf_peer_db_set(struct ntb_dev *ndev, u64 db_bits)
- {
--	u32 interrupt_num = ffs(db_bits) + 1;
- 	struct epf_ntb *ntb = ntb_ndev(ndev);
- 	u8 func_no, vfunc_no;
--	int ret;
-+	u64 failed = 0;
-+	unsigned long i;
- 
- 	func_no = ntb->epf->func_no;
- 	vfunc_no = ntb->epf->vfunc_no;
- 
--	ret = pci_epc_raise_irq(ntb->epf->epc, func_no, vfunc_no,
--				PCI_IRQ_MSI, interrupt_num + 1);
--	if (ret)
--		dev_err(&ntb->ntb->dev, "Failed to raise IRQ\n");
-+	for_each_set_bit(i, (unsigned long *)&db_bits, ntb->db_count) {
-+		/*
-+		 * DB bit i is MSI interrupt (i + 2).
-+		 * Vector 0 is used for link events and MSI vectors are
-+		 * 1-based for pci_epc_raise_irq().
-+		 */
-+		if (pci_epc_raise_irq(ntb->epf->epc, func_no, vfunc_no,
-+				      PCI_IRQ_MSI, i + 2))
-+			failed |= BIT_ULL(i);
-+	}
-+	if (failed)
-+		dev_err(&ntb->ntb->dev, "Failed to raise IRQ (%#llx)\n",
-+			failed);
- 
--	return ret;
-+	return failed ? -EIO : 0;
- }
- 
- static u64 vntb_epf_db_read(struct ntb_dev *ndev)
-@@ -1561,6 +1586,8 @@ static const struct ntb_dev_ops vntb_epf_ops = {
- 	.spad_count		= vntb_epf_spad_count,
- 	.peer_mw_count		= vntb_epf_peer_mw_count,
- 	.db_valid_mask		= vntb_epf_db_valid_mask,
-+	.db_vector_count	= vntb_epf_db_vector_count,
-+	.db_vector_mask		= vntb_epf_db_vector_mask,
- 	.db_set_mask		= vntb_epf_db_set_mask,
- 	.mw_set_trans		= vntb_epf_mw_set_trans,
- 	.mw_clear_trans		= vntb_epf_mw_clear_trans,
+ /**
+  * ntb_mw_clear_trans() - clear the translation address of an inbound memory
+  *                        window
 -- 
 2.51.0
 
