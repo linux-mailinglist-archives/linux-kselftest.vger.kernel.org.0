@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-49297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D632D396A4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 15:09:44 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8601ED39646
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 15:03:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C4B8A30FA4DB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:02:11 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 05EB2300E4E7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:02:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45F435580C;
-	Sun, 18 Jan 2026 13:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1759F3570B7;
+	Sun, 18 Jan 2026 13:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="IuuBvnAd"
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="OzgBPjOP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11021096.outbound.protection.outlook.com [52.101.125.96])
+Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11021122.outbound.protection.outlook.com [40.107.74.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF55E350A2F;
-	Sun, 18 Jan 2026 13:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9810134B410;
+	Sun, 18 Jan 2026 13:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.122
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768744558; cv=fail; b=V1PJJMevKpot3oqPfUHRPIYjOwjW+xuh8pWNwEchGTU4CYlIFPA1NIyIYiIJ2rIFVp5ok/AdFTfLnN7JL5lm8jtNcyaKwg27PTQKv/6hw3NWtbnyBVkNpFCxt1WLoFxMWWD/2nOo1Ck9oDqQHu+7fWjNBauAIWVZDXJJg7e9LbA=
+	t=1768744559; cv=fail; b=njAktPBacXEyuWqg65AZMHTjrhGLgWKeTm6IeKsCxSsyQk+rJFmQEVO7WxGLNaijx9RKZFNiBZsuhPdgVCINtKVKhzDvkJmPwXPm1HZ75Xi8J6FNPcTKuWNbCyLfURliSpPf3/BDTPXSw8vGMetYEPsumzbErtyB+t2LJlUmW74=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768744558; c=relaxed/simple;
-	bh=UuXGLZP37ij+tRp0htfcTkXjgDsuQT9RGFOc7U0xI0o=;
+	s=arc-20240116; t=1768744559; c=relaxed/simple;
+	bh=XTAf4moWA3ONm/EDufGRoCTADoj36/C2rHn7GqSZFJ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KRtJYmj9lOYy7Vyk8U/DAzdg+ZrW7F6viUDB14S+CITyx1SyFEbxgCyNy0o0zADIPIeRg0rf1k24Haqa7ekak99aF7T9FZUjmoaz2hHpeAy/NKnXHfu3hHsqKW0i1xTJ/9GsxkLltResRQdP+ppUNl4CG7MYZX4UkHeAVJ3SMIQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=IuuBvnAd; arc=fail smtp.client-ip=52.101.125.96
+	 Content-Type:MIME-Version; b=C+gKe3ElP2ZrJc42hdb8SCyl8fqtRm8r2WlfFXJeqpNLXw8Y2GQ2qFhGb/ns+VnMXwYjWZzbSIHt6feXMJxrezSuB9vcrBTjw/iN3pgdHrXVIIHXI5LNFa8ODr38NWURtc6Q2dOuw7jpUl5AEq+SI/L6oGwTL6va49ap4zAQtS8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=OzgBPjOP; arc=fail smtp.client-ip=40.107.74.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=O8Yfb6YL6P0wazQc5cyhfNaEQifSw9QbhAKmgnN6Zo4Oq4GFAHVHDTMMzdB0Tv43f1ZCYMGFuRGQDQTjqeaic09CKy2JVPVxsJTJwRgVVGbRxKHUYi6yHaLw7cAWYceheYWFDQag0pmnOzDbApQxhN+zPadtDMDoypZRQvhWVp1twKUSOBQiy0XwC4ZrII8fZj8nTA2Rc7yMKnkbeTY6M9AOFvp2XFvkE/X6yU4n3XZZkA86OHiHAGuxgG3rL6kJWh0KurVHW2kxZuVKpw6UdvQtPW00b+CNvuideZorohnMQ1V1AEaEEX5HEfeQvO/Cy5ZIv7ta1WINGtuLrRLWlQ==
+ b=rNCq1pdam+LHf1AftWZW8Aj66FXgVaWvisDPSdmj1Tzuwv2gRzpdZ2ymcNQ2p0V4tnociVUztdCDe0ZekWU0/EJAqX39lFxcPsr3hqtdl26eTiiEihHBgj4XQfJ71bE/SCYWV0oZkEE6jv9XINqLa32II2yNeniq22PkCw6M75vuwFus/TxWf1ImvUGXtLu0GddMaGThTsga+WmloCKBwfuYJlW1Pe8nKiPrKtWGrSUlHDvRDIDYZI4YYiAVsGs0vDqUFGU4+C+8ONPu0V7EeZcjidIEee0LlQ2JBJbDSipE3XVpe8NiGisg+xrDxgC4KN2uMyG35c14am+TFcbtjg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kc0ZovYMMNE566/oX/46iFpesbOPkOjEHJvHSPWx/os=;
- b=nPhungfL7HXOIGyKn+EVqWHUqk0Bk70F4t9FoZaA4eABcr+QWsdXcGf/WzCFnm2/5HRPWy1r/mtvhpZfn75Ili/61c4OCJeTTOn8S/3w6zfsLzgiT5AjtbONSh/+BJbAj2MwGig5gRTwlh++XigaMMLoE40RJaJZ035DYsKu87AU3tyonYSVQ8AuG/FpT3JZK70VvPO6eiNs49TQ9HsId3og84hGUN7imqzOIDos1JFRgqAWEcbuR3klO2qd7TnC/KKhszslBVfND+T/32QeqvLvbUBlqS01gnbdh2DK19NwopFMEvcaAm9SDtVzFlZyPfRci1CW0o0sSGjdsjaWyA==
+ bh=EqZ4zFSJKcS2aXV8+pNLIdL+h0NJNfQfOFRYdRf/uRY=;
+ b=JnTwzg9xYTp+TF05yx7IwV7O/N8Gf6oK7KkLX84KZvi9urEeSD5WautCsD/a/ir1ihvTimK2bu5iQZOCoX161wprnm4V7paHf/AW7i5u1SipYTjgrC/LF/LDiel0mRT3j7xgmicV1pDPncJx4/XT6XY65XeYtOUYzBPljCgKxBmm4MTReq6xq8zI0tJXACUtHIqlKP1Z/blhk2zCbrXfwqv9cmi58Avnm+/LmrflysppTq4XaBx+uW6q1V6A1EJIyL7lUfrQ218iFuParMVl+GoKMari+Om0ZZHaoPb+L3pWuEi7tTlfEtJqZbDN4ObboVggs/vQDixGwyUXfGI2Zg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
  header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kc0ZovYMMNE566/oX/46iFpesbOPkOjEHJvHSPWx/os=;
- b=IuuBvnAdAPcVjwWIQUdB21d/Q/UAUBylapaDXPoRLPFJduYaLcGMFpwFrsqnp54GWmLEd3tJeT+H5VzCI1/dLR7lNhay/NEiFhXtuzFtkAOU1FgvgahLWYzddOUovZEcNbjgKnD1LPeCuWNNcz/4IB2YLcdmh3L/hyY0fQ9N5nU=
+ bh=EqZ4zFSJKcS2aXV8+pNLIdL+h0NJNfQfOFRYdRf/uRY=;
+ b=OzgBPjOPjSiwS5I5P25maVfU1Z1r5X3hWfFQCtFs52oeZH+WiINdt2KqC7sLEwKzdmquZru43k900q0XPRg3f+XgUDUP8YASkzRx4QamOsP5JUTufmVyfIdf4/6RXP3xebyXceeJTxidgmj7n+WpqQ2r6Y5PmWhptsXB2t7Vd9U=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=valinux.co.jp;
 Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
@@ -93,16 +93,16 @@ Cc: linux-pci@vger.kernel.org,
 	andriy.shevchenko@linux.intel.com,
 	jbrunet@baylibre.com,
 	utkarsh02t@gmail.com
-Subject: [RFC PATCH v4 33/38] Documentation: PCI: endpoint: pci-epf-vntb: Update and add mwN_offset usage
-Date: Sun, 18 Jan 2026 22:54:35 +0900
-Message-ID: <20260118135440.1958279-34-den@valinux.co.jp>
+Subject: [RFC PATCH v4 34/38] Documentation: driver-api: ntb: Document remote embedded-DMA transport
+Date: Sun, 18 Jan 2026 22:54:36 +0900
+Message-ID: <20260118135440.1958279-35-den@valinux.co.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260118135440.1958279-1-den@valinux.co.jp>
 References: <20260118135440.1958279-1-den@valinux.co.jp>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TYCP301CA0044.JPNP301.PROD.OUTLOOK.COM
- (2603:1096:400:380::6) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-ClientProxiedBy: TYWPR01CA0035.jpnprd01.prod.outlook.com
+ (2603:1096:400:aa::22) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -112,130 +112,304 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|OSZP286MB2093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9148de71-5f3b-4919-09b6-08de5699377f
+X-MS-Office365-Filtering-Correlation-Id: 05f1054a-752a-46d9-9455-08de569937ec
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|376014|7416014|10070799003|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?rF5wSoIVziqj7UiAw5yTEWoRiHOYfHfyIlHlwyz/80pl2xlCFIUllu4j2FpB?=
- =?us-ascii?Q?V0RPe+uFZ2Q5MCc5+x1Oc2deLQn5dlwOoYTnCib/WQf+nz5AGnweZZ5vDPPr?=
- =?us-ascii?Q?wG8WbDfcULFg/3PjBiJ4CZf6en483omlcz1C9xCPF8re0UXyLrzu9qqK/kr4?=
- =?us-ascii?Q?OPhPNXkQCBaU6+5D471DcqiEe++rYU13GJ3QfNujNaFgv7kgEOG4IVNvvlJr?=
- =?us-ascii?Q?SHc1Uc9kcFXu07HHJFczSufosLCT7U9G7PP9CN71VlR5YptxJsGqRTxi0qMh?=
- =?us-ascii?Q?OMMXk1fNY7qCucxwk6scyBNMUNx9i7nVGQbe+ckIMuLgjOKf3UwQ97W0cW9q?=
- =?us-ascii?Q?e1L4UAepRknc/PLzMARoz9nT2JhU6WpGFarKRtbGV3Z+wHFynNdc9DFmkm9y?=
- =?us-ascii?Q?VJ3qE/ELgyQFzwyCghZiqDPGoxtQ29a01hvBtavwtTYZb058KtHrgqZ7qunk?=
- =?us-ascii?Q?VhEbhBp9PyayvY84OqRDnCwUR5kBKlky7yhZkcaqSREAcC+2euG+BLrzaTMv?=
- =?us-ascii?Q?yf0kTeMd0Ur9xh+KQG5mZoaNPu5qGQbvsY8sMnqJs9ZLfTEBPRWZojvIiuTS?=
- =?us-ascii?Q?p/Fxkd8OGleZr8fhay21ytaVubgcF02vxMUHTgwDy43SXbTZ5+HMTkuTCiIn?=
- =?us-ascii?Q?RJGgM/xnz/u+D5yViWk7iYkQVxE0txs0zxDGlgvcxEUj6UlrxnSit466wdqa?=
- =?us-ascii?Q?ya/2jQRul8vl7i0KvxswyvK6l6YJWIuUr2FApK4Rr3UdOlmIql6xMEmMIMC7?=
- =?us-ascii?Q?tg4syY/L9iuLwj/+xm+71izYOIt+hO9RjBKq4dTiKEkWenewYhsjCFq24RMO?=
- =?us-ascii?Q?UA7V5nA1vSMrrjA2LeGZbol2oXp83ZLCj/R5iNXckprwE3wFmvCeJTq1yyNR?=
- =?us-ascii?Q?XrtLm2H/a5fCGMBJv0t8OgNVqF2RZmp1gwrFMgyaUbcWyhs1M3174iYR7y0I?=
- =?us-ascii?Q?6EnfLYj/c60/P+wMOgvoDc70e7KimHtKXro7hc0z75OIqZr356zjfYenkhUD?=
- =?us-ascii?Q?OEK8bPH2UGzkD7ZmbuobJcYv6ZHE1753t3sy1aeC/Pm+OQp5qFfduTVhxCwj?=
- =?us-ascii?Q?rb5yU2WzgMpcX4BmaWVymYB6s94ykyvHJNZFxhD459rIEtac9atl7zFw93dJ?=
- =?us-ascii?Q?gC5FUNpqxK//j8PSorXyCYWKkn0Dcgolhn3rguw/4QeOtUpcg0nmi6oaKN43?=
- =?us-ascii?Q?atE+CPcOBMCeNIcO6OC1h3dYiw4dvWVeLom+qdsx64EJhT60GoPGXmhZGV2z?=
- =?us-ascii?Q?RyHiLU9QAuX7bGSwTnJ2ptmrycbLwuOksUUbplb0sLU/tz09ifO8GGf4vd5Q?=
- =?us-ascii?Q?7ETkNEsr2NYMfdvvKT3/Kyj+ZnDijgY+dd8tpAFa1dtAqtTNT216hBZq3mFp?=
- =?us-ascii?Q?s2ClFHj19CPWGoMEmHeC7gwKP1MC2ZAvCjLinjFy41zDZpnrp72Hr2MZoiDU?=
- =?us-ascii?Q?ddcsjHsU2NccY8/PjmWZ3F+qJ0S5E19/1GSFRITM4Mq0qbzYxZS1UDjCV2CD?=
- =?us-ascii?Q?nDTAy2gOxtJPIh4ZFYc/KkysF9+zuQ5wNXV5vU+vn1jSXuxfvpjVucx7Kl+i?=
- =?us-ascii?Q?xsvFRmZ15gH+zeKEj1w9tM4hVHNHkjtxFcpcKOOQGOmDkZ28ArTxcavvUzej?=
- =?us-ascii?Q?SA=3D=3D?=
+	=?us-ascii?Q?KXqGKxjr0Rmd020EU3Vb7auqyUc3JS5JqRAZ6nbdBH8M4CPBJ8dDp+zacGUq?=
+ =?us-ascii?Q?/GyyOix2QPej7YOaPrRkXzLuZANmfnyBM8Cy6KSdrCGgR+l2wklmjqlG8rzt?=
+ =?us-ascii?Q?ZkjUgP18JmY3atGKzEi+T9xmR/OMkPwj1le+nl+ntkR0juLOo4Zix/Fufmst?=
+ =?us-ascii?Q?h1sdiCEy7YNvErJP9rdy+MbqsQP95SFUIHRmVCT9pyqdGQ6DoC2u2BXi7aev?=
+ =?us-ascii?Q?M5jIK34MQjN1zSvhHwLFWGvcWePaTyKn6wjJ0vBSzjR5UJbq4JXcjv60GDNe?=
+ =?us-ascii?Q?AQw9R1UrG2lQHJgaz795pAd68ojLW4qlXDDqSxixNk7zMz7V0R1+7+QMijmt?=
+ =?us-ascii?Q?VnuYdEOuqg20PenDzVeX0XnCKuIcpUZEyqgd7sziNnyRsprignyiChh0hr6d?=
+ =?us-ascii?Q?BH5+yM4lYsyR/5Me4HwXIYEZ6QAZ8xCPGE42QFjjJiR1jKjfwr0pMoOfK4VQ?=
+ =?us-ascii?Q?vYsIW7d9gIhrM0jXRlf+eEFtoHvFkZNTHOuI+XgYmzUM3KQhKxtcfAHCVCq3?=
+ =?us-ascii?Q?e8c/R9vorBV7UPI3psHEFZrWNi0OAyV/UMZsyHMAbRgyqlepFkYJFOHRSL4g?=
+ =?us-ascii?Q?C4FYtnDVsox3KIKrqxTYxgQL9bFK3MIyjMmMD7NRKO8nTY5y9VFThw/zoNXf?=
+ =?us-ascii?Q?BXIf+B75JWrlN5K5TSCgKk7gc5VngcWHUsJhCgv/9aWQTK39H338gVGNsZio?=
+ =?us-ascii?Q?4TrIeIlXEn1hLENi09foF3OvinJBz3wZXi8RJM88zDXB50FWslSbsgJAmq5v?=
+ =?us-ascii?Q?ZFaZBAN1wOK9klNqtKwLUWOH3TYcf5E7O20r23rGnxIBebjIjCM3Brt5b5bD?=
+ =?us-ascii?Q?9cjElvZrdyqWq6S+GsJDSNplHy60K4OchHTf4BZMPbDBrrnvpuMVPxR4Finy?=
+ =?us-ascii?Q?lkASub9YDwziFDaXrGjC9yB1IRLBDDDeILLTx0qnGV5R/2+j6dXIfoGs1+dt?=
+ =?us-ascii?Q?7srBahSt81KjW8zKxzwzh3j5c8P3rc1J6sySXe8ktRKokMM0kwv+qBpoDmhu?=
+ =?us-ascii?Q?KYYgOes6kHuUIiEqei62iXaXAGkaJEaltgVhD/IdAxF1fGk9zZiBnRUSIWZm?=
+ =?us-ascii?Q?79XyySll6OqemtQUlhbRbCwE9089m3zqDpXUJhVu58j5BtalO9z6AmR8AtQO?=
+ =?us-ascii?Q?AAAjdaMzSYRi8qIVLG293FT7ufIlMOuf0Q5I8JAoBADIqmPd47635r1WVEyz?=
+ =?us-ascii?Q?KL4KwB4MIoExhkf1OEdY457YJf11u3X06so5S111iCTH+mLpeMyBefk6bNnY?=
+ =?us-ascii?Q?gfRfmeB8bbg/I1V7TuWwlS9ZMMilrm43eA6gHt9v+ViJ3+ydphHfROju2c+r?=
+ =?us-ascii?Q?MMk0Xf9hSccgKBIwDdGt/sBvykf8dbii2BbMBQeKx1WTaQeLkL6+bai1wbRR?=
+ =?us-ascii?Q?jKE8U2uIZL0ewLZPqjEloLscBqlDE9w45pMAZxrJh/6F8ckL8ZXoA0RlNcwu?=
+ =?us-ascii?Q?Z0Q5ySVLQG9dW6XYJJdU/c0cwSmjwFgCHoErhBzu6NFDQEk2PGUFcf5zlJGE?=
+ =?us-ascii?Q?VgCjj/rDMgfJ/5EUFB6BD7dmZdghQrVvmGPU1Feor+NRaK2h3dW74k+Lq6pu?=
+ =?us-ascii?Q?UKSqZ4kg51b2wroEfJmc0+W01mg7NXUdRODXFTeSmA+jp0HFMxxiAxrbtwWA?=
+ =?us-ascii?Q?pQ=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(10070799003)(1800799024)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?JFZNuyOWk30FYP3X2M1z/ArRg6Q5bLbXqDDVqvalzUuwDpY2jFlKLA1boMxz?=
- =?us-ascii?Q?V+F4T9TcXNjSbL0XHGvEIeu83pcKJ+7zZlLJQyop+K/l/VzcggptIk3Wzau8?=
- =?us-ascii?Q?qHfYOUEBif0VYjma//NvQ7H/5ZbcA5uaS+hJ6bepvphp3mwWMVRlT7daCXQd?=
- =?us-ascii?Q?bTIHEU2+AZLG6s6cUVSFWDHxNiZIMnFY8zeyznupOLPhe4WPYxCfa7We1LtZ?=
- =?us-ascii?Q?2i2cdFJHfXTVYn0wBqFI6TvemXZDcTLQqKDBY1jhOlR5hHtw0cabM4qsYfAK?=
- =?us-ascii?Q?mAXp9cN3vWhwtYx6tQevdzpVPq1LZ5XjCKK/9DiA/VtutZeKkmFnKIQeGv2e?=
- =?us-ascii?Q?W+cimL1ZBJBZxXMXVvKlYzMSQLztPeDEmfUohpqxSjljkkBlqu0Niq987xUa?=
- =?us-ascii?Q?Gj+6YM7NA7THnQ0hRbzIIsF9Vgd1eOHOnORU20gLDquZTRfeVn0CEj7gE9rB?=
- =?us-ascii?Q?8QeyL0zO3FvyO5MM3jemNWIk+qO+M/8iSdg181hD+0YWeZTVhNh3vLdxh1nD?=
- =?us-ascii?Q?Ol3xUPbFB2uzlJjE7sM1wEfu+gvgnQuFbiWqDgi4741L6eg1OBAReZ7F8KPO?=
- =?us-ascii?Q?bZQgGv4FH+6c/Y4JTc7KHyMWBs2e5S4Vt4GfIn+UxdlXHl4LUGGKRcGyKv91?=
- =?us-ascii?Q?zHg6+2yYMi3I56bEhhx3MrcXVHT/s544P/OAD9Dq3IEIo35SrtFSE7bcd97G?=
- =?us-ascii?Q?j8X0SX3HpaZcK4vXDeTHVUwgukjeTwbiD3vChpyGz6sUlyj/8O4hsEe9hnvk?=
- =?us-ascii?Q?G17BUae0N5TvPTCR/BA7DYUUL3ALkks7Ge54BIaYyo7k+Ns4wg6J3mSIEsas?=
- =?us-ascii?Q?WnzE2135COP5bIe2JX2+JYx3Wh4AdIgB7ZvjdP2TnLGcWA7pX/RbqS8e0n4Q?=
- =?us-ascii?Q?QOnEgsBjie9Kie9KXOmO0gjvPOyV0tzAhahz49G2hIQnJMh6u+HgoEkXicJw?=
- =?us-ascii?Q?9uS3OSRMkAtoO5LU26ZijtuOod41f5N3OaUQzTq7oyfQXmY/DKp3CAv6FdPG?=
- =?us-ascii?Q?9NMApr1ExBsvqnw3R4u1MkLjv4lMfh61UoJd2q2JOm+4BQiwQr3+nQeYSZGw?=
- =?us-ascii?Q?1UeUArcCDop9I7NEHrFWzCeZJa7ZNEXr4hj+Nkatqz9ELGLYhAT3j0oM+Cmd?=
- =?us-ascii?Q?WfEbjrDrze6n6odsA0XRoMTTBghNc4Iva9wDQFQdxboubIvNMIzRTsZIWfM5?=
- =?us-ascii?Q?UnoAGUVVoAt+gAjUiNZZD/o6oZvMPlQ6xnpQAjjLcxhK35XaDtFKF29WCpWl?=
- =?us-ascii?Q?ofWRAVJhfdtsTv+ukGK+qSMWlbOamxiSHVB6RlH0C+igVSsp5D2kptXY+ywX?=
- =?us-ascii?Q?cO5mQx5FhKFH2oir+yiT8kpM45NAk0pfaUmdVQs4Ui8iVYdXgzYVXkSq6FTX?=
- =?us-ascii?Q?h7QqtFDvjlAh/gi8G+DV+qVVxGjMtNflt6Y4sTjIk2fsGEf3buEjqtg5biNP?=
- =?us-ascii?Q?uib+78vFqFRicMPCbngVOy4mPCDFrjr8BH5oUTJd1Lvh0l9p1NfuUp3j9oI3?=
- =?us-ascii?Q?mxvuy5mwacExinVYJ4LgoxlVBBpXswaZiMNx13q272WPyHeeHcMCYnrZpqJS?=
- =?us-ascii?Q?KCiQXY1jkIu4OdoBUHDXPOiLF6Vsxri2+YZVewVsHyPOB+KS+LaHmrlnKzJM?=
- =?us-ascii?Q?OMWKPMxF+0glQuFdGaOP8FkXCb3ft8K/BaNw0uDNWKBkWtWJ4fKk+8ntsaJa?=
- =?us-ascii?Q?go+MVk2K6dWIsr3PVBD66Zrmi2TO/RDV+MtaC0c0/GVcfr5+8Ipuyl85/X5x?=
- =?us-ascii?Q?y6mLKHk3xnjZb43kXszDpJFwSoJy19zTfFYCNwapdjFJtuFq+Fvs?=
+	=?us-ascii?Q?haAFqZSMRVt8o5akNoJC8cMTex1qT3ISt2aONoyA+fat1LvuDm3lav63KHPP?=
+ =?us-ascii?Q?OWCZKR1gjUxorufT89PIuanIxoe/CRulUoWd0j6OMTL4YlRok7YwYlKFbyW7?=
+ =?us-ascii?Q?NsGTQsvhgHYKfXx/2qH7MTQcG9+Irwo50wFI3TFZ47+wuah7p7zcG9dljVNW?=
+ =?us-ascii?Q?UgtZvuKihYXOvpHAB4vsZGExrEbmgXOdenGLNA/kTXWfImkpOsxZjMyCUPRR?=
+ =?us-ascii?Q?7MDa0De2hwVE8gYo3AhPOhzu3OTM7FlokP86Jg4OazRc4TVpN/je9VSJZW9V?=
+ =?us-ascii?Q?8PBjBiVdJ0n0FoE7i8KkuFhWG2nuN3gXK16Kgvcg8JirFniyzzXOC/K8lMlo?=
+ =?us-ascii?Q?RlhQrilr3eDceJSV3HT3hfW5MzEWYbToooK5Rf7/SC4bKvTN6GTGw9lNVPX+?=
+ =?us-ascii?Q?aS0u5B+acv0Uh2RvKB8g6febI6tsqielPpV0IHU0W6bVAVBXVTRH0jUWyWKU?=
+ =?us-ascii?Q?Y5GPO2W9mCNDvefYEhKymUFs1AAb/c4j4dK1VK/YzQatZy+WyjFHRcoF6G+4?=
+ =?us-ascii?Q?e4ZPdHHZx02zllinhwi8ez+LwaOJ6317y66Re4CkLd1VyMTt0MvPPa/6Bfdy?=
+ =?us-ascii?Q?O7cRXp3Y4ZITpaagQcciqvYbwwhN+XOyDZi1co2IBYMaaSWrsY0vUfz6kg+B?=
+ =?us-ascii?Q?pb6qA69Xq83VLlNW783m3LV/RjZ9UPfRUSG1Oo9g5IAgIRqddt9ZhWsWH7Lx?=
+ =?us-ascii?Q?BY0UdSur9sS5TSNV9hESQdOCpALVJwiSnoGr4/kvVUZr6sfJz+jmdctYC1xO?=
+ =?us-ascii?Q?FEKwgr9PdD/jKoISduOe2voaow4IdYgpsSQNBQ6J0mhM8NVHC0IbezxyxI6X?=
+ =?us-ascii?Q?wrIdCgNjliUVYmmcyKf7KaEQp711PTSVHK+BewzB6ieWeq3lhBuRLFcqSzbJ?=
+ =?us-ascii?Q?wJnFWVLvfMQoUzBnI7FZECcPIiwo4wyq39vo9jAHrA+neYWtuWxE8qY53ylo?=
+ =?us-ascii?Q?H3ldsD/K4A2uqPHULh2c3W4Hpfl31S3qHVzegfPbBfroqgo+D5m0vuXJtRE3?=
+ =?us-ascii?Q?rwT/jnG7rqeauhoa2aG7U2xGzz/6HZTUyyqnoFOAjGNULBkVqHC1cbCkQRxI?=
+ =?us-ascii?Q?SKV9bnYKxHtuH1rRSeFmlqb/sTlsbK/ouidbjAA1oufW/iFnDuU/fIuF3yfn?=
+ =?us-ascii?Q?AVguaPpahMRr3eeT5zmaP3N9b5piLmEA81UALZmow/XJ6Ir+gaMysmmvs3Vf?=
+ =?us-ascii?Q?rCbsYg5eSfxpBenqx5j2GiKPuElVJesr66G3aPjMhXB1KJYkD6EiwJPhwicM?=
+ =?us-ascii?Q?f1sRuvaWPXxd4CbpSfqw7e0fcZ4jJcxCtNYXv73X3D/OjCjUscz5n/VGxunU?=
+ =?us-ascii?Q?HXa2fYXegtwyLVRJfokCCvXRwTekwlfIykKoijSTmheBnr+tju357dBIq+o2?=
+ =?us-ascii?Q?6cSPsGQQJcRVwRURrZipUw6+Kv5V/50kSQNL6rTv9AqBw1HPmkTSrRhXDmhD?=
+ =?us-ascii?Q?IvON2tq8C38o/YFPulUwgwHVnoQvDstIICB80OnJMNJUSLcpd2Swa6fJ1KqS?=
+ =?us-ascii?Q?sQlIVL/R5q6ijY1KCH583frRh8qgmHAAZImqWNaFm4JE+1Q3viypJ5V6hYAP?=
+ =?us-ascii?Q?YL4diPGSFh5KtEzNDTtO0PPVzbkSwHZIqCn8LCq/2VfY7cbLi/wEdJlxQ2qZ?=
+ =?us-ascii?Q?PR87jJPxs3SQ3wBDy744xIthCRpYyjipOnU+pxHSl7GvvDh68HlrVsBOefE5?=
+ =?us-ascii?Q?CXzwMWDrY/8Q3E8alga4zxeMQ8JSWqKlF5qrLnOqU1z/d0c3F3c6vcPBPZ/d?=
+ =?us-ascii?Q?KW46VMIOQpfIAl22+BiFzQuIUttaMDgXd1C6/cbIUcyzDXWqL6Y1?=
 X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9148de71-5f3b-4919-09b6-08de5699377f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05f1054a-752a-46d9-9455-08de569937ec
 X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:55:19.4634
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:55:20.1837
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eaChMWr9KA/D8dufZYhQFIobSagIl0nsfETjIp+amqtyufwWp0NkXvSAXeH7UHpguhKE8cpTNbCn/a0fGYssnA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: A4FBSxwPGhr5uUoKfLDvcmlIOX18bS55Rnbw8q/DOzsi+vo3AZiYKgfW4O/fwQbCOc0/pffOD7urbAhmOlPC4A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB2093
 
-Add a concrete example showing how to pack multiple memory windows into
-a single BAR by using 'mwN_bar' and 'mwN_offset'.
+The NTB transport code is split into a common library
+(ntb_transport_core) and NTB client modules.
+
+Document the two transport variants:
+- ntb_transport: legacy shared-memory rings (CPU/local DMA memcpy)
+- ntb_transport_edma: remote embedded-DMA data plane
+
+Also describe how to select the desired driver (module load order or
+driver_override binding) and add data-flow diagrams for both directions.
 
 Signed-off-by: Koichiro Den <den@valinux.co.jp>
 ---
- Documentation/PCI/endpoint/pci-vntb-howto.rst | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ Documentation/driver-api/ntb.rst | 193 +++++++++++++++++++++++++++++++
+ 1 file changed, 193 insertions(+)
 
-diff --git a/Documentation/PCI/endpoint/pci-vntb-howto.rst b/Documentation/PCI/endpoint/pci-vntb-howto.rst
-index 3679f5c30254..097826f946a9 100644
---- a/Documentation/PCI/endpoint/pci-vntb-howto.rst
-+++ b/Documentation/PCI/endpoint/pci-vntb-howto.rst
-@@ -90,9 +90,9 @@ of the function device and is populated with the following NTB specific
- attributes that can be configured by the user::
+diff --git a/Documentation/driver-api/ntb.rst b/Documentation/driver-api/ntb.rst
+index a49c41383779..75f96726c373 100644
+--- a/Documentation/driver-api/ntb.rst
++++ b/Documentation/driver-api/ntb.rst
+@@ -132,6 +132,199 @@ Transport queue pair.  Network data is copied between socket buffers and the
+ Transport queue pair buffer.  The Transport client may be used for other things
+ besides Netdev, however no other applications have yet been written.
  
- 	# ls functions/pci_epf_vntb/func1/pci_epf_vntb.0/
--	ctrl_bar  db_count  mw1_bar  mw2_bar  mw3_bar  mw4_bar	spad_count
--	db_bar	  mw1	    mw2      mw3      mw4      num_mws	vbus_number
--	vntb_vid  vntb_pid
-+	ctrl_bar  mw1         mw2         mw3         mw4         num_mws      vntb_pid
-+	db_bar    mw1_bar     mw2_bar     mw3_bar     mw4_bar     spad_count   vntb_vid
-+	db_count  mw1_offset  mw2_offset  mw3_offset  mw4_offset  vbus_number
- 
- A sample configuration for NTB function is given below::
- 
-@@ -111,6 +111,19 @@ A sample configuration for virtual NTB driver for virtual PCI bus::
- 	# echo 0x080A > functions/pci_epf_vntb/func1/pci_epf_vntb.0/vntb_pid
- 	# echo 0x10 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/vbus_number
- 
-+When BAR resources are tight but you still need to create many memory
-+windows, you can pack multiple windows into a single BAR by setting
-+``mwN_bar`` to the same BAR number and using ``mwN_offset`` to place each
-+MW within that BAR. Offsets are in bytes and the resulting regions must not
-+overlap and must exactly fit within the BAR size. This may fail depending
-+on the underlying EPC capabilities::
++Transport variants
++~~~~~~~~~~~~~~~~~~
 +
-+	# echo 0xE0000 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/mw1
-+	# echo 0x20000 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/mw2
-+	# echo 0xE0000 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/mw2_offset
-+	# echo 2 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/mw1_bar
-+	# echo 2 > functions/pci_epf_vntb/func1/pci_epf_vntb.0/mw2_bar
++The ``ntb_transport`` module is a thin NTB client driver. Most of its
++functionality is implemented in the ``ntb_transport_core`` library module,
++which provides a "queue pair" abstraction to transport clients such as
++``ntb_netdev``. Another transport variant, ``ntb_transport_edma``, relies
++on an endpoint embedded DMA engine for the data plane. When
++``ntb_transport_edma`` is loaded before ``ntb_transport``, or when an NTB
++device is explicitly bound to ``ntb_transport_edma`` via sysfs, it will be
++selected. Only one transport driver can bind to a given NTB device, and the
++upper layer does not need to care which variant is active::
 +
- Binding pci-epf-vntb Device to EP Controller
- --------------------------------------------
++                       +--------------------+
++                       | ntb_transport_core |
++                       +--------------------+
++                         ^                ^
++                         |                |
++      ntb_transport -----+                +----- ntb_transport_edma
++     (cpu/dma memcpy)                       (remote embedded DMA transfer)
++                                                         |
++                                                         v
++                                                   +-----------+
++                                                   |  ntb_edma |
++                                                   +-----------+
++                                                         ^
++                                                         |
++                                                 +----------------+
++                                                 |                |
++                                            ntb_dw_edma         [...]
++
++
++Legacy shared-memory backend (``ntb_transport``)
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The default backend uses the NTB memory windows as the data plane. For a TX,
++the payload is copied into a window-backed ring buffer and the receiver copies
++it back out. Copying is performed by the CPU or by a local DMA engine when the
++``use_dma`` module parameter is set.
++
++This mode is widely applicable but is sensitive to memory window size, as
++one descriptor can hold the entire MTU-sized packet data. It also requires
++one extra memcpy on both ends, as opposed to the Remote embedded DMA
++backend, described below.
++
++Remote embedded DMA backend (``ntb_transport_edma``)
++^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++The remote embedded DMA backend moves payload data directly between the two
++systems' memories, and uses the NTB memory windows only for control
++structures and for exposing the endpoint PCI embedded DMA engine to the
++host. It is provided by the ``ntb_transport_edma`` module.
++
++The current implementation supports Synopsys DesignWare PCIe embedded DMA
++(eDMA) via the ``ntb_dw_edma``, which is the only remote embedded DMA
++backend option at the moment, and the ``dw-edma`` DMA-engine driver
++(``drivers/dma/dw-edma``). The transport is not inherently tied to
++DesignWare: additional vendor-specific backends can be added by registering
++an ``ntb_edma_backend`` implementation (See ``[...]`` in the above figure.)
++
++At a high level:
++
++* One memory window is reserved as the "eDMA window". The endpoint maps its DMA
++  register block and linked-list descriptor memory into that window so the
++  host can ioremap it.
++
++* The remaining memory windows contain small per-QP control rings used to
++  exchange receive-buffer addresses and completion information.
++
++* For RC->EP traffic the RC controls the endpoint DMA read channels through the
++  eDMA window and the DMA engine pulls from RC memory into an EP RX buffer.
++
++* For EP->RC traffic the endpoint uses its local DMA write channels to push into
++  an RC RX buffer.
++
++Because the data plane no longer uses window-backed payload rings, this mode
++scales better when window space is scarce (for example, when using many queue
++pairs).
++
++The following figures illustrate the data flow when ``ntb_netdev`` sits on top
++of the transport:
++
++::
++
++       Figure 1. RC->EP traffic via ntb_netdev + ntb_transport_edma
++                         backed by ntb_dw_edma
++
++             EP                                   RC
++          phys addr                            phys addr
++            space                                space
++             +-+                                  +-+
++             | |                                  | |
++             | |                ||                | |
++             +-+-----.          ||                | |
++    EDMA REG | |      \\    [A] ||                | |
++             +-+----.  '---+-+  ||                | |
++             | |     \\    | |<---------[0-a]----------
++             +-+-----------| |<----------[2]----------.
++     EDMA LL | |           | |  ||                | | :
++             | |           | |  ||                | | :
++             +-+-----------+-+  ||  [B]           | | :
++             | |                ||  ++            | | :
++          ---------[0-b]----------->||----------------'
++             | |            ++  ||  ||            | |
++             | |            ||  ||  ++            | |
++             | |            ||<----------[4]-----------
++             | |            ++  ||                | |
++             | |           [C]  ||                | |
++          .--|#|<------------------------[3]------|#|<-.
++          :  |#|                ||                |#|  :
++         [5] | |                ||                | | [1]
++          :  | |                ||                | |  :
++          '->|#|                                  |#|--'
++             |#|                                  |#|
++             | |                                  | |
++
++       Figure 2. EP->RC traffic via ntb_netdev + ntb_transport_edma
++                        backed by ntb_dw_edma
++
++             EP                                   RC
++          phys addr                            phys addr
++            space                                space
++             +-+                                  +-+
++             | |                                  | |
++             | |                ||                | |
++             +-+                ||                | |
++    EDMA REG | |                ||                | |
++             +-+                ||                | |
++    ^        | |                ||                | |
++    :        +-+                ||                | |
++    : EDMA LL| |                ||                | |
++    :        | |                ||                | |
++    :        +-+                ||  [C]           | |
++    :        | |                ||  ++            | |
++    :     -----------[4]----------->||            | |
++    :        | |            ++  ||  ||            | |
++    :        | |            ||  ||  ++            | |
++    '----------------[2]-----||<--------[0-b]-----------
++             | |            ++  ||                | |
++             | |           [B]  ||                | |
++          .->|#|--------[3]---------------------->|#|--.
++          :  |#|                ||                |#|  :
++         [1] | |                ||                | | [5]
++          :  | |                ||                | |  :
++          '--|#|                                  |#|<-'
++             |#|                                  |#|
++             | |                                  | |
++
++       0-a. configure remote embedded DMA (e.g. program endpoint DMA registers)
++       0-b. DMA-map and publish destination address (DAR)
++       1.   network stack builds skb (copy from application/user memory)
++       2.   consume DAR, DMA-map source address (SAR) and start the DMA transfer
++       3.   DMA transfer (payload moves between RC/EP memory)
++       4.   consume completion (commit)
++       5.   network stack delivers data to application/user memory
++
++       [A]: Dedicated MW that aggregates DMA regs and LL (peer ioremaps it)
++       [B]: Control-plane ring buffer for "produce"
++       [C]: Control-plane ring buffer for "consume"
++
++Enabling the remote embedded DMA transport requires:
++
++* ``CONFIG_NTB_TRANSPORT`` and ``CONFIG_NTB_TRANSPORT_EDMA``,
++
++* a matching embedded-DMA backend enabled and/or loaded (e.g.
++  ``CONFIG_NTB_DW_EDMA``),
++
++* an endpoint configuration exposing an extra Memory Window, which,
++  in the ``ntb_dw_edma`` case, exposes eDMA registers and LL region. That
++  means at least the two Memory Windows (MW1 and MW2) need to be present.
++
++* loading ``ntb_transport_edma`` (instead of ``ntb_transport``) on both sides,
++  or explicitly bind to ``ntb_transport_edma`` when both are loaded. See
++  the following::
++
++      dev=<ntb device>  # pick one from: /sys/bus/ntb/devices/
++
++      # switch from ntb_transport -> ntb_transport_edma
++      echo $dev > /sys/bus/ntb/drivers/ntb_transport/unbind
++      echo ntb_transport_edma > /sys/bus/ntb/devices/$dev/driver_override
++      echo $dev > /sys/bus/ntb/drivers/ntb_transport_edma/bind
++
++      # switch back (optional)
++      echo $dev > /sys/bus/ntb/drivers/ntb_transport_edma/unbind
++      echo ntb_transport > /sys/bus/ntb/devices/$dev/driver_override
++      echo $dev > /sys/bus/ntb/drivers/ntb_transport/bind
++
++The remote embedded DMA mode uses a different memory window layout from the
++legacy shared-memory transport. There is no automatic fallback at runtime:
++if the endpoint does not expose a compatible eDMA window,
++``ntb_transport_edma`` will fail to attach. In that case, users need to
++manually switch back to ``ntb_transport``.
++
+ NTB Ping Pong Test Client (ntb\_pingpong)
+ -----------------------------------------
  
 -- 
 2.51.0
