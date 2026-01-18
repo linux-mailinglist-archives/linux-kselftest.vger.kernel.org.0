@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-49298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8601ED39646
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 15:03:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38615D396A2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 15:09:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 05EB2300E4E7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:02:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5CA9830CFA95
+	for <lists+linux-kselftest@lfdr.de>; Sun, 18 Jan 2026 14:02:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1759F3570B7;
-	Sun, 18 Jan 2026 13:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2865A3587B4;
+	Sun, 18 Jan 2026 13:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="OzgBPjOP"
+	dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b="MTGlmtY7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11021122.outbound.protection.outlook.com [40.107.74.122])
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11020105.outbound.protection.outlook.com [52.101.229.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9810134B410;
-	Sun, 18 Jan 2026 13:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC6535503D;
+	Sun, 18 Jan 2026 13:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.105
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768744559; cv=fail; b=njAktPBacXEyuWqg65AZMHTjrhGLgWKeTm6IeKsCxSsyQk+rJFmQEVO7WxGLNaijx9RKZFNiBZsuhPdgVCINtKVKhzDvkJmPwXPm1HZ75Xi8J6FNPcTKuWNbCyLfURliSpPf3/BDTPXSw8vGMetYEPsumzbErtyB+t2LJlUmW74=
+	t=1768744560; cv=fail; b=jkiqdQosjmqW0c8LKrs4xPPwNqR1Rp9vsFjOesa3+DjAEtmzEXHd4SIsoeHxjDrLwAFCkfg5jjDF+yHDH7NIa/UciN7EfNmFEH31gKW+xC7mwMCQxkNyzfyf5s+yIzWiC5rfzr2Grp+EysHDZ+DxRZBeMm4RuGBPn6HRu+Nm5X8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768744559; c=relaxed/simple;
-	bh=XTAf4moWA3ONm/EDufGRoCTADoj36/C2rHn7GqSZFJ0=;
+	s=arc-20240116; t=1768744560; c=relaxed/simple;
+	bh=YVdnHgukbTjGy9ZuSEPmcJdnE9Pxh8RckKZoie4rV04=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C+gKe3ElP2ZrJc42hdb8SCyl8fqtRm8r2WlfFXJeqpNLXw8Y2GQ2qFhGb/ns+VnMXwYjWZzbSIHt6feXMJxrezSuB9vcrBTjw/iN3pgdHrXVIIHXI5LNFa8ODr38NWURtc6Q2dOuw7jpUl5AEq+SI/L6oGwTL6va49ap4zAQtS8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=OzgBPjOP; arc=fail smtp.client-ip=40.107.74.122
+	 Content-Type:MIME-Version; b=XC49/QDRvchPVgIyx9PwrLzNL1KlNKGeAkwurQl7fSZD+ei7eZBZz7k6YRDU0GP9zBrNSX5/qEKor4zGVgzlqxoHhxv1MF2JzKw55FeMQS0ZnmkXeFoQ8icFda2XgYrq6MGH6AcmJrKtajqVMb2txi1E+Kf90odlhTwhtZ7qJMY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp; spf=pass smtp.mailfrom=valinux.co.jp; dkim=pass (1024-bit key) header.d=valinux.co.jp header.i=@valinux.co.jp header.b=MTGlmtY7; arc=fail smtp.client-ip=52.101.229.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=valinux.co.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=valinux.co.jp
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rNCq1pdam+LHf1AftWZW8Aj66FXgVaWvisDPSdmj1Tzuwv2gRzpdZ2ymcNQ2p0V4tnociVUztdCDe0ZekWU0/EJAqX39lFxcPsr3hqtdl26eTiiEihHBgj4XQfJ71bE/SCYWV0oZkEE6jv9XINqLa32II2yNeniq22PkCw6M75vuwFus/TxWf1ImvUGXtLu0GddMaGThTsga+WmloCKBwfuYJlW1Pe8nKiPrKtWGrSUlHDvRDIDYZI4YYiAVsGs0vDqUFGU4+C+8ONPu0V7EeZcjidIEee0LlQ2JBJbDSipE3XVpe8NiGisg+xrDxgC4KN2uMyG35c14am+TFcbtjg==
+ b=AN3HkOBLhYW3eQWs0+WMW2nT7wIl9TUI4pbPoBCVl62c7oxUz8zr1TUxNLEDcy+QwcC3RqtAoeoVNv3JdbDkgf3H84hiCYdX6ojsbdtgtTxh8Z+jcmruRTlvjRggmrfQxNMK/+VQIHyLU13PhB/dHnfEDFpkVLXZrsTBoTRh3UupnBelZje7FGz3xFIMqNEu2Dkpayk0oZrd6Sxc1AqBcoW5buhuqc8OBVLyTL1uM6/8ciU8iGftVEPI2KH5udAmWFZ4LAR5uJEePOv4eZMrFjSIZkBkrHCstvBLmcXdVzgp0LpZqr9ysYAU/4N3dzc76uj+9JXfi2Nic1FCBGYpQw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EqZ4zFSJKcS2aXV8+pNLIdL+h0NJNfQfOFRYdRf/uRY=;
- b=JnTwzg9xYTp+TF05yx7IwV7O/N8Gf6oK7KkLX84KZvi9urEeSD5WautCsD/a/ir1ihvTimK2bu5iQZOCoX161wprnm4V7paHf/AW7i5u1SipYTjgrC/LF/LDiel0mRT3j7xgmicV1pDPncJx4/XT6XY65XeYtOUYzBPljCgKxBmm4MTReq6xq8zI0tJXACUtHIqlKP1Z/blhk2zCbrXfwqv9cmi58Avnm+/LmrflysppTq4XaBx+uW6q1V6A1EJIyL7lUfrQ218iFuParMVl+GoKMari+Om0ZZHaoPb+L3pWuEi7tTlfEtJqZbDN4ObboVggs/vQDixGwyUXfGI2Zg==
+ bh=vr5TAntOe1KqTU8CWEh2fbZ9UrqenNIZnJpcr9cLzYI=;
+ b=Xshni+Dqczo4YmXt7qidTLOSW26FfvgRPhQzkgfLlNdFZvWUeF0vTQd8686+wH3bQg4Oq0667tzOsyEBaRwvxmP9JqYslQ644y5KocpKDvUyS8Oc8YBFwZjN5mMQpk7qXVwGvYWlmiLG0Ryjq5V5VR1YhLVKtsiWxYVO3x4kbk4/eTsJLQajsbD/VhQAQ87zQq1DqXk2IUad1KJVHH1Z0EWmJ4qUYP/SjNPwCiHGTVUOw0gOGtjvJyQ+hCUI99DXoU4e64olAeRgk5fydP5g0+9SUiYM4U07xWTZBp5xiXtzOPA9PtDnyOXv2S+S50Mxhjf3Xb5viOvJs0LsbeH3FA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=valinux.co.jp; dmarc=pass action=none
  header.from=valinux.co.jp; dkim=pass header.d=valinux.co.jp; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=valinux.co.jp;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EqZ4zFSJKcS2aXV8+pNLIdL+h0NJNfQfOFRYdRf/uRY=;
- b=OzgBPjOPjSiwS5I5P25maVfU1Z1r5X3hWfFQCtFs52oeZH+WiINdt2KqC7sLEwKzdmquZru43k900q0XPRg3f+XgUDUP8YASkzRx4QamOsP5JUTufmVyfIdf4/6RXP3xebyXceeJTxidgmj7n+WpqQ2r6Y5PmWhptsXB2t7Vd9U=
+ bh=vr5TAntOe1KqTU8CWEh2fbZ9UrqenNIZnJpcr9cLzYI=;
+ b=MTGlmtY7SMd2CLu7TVcTLwJsEacJSq/gGb3hLXN9BcRsSYwfDG3wuKy44bfXQyWdzwBzz4FA+80DiDmG3BoAEzZUroW27H8GYim4QWzxrs/Gh5tLY7rMSjkRuOS/jY56LYOU5SCYPcl6m0xZ3ujxz8WtpLCKKvmkglV7vviTilc=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=valinux.co.jp;
 Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:38f::10)
  by OSZP286MB2093.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:180::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.10; Sun, 18 Jan
- 2026 13:55:47 +0000
+ 2026 13:55:48 +0000
 Received: from TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  ([fe80::2305:327c:28ec:9b32]) by TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  ([fe80::2305:327c:28ec:9b32%5]) with mapi id 15.20.9520.009; Sun, 18 Jan 2026
- 13:55:47 +0000
+ 13:55:48 +0000
 From: Koichiro Den <den@valinux.co.jp>
 To: Frank.Li@nxp.com,
 	dave.jiang@intel.com,
@@ -93,16 +93,16 @@ Cc: linux-pci@vger.kernel.org,
 	andriy.shevchenko@linux.intel.com,
 	jbrunet@baylibre.com,
 	utkarsh02t@gmail.com
-Subject: [RFC PATCH v4 34/38] Documentation: driver-api: ntb: Document remote embedded-DMA transport
-Date: Sun, 18 Jan 2026 22:54:36 +0900
-Message-ID: <20260118135440.1958279-35-den@valinux.co.jp>
+Subject: [RFC PATCH v4 35/38] PCI: endpoint: pci-epf-test: Add pci_epf_test_next_free_bar() helper
+Date: Sun, 18 Jan 2026 22:54:37 +0900
+Message-ID: <20260118135440.1958279-36-den@valinux.co.jp>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260118135440.1958279-1-den@valinux.co.jp>
 References: <20260118135440.1958279-1-den@valinux.co.jp>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TYWPR01CA0035.jpnprd01.prod.outlook.com
- (2603:1096:400:aa::22) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
+X-ClientProxiedBy: TYWPR01CA0036.jpnprd01.prod.outlook.com
+ (2603:1096:400:aa::23) To TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
  (2603:1096:405:38f::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -112,305 +112,158 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: TY7P286MB7722:EE_|OSZP286MB2093:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05f1054a-752a-46d9-9455-08de569937ec
+X-MS-Office365-Filtering-Correlation-Id: da920d95-4ef7-4bac-20eb-08de5699385b
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|376014|7416014|10070799003|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KXqGKxjr0Rmd020EU3Vb7auqyUc3JS5JqRAZ6nbdBH8M4CPBJ8dDp+zacGUq?=
- =?us-ascii?Q?/GyyOix2QPej7YOaPrRkXzLuZANmfnyBM8Cy6KSdrCGgR+l2wklmjqlG8rzt?=
- =?us-ascii?Q?ZkjUgP18JmY3atGKzEi+T9xmR/OMkPwj1le+nl+ntkR0juLOo4Zix/Fufmst?=
- =?us-ascii?Q?h1sdiCEy7YNvErJP9rdy+MbqsQP95SFUIHRmVCT9pyqdGQ6DoC2u2BXi7aev?=
- =?us-ascii?Q?M5jIK34MQjN1zSvhHwLFWGvcWePaTyKn6wjJ0vBSzjR5UJbq4JXcjv60GDNe?=
- =?us-ascii?Q?AQw9R1UrG2lQHJgaz795pAd68ojLW4qlXDDqSxixNk7zMz7V0R1+7+QMijmt?=
- =?us-ascii?Q?VnuYdEOuqg20PenDzVeX0XnCKuIcpUZEyqgd7sziNnyRsprignyiChh0hr6d?=
- =?us-ascii?Q?BH5+yM4lYsyR/5Me4HwXIYEZ6QAZ8xCPGE42QFjjJiR1jKjfwr0pMoOfK4VQ?=
- =?us-ascii?Q?vYsIW7d9gIhrM0jXRlf+eEFtoHvFkZNTHOuI+XgYmzUM3KQhKxtcfAHCVCq3?=
- =?us-ascii?Q?e8c/R9vorBV7UPI3psHEFZrWNi0OAyV/UMZsyHMAbRgyqlepFkYJFOHRSL4g?=
- =?us-ascii?Q?C4FYtnDVsox3KIKrqxTYxgQL9bFK3MIyjMmMD7NRKO8nTY5y9VFThw/zoNXf?=
- =?us-ascii?Q?BXIf+B75JWrlN5K5TSCgKk7gc5VngcWHUsJhCgv/9aWQTK39H338gVGNsZio?=
- =?us-ascii?Q?4TrIeIlXEn1hLENi09foF3OvinJBz3wZXi8RJM88zDXB50FWslSbsgJAmq5v?=
- =?us-ascii?Q?ZFaZBAN1wOK9klNqtKwLUWOH3TYcf5E7O20r23rGnxIBebjIjCM3Brt5b5bD?=
- =?us-ascii?Q?9cjElvZrdyqWq6S+GsJDSNplHy60K4OchHTf4BZMPbDBrrnvpuMVPxR4Finy?=
- =?us-ascii?Q?lkASub9YDwziFDaXrGjC9yB1IRLBDDDeILLTx0qnGV5R/2+j6dXIfoGs1+dt?=
- =?us-ascii?Q?7srBahSt81KjW8zKxzwzh3j5c8P3rc1J6sySXe8ktRKokMM0kwv+qBpoDmhu?=
- =?us-ascii?Q?KYYgOes6kHuUIiEqei62iXaXAGkaJEaltgVhD/IdAxF1fGk9zZiBnRUSIWZm?=
- =?us-ascii?Q?79XyySll6OqemtQUlhbRbCwE9089m3zqDpXUJhVu58j5BtalO9z6AmR8AtQO?=
- =?us-ascii?Q?AAAjdaMzSYRi8qIVLG293FT7ufIlMOuf0Q5I8JAoBADIqmPd47635r1WVEyz?=
- =?us-ascii?Q?KL4KwB4MIoExhkf1OEdY457YJf11u3X06so5S111iCTH+mLpeMyBefk6bNnY?=
- =?us-ascii?Q?gfRfmeB8bbg/I1V7TuWwlS9ZMMilrm43eA6gHt9v+ViJ3+ydphHfROju2c+r?=
- =?us-ascii?Q?MMk0Xf9hSccgKBIwDdGt/sBvykf8dbii2BbMBQeKx1WTaQeLkL6+bai1wbRR?=
- =?us-ascii?Q?jKE8U2uIZL0ewLZPqjEloLscBqlDE9w45pMAZxrJh/6F8ckL8ZXoA0RlNcwu?=
- =?us-ascii?Q?Z0Q5ySVLQG9dW6XYJJdU/c0cwSmjwFgCHoErhBzu6NFDQEk2PGUFcf5zlJGE?=
- =?us-ascii?Q?VgCjj/rDMgfJ/5EUFB6BD7dmZdghQrVvmGPU1Feor+NRaK2h3dW74k+Lq6pu?=
- =?us-ascii?Q?UKSqZ4kg51b2wroEfJmc0+W01mg7NXUdRODXFTeSmA+jp0HFMxxiAxrbtwWA?=
- =?us-ascii?Q?pQ=3D=3D?=
+	=?us-ascii?Q?r6+RQcTHLBlreemx55TOdwbpWc45ipr7r5X6ePi8nMcHSnx2zGXls9m7lRV+?=
+ =?us-ascii?Q?RQArVyJJhdfwFwGurQEK0Hrc8ZxeRrTy+A6RJ0CU56tqoYNX/85QmX67LFJ7?=
+ =?us-ascii?Q?JAeuHaiB98R+q65GlgHpzcZIlVhxYqDCtYskmT3wNcGhVg2ERk2x0rIcdnA2?=
+ =?us-ascii?Q?yaKu/dxoHWLSwSo2vijNk1wczJeHYCtfyZ/jhw1Nt1ycxrZ2M2es9YJV4ZQb?=
+ =?us-ascii?Q?bdfGbdkhQrwzcRZ3tGPzzDrKYRH8xejNeZJ7H/RrJ6NM1zuklpmNhe5E5fSH?=
+ =?us-ascii?Q?LWBsr9BfND3IbgRHyv6HidyFxT/slbPo0inz7vKi8v2a4QBRfYBxwSWjvqxZ?=
+ =?us-ascii?Q?XT4khZK2KkhtVR5Rzdayo24LGsLjfj+cs6/nnfm8Tc1C3CqgVJQGqA2G7w+Z?=
+ =?us-ascii?Q?WhqspQRRqkyC3kWaPLaKKk6U/PFW1KEl3eHlwY/8QUTEHkkUiYIw4fjoUNIq?=
+ =?us-ascii?Q?0kd9G3mjouPJnCZAgnRhzHSCHR7XFbyIumST5dg+E4X0hmh5Ot64eKx01yln?=
+ =?us-ascii?Q?U1QXxK5tsn32hh/8DfDneSW8oe+WjBSS6mpg2isxwSBtb4Z2PUuHzRKLyb0Z?=
+ =?us-ascii?Q?MiRsMSAjCEEQbJ0cWHhZpzytYHvX4XrFZpabamZ75N91ZpRYo7r3kT9xbBQs?=
+ =?us-ascii?Q?S0u9sYTFpxi53k63x4X225svP5r3TeCXwluUVek3f0FUREn+yygDv4iPWFKt?=
+ =?us-ascii?Q?HUgRwdpuFbxOWqjY3BboaIWjVfZvvjEr24S7roAztQ4jjHQEPNcGd37Go0hR?=
+ =?us-ascii?Q?BkhgYzauxA957D/3fMZIibtsVd3JP1cekuGLb/iB4nOnYjlgf0z0SYOK37SQ?=
+ =?us-ascii?Q?7/W7JF/uvSQFF5pxvEYQrWXOKN5Pbriw5ejGjiGAG4SIQjHX5MGu3i8QgOfC?=
+ =?us-ascii?Q?iP59nKPJgiXbLhnXWYF+3dJQe7wAyRCl18E9mT7jYMNjGp9JCnzOg5untaly?=
+ =?us-ascii?Q?a6A6fWGqCfI/9agbUpnrvsgRQO1jF1ux3vBm4XcLGoLWPdSLoId9VxwrVLAC?=
+ =?us-ascii?Q?h5dNH82Ok7nk6UY7JclKJF9FgdE0l8emWB6178G0zevOJKYySwr8B87BI4Kw?=
+ =?us-ascii?Q?Xwi4w31Xc9yds40OVdZkoirfXJ3PKJ69XnBJjmBCFReGfRCP5YabOhl7DZ4M?=
+ =?us-ascii?Q?SDhh41SQxf9oDn5W5+OBrOAXhLtETHSuxaOc/SUXAZ32qQpFJbiPXTfqEz6a?=
+ =?us-ascii?Q?3gAoxdeXS5YNJcu7z20LE93SDjfsA9aDyLZPOlx9Xcr8QMEc6SvfLCiLoCae?=
+ =?us-ascii?Q?yMIFea3r7uBpy65jye27iY2nmCXjx6WhhP2A9L9uLTukIPo9wMLhZHLAIl5D?=
+ =?us-ascii?Q?M0SksnR2gBTji+2j27rO0g0Wtt+rRxCw5eHW/hKoc6hZDUoADXXjjvwUpf31?=
+ =?us-ascii?Q?6hoS4Bbz7LxX7UxcCxAiogLNWbV9OOcNqRmpNiyqE1WkuVENwMuNosDbCWri?=
+ =?us-ascii?Q?LiLaIccyKFOQo2lwx7J4OWahzauBKpxh9pQ978rQAzsdNWYzo2+QdR1Ty9eU?=
+ =?us-ascii?Q?IORt0h0Tpj0mQCbLiJHp8FB72wDbdce4YN5H6ouYB60rVamKP5JnRhVGJ8IR?=
+ =?us-ascii?Q?UzDhXiWwgY/RjBES0W3XaWvN8NXGhawRoGwD7bukO0WgH5vLOUjxV0fVuDTM?=
+ =?us-ascii?Q?0w=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(10070799003)(1800799024)(921020);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?haAFqZSMRVt8o5akNoJC8cMTex1qT3ISt2aONoyA+fat1LvuDm3lav63KHPP?=
- =?us-ascii?Q?OWCZKR1gjUxorufT89PIuanIxoe/CRulUoWd0j6OMTL4YlRok7YwYlKFbyW7?=
- =?us-ascii?Q?NsGTQsvhgHYKfXx/2qH7MTQcG9+Irwo50wFI3TFZ47+wuah7p7zcG9dljVNW?=
- =?us-ascii?Q?UgtZvuKihYXOvpHAB4vsZGExrEbmgXOdenGLNA/kTXWfImkpOsxZjMyCUPRR?=
- =?us-ascii?Q?7MDa0De2hwVE8gYo3AhPOhzu3OTM7FlokP86Jg4OazRc4TVpN/je9VSJZW9V?=
- =?us-ascii?Q?8PBjBiVdJ0n0FoE7i8KkuFhWG2nuN3gXK16Kgvcg8JirFniyzzXOC/K8lMlo?=
- =?us-ascii?Q?RlhQrilr3eDceJSV3HT3hfW5MzEWYbToooK5Rf7/SC4bKvTN6GTGw9lNVPX+?=
- =?us-ascii?Q?aS0u5B+acv0Uh2RvKB8g6febI6tsqielPpV0IHU0W6bVAVBXVTRH0jUWyWKU?=
- =?us-ascii?Q?Y5GPO2W9mCNDvefYEhKymUFs1AAb/c4j4dK1VK/YzQatZy+WyjFHRcoF6G+4?=
- =?us-ascii?Q?e4ZPdHHZx02zllinhwi8ez+LwaOJ6317y66Re4CkLd1VyMTt0MvPPa/6Bfdy?=
- =?us-ascii?Q?O7cRXp3Y4ZITpaagQcciqvYbwwhN+XOyDZi1co2IBYMaaSWrsY0vUfz6kg+B?=
- =?us-ascii?Q?pb6qA69Xq83VLlNW783m3LV/RjZ9UPfRUSG1Oo9g5IAgIRqddt9ZhWsWH7Lx?=
- =?us-ascii?Q?BY0UdSur9sS5TSNV9hESQdOCpALVJwiSnoGr4/kvVUZr6sfJz+jmdctYC1xO?=
- =?us-ascii?Q?FEKwgr9PdD/jKoISduOe2voaow4IdYgpsSQNBQ6J0mhM8NVHC0IbezxyxI6X?=
- =?us-ascii?Q?wrIdCgNjliUVYmmcyKf7KaEQp711PTSVHK+BewzB6ieWeq3lhBuRLFcqSzbJ?=
- =?us-ascii?Q?wJnFWVLvfMQoUzBnI7FZECcPIiwo4wyq39vo9jAHrA+neYWtuWxE8qY53ylo?=
- =?us-ascii?Q?H3ldsD/K4A2uqPHULh2c3W4Hpfl31S3qHVzegfPbBfroqgo+D5m0vuXJtRE3?=
- =?us-ascii?Q?rwT/jnG7rqeauhoa2aG7U2xGzz/6HZTUyyqnoFOAjGNULBkVqHC1cbCkQRxI?=
- =?us-ascii?Q?SKV9bnYKxHtuH1rRSeFmlqb/sTlsbK/ouidbjAA1oufW/iFnDuU/fIuF3yfn?=
- =?us-ascii?Q?AVguaPpahMRr3eeT5zmaP3N9b5piLmEA81UALZmow/XJ6Ir+gaMysmmvs3Vf?=
- =?us-ascii?Q?rCbsYg5eSfxpBenqx5j2GiKPuElVJesr66G3aPjMhXB1KJYkD6EiwJPhwicM?=
- =?us-ascii?Q?f1sRuvaWPXxd4CbpSfqw7e0fcZ4jJcxCtNYXv73X3D/OjCjUscz5n/VGxunU?=
- =?us-ascii?Q?HXa2fYXegtwyLVRJfokCCvXRwTekwlfIykKoijSTmheBnr+tju357dBIq+o2?=
- =?us-ascii?Q?6cSPsGQQJcRVwRURrZipUw6+Kv5V/50kSQNL6rTv9AqBw1HPmkTSrRhXDmhD?=
- =?us-ascii?Q?IvON2tq8C38o/YFPulUwgwHVnoQvDstIICB80OnJMNJUSLcpd2Swa6fJ1KqS?=
- =?us-ascii?Q?sQlIVL/R5q6ijY1KCH583frRh8qgmHAAZImqWNaFm4JE+1Q3viypJ5V6hYAP?=
- =?us-ascii?Q?YL4diPGSFh5KtEzNDTtO0PPVzbkSwHZIqCn8LCq/2VfY7cbLi/wEdJlxQ2qZ?=
- =?us-ascii?Q?PR87jJPxs3SQ3wBDy744xIthCRpYyjipOnU+pxHSl7GvvDh68HlrVsBOefE5?=
- =?us-ascii?Q?CXzwMWDrY/8Q3E8alga4zxeMQ8JSWqKlF5qrLnOqU1z/d0c3F3c6vcPBPZ/d?=
- =?us-ascii?Q?KW46VMIOQpfIAl22+BiFzQuIUttaMDgXd1C6/cbIUcyzDXWqL6Y1?=
+	=?us-ascii?Q?VsMgRYpmOUbP9uJd7jT3yvXWgfMammIwrGG9C7QwNlAu5GuQJxcXJB7LtLeI?=
+ =?us-ascii?Q?7xrnrZd8kYLDglXpZbMUZcXxZCOQ9SG4AxLgIAo8jV+Vyc5TjvQIvv9XXUfj?=
+ =?us-ascii?Q?NSHOLb5uEHgf5yUtKys3HeRUl1lD38mRtmvb6xh7CnWB9430j4KNEB/Sqf1h?=
+ =?us-ascii?Q?T6+Ym9OroWh9yjanX1/nfu5R6tMq77i5UvopIy0WjvYu1CIXi62dkxuMT8Rg?=
+ =?us-ascii?Q?yM+pxC7UgRoMSZnbmOAJy/gwxZeEY2UEj7x45N8/6OaorWorHHNjUtbEL3YO?=
+ =?us-ascii?Q?GDhFU4g6cfCoKeBGuLXCL+LobeFYcWZc97Q/gTWdbFkaI02MilwKKuZM5qc6?=
+ =?us-ascii?Q?/qpDl/fZ+4DT2GzDAuv0/h9GML3z6ktS1fm+a3383nH31i7PV2D0VAQ9JC1q?=
+ =?us-ascii?Q?KyReI/048DWu6XiI3QOhmOTiLW38WbGo5tu2Md728jSZO1E6te1fsw6/pAjs?=
+ =?us-ascii?Q?3uBJAyl+zoV5d/Bn6J56xqatoWxSjRZMByvzJSqtBPloKaQO80Jsvdk3NSXh?=
+ =?us-ascii?Q?ZttnVYVtXYzIbQ8cwzpUvEcZMPmaUonZtf7gMKSZDUhUuBOoIq5Dag7g/oGj?=
+ =?us-ascii?Q?ch1mzSHnkN9+1Gdzr7KvWa29/A5DakVYlU9lgSOR6Wntn2NHpxfPu5rTZCQj?=
+ =?us-ascii?Q?vQviuQ3qBKjQ2C7A2/QpWJxfeq2Dwnv6C+UTV1LbByQ15T+Z1bRtv6CKz/bN?=
+ =?us-ascii?Q?Aqel8H+K9ZfI5KmXXRAdHIE5VP1OSO/ToYnAiA+J29UyX8UAbWeSUHG8H1On?=
+ =?us-ascii?Q?wWX3lK+I6Y1xCDqO7JvkeoOnAEZHGCN4Q2oyopJowVEYJ5rOvoHmO7Rec7vo?=
+ =?us-ascii?Q?EVbWKyxx9l4Yi4+L6CzEzgoM6r+FW6PWtZh6VK7pPE6qUNn1Hdvm14pcwMT4?=
+ =?us-ascii?Q?zzrktl3G8Gyi0AIpHHv/f5uJ1m5b4HhvyjdF9GRg96OKNgHJihRkU8Bx2rTz?=
+ =?us-ascii?Q?bZtUU36P1imrig6t1Fuk36vrCI6hsNVwKsIR13jT/G/ECuUPHkRs6nWRhCHo?=
+ =?us-ascii?Q?qoJX+1Vd5RzQayfniCIbTDHyok4129moaAS40aLsw12To+ZGxbJxpOpjghY+?=
+ =?us-ascii?Q?3OGZl7x+7lm4j5eIaUseCmcCj5MIPykPuXamVwK4v8PlU1SRUbjse8RS2aeI?=
+ =?us-ascii?Q?u14ewMheKMrPZHUvnw+cEHFTTIx0hIp4ZzhzbH3cDMBMxL2MmvLCJWtj2xlO?=
+ =?us-ascii?Q?F2uryeTf1FvY6XZHDcULT4bjcuHBi6x41sbecdGOZp9J+pfM4Y9pKP9XrLCg?=
+ =?us-ascii?Q?kmYIpcQv3eMzyj86Sjzk4+vNSXYqPK8vBxrjH+BcdFHyQyQm3OtXRyV4UcJZ?=
+ =?us-ascii?Q?TDrSxXFRuiSA5toFJ+H7djBb0vKmgStSKKpVz+jjx3JJVOjlE3kFssft4JNc?=
+ =?us-ascii?Q?qAOw4cSOXCWyxmz1+42N4yLRXVyN6XS8OhdM1IcwRWSavH1N3AWA09yTji6x?=
+ =?us-ascii?Q?dYNno9kw7JsF8asaV7+e5gIacw61kjgx3ILq93V7JnNB9FvtHEvUaA11I/z1?=
+ =?us-ascii?Q?BoZpVtlazsRO00fltl2ACUWogfARe0uW74v4yF4FKQVfltGUwL1HbD1bCF9N?=
+ =?us-ascii?Q?LKmnMJ/qZnOX9bJ7g1azLB8tNc/AiI/1cpA8nnDZEyN8eL/9pwPWD3P/2ibo?=
+ =?us-ascii?Q?L+Iya3Q3q4avj8rKsur45WvhiQkEPN16KQMPQPj4Ux5NeqQ3X0HJwCQ2L0vk?=
+ =?us-ascii?Q?espxPEROXYLCMEQEY30HE8ROkMZ12jDJJRYZzSKTK3BtwioJmJSf3CYZxsTF?=
+ =?us-ascii?Q?272qBm6Rc49rwO93eyXCiSvI29MdTMOd12t5/jhmYOyIZu8Y8ydf?=
 X-OriginatorOrg: valinux.co.jp
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05f1054a-752a-46d9-9455-08de569937ec
+X-MS-Exchange-CrossTenant-Network-Message-Id: da920d95-4ef7-4bac-20eb-08de5699385b
 X-MS-Exchange-CrossTenant-AuthSource: TY7P286MB7722.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:55:20.1837
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2026 13:55:20.9092
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7a57bee8-f73d-4c5f-a4f7-d72c91c8c111
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A4FBSxwPGhr5uUoKfLDvcmlIOX18bS55Rnbw8q/DOzsi+vo3AZiYKgfW4O/fwQbCOc0/pffOD7urbAhmOlPC4A==
+X-MS-Exchange-CrossTenant-UserPrincipalName: TOBetW6Mh5hubHH2kIpqrWdZS6aMf8G8ky/v6m3kknfDOitnmNv66B5Tm4XY7Lu9Bl1frpkM8atOIWPmt9bWCA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB2093
 
-The NTB transport code is split into a common library
-(ntb_transport_core) and NTB client modules.
+Introduce pci_epf_test_next_free_bar(), a small helper that wraps
+pci_epc_get_next_free_bar() and tracks the next starting BAR number.
+Use it for selecting the test register BAR and the doorbell BAR.
 
-Document the two transport variants:
-- ntb_transport: legacy shared-memory rings (CPU/local DMA memcpy)
-- ntb_transport_edma: remote embedded-DMA data plane
+An upcoming extension needs to reserve an additional BAR, and this
+helper will help keep the code compact with the selection logic
+being centralized.
 
-Also describe how to select the desired driver (module load order or
-driver_override binding) and add data-flow diagrams for both directions.
+No functional change intended.
 
 Signed-off-by: Koichiro Den <den@valinux.co.jp>
 ---
- Documentation/driver-api/ntb.rst | 193 +++++++++++++++++++++++++++++++
- 1 file changed, 193 insertions(+)
+ drivers/pci/endpoint/functions/pci-epf-test.c | 20 ++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/driver-api/ntb.rst b/Documentation/driver-api/ntb.rst
-index a49c41383779..75f96726c373 100644
---- a/Documentation/driver-api/ntb.rst
-+++ b/Documentation/driver-api/ntb.rst
-@@ -132,6 +132,199 @@ Transport queue pair.  Network data is copied between socket buffers and the
- Transport queue pair buffer.  The Transport client may be used for other things
- besides Netdev, however no other applications have yet been written.
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 6ecbc2c2ff36..e560c3becebb 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -64,6 +64,7 @@ struct pci_epf_test {
+ 	void			*reg[PCI_STD_NUM_BARS];
+ 	struct pci_epf		*epf;
+ 	enum pci_barno		test_reg_bar;
++	enum pci_barno		next_free_bar;
+ 	size_t			msix_table_offset;
+ 	struct delayed_work	cmd_handler;
+ 	struct dma_chan		*dma_chan_tx;
+@@ -104,6 +105,18 @@ static struct pci_epf_header test_header = {
  
-+Transport variants
-+~~~~~~~~~~~~~~~~~~
-+
-+The ``ntb_transport`` module is a thin NTB client driver. Most of its
-+functionality is implemented in the ``ntb_transport_core`` library module,
-+which provides a "queue pair" abstraction to transport clients such as
-+``ntb_netdev``. Another transport variant, ``ntb_transport_edma``, relies
-+on an endpoint embedded DMA engine for the data plane. When
-+``ntb_transport_edma`` is loaded before ``ntb_transport``, or when an NTB
-+device is explicitly bound to ``ntb_transport_edma`` via sysfs, it will be
-+selected. Only one transport driver can bind to a given NTB device, and the
-+upper layer does not need to care which variant is active::
-+
-+                       +--------------------+
-+                       | ntb_transport_core |
-+                       +--------------------+
-+                         ^                ^
-+                         |                |
-+      ntb_transport -----+                +----- ntb_transport_edma
-+     (cpu/dma memcpy)                       (remote embedded DMA transfer)
-+                                                         |
-+                                                         v
-+                                                   +-----------+
-+                                                   |  ntb_edma |
-+                                                   +-----------+
-+                                                         ^
-+                                                         |
-+                                                 +----------------+
-+                                                 |                |
-+                                            ntb_dw_edma         [...]
-+
-+
-+Legacy shared-memory backend (``ntb_transport``)
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+The default backend uses the NTB memory windows as the data plane. For a TX,
-+the payload is copied into a window-backed ring buffer and the receiver copies
-+it back out. Copying is performed by the CPU or by a local DMA engine when the
-+``use_dma`` module parameter is set.
-+
-+This mode is widely applicable but is sensitive to memory window size, as
-+one descriptor can hold the entire MTU-sized packet data. It also requires
-+one extra memcpy on both ends, as opposed to the Remote embedded DMA
-+backend, described below.
-+
-+Remote embedded DMA backend (``ntb_transport_edma``)
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+
-+The remote embedded DMA backend moves payload data directly between the two
-+systems' memories, and uses the NTB memory windows only for control
-+structures and for exposing the endpoint PCI embedded DMA engine to the
-+host. It is provided by the ``ntb_transport_edma`` module.
-+
-+The current implementation supports Synopsys DesignWare PCIe embedded DMA
-+(eDMA) via the ``ntb_dw_edma``, which is the only remote embedded DMA
-+backend option at the moment, and the ``dw-edma`` DMA-engine driver
-+(``drivers/dma/dw-edma``). The transport is not inherently tied to
-+DesignWare: additional vendor-specific backends can be added by registering
-+an ``ntb_edma_backend`` implementation (See ``[...]`` in the above figure.)
-+
-+At a high level:
-+
-+* One memory window is reserved as the "eDMA window". The endpoint maps its DMA
-+  register block and linked-list descriptor memory into that window so the
-+  host can ioremap it.
-+
-+* The remaining memory windows contain small per-QP control rings used to
-+  exchange receive-buffer addresses and completion information.
-+
-+* For RC->EP traffic the RC controls the endpoint DMA read channels through the
-+  eDMA window and the DMA engine pulls from RC memory into an EP RX buffer.
-+
-+* For EP->RC traffic the endpoint uses its local DMA write channels to push into
-+  an RC RX buffer.
-+
-+Because the data plane no longer uses window-backed payload rings, this mode
-+scales better when window space is scarce (for example, when using many queue
-+pairs).
-+
-+The following figures illustrate the data flow when ``ntb_netdev`` sits on top
-+of the transport:
-+
-+::
-+
-+       Figure 1. RC->EP traffic via ntb_netdev + ntb_transport_edma
-+                         backed by ntb_dw_edma
-+
-+             EP                                   RC
-+          phys addr                            phys addr
-+            space                                space
-+             +-+                                  +-+
-+             | |                                  | |
-+             | |                ||                | |
-+             +-+-----.          ||                | |
-+    EDMA REG | |      \\    [A] ||                | |
-+             +-+----.  '---+-+  ||                | |
-+             | |     \\    | |<---------[0-a]----------
-+             +-+-----------| |<----------[2]----------.
-+     EDMA LL | |           | |  ||                | | :
-+             | |           | |  ||                | | :
-+             +-+-----------+-+  ||  [B]           | | :
-+             | |                ||  ++            | | :
-+          ---------[0-b]----------->||----------------'
-+             | |            ++  ||  ||            | |
-+             | |            ||  ||  ++            | |
-+             | |            ||<----------[4]-----------
-+             | |            ++  ||                | |
-+             | |           [C]  ||                | |
-+          .--|#|<------------------------[3]------|#|<-.
-+          :  |#|                ||                |#|  :
-+         [5] | |                ||                | | [1]
-+          :  | |                ||                | |  :
-+          '->|#|                                  |#|--'
-+             |#|                                  |#|
-+             | |                                  | |
-+
-+       Figure 2. EP->RC traffic via ntb_netdev + ntb_transport_edma
-+                        backed by ntb_dw_edma
-+
-+             EP                                   RC
-+          phys addr                            phys addr
-+            space                                space
-+             +-+                                  +-+
-+             | |                                  | |
-+             | |                ||                | |
-+             +-+                ||                | |
-+    EDMA REG | |                ||                | |
-+             +-+                ||                | |
-+    ^        | |                ||                | |
-+    :        +-+                ||                | |
-+    : EDMA LL| |                ||                | |
-+    :        | |                ||                | |
-+    :        +-+                ||  [C]           | |
-+    :        | |                ||  ++            | |
-+    :     -----------[4]----------->||            | |
-+    :        | |            ++  ||  ||            | |
-+    :        | |            ||  ||  ++            | |
-+    '----------------[2]-----||<--------[0-b]-----------
-+             | |            ++  ||                | |
-+             | |           [B]  ||                | |
-+          .->|#|--------[3]---------------------->|#|--.
-+          :  |#|                ||                |#|  :
-+         [1] | |                ||                | | [5]
-+          :  | |                ||                | |  :
-+          '--|#|                                  |#|<-'
-+             |#|                                  |#|
-+             | |                                  | |
-+
-+       0-a. configure remote embedded DMA (e.g. program endpoint DMA registers)
-+       0-b. DMA-map and publish destination address (DAR)
-+       1.   network stack builds skb (copy from application/user memory)
-+       2.   consume DAR, DMA-map source address (SAR) and start the DMA transfer
-+       3.   DMA transfer (payload moves between RC/EP memory)
-+       4.   consume completion (commit)
-+       5.   network stack delivers data to application/user memory
-+
-+       [A]: Dedicated MW that aggregates DMA regs and LL (peer ioremaps it)
-+       [B]: Control-plane ring buffer for "produce"
-+       [C]: Control-plane ring buffer for "consume"
-+
-+Enabling the remote embedded DMA transport requires:
-+
-+* ``CONFIG_NTB_TRANSPORT`` and ``CONFIG_NTB_TRANSPORT_EDMA``,
-+
-+* a matching embedded-DMA backend enabled and/or loaded (e.g.
-+  ``CONFIG_NTB_DW_EDMA``),
-+
-+* an endpoint configuration exposing an extra Memory Window, which,
-+  in the ``ntb_dw_edma`` case, exposes eDMA registers and LL region. That
-+  means at least the two Memory Windows (MW1 and MW2) need to be present.
-+
-+* loading ``ntb_transport_edma`` (instead of ``ntb_transport``) on both sides,
-+  or explicitly bind to ``ntb_transport_edma`` when both are loaded. See
-+  the following::
-+
-+      dev=<ntb device>  # pick one from: /sys/bus/ntb/devices/
-+
-+      # switch from ntb_transport -> ntb_transport_edma
-+      echo $dev > /sys/bus/ntb/drivers/ntb_transport/unbind
-+      echo ntb_transport_edma > /sys/bus/ntb/devices/$dev/driver_override
-+      echo $dev > /sys/bus/ntb/drivers/ntb_transport_edma/bind
-+
-+      # switch back (optional)
-+      echo $dev > /sys/bus/ntb/drivers/ntb_transport_edma/unbind
-+      echo ntb_transport > /sys/bus/ntb/devices/$dev/driver_override
-+      echo $dev > /sys/bus/ntb/drivers/ntb_transport/bind
-+
-+The remote embedded DMA mode uses a different memory window layout from the
-+legacy shared-memory transport. There is no automatic fallback at runtime:
-+if the endpoint does not expose a compatible eDMA window,
-+``ntb_transport_edma`` will fail to attach. In that case, users need to
-+manually switch back to ``ntb_transport``.
-+
- NTB Ping Pong Test Client (ntb\_pingpong)
- -----------------------------------------
+ static size_t bar_size[] = { 512, 512, 1024, 16384, 131072, 1048576 };
  
++static enum pci_barno pci_epf_test_next_free_bar(struct pci_epf_test *epf_test)
++{
++	enum pci_barno bar;
++
++	bar = pci_epc_get_next_free_bar(epf_test->epc_features,
++					epf_test->next_free_bar);
++	if (bar != NO_BAR)
++		epf_test->next_free_bar = bar + 1;
++
++	return bar;
++}
++
+ static void pci_epf_test_dma_callback(void *param)
+ {
+ 	struct pci_epf_test *epf_test = param;
+@@ -721,7 +734,7 @@ static void pci_epf_test_enable_doorbell(struct pci_epf_test *epf_test,
+ 		goto set_status_err;
+ 
+ 	msg = &epf->db_msg[0].msg;
+-	bar = pci_epc_get_next_free_bar(epf_test->epc_features, epf_test->test_reg_bar + 1);
++	bar = pci_epf_test_next_free_bar(epf_test);
+ 	if (bar < BAR_0)
+ 		goto err_doorbell_cleanup;
+ 
+@@ -1110,13 +1123,14 @@ static int pci_epf_test_bind(struct pci_epf *epf)
+ 		dev_err(&epf->dev, "epc_features not implemented\n");
+ 		return -EOPNOTSUPP;
+ 	}
++	epf_test->epc_features = epc_features;
++	epf_test->next_free_bar = BAR_0;
+ 
+-	test_reg_bar = pci_epc_get_first_free_bar(epc_features);
++	test_reg_bar = pci_epf_test_next_free_bar(epf_test);
+ 	if (test_reg_bar < 0)
+ 		return -EINVAL;
+ 
+ 	epf_test->test_reg_bar = test_reg_bar;
+-	epf_test->epc_features = epc_features;
+ 
+ 	ret = pci_epf_test_alloc_space(epf);
+ 	if (ret)
 -- 
 2.51.0
 
