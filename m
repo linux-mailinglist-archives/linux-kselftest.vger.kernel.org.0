@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-49343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EE0DD3A5AB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:50:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3259D3A5EE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CE3413008E0C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 10:50:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B455B304355C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 10:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1908357A25;
-	Mon, 19 Jan 2026 10:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C87530AAD6;
+	Mon, 19 Jan 2026 10:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mb3l4B93"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5HR1K7C"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0BE33B96B;
-	Mon, 19 Jan 2026 10:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1963A2FF66A;
+	Mon, 19 Jan 2026 10:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768819820; cv=none; b=j+/GumuVs5Qc41hpku6JSDGCubP1wwUAhaEHGJ3kF8+rHrIvY9dHaVlZAPrBKyzFeG8ioYQFEeb6wMOSbFnlweb2T5OB7qNJPQHGJjkgUY7/FwQP/WeHhUMD2rY+W5m6FNIbIXS4UqXC3fdfAtwKG3XnUZfQSFpPCp3C4oq/L9Q=
+	t=1768820159; cv=none; b=Z71M+26Hl3Pke5Iht/xUOtV086jZ8vrc+qxnUWiLNZAnedoPZ1rYrt2TMgxshUFAWhnEx2wuxKD91Q5TRqn/YVWxlqBaUS5mdVla102nWp5WvvmPfINO8qfkqn73Qjh2CASrU6VKCskChAFX1tpFmdCwEWj5VeGQ7wvYG308YcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768819820; c=relaxed/simple;
-	bh=ZxzOJ4oQEra0siX2nuGmp1Odh2MhJ5xZ8jMUn/Ah4gk=;
+	s=arc-20240116; t=1768820159; c=relaxed/simple;
+	bh=bsXo26KZ+K1aH/HZ8wolPUoG9a2d4fNHkR3P0zLa+8g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nGS9hTQcGKoNnTtw89T6FPjzw3w9NX4Pe9t1YMM7wvr/nieqVB+NMGRvz1gy4DQkz5sCwgCtQpbmGqMX5QVC8RKaDujNIwLoRAQI98Vjq3kCXkrBH6dx7KYT8xjayYski+QQFYx+YH/qvszNYNIGu6XjzbXI+PIQS3lOldZxVfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mb3l4B93; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE8BC116C6;
-	Mon, 19 Jan 2026 10:50:17 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=eUSPb8n+ee3CKsQSDyHacUg/LlgphD7W82pLp3vi1udnnRa9QPVN1m9/OE18bql9CLrCebzG2E8lbtmsyDS1bc208fc8zUOMpyUEUBeEDwYJAp/MfQUkS+bD8anba5ZrC09eADtcqyHhcj6EY1KrDL7dHPy5qO7AwypCIMPwmD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5HR1K7C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F7E2C116C6;
+	Mon, 19 Jan 2026 10:55:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768819820;
-	bh=ZxzOJ4oQEra0siX2nuGmp1Odh2MhJ5xZ8jMUn/Ah4gk=;
+	s=k20201202; t=1768820158;
+	bh=bsXo26KZ+K1aH/HZ8wolPUoG9a2d4fNHkR3P0zLa+8g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Mb3l4B93W7KHvJqwCHsHAebr5jOOyiZlGqBl9zbbC4g/ii3pn0ZDDm7Ohwcy8iKkR
-	 gTGS3vWHE2icNR7vhXXMBH55mWFZVY2oYmaHSuBpUMugiX3mSQSOYZ3UDMyUfhDXi2
-	 SFAbC6/OrsSAglWp32PITL/43LEBiO/H+MFhd2je0bCAYTtb9J3mCcHsaCFFp+bWH1
-	 0KTTuF873zuO5A/mK7hDCJz5KtfnB5x9JPeePjkce7Yi8WkMCJx3vea8n9udJ4+3V1
-	 SpsMmoCCpJmsyYXoy0+F4Mnjj2vXMgbo6rSvG1RVCt3cHsMsPUi48hhxYMlqX0Sps/
-	 dywkRtRlSS3Bg==
-Message-ID: <e2d76567-44f3-4372-9490-5cae91619125@kernel.org>
-Date: Mon, 19 Jan 2026 11:50:15 +0100
+	b=U5HR1K7Cjv0Cp+7YA9y3rZzYh3llbIkfZP8dDEoV9I93qC40yuDZuPbkDtUVAE8Xg
+	 W7/u0Dc4zylWNGHI2B/csqj7mS8kuwdP6elJFVLdx6UbEdH6hy7LNPodk4rb2UvPku
+	 PRsyafmBOay1dqnXvPNE9mACu05Ir5P33XWVzP8Bc91mrb8vmXgUkQqrGf1DRxq/Nb
+	 9MdLKrAaR2r//UIh9a4FhU6Nq64ghVu9kwpROwSidCRdJtB2M2Xbz/SlUJqMImyGP4
+	 ouTywClMcWbwMw59omh7dCa2luVHaowpKS6lyNbYgozqnWikaAZQprzz+3UpK3ecTj
+	 yUcKnCrZxwa4g==
+Message-ID: <aa0ad9eb-dab8-4c29-827d-bed4983a584b@kernel.org>
+Date: Mon, 19 Jan 2026 11:55:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,8 +48,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/8] selftests/mm: fix usage of FORCE_READ() in cow
- tests
+Subject: Re: [PATCH v2 5/8] selftests/mm: introduce helper to read every page
+ in range
 To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
@@ -57,7 +57,7 @@ Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
  <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
  Shuah Khan <shuah@kernel.org>
 References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
- <20260107164842.3289559-5-kevin.brodsky@arm.com>
+ <20260107164842.3289559-6-kevin.brodsky@arm.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -103,29 +103,151 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <20260107164842.3289559-5-kevin.brodsky@arm.com>
+In-Reply-To: <20260107164842.3289559-6-kevin.brodsky@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 1/7/26 17:48, Kevin Brodsky wrote:
-> Commit 5bbc2b785e63 ("selftests/mm: fix FORCE_READ to read input
-> value correctly") modified FORCE_READ() to take a value instead of a
-> pointer. It also changed most of the call sites accordingly, but
-> missed many of them in cow.c. In those cases, we ended up with the
-> pointer itself being read, not the memory it points to.
+> FORCE_READ(*addr) ensures that the compiler will emit a load from
+> addr. Several tests need to trigger such a load for every page in
+> the range [addr, addr + len), ensuring that every page is faulted
+> in, if it wasn't already.
 > 
-> No failure occurred as a result, so it looks like the tests work
-> just fine without faulting in. However, the huge_zeropage tests
-> explicitly check that pages are populated, so those became skipped.
+> Introduce a new helper force_read_pages_in_range() that does exactly
+> that and replace existing loops with a call to it. Some of those
+> loops have a different step size, but reading from every page is
+> appropriate in all cases.
+> 
+> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> ---
+>   tools/testing/selftests/mm/hugetlb-madvise.c     |  9 +--------
+>   tools/testing/selftests/mm/pfnmap.c              | 16 ++++++----------
+>   .../testing/selftests/mm/split_huge_page_test.c  |  6 +-----
+>   tools/testing/selftests/mm/vm_util.h             |  6 ++++++
+>   4 files changed, 14 insertions(+), 23 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index 05d9d2805ae4..1f82568ae262 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -47,14 +47,7 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
+>   
+>   void read_fault_pages(void *addr, unsigned long nr_pages)
+>   {
+> -	unsigned long i;
+> -
+> -	for (i = 0; i < nr_pages; i++) {
+> -		unsigned long *addr2 =
+> -			((unsigned long *)(addr + (i * huge_page_size)));
+> -		/* Prevent the compiler from optimizing out the entire loop: */
+> -		FORCE_READ(*addr2);
+> -	}
+> +	force_read_pages_in_range(addr, nr_pages * huge_page_size);
+>   }
+>   
+>   int main(int argc, char **argv)
+> diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
+> index f546dfb10cae..35b0e3ed54cd 100644
+> --- a/tools/testing/selftests/mm/pfnmap.c
+> +++ b/tools/testing/selftests/mm/pfnmap.c
+> @@ -33,20 +33,17 @@ static void signal_handler(int sig)
+>   	siglongjmp(sigjmp_buf_env, -EFAULT);
+>   }
+>   
+> -static int test_read_access(char *addr, size_t size, size_t pagesize)
+> +static int test_read_access(char *addr, size_t size)
+>   {
+> -	size_t offs;
+>   	int ret;
+>   
+>   	if (signal(SIGSEGV, signal_handler) == SIG_ERR)
+>   		return -EINVAL;
+>   
+>   	ret = sigsetjmp(sigjmp_buf_env, 1);
+> -	if (!ret) {
+> -		for (offs = 0; offs < size; offs += pagesize)
+> -			/* Force a read that the compiler cannot optimize out. */
+> -			*((volatile char *)(addr + offs));
+> -	}
+> +	if (!ret)
+> +		force_read_pages_in_range(addr, size);
+> +
+>   	if (signal(SIGSEGV, SIG_DFL) == SIG_ERR)
+>   		return -EINVAL;
+>   
+> @@ -138,7 +135,7 @@ FIXTURE_SETUP(pfnmap)
+>   		SKIP(return, "Invalid file: '%s'. Not pfnmap'ed\n", file);
+>   
+>   	/* ... and want to be able to read from them. */
+> -	if (test_read_access(self->addr1, self->size1, self->pagesize))
+> +	if (test_read_access(self->addr1, self->size1))
+>   		SKIP(return, "Cannot read-access mmap'ed '%s'\n", file);
+>   
+>   	self->size2 = 0;
+> @@ -243,8 +240,7 @@ TEST_F(pfnmap, fork)
+>   	ASSERT_GE(pid, 0);
+>   
+>   	if (!pid) {
+> -		EXPECT_EQ(test_read_access(self->addr1, self->size1,
+> -					   self->pagesize), 0);
+> +		EXPECT_EQ(test_read_access(self->addr1, self->size1), 0);
+>   		exit(0);
+>   	}
+>   
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index 40799f3f0213..65a89ceca4a5 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -652,11 +652,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
+>   	}
+>   	madvise(*addr, fd_size, MADV_HUGEPAGE);
+>   
+> -	for (size_t i = 0; i < fd_size; i++) {
+> -		char *addr2 = *addr + i;
+> -
+> -		FORCE_READ(*addr2);
+> -	}
+> +	force_read_pages_in_range(*addr, fd_size);
+>   
+>   	if (!check_huge_file(*addr, fd_size / pmd_pagesize, pmd_pagesize)) {
+>   		ksft_print_msg("No large pagecache folio generated, please provide a filesystem supporting large folio\n");
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 6ad32b1830f1..74bdf96161d7 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -54,6 +54,12 @@ static inline unsigned int pshift(void)
+>   	return __page_shift;
+>   }
+>   
+> +static inline void force_read_pages_in_range(char *addr, size_t len)
+> +{
+> +	for (size_t i = 0; i < len; i += psize())
+> +		FORCE_READ(addr[i]);
+> +}
+> +
 
-Right, that's nasty! Thanks!
+Of course, we could also just pass the pagesize
 
-For all cases, we could probably just fail if the memory is not 
-populated after FORCE_READ().
+static inline void force_read_pages_in_range(char *addr, size_t len,
+	size_t pagesize)
+{
+	for (size_t i = 0; i < len; i += pagesize)
+		FORCE_READ(addr[i]);
+}
 
-Would you have time to prepare a patch for that?
 
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Or alternatively even better:
+
+static inline void force_read_pages(char *addr, unsigned int nr_pages,
+	size_t pagesize)
+{
+	for (size_t i = 0; i < nr_pages; i++)
+		FORCE_READ(addr[i * pagesize]);
+}
+
+Then there is no change at all and we avoid the repeated psize() naturally.
+
+Thoughts?
 
 -- 
 Cheers
