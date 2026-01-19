@@ -1,46 +1,79 @@
-Return-Path: <linux-kselftest+bounces-49346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1F5D3A67B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:13:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7F4D3A66E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:11:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C55B630895F0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:09:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4D7043033F9A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F063596EC;
-	Mon, 19 Jan 2026 11:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D7B359710;
+	Mon, 19 Jan 2026 11:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lRf1Owty"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NpibMGYb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49C93590CA;
-	Mon, 19 Jan 2026 11:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383E13590D9
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 11:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768820952; cv=none; b=EJs04sTvoBinZCQCKaQBqLhkYwn4Ap3rfDSY0Elkbk0A12FncYE0rSQG0qMBfgu4hqYkjOU0hAq8PjSN8RsxiYTOJFIJxSBijHrBHKYlnsj5i8o3R6edrROneDoNDhm7RfD2xXVLats/jandEG+h07CPCmc256btNPqdWywsRhE=
+	t=1768821048; cv=none; b=ozDSD8pEK9V137SU+NRnucM9FcQ9CIx4U9UhEOO3tqJSV8aibfB+G0dX4QBk/JBKCqjJ28CPIdHhcWuoBfJiHC0Jcw2gb9sfWcKLQrER3K0FG3plv2mqDDxLtngjShcMpH1JqGTQpkYbta+KWjzbzjxClspN9AYwpOwgp1Cx2AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768820952; c=relaxed/simple;
-	bh=rKLM88gxUGPocmEKu54kST8HAh1vpFomnsnpw5ncF/4=;
+	s=arc-20240116; t=1768821048; c=relaxed/simple;
+	bh=JgQIG2mEIN7Ft0uxr1kvE//MgY/eJteBGp6wjRM8Zck=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nCoOrCNVH5fEMuEdUYlz18aJEInRKSr+3QQKAIT1+ZesBCJthOYqbaIkUJ+Racl89MAjcaZZDqQHiMxW6oHQkUDewLZXeVi1Fc+a1FHKv5STl7QOGhQlX6fE7fjx98Jhjcap4KjuscJkFZs9lIKVeG3IjOXYcABesmwzJ6aI/hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lRf1Owty; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D0DC116C6;
-	Mon, 19 Jan 2026 11:09:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768820952;
-	bh=rKLM88gxUGPocmEKu54kST8HAh1vpFomnsnpw5ncF/4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lRf1OwtyxAECl+Eaa0182Si5tY+rpvdgdW7IC6u6c6Jg4pURVBtxi7oU8rqXZgFdG
-	 linyfrNplUxCtEvNjGwlGetPNAuoJeCwq/esuWIPehYSaJ8kGS0gwvRK76cc60SXEI
-	 iFwbMU5/NKYMJyQ9SICvxnoGXNDkRBEyHvlmDLAbghYwFvS+uNdOnnmsD2mJ+NsLrF
-	 nzdhFMKGkMwQkj7vnuhIfgrYZWpuAegrdB4UUzsTZ/bl28qylovIYP8KeC5hIPev8I
-	 9CCPg6Ud1HTxwpXK4KPV/wvvtf9h2CXHbWwIuGqPzSvfLx3xZ1ZwqM9H0YoJoe+UwU
-	 2QC9uHpCDYptw==
-Message-ID: <cd9e1fca-81ef-4eaa-aea1-aac6dd00623d@kernel.org>
-Date: Mon, 19 Jan 2026 12:09:07 +0100
+	 In-Reply-To:Content-Type; b=XzPW2PoeYquBKl/ofALrDecIZYJ9I4Hdzb/Q5ysQbR8KDquwaIyUt7TJH3GDuEW0en21Wk73EJZTQ3IYPd4e25tXCfwQKP/bGOvsIUsenCr9KgXLkDwbxePPOIJ4w8m9Ar/oICsCb6x7MV9yaM9hrF3/+GisTTMElM3E1KNcLos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NpibMGYb; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso27008315e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 03:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768821043; x=1769425843; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hJ2qz5Sc4o5xQKpn60NA0bOq+C5q4mcRTMre+DDqfZ8=;
+        b=NpibMGYbzXYaaFGKnaJkTUiIdvIPdv9MXk+RpGgx02nHxDeyme5ZeIUvy5nyHaMegx
+         fun3wxleWXUmw1LtW+yIIvYm86rEougBiwUumI95FH84g5qH5+Xosmui0if8XbkEM8kE
+         +0K572THp6V+BtAiSqK5L+8VBwWgqcFlzXQrUd98T8mcDCyqIRy459nPWRHYu9ch8Rdm
+         9F4AV9t/PZi/ct5y2nnkuj0W8V2EDUnSfTssoCQ9Lggs4BPn/3M0tPbmUWLhZH/yK940
+         WaqTPFi4ilxFJjVtg+F7n/mInyAEyswCXDXXcHHWcsR0DN9JsCaUCeMVBKA4dTdKWnX+
+         IPPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768821043; x=1769425843;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hJ2qz5Sc4o5xQKpn60NA0bOq+C5q4mcRTMre+DDqfZ8=;
+        b=T4Vm5XH51bAITRGBtXT3K0qdCb2WcF7tz2kozpXLvxwU+4d7SbU8dt5B8MusmprKfe
+         bhA2hJ0T9JAvI09dIpvTZmHREJXfd7IVDFa8Rrn10K2tzPZaEIE1z+Qm01aNUOGxQYP4
+         fRG7/M8EV1A3R1EgQHkLlRPZP8ILNpJtGBS+JkOP9RYdIYUxjiQcob8/LvUX20yyiY8r
+         xIdXD7ADTpwqcjPRE0VFFMPMNSPj1WuKztR7Aqv5Yvg2S5ykdZuKm3XcDBLjTzrQJJKT
+         Og7AovS00FmTPayNstqodiqtzmDFnslriSDLP6ghorlYjXYzefO55kzlxf+nBLy18XS5
+         YxQw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFEsz6poSdQXNsKIf7CR9/eQ4wqGyMJ0IyI8I4yborfmbhsTCx8XvUaQvLmN/cmum+g1bnZd5UhHILZ+d/fQg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrtTlxl02aCjkzBho3F7+gWszsLdx+sRd3nUwDXEhGhYuW0fKa
+	AF9D4LN4Obz7ApC8p+7/wIV9yzPyIlMJdcdxfCRH6MaS/uIQsJCg2B78
+X-Gm-Gg: AY/fxX4n9HdBj32V1KKYBSNMrOEjb8vKqaINKJ8cN12pbYoZ8UUW96gpb7Ru/XwDZBN
+	/pwAP5xPFLhdwSnZ59lw9YsaEsjdAoyxHwEVhWwy4IacZ3Um/zCq1ls/rLDqf4wDQoHeR3LdXmy
+	MMBPSUJ4h62e7tYwrC70mJFIKaSEPOiNm4vvK1gflvVMXcjvAop/1sPM24Q+/55BqmyuR0qZyOt
+	9EvUnl+4lRJgx5D1UgplC6uEIvs4NgwSsYUFi3rLqwop/qhiQTGlSEbBLxu2ny0LfN7myiiazmL
+	fKBm3LhApBBGhYclhsAN1OsjNsN5XxBjJB408QC7lTDiihlRrNmom5KXxlc+Q44kTvonOs1KUxo
+	9/zLMdo7RnN2OvcpUYC4Yhq92vMhpfUYohuRMN0+xC5Ww1n8534vbuHGOrxS0z74XdcSc3JZ244
+	p4G1HqcLbJk5GF7Oh85oD/xOowoVgcUsptMgvxrAsfIw==
+X-Received: by 2002:a05:600c:8184:b0:475:d9de:952e with SMTP id 5b1f17b1804b1-4801e530d08mr129410295e9.1.1768821043145;
+        Mon, 19 Jan 2026 03:10:43 -0800 (PST)
+Received: from [10.24.66.11] ([15.248.2.27])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f429071besm240510305e9.10.2026.01.19.03.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jan 2026 03:10:42 -0800 (PST)
+Message-ID: <c8d5dd11-2b99-40bc-bb50-4d3a738ad765@gmail.com>
+Date: Mon, 19 Jan 2026 11:10:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,86 +81,280 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] selftests/mm: fix faulting-in code in
- pagemap_ioctl test
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>, Usama Anjum <Usama.Anjum@arm.com>
-References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
- <20260107164842.3289559-7-kevin.brodsky@arm.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Subject: Re: [PATCH v4 1/3] KVM: arm64: Add pre_fault_memory implementation
+To: Marc Zyngier <maz@kernel.org>
+Cc: oliver.upton@linux.dev, pbonzini@redhat.com, joey.gouly@arm.com,
+ suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com,
+ will@kernel.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, isaku.yamahata@intel.com,
+ xmarcalx@amazon.co.uk, kalyazin@amazon.co.uk, jackabt@amazon.com,
+ Vladimir Murzin <vladimir.murzin@arm.com>
+References: <20260113152643.18858-1-jackabt.amazon@gmail.com>
+ <20260113152643.18858-2-jackabt.amazon@gmail.com>
+ <86jyxjkxus.wl-maz@kernel.org>
+ <ea7786e4-8b67-4a9f-b2c6-c0e4cd325cc3@gmail.com>
+ <87ldhvdxio.wl-maz@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
- ZW5icmFuZCA8ZGF2aWRAa2VybmVsLm9yZz7CwY0EEwEIADcWIQQb2cqtc1xMOkYN/MpN3hD3
- AP+DWgUCaKYhwAIbAwUJJlgIpAILCQQVCgkIAhYCAh4FAheAAAoJEE3eEPcA/4Naa5EP/3a1
- 9sgS9m7oiR0uenlj+C6kkIKlpWKRfGH/WvtFaHr/y06TKnWn6cMOZzJQ+8S39GOteyCCGADh
- 6ceBx1KPf6/AvMktnGETDTqZ0N9roR4/aEPSMt8kHu/GKR3gtPwzfosX2NgqXNmA7ErU4puf
- zica1DAmTvx44LOYjvBV24JQG99bZ5Bm2gTDjGXV15/X159CpS6Tc2e3KvYfnfRvezD+alhF
- XIym8OvvGMeo97BCHpX88pHVIfBg2g2JogR6f0PAJtHGYz6M/9YMxyUShJfo0Df1SOMAbU1Q
- Op0Ij4PlFCC64rovjH38ly0xfRZH37DZs6kP0jOj4QdExdaXcTILKJFIB3wWXWsqLbtJVgjR
- YhOrPokd6mDA3gAque7481KkpKM4JraOEELg8pF6eRb3KcAwPRekvf/nYVIbOVyT9lXD5mJn
- IZUY0LwZsFN0YhGhQJ8xronZy0A59faGBMuVnVb3oy2S0fO1y/r53IeUDTF1wCYF+fM5zo14
- 5L8mE1GsDJ7FNLj5eSDu/qdZIKqzfY0/l0SAUAAt5yYYejKuii4kfTyLDF/j4LyYZD1QzxLC
- MjQl36IEcmDTMznLf0/JvCHlxTYZsF0OjWWj1ATRMk41/Q+PX07XQlRCRcE13a8neEz3F6we
- 08oWh2DnC4AXKbP+kuD9ZP6+5+x1H1zEzsFNBFXLn5EBEADn1959INH2cwYJv0tsxf5MUCgh
- Cj/CA/lc/LMthqQ773gauB9mN+F1rE9cyyXb6jyOGn+GUjMbnq1o121Vm0+neKHUCBtHyseB
- fDXHA6m4B3mUTWo13nid0e4AM71r0DS8+KYh6zvweLX/LL5kQS9GQeT+QNroXcC1NzWbitts
- 6TZ+IrPOwT1hfB4WNC+X2n4AzDqp3+ILiVST2DT4VBc11Gz6jijpC/KI5Al8ZDhRwG47LUiu
- Qmt3yqrmN63V9wzaPhC+xbwIsNZlLUvuRnmBPkTJwwrFRZvwu5GPHNndBjVpAfaSTOfppyKB
- Tccu2AXJXWAE1Xjh6GOC8mlFjZwLxWFqdPHR1n2aPVgoiTLk34LR/bXO+e0GpzFXT7enwyvF
- FFyAS0Nk1q/7EChPcbRbhJqEBpRNZemxmg55zC3GLvgLKd5A09MOM2BrMea+l0FUR+PuTenh
- 2YmnmLRTro6eZ/qYwWkCu8FFIw4pT0OUDMyLgi+GI1aMpVogTZJ70FgV0pUAlpmrzk/bLbRk
- F3TwgucpyPtcpmQtTkWSgDS50QG9DR/1As3LLLcNkwJBZzBG6PWbvcOyrwMQUF1nl4SSPV0L
- LH63+BrrHasfJzxKXzqgrW28CTAE2x8qi7e/6M/+XXhrsMYG+uaViM7n2je3qKe7ofum3s4v
- q7oFCPsOgwARAQABwsF8BBgBCAAmAhsMFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAmic2qsF
- CSZYCKEACgkQTd4Q9wD/g1oq0xAAsAnw/OmsERdtdwRfAMpC74/++2wh9RvVQ0x8xXvoGJwZ
- rk0Jmck1ABIM//5sWDo7eDHk1uEcc95pbP9XGU6ZgeiQeh06+0vRYILwDk8Q/y06TrTb1n4n
- 7FRwyskKU1UWnNW86lvWUJuGPABXjrkfL41RJttSJHF3M1C0u2BnM5VnDuPFQKzhRRktBMK4
- GkWBvXlsHFhn8Ev0xvPE/G99RAg9ufNAxyq2lSzbUIwrY918KHlziBKwNyLoPn9kgHD3hRBa
- Yakz87WKUZd17ZnPMZiXriCWZxwPx7zs6cSAqcfcVucmdPiIlyG1K/HIk2LX63T6oO2Libzz
- 7/0i4+oIpvpK2X6zZ2cu0k2uNcEYm2xAb+xGmqwnPnHX/ac8lJEyzH3lh+pt2slI4VcPNnz+
- vzYeBAS1S+VJc1pcJr3l7PRSQ4bv5sObZvezRdqEFB4tUIfSbDdEBCCvvEMBgoisDB8ceYxO
- cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
- EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
- qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <20260107164842.3289559-7-kevin.brodsky@arm.com>
+From: "Thomson, Jack" <jackabt.amazon@gmail.com>
+In-Reply-To: <87ldhvdxio.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/7/26 17:48, Kevin Brodsky wrote:
-> One of the pagemap_ioctl tests attempts to fault in pages by
-> memcpy()'ing them to an unused buffer. This probably worked
-> originally, but since commit 46036188ea1f ("selftests/mm: build with
-> -O2") the compiler is free to optimise away that unused buffer and
-> the memcpy() with it. As a result there might not be any resident
-> page in the mapping and the test may fail.
+Hi Marc,
 
-Yes, I assume so. Using FORCE_READ() etc is the way to go.
+On 18/01/2026 10:29 am, Marc Zyngier wrote:
+> On Fri, 16 Jan 2026 14:33:42 +0000,
+> "Thomson, Jack" <jackabt.amazon@gmail.com> wrote:
+>>
+>>
+>> Hey Marc,
+>>
+>> Thanks for the review.
+>>
+>> On 15/01/2026 9:51 am, Marc Zyngier wrote:
+>>> [+ Vladimir, who was also looking at this patch]
+>>>
+>>> On Tue, 13 Jan 2026 15:26:40 +0000,
+>>> Jack Thomson <jackabt.amazon@gmail.com> wrote:
+>>>>
+>>>> From: Jack Thomson <jackabt@amazon.com>
+>>>>
+>>>> Add kvm_arch_vcpu_pre_fault_memory() for arm64. The implementation hands
+>>>> off the stage-2 faulting logic to either gmem_abort() or
+>>>> user_mem_abort().
+>>>>
+>>>> Add an optional page_size output parameter to user_mem_abort() to
+>>>> return the VMA page size, which is needed when pre-faulting.
+>>>>
+>>>> Update the documentation to clarify x86 specific behaviour.
+>>>>
+>>>> Signed-off-by: Jack Thomson <jackabt@amazon.com>
+>>>> ---
+>>>>    Documentation/virt/kvm/api.rst |  3 +-
+>>>>    arch/arm64/kvm/Kconfig         |  1 +
+>>>>    arch/arm64/kvm/arm.c           |  1 +
+>>>>    arch/arm64/kvm/mmu.c           | 79 ++++++++++++++++++++++++++++++++--
+>>>>    4 files changed, 79 insertions(+), 5 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>>>> index 01a3abef8abb..44cfd9e736bb 100644
+>>>> --- a/Documentation/virt/kvm/api.rst
+>>>> +++ b/Documentation/virt/kvm/api.rst
+>>>> @@ -6493,7 +6493,8 @@ Errors:
+>>>>    KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
+>>>>    for the current vCPU state.  KVM maps memory as if the vCPU generated a
+>>>>    stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
+>>>> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
+>>>> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
+>>>> +Accessed.
+>>>>      In the case of confidential VM types where there is an initial
+>>>> set up of
+>>>>    private guest memory before the guest is 'finalized'/measured, this ioctl
+>>>> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+>>>> index 4f803fd1c99a..6872aaabe16c 100644
+>>>> --- a/arch/arm64/kvm/Kconfig
+>>>> +++ b/arch/arm64/kvm/Kconfig
+>>>> @@ -25,6 +25,7 @@ menuconfig KVM
+>>>>    	select HAVE_KVM_CPU_RELAX_INTERCEPT
+>>>>    	select KVM_MMIO
+>>>>    	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>>>> +	select KVM_GENERIC_PRE_FAULT_MEMORY
+>>>>    	select VIRT_XFER_TO_GUEST_WORK
+>>>>    	select KVM_VFIO
+>>>>    	select HAVE_KVM_DIRTY_RING_ACQ_REL
+>>>> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+>>>> index 4f80da0c0d1d..19bac68f737f 100644
+>>>> --- a/arch/arm64/kvm/arm.c
+>>>> +++ b/arch/arm64/kvm/arm.c
+>>>> @@ -332,6 +332,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>>>>    	case KVM_CAP_COUNTER_OFFSET:
+>>>>    	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
+>>>>    	case KVM_CAP_ARM_SEA_TO_USER:
+>>>> +	case KVM_CAP_PRE_FAULT_MEMORY:
+>>>>    		r = 1;
+>>>>    		break;
+>>>>    	case KVM_CAP_SET_GUEST_DEBUG2:
+>>>> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+>>>> index 48d7c372a4cd..499b131f794e 100644
+>>>> --- a/arch/arm64/kvm/mmu.c
+>>>> +++ b/arch/arm64/kvm/mmu.c
+>>>> @@ -1642,8 +1642,8 @@ static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>>>>      static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t
+>>>> fault_ipa,
+>>>>    			  struct kvm_s2_trans *nested,
+>>>> -			  struct kvm_memory_slot *memslot, unsigned long hva,
+>>>> -			  bool fault_is_perm)
+>>>> +			  struct kvm_memory_slot *memslot, unsigned long *page_size,
+>>>> +			  unsigned long hva, bool fault_is_perm)
+>>>>    {
+>>>>    	int ret = 0;
+>>>>    	bool topup_memcache;
+>>>> @@ -1923,6 +1923,9 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>>>>    	kvm_release_faultin_page(kvm, page, !!ret, writable);
+>>>>    	kvm_fault_unlock(kvm);
+>>>>    +	if (page_size)
+>>>> +		*page_size = vma_pagesize;
+>>>> +
+>>>>    	/* Mark the page dirty only if the fault is handled successfully */
+>>>>    	if (writable && !ret)
+>>>>    		mark_page_dirty_in_slot(kvm, memslot, gfn);
+>>>> @@ -2196,8 +2199,8 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
+>>>>    		ret = gmem_abort(vcpu, fault_ipa, nested, memslot,
+>>>>    				 esr_fsc_is_permission_fault(esr));
+>>>>    	else
+>>>> -		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, hva,
+>>>> -				     esr_fsc_is_permission_fault(esr));
+>>>> +		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, NULL,
+>>>> +				     hva, esr_fsc_is_permission_fault(esr));
+>>>>    	if (ret == 0)
+>>>>    		ret = 1;
+>>>>    out:
+>>>> @@ -2573,3 +2576,71 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
+>>>>      	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled,
+>>>> now_enabled);
+>>>>    }
+>>>> +
+>>>> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
+>>>> +				    struct kvm_pre_fault_memory *range)
+>>>> +{
+>>>> +	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
+>>>> +	struct kvm_s2_trans nested_trans, *nested = NULL;
+>>>> +	unsigned long page_size = PAGE_SIZE;
+>>>> +	struct kvm_memory_slot *memslot;
+>>>> +	phys_addr_t ipa = range->gpa;
+>>>> +	phys_addr_t end;
+>>>> +	hva_t hva;
+>>>> +	gfn_t gfn;
+>>>> +	int ret;
+>>>> +
+>>>> +	if (vcpu_is_protected(vcpu))
+>>>> +		return -EOPNOTSUPP;
+>>>
+>>> This feels pretty odd. If you have advertised the capability, then
+>>> saying "not supported" at this stage is not on.
+>>>
+>>
+>> Thanks good point, I think I can actually just drop this completely since
+>> kvm_pvm_ext_allowed() would already exclude this as a capacility.
+>>
+> 
+> I think you still need some runtime handling, just in case userspace
+> is acting silly.
+> 
 
+Yeah makes sense I'll put something in.
 
-Should we add
+>>>> +
+>>>> +	/*
+>>>> +	 * We may prefault on a shadow stage 2 page table if we are
+>>>> +	 * running a nested guest.  In this case, we have to resolve the L2
+>>>> +	 * IPA to the L1 IPA first, before knowing what kind of memory should
+>>>> +	 * back the L1 IPA.
+>>>> +	 *
+>>>> +	 * If the shadow stage 2 page table walk faults, then we return
+>>>> +	 * -EFAULT
+>>>> +	 */
+>>>> +	if (kvm_is_nested_s2_mmu(vcpu->kvm, vcpu->arch.hw_mmu) &&
+>>>> +	    vcpu->arch.hw_mmu->nested_stage2_enabled) {
+>>>> +		ret = kvm_walk_nested_s2(vcpu, ipa, &nested_trans);
+>>>> +		if (ret)
+>>>> +			return -EFAULT;
+>>>
+>>> And then what? Userspace is completely screwed here, with no way to
+>>> make any forward progress, because the L1 is in charge of that S2, and
+>>> L1 is not running. What's the outcome? Light a candle and pray?
+>>>
+>>> Also, the IPA you are passing as a parameter means absolutely nothing
+>>> in the context of L2. Userspace doesn't have the faintest clue about
+>>> the memory map presented to L2, as that's L1 business. L1 can
+>>> absolutely present to L2 a memory map that doesn't have a single
+>>> address in common with its own.
+>>>
+>>> So this really doesn't work at all.
+>>>
+>> Would just returning -EOPNOTSUPP in this case like:
+> 
+> Absolutely *not*. Userspace has no idea what the guest is doing, and
+> cannot influence it (other than disabling nesting altogether). This is
+> just as bad a -EFAULT.
+> 
+>>
+>>    if (kvm_is_nested_s2_mmu(vcpu->kvm, vcpu->arch.hw_mmu) &&
+>>        vcpu->arch.hw_mmu->nested_stage2_enabled)
+>>      return -EOPNOTSUPP;
+>>
+>> be the best way to continue for now?
+> 
+> We both know that what you actually mean is "this doesn't match my use
+> case, let someone else deal with it". To which my answer is that you
+> either fully support pre-faulting, or you don't at all. There is no
+> middle ground.
+> 
 
-Fixes: 46036188ea1f ("selftests/mm: build with -O2")
+Sorry if it came across as a cop-out, I think I just misunderstood your
+earlier comment about taking a step back and looking at an easier
+approach. If this is required I'll definitely look at full support for
+pre-faulting.
 
-?
+>>>> +
+>>>> +		ipa = kvm_s2_trans_output(&nested_trans);
+>>>> +		nested = &nested_trans;
+>>>> +	}
+>>>> +
+>>>> +	if (ipa >= kvm_phys_size(vcpu->arch.hw_mmu))
+>>>> +		return -ENOENT;
+>>>> +
+>>>> +	/* Generate a synthetic abort for the pre-fault address */
+>>>> +	fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
+>>>> +		ESR_ELx_FSC_FAULT_L(KVM_PGTABLE_LAST_LEVEL);
+>>>
+>>> Why level 3? You must present a fault that matches the level at which
+>>> the emulated fault would actually occur, because the rest of the
+>>> infrastructure relies on that (at least on the permission path, and
+>>> more to come).
+>>>
+>>
+>> Ack, thanks I was relying on the fact `fault_is_perm` was hardcoded to
+>> false. I'll replace with something like:
+>>
+>>    pgt = vcpu->arch.hw_mmu->pgt;
+>>    ret = kvm_pgtable_get_leaf(pgt, gpa, &pte, &level);
+>>    if (ret)
+>>      return ret;
+>>
+>>    fault_info->esr_el2 = (ESR_ELx_EC_DABT_LOW << ESR_ELx_EC_SHIFT) |
+>>      ESR_ELx_FSC_FAULT_L(level);
+>>    fault_info->hpfar_el2 = HPFAR_EL2_NS |
+>>      FIELD_PREP(HPFAR_EL2_FIPA, gpa >> 12);
+> 
+> If a mapping exists, you probably don't want to replay the fault. And
+> this needs to occur while the mmu_lock is held.
+> 
 
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+Got you thanks.
 
--- 
-Cheers
+>>
+>>> Taking a step back on all this, 90% of the problems are there because
+>>> you are trying to support prefaulting a guest that is already running.
+>>> If you limited this to actually *pre*-faulting the guest, it would be
+>>> the easiest thing ever, and wouldn't suffer from any of the above (you
+>>> can't be in a nested context if you haven't run).
+>>>
+>>> What prevents you from doing so? I'm perfectly happy to make this a
+>>> separate API if this contradicts other implementations. Or are you
+>>> relying on other side effects of the "already running" state?
+>>
+>> We would need this to work on an already running guest.
+> 
+> Then you need to fully support pre-faulting the guest even when it is
+> in a nested context, without resorting to coping-out in situations
+> that do not match your narrow use-case. Which means populating the
+> canonical s2_mmu even when you're not in that particular context.
 
-David
+Will do, I'll work on a next revision with this case.
+
+Thanks again for looking.
+
+Jack
 
