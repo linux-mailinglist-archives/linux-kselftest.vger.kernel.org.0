@@ -1,208 +1,317 @@
-Return-Path: <linux-kselftest+bounces-49350-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88947D3A686
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:16:31 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68EE6D3A689
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:16:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E9AC5300FA28
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:16:29 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8F3053002B9B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:16:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531E22DA77E;
-	Mon, 19 Jan 2026 11:16:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E69B2C21F1;
+	Mon, 19 Jan 2026 11:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ec02xF3m"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fa43tLq7";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="zoAfBTXL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB852D1916;
-	Mon, 19 Jan 2026 11:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768821389; cv=none; b=SwimAnuIvKP74I4zLl/V77x/aIjVDEbYgSuxwLwmlQJMnAbPGRJVzqvKTDhEp8oJUgMYRDsCqfkiOu6Do3FK/ZMcjqYmQKrgLzdvCYdH+bQxDkusU88umTy9GJHVhP4nQJUjqrE/tiRB2Bub6EYplrG8DN+ZqWdH8FoR4q8pgXo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768821389; c=relaxed/simple;
-	bh=IUVE3GXM6RFdsSQGwKFqMXdBr5285go1ee4oIqD+IQs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aHVyCTThhYkND8tc6RcFmrEhThPKVUoaXK3aeobYUlCpGIEePn68YwKeHl20IJOUixW2nljoGRPbbvkx62KmaHuW1yO7K3FgIB3xUdTEp5wdbS/ZgX2J1YCf4wjMd/smmdwCVib2PURt7dInlncR+M1LAf3jP3SpA90MkAJt8K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ec02xF3m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47576C19424;
-	Mon, 19 Jan 2026 11:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768821388;
-	bh=IUVE3GXM6RFdsSQGwKFqMXdBr5285go1ee4oIqD+IQs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ec02xF3muwf5NwLMrYHzJqg/3ypIIf23/u3Y2IW1l/6ndAQJgW0lZbX2aS2L0VK6x
-	 Ogk894YZ6RKbCK/mD1aVu/YWHBKnxlnc+GVjFSYOt4w44iX/J2IEkBKi2oxP68pKuv
-	 CJbtP4AF9bf7RHjYc4swjy6n44CpUM/WYU23UeFvXbL8Wc+bNaCiUZjXvmiTdmig3h
-	 f3deb0V7NrTP2iozv4kQJnGxxBVvwP02h4gksMo63Y71ffljQ8dXaBjy49TfuUbjT8
-	 1/cvn5ipx1PPKAFvKIjh4Y1/I9tjxv1ligJ6Jxjrru+w9o4+W9kC4Dj9iv/QXixz5N
-	 HzGQtc92tcj3A==
-Message-ID: <09c214df-c3aa-48e4-9587-c54c667c6ce9@kernel.org>
-Date: Mon, 19 Jan 2026 12:16:24 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4630A2C2340;
+	Mon, 19 Jan 2026 11:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768821404; cv=fail; b=jX9ZwmXBI9b0lwSQ0/MXnZ3b/bJBijsmSjAZcjKNOa8Kzp34c8UXz4g9LRU1FRMAArN8FK4ZzFUR7bgfAWLxl+E0KvyWtqsGK8KlYve6SuTSC1KX7YmGGV2xmDO2Iw9jcq359Zs0Amru1VtzLuCjMt7NFFJZZU2rSGqpJlU43rk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768821404; c=relaxed/simple;
+	bh=ccLbC7Qlawk7VerVP5mwGe5nfVKmTyTdzR8mRqSc5M4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=X8mSU4DqPFogwG/NaT1dMM7lrgh+UMetdb6B0SUBuv2pHy+Xdiej+yBCv44151BIua+ykgXd2Yl5uuyxcoUr0TacXcuugxZpCfDMfmLNzZkEJmQ7YL3NE7nKz2r8OWZaeKwj7qp6QaLguuOOTmRBsAXwSLFmAXTHBsYDZ3Broa4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=fa43tLq7; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=zoAfBTXL; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60JBDNBX1512384;
+	Mon, 19 Jan 2026 11:16:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=bf8BLnDJZ5Zr9e6weX
+	VTlUiumPEobYvMLHMOYQSdJ6M=; b=fa43tLq7TiPC1LeGxIvKkle7zdmK0jCLrd
+	ysc8pEtLxJaMygKIbdGwOJOCrjpKKUYds40a9JKSpgGaygzqJdnFAo5T5k6dvIcL
+	2+ZuHrru7Irk94k2pVxdeqbb5uye0iVcZnuh9NAD1dSVBBwVNrzuTzxk0Asi772b
+	N/TiHAdr17OZXLBq8G/CJWFN1CqwOrMblQKjfEw1z2zAHG79OQg0anuqYstMLpkr
+	wZ/1epay+nuXTRqaWjSl7SF/T/HiY3XgJOTgcTuFGX/dn6JjXlTU3KCwdvZLfg71
+	prDj8jApSfA6usOqt+ccuM28gK27313nfq9qIvvecWzEUoa0dNKA==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4br21qa4cv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Jan 2026 11:16:30 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60JBG4uU008388;
+	Mon, 19 Jan 2026 11:16:29 GMT
+Received: from ch1pr05cu001.outbound.protection.outlook.com (mail-northcentralusazon11010065.outbound.protection.outlook.com [52.101.193.65])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4br0v88v1c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Jan 2026 11:16:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uXCWWiJ//DxO9z4bWRXcwQcZ6bgzxeUp4PE+mWftu6QuKUzsQqgvb3K2wOPciRd34kFF7TXq+WlLPcl60o/fIg0yMiYj5Hrv+lbPnMigX9CHE0JPUSBnQxN3xCc/DMCBBb82fYmB/p2DTAtDd/6kjrgCPwtmmmAiLaHpSPm2m12wofTrEMaAgKLtY9C2j6HlOvqNqp89WAimwNWulMGUsjm9QChxub6D1aNoblZYxeMZy/DhfwWWTWInS4r3KzPnsHyTuZ/TMm3la33tHzowFoWQZ/QgnvwvIEP/2f8e2uSLxcHHOWHAcxudwqjhyN2W4+jxc6mV4medBvxvRPKA5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bf8BLnDJZ5Zr9e6weXVTlUiumPEobYvMLHMOYQSdJ6M=;
+ b=nGpMuTXEBM5q6DInAYwEoxMsBx+pt69gTZB6XrYWLgyYyzpkMfSqqMbt2vTYiVP31QIpRGIglyvbKySwyVZTrahFJSklQ1wrSRHreDNbQkXI2eds0osuxL3S7vbD+lxAepQP/j7ExcqToSSS2SwLbsKPMajWbcCT3WMfiQWzzsSFzwzhABdHx5YuMN/1u/eaNWRCAUIvvDte1337KL1p7XY65JfNTRqHERWPTB2iu7kBb3xTEKKEywXavL5kMZ1kNMWHueAPAYOJZISbN5n/RT+dsoVV4vG1/oDceSYSvjy2qaZQ8wtpsGhDEU+ld6JE1uSoGBtoO9VtJxJPB2QukQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bf8BLnDJZ5Zr9e6weXVTlUiumPEobYvMLHMOYQSdJ6M=;
+ b=zoAfBTXL8qKTKXcM+dUGgDsRzr98KI6TeZvtsqNaWP+FDsJvCWxMtm0RJDvmkiM5s/uMBiLq4d2sgcCGVDoPtRZlIb7gchsH00KPtl8pQBk3fxTbr25BadORx6CbsC8a1MVJfV2waZL5Qvi1eLj0rNiNcCgJU16U9qA3VnZWaBc=
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
+ by CO1PR10MB4689.namprd10.prod.outlook.com (2603:10b6:303:98::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.7; Mon, 19 Jan
+ 2026 11:16:26 +0000
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582%6]) with mapi id 15.20.9520.005; Mon, 19 Jan 2026
+ 11:16:26 +0000
+Date: Mon, 19 Jan 2026 11:16:29 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] selftests/mm: remove virtual_address_range test
+Message-ID: <7b4c877e-3ad9-42b3-91bd-e65390f9a343@lucifer.local>
+References: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
+ <3d2e85ed-f072-4fca-8c22-461b001495c1@kernel.org>
+ <79d2636a-bb15-4c7f-a633-c4bf408a2bc8@lucifer.local>
+ <a6479b82-a68c-49f5-8631-b3f536059352@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a6479b82-a68c-49f5-8631-b3f536059352@kernel.org>
+X-ClientProxiedBy: LO2P123CA0081.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:138::14) To BL4PR10MB8229.namprd10.prod.outlook.com
+ (2603:10b6:208:4e6::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 8/8] selftests/mm: report SKIP in pfnmap if a check
- fails
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>
-References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
- <20260107164842.3289559-9-kevin.brodsky@arm.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <20260107164842.3289559-9-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|CO1PR10MB4689:EE_
+X-MS-Office365-Filtering-Correlation-Id: bcf9bc2f-90ce-4adf-19ef-08de574c2fbb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?HnuiUsQUcKlnM8x69PQyZYBN3dvsRpsgkQfBlVbMcKLXF+hu9IMaIt8IWfpq?=
+ =?us-ascii?Q?Vz+64g8Ch+R1z/C/KXgU8l5/OroakEEvX/whY8TL0l5+500b6q3YkjaKH9dD?=
+ =?us-ascii?Q?cN2pG3nP+DHnbOUvIhbyY4wSZOajwFHvP4PFYt/hGjKVVQepTAPdcPuuqh48?=
+ =?us-ascii?Q?UarH1nDXWZvKCjjV9JEDOUhF3YeoEJ8FC4++B60cxxSuNuE6QHVfKLc3u3+0?=
+ =?us-ascii?Q?ofwuo7QfuwQASG/syUvg9HjTSwtZTciTAc6RT7RYfXaWbyl+Dlf47xsIJYMJ?=
+ =?us-ascii?Q?UlTtvj/j2Ec0cB3zubm90kzqgXgSgiPWmUxqtUkNWCe8mC10IH+wtdEY5lTk?=
+ =?us-ascii?Q?4rxvKNPXtILEaI5V7BJftEsdXWp182G0E6fSM/dgbJgkm27GY1O/73cb99oO?=
+ =?us-ascii?Q?SHLINkSNWhKeTFwabXVbK1YNKCFw4r6aO9BJ7wOuLJIloyEuCPqthIe0JbRy?=
+ =?us-ascii?Q?OF8aDB4Ep9lDP3IkbtlE2bNBaIw4so3IZ99WSRjdsDv5ANpKrKo1NTAIqJvo?=
+ =?us-ascii?Q?fM2RedFEltexYnSLTQHo+b1zdF4zMw2fmML1R/srsxEZALRnA42UilwaF0LY?=
+ =?us-ascii?Q?mFimIfOWWNV2rS7pomhs0PJm/yOUp5JfM36w2+1qqRN/DqTxJwiU6oLjVT8A?=
+ =?us-ascii?Q?X6HfhV419Kpz0iUwXoF0vf9Z63QWqeOyalmdklw43IlEVAUof82zGwqfKmYA?=
+ =?us-ascii?Q?mAlOcCA4gM77KOJpEnbyyYCWGIl8tEkmUk9auF881eAojdl4hSwaWzOMl9FT?=
+ =?us-ascii?Q?c4DTzH15SuUrD3Yrk9GKujFSmEeCnZucTyQARUNO4Vq8m92G9WbAdmfkzOfc?=
+ =?us-ascii?Q?Oban+WkpSpaoelTr9gnQiA0C9lo+X2rnLrKi1zXz6kUaJJ/2tBJ2LxubmnG/?=
+ =?us-ascii?Q?3oOVp6SthTbxZGz5KH2hHJ5yqhFnMrMAnyH7aHZfJ3mXhawxIZJGvoEMpX9J?=
+ =?us-ascii?Q?jNG5VFFfovPe28jCUQl0zMi2BYtgUN0OYjkGYgoJNMz9rAfmGvxdSq1LurrE?=
+ =?us-ascii?Q?8wd/AMnohYke4XPoEdEum9dZ+n5z1soJWRKXc6Oqtxc3lUbFl7xCHtMsBBu5?=
+ =?us-ascii?Q?KPlDrGS6UXiff5x3bMeMZMsDQStNdUNanre33MBDT5Ut/fZTQGugO3h2gFPN?=
+ =?us-ascii?Q?8a3ndgKheB3gyirybyRNhbqe6ugsg79YpWA/CFRARiBXVfMmbUWHPePdZgEs?=
+ =?us-ascii?Q?YRvsYgstqfRD04+i4t92T+x9hbVnkE91aLWuGK6OLPAGHKjjf+5gYekR8v6k?=
+ =?us-ascii?Q?ZJYPYdhqo2ag5kz6RlahJ6lZCSA8H+vQcWgUp8AHmSbJSC41FB4kA4OJrs3W?=
+ =?us-ascii?Q?WKfj25dZa3t/kLd2DXwVkjhvlr7B69OJrA4vq+zb/ooJc1FTPdMLlCWi1Nbe?=
+ =?us-ascii?Q?LBoQ1ht1Vcm2t2UJBSmEu8pCzhhWc6SA1v0U+cViVLovj4aoVwI8+69KQLVi?=
+ =?us-ascii?Q?Q7Bb3+uYAexqhNnOm8KDhl+aDBpIT0T0Nqs2tyxb3JL0hEpOwkMegOVhlGqD?=
+ =?us-ascii?Q?5q/yiiZ4aRYgrmZplE92R4A5MKSEN79dLpS9oxMexJyMMbmzWN7jLCzStcun?=
+ =?us-ascii?Q?bkb5kwrS6FCB3aEULY8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?a9GP3fISxmMaf0apBeuNoGOLGe8MGxcQnyjVTGqMglxCvm2W3bf7pU/htZKB?=
+ =?us-ascii?Q?t1PpPRMWlDnVEaFEjkdFfcWWyY/Wh48oTBjMQSzTt2J7VSpDt5EXebGD9zLH?=
+ =?us-ascii?Q?kzitsvuB2CtkGdj50ytv4JZ23G1Gr5d/SHUS7MnJDodgd6prL2aQGBYLbWGY?=
+ =?us-ascii?Q?dPwY9m4OelnaWAqmDzO6T6qApUp8mEMvVnQajp04IBAFM4z3pCePCFSX4QKw?=
+ =?us-ascii?Q?wxLewbiLnNvMk8hiTPLFiM7UAC1MaCkDupjai2yI4tMF1c9EtBug3svpePOB?=
+ =?us-ascii?Q?/xOr8hqlhxZveAOwAExPFE4NTyhEYHxJpxrJvU0HFv8J8WVSxM9yOf5JbLP7?=
+ =?us-ascii?Q?+U7+kTeqRIyYlI21SlHJHIZYWPBERCUJFkZkbjnGDridJ47nynoePUFrxnIX?=
+ =?us-ascii?Q?OKTT18kvxf1yaJ1N4eimLKXuatQVyQ/w4bC0j2tCU3M9HwuNjBUXe0BvAWMz?=
+ =?us-ascii?Q?tuldKAYPmDX4fTIXdAMC4HeI/BOLalfqIdcpbQ4rPX8RfeRDUQFT5pgTHQBs?=
+ =?us-ascii?Q?HQ2okyXxjURs7cQQMkIzRP+wOYNvAUvnyQMXV6hfThGildVIQuyiHV3jnh6U?=
+ =?us-ascii?Q?9XvXbNzqxGbtSDCVA5SAD0iIeHytFp7pGbgXFiPCkbR9nSeRzicj9e31ZMyc?=
+ =?us-ascii?Q?mHfSc8VATsq9epWNVYexO/IP8nvyCDzmhQGIPmuhQ0swTf9DTxsGIjFZiR37?=
+ =?us-ascii?Q?gMrqSjIX0+Xb46PQt9CstqD2m+BpCY0d+hTWClxxE+4UtsbvnwR/dyx/gO+I?=
+ =?us-ascii?Q?vI4fdg4fq2KmCrl5MnGhnVIepJhFCDuGiu5RQE5amwSL5+NB83e59vrZzNLY?=
+ =?us-ascii?Q?VfBev6k2uZNoHAM424cSM2/DhWB/gl8duOZ4wCGHgem2qC48r19OhKPA9Ngr?=
+ =?us-ascii?Q?/3zVoU/9MOTyruBx5NiyxT1JcB+ia4jyzFXMtdrOv7qieA3mids051YKqpX/?=
+ =?us-ascii?Q?QCUq57Ayd4OIpo+0G99R3Yx+asmf0xjBAt8Qd2HL+XBHYe/2aBmz1yIZcDFS?=
+ =?us-ascii?Q?pdmo1pXUsr+0i4wBgjoeAGvODC5nWq8jYdlGLNfaPog3XS4DAPEaEtWnnIGZ?=
+ =?us-ascii?Q?AYPwcYEhbdW1I5HzQQaHMsm7PUvLSPrpCy0YeFmo+c9inbhEp9NShPRw/TQY?=
+ =?us-ascii?Q?9FQ1Yv35JcW5Ygb5dPKzGuY8IEJyztTXRHolzKppYxD7pAMV+Rog0qe7+14r?=
+ =?us-ascii?Q?onqiyOPOt4nSow9uVheBs00GYjmyZjP/ZzvTIzRIIjbmA7JxNZKnRaXExUxy?=
+ =?us-ascii?Q?BorhkKoLjt+8BPw+fetPIpoe8teHYbdlyzJryK3fmkIW8ldAw9+awS8ibPbc?=
+ =?us-ascii?Q?S0hGUxTRqO6wNybAcK2CGObOTC6WnkqhNHTkwZW6QAv53x3EsRHbgoOwEyCx?=
+ =?us-ascii?Q?b/FXCa2P30X/YfYf3um1exlWxUQzELSUQuFBBd7NJa1AhaBzdGJlQeIR+UDs?=
+ =?us-ascii?Q?xRCyesEuYSwYAtJNcPF0k4Gc0oiGAiz9GXJOCK5UXuF43GUrkZqfPAtBj7co?=
+ =?us-ascii?Q?CKg/ClkheOiCNEQUyC2OLRw1uEh4Tg9/BFO/YOyLGWKzdcGDY105m15JrJ8r?=
+ =?us-ascii?Q?JF351qDlYBIzX6q9ShvJ60qccwlq1qqXwgOzbxDhwxCT4QwByYcsqxxQLaCn?=
+ =?us-ascii?Q?ktHBKMC94Ew5BqbyN7agJlszzWdcUAlfFwYVIcqnviZ0ZaZtGcv97esBjZ4I?=
+ =?us-ascii?Q?G8NEEXy1WqRE/TJRuIvV8CJlHw5hK4gXISwCXkyTHqfU3t3ePQ9tC7ND1//u?=
+ =?us-ascii?Q?0EWOXnCupWKUGS8ny0P70wuDCxqXoKE=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	jOLtunrwpD4S8GuNwT/ZtBfXA0HKw5dtDk6CWNx7KjezFtjdrm6Et8IIt/re1WHK+Dv+zZbhLfoM06ZBAvzyikurNPTVdGrwSC7MEBjlo3onZ2OfEVEalf+mhyWJWJgnlUUv1Q2vmRuA3g4TSyO3lD8M8NsBi+PVAC3Xl4mgfEyaeKFv2abe2Ya4mHQ7kLdJlQ86/nnUtZ+UKBU9DCVwjLXEXUim8diqQdL4399maWlYxAMziZI8ePUIOY7m5EMFnqDqHjRlWeHiNrxaRyiz/l1IRXVO0+BTBX8x38ZNSEAl/5TySDPIYTBtMm12GwznjQhDM70tUc8W5iozNThtOfRF6kuhWtbZ/7a7rPIp8N98pcnUFQbL0I1N8Dd7D6AaLPWhJubCpF01BRfhRO1wUGWXuimErgjwyR/6clPrtuJOchEB9hg7CQ7s+4+a8pR4Cd1uFRKXt+NeVsmRN5kAuNH5NYAsaVECUztoLVSg9Frg41YrQKLpteRd6lQye0JNey3fr0ObZQOeGbgrLQj+buQ3M/gzlFscKuoP/34tPYTZlh1Na1i34jFiexij+Tjc+7fwxQrP5gbnGJeOhUsUHgvGxy7y5By+RpbnMvH0JhI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcf9bc2f-90ce-4adf-19ef-08de574c2fbb
+X-MS-Exchange-CrossTenant-AuthSource: BL4PR10MB8229.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 11:16:26.3762
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uJh8D4F8D5UMKZSCI5i/dRhz5clLdj71jY6l/Sb+H5m4wFfzATF8/bZjzWJ/k1GRLLLNLCMeRdqX/j7SRsZ1BfRhH3MoZDXLhnnNkh7pUwA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4689
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-19_02,2026-01-19_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
+ definitions=main-2601190093
+X-Proofpoint-GUID: oXDEhbHfb3azM2D42B0sMClJ0yAWLHZD
+X-Proofpoint-ORIG-GUID: oXDEhbHfb3azM2D42B0sMClJ0yAWLHZD
+X-Authority-Analysis: v=2.4 cv=QdJrf8bv c=1 sm=1 tr=0 ts=696e128e cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=toH4KdYtoxDtoiild2cA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE5MDA5MiBTYWx0ZWRfX8cCej0sXqBdf
+ 9xB4eUIRXgdhbIcYrEsb1DLvjx3BkG1Tbuxl2Wpwe8S12Lt6Si4oJsXSp/RUfaWh2EDzLvTmsm2
+ gJ0uGE66H0NkA7uUkBoSKvjR85oMg2sdDUr8v7OrncteGzM8W8rcMDgHaU1cumgtW/FHfmn+WZ2
+ 2X9zqxgK0nk8rc5ylMKpPzwIv2SYIYWUkiNDQNrHwVgO9JizVCPfBhFma0E0cZv91IPSRHJtB7h
+ RnaZB/mm+W1tX2dxdNjgVdiKUBuJWGnBRql0FpasxvZSpzWqVvG44aY0K0Ep6SIedA5tJ1iCYob
+ r2Cvoe7KlEPD/jbcvXkTT5FfmNtsNUk8Tt2J/NS/usMjCF7JfJq5HhVzZkxqUojpeQS+tUtFond
+ ikJQZ/cy/dOD224REaX50/e8psIEE08SbBz5Qi3w1k86rkRiR1RQ+3Kvb0p9VlHkzbwt5iOZKLJ
+ D97Tdig+fnPLAS8teNA==
 
-On 1/7/26 17:48, Kevin Brodsky wrote:
-> pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
-> meaning once for every test, and skips the test if any check fails.
-> 
-> The target file is the same for every test so this is a little
-> overkill. More importantly, this approach means that the whole suite
-> will report PASS even if all the tests are skipped because kernel
-> configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
-> being mapped, for instance.
-> 
-> Let's ensure that KSFT_SKIP is returned as exit code if any check
-> fails by performing the checks in pfnmap_init(), run once. That
-> function also takes care of finding the offset of the pages to be
-> mapped and saves it in a global. The file is still mapped/unmapped
-> for every test, as some of them modify the mapping.
-> 
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
->   tools/testing/selftests/mm/pfnmap.c | 81 ++++++++++++++++++++---------
->   1 file changed, 55 insertions(+), 26 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
-> index 35b0e3ed54cd..e41d5464130b 100644
-> --- a/tools/testing/selftests/mm/pfnmap.c
-> +++ b/tools/testing/selftests/mm/pfnmap.c
-> @@ -25,8 +25,11 @@
->   #include "kselftest_harness.h"
->   #include "vm_util.h"
->   
-> +#define DEV_MEM_NPAGES	2
-> +
->   static sigjmp_buf sigjmp_buf_env;
->   static char *file = "/dev/mem";
-> +static off_t file_offset;
->   
->   static void signal_handler(int sig)
->   {
-> @@ -88,7 +91,7 @@ static int find_ram_target(off_t *offset,
->   			break;
->   
->   		/* We need two pages. */
-> -		if (end > start + 2 * pagesize) {
-> +		if (end > start + DEV_MEM_NPAGES * pagesize) {
->   			fclose(file);
->   			*offset = start;
->   			return 0;
-> @@ -97,9 +100,49 @@ static int find_ram_target(off_t *offset,
->   	return -ENOENT;
->   }
->   
-> +static void pfnmap_init(void)
-> +{
-> +	size_t pagesize = getpagesize();
-> +	size_t size = DEV_MEM_NPAGES * pagesize;
-> +	int fd;
-> +	void *addr;
-> +
-> +	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
-> +		int err = find_ram_target(&file_offset, pagesize);
-> +
-> +		if (err)
-> +			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
-> +				       strerror(-err));
-> +	} else {
-> +		file_offset = 0;
-> +	}
-> +
-> +	/*
-> +	 * Make sure we can open and map the file, and perform some basic
-> +	 * checks; skip the whole suite if anything goes wrong.
-> +	 * A fresh mapping is then created for every test case by
-> +	 * FIXTURE_SETUP(pfnmap).
-> +	 */
-> +	fd = open(file, O_RDONLY);
-> +	if (fd < 0)
-> +		ksft_exit_skip("Cannot open '%s': %s\n", file, strerror(errno));
-> +
-> +	addr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, file_offset);
-> +	if (addr == MAP_FAILED)
-> +		ksft_exit_skip("Cannot mmap '%s': %s\n", file, strerror(errno));
-> +
-> +	if (!check_vmflag_pfnmap(addr))
-> +		ksft_exit_skip("Invalid file: '%s'. Not pfnmap'ed\n", file);
-> +
-> +	if (test_read_access(addr, size))
-> +		ksft_exit_skip("Cannot read-access mmap'ed '%s'\n", file);
-> +
-> +	munmap(addr, size);
+On Mon, Jan 19, 2026 at 12:11:39PM +0100, David Hildenbrand (Red Hat) wrote:
+> On 1/19/26 12:06, Lorenzo Stoakes wrote:
+> > On Mon, Jan 19, 2026 at 11:39:51AM +0100, David Hildenbrand (Red Hat) wrote:
+> > > On
+> > >
+> > > $ uname -r
+> > > 6.18.4-200.fc43.x86_64
+> > >
+> > > I am getting
+> > >
+> > > $ ./va_high_addr_switch
+> > > mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d7000 - OK
+> > > mmap(addr_switch_hint - pagesize, (2 * pagesize)): 0x7fe7de6d6000 - OK
+> > > mmap(addr_switch_hint, pagesize): 0x7fe7de6d7000 - OK
+> > > mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
+> > > mmap(NULL): 0x7fe7de6d5000 - OK
+> > > mmap(low_addr): 0x40000000 - OK
+> > > mmap(high_addr): 0x7fe7de6d5000 - OK
+> > > mmap(high_addr) again: 0x7fe7de6d3000 - OK
+> > > mmap(high_addr, MAP_FIXED): 0xffffffffffffffff - FAILED
+> > > mmap(-1): 0x7fe7de6d1000 - OK
+> > > mmap(-1) again: 0x7fe7de6cf000 - OK
+> > > mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d0000 - OK
+> > > mmap(addr_switch_hint - pagesize, 2 * pagesize): 0x7fe7de6cf000 - OK
+> > > mmap(addr_switch_hint - pagesize/2 , 2 * pagesize): 0x7fe7de6cd000 - OK
+> > > mmap(addr_switch_hint, pagesize): 0x7fe7de6cc000 - OK
+> > > mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
+> > >
+> > >
+> > > Are these the same issues you see?
+> >
+> > No, that's entirely separate bug it seems :)
+> >
+>
+> Oh, lol, I ran the wrong test.
 
-Why not keep the fd open then and supply that to all tests without the 
-need for them to open/close?
+:)) but found another bug...
 
-Then, also the file cannot change etc.
+>
+> Yes, on Fedora config I just get
+>
+>  $ ./virtual_address_range
+> TAP version 13
+> 1..1
+> ok 1 # SKIP prctl(PR_SET_VMA_ANON_NAME) not supported
+> # 1 skipped test(s) detected. Consider enabling relevant config options to
+> improve coverage.
+> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
 
--- 
-Cheers
+Yeah and the test runners seem to be the same, so this test has just _not
+been running_ for a long while.
 
-David
+Then if you configure a kernel that _does_ support this, it fails with a
+test assertion.
+
+I tried to dig in and it seemed that the logic just got confused rather
+than it being a legit failure as it's making odd impl detail asserts about
+lengths of gaps between VMA regions...
+
+>
+>
+> > Seems to work locally for me on 6.18.3, and also in VM with tip mm-unstable,
+> > strange.
+>
+> Maybe a hardware thing (notebook not supporting 5 level page tables, maybe?)
+
+Yeah and that's something that should probably be addressed... you'd think
+it'd pass anyway?
+
+>
+> >
+> > The issue here is with virtual_address_space.c which seems to just to be
+> > generally broken, I couldn't even bisect to a working one, and I really did
+> > try.
+> >
+> > Actually hang on, isn't va_high_addr_space already then testing what
+> > virtual_address_space should be testing anyway if it were sensible??
+> >
+> > That suggests then that just removing virtual_address_space without
+> > replacement (since this already exists) is the right way (...!)
+>
+> I cannot really judge, I would have to decipher the details of the tests ...
+
+Yup, in any case removal of a test that is fundamentally broken to the
+point of not being able to bisect it, that doesn't mmake any sense, that
+risks timeout due to it taking so long doing something crazy (it tries to
+map across ALL of the VA address space), that relies on implementation
+details of the kernel/libc (i.e. how the space is laid out in the first
+place), etc. makes sense.
+
+It is just not useful, and needs to be replaced with something that is. If
+we want to unit test get_unmapped_area(), then we should unit test
+get_unmapped_area() in isolation.
+
+It's actively broken and harmful to keep a broken test case around. A
+replacement that works can be added later.
+
+>
+> --
+> Cheers
+>
+> David
+
+Thanks, Lorenzo
 
