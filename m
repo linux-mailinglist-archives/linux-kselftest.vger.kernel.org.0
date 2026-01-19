@@ -1,256 +1,256 @@
-Return-Path: <linux-kselftest+bounces-49344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3259D3A5EE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F2075D3A667
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:10:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B455B304355C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 10:55:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B433230B1B46
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C87530AAD6;
-	Mon, 19 Jan 2026 10:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 408373590B2;
+	Mon, 19 Jan 2026 11:06:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U5HR1K7C"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AeLCVkil";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GXrhLVn0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1963A2FF66A;
-	Mon, 19 Jan 2026 10:55:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768820159; cv=none; b=Z71M+26Hl3Pke5Iht/xUOtV086jZ8vrc+qxnUWiLNZAnedoPZ1rYrt2TMgxshUFAWhnEx2wuxKD91Q5TRqn/YVWxlqBaUS5mdVla102nWp5WvvmPfINO8qfkqn73Qjh2CASrU6VKCskChAFX1tpFmdCwEWj5VeGQ7wvYG308YcE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768820159; c=relaxed/simple;
-	bh=bsXo26KZ+K1aH/HZ8wolPUoG9a2d4fNHkR3P0zLa+8g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eUSPb8n+ee3CKsQSDyHacUg/LlgphD7W82pLp3vi1udnnRa9QPVN1m9/OE18bql9CLrCebzG2E8lbtmsyDS1bc208fc8zUOMpyUEUBeEDwYJAp/MfQUkS+bD8anba5ZrC09eADtcqyHhcj6EY1KrDL7dHPy5qO7AwypCIMPwmD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U5HR1K7C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F7E2C116C6;
-	Mon, 19 Jan 2026 10:55:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768820158;
-	bh=bsXo26KZ+K1aH/HZ8wolPUoG9a2d4fNHkR3P0zLa+8g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U5HR1K7Cjv0Cp+7YA9y3rZzYh3llbIkfZP8dDEoV9I93qC40yuDZuPbkDtUVAE8Xg
-	 W7/u0Dc4zylWNGHI2B/csqj7mS8kuwdP6elJFVLdx6UbEdH6hy7LNPodk4rb2UvPku
-	 PRsyafmBOay1dqnXvPNE9mACu05Ir5P33XWVzP8Bc91mrb8vmXgUkQqrGf1DRxq/Nb
-	 9MdLKrAaR2r//UIh9a4FhU6Nq64ghVu9kwpROwSidCRdJtB2M2Xbz/SlUJqMImyGP4
-	 ouTywClMcWbwMw59omh7dCa2luVHaowpKS6lyNbYgozqnWikaAZQprzz+3UpK3ecTj
-	 yUcKnCrZxwa4g==
-Message-ID: <aa0ad9eb-dab8-4c29-827d-bed4983a584b@kernel.org>
-Date: Mon, 19 Jan 2026 11:55:54 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E2C3590CA;
+	Mon, 19 Jan 2026 11:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768820805; cv=fail; b=X/hmahBW1SjNpsGZXX9JLG2UqzJTtpcG1Gs0LfhugufF9h/MHqYBYXg1LBxUsHP+q+GnmmO7s/vnoU5/H3wwu3JUb3GjmRdLsUQFEoT47vGOl519KzYYi/d6V4l5DNaL04gLcqckAg3uf3QnV6sB5YWr2HkBV7XlBxfJJhW9aQE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768820805; c=relaxed/simple;
+	bh=JWBWF2ueEVt5O12KUXksSZY8Lncslrt5+d+mBiL9bdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=mS2+Agdv8cIeP5wyXknnX3bmRhlJZW3PIW0s/QN15avKgHgFq+eUop7oIAjxzIXec/JyE1qrxk9JLNID64ZDUkmOhcGZ+v9WAzLJlcbNpA23B3FjZIqcUmkD4Dq1RfhcrssdF10Fj5Ue2jEJZJ5r6yvhE32c7Fs2fyFNCnnDKeA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AeLCVkil; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GXrhLVn0; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60J3IJQi270916;
+	Mon, 19 Jan 2026 11:06:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=JWBWF2ueEVt5O12KUX
+	ksSZY8Lncslrt5+d+mBiL9bdI=; b=AeLCVkilQcuHEHJI0F81XW94N4r4jw7+VQ
+	bGHY5cNzf75rXGR2gwDqiKMdTqaXDwWxybixZ0uF0i2SpfgXbrjB973S8kbEstVn
+	kXGa4SCFPCWLLaRiDYABIyb6nZcZ7KooYLW5m6X+1X3hVhVBJ4UOLnRZ3/7C6Bqj
+	XgqI5IVye9nGctu7ill8PF38pJe+nGVcrUVQmZ+gbNZ31zl742Xv4px1E4UNcozM
+	d/Iu+tHWriv3NhsSYP6O358vgll7abn3UNw0Imzt/kGKqD+C+eqWMccfjC9dzhXk
+	681B7m78QET48kvFT+rSbpwnKQ6JDYDOKtcRGJ6Cgwb33GqniADQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4br2ypt190-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Jan 2026 11:06:30 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60J8rkkd037782;
+	Mon, 19 Jan 2026 11:06:30 GMT
+Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11010012.outbound.protection.outlook.com [52.101.46.12])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4br0v87rmk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 19 Jan 2026 11:06:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ia3QyEsDSUKURUu7Gfvs3PoVxfS39GZSNW3rUaVxh2DsCgeJqWh4wycjBRRyPy7sgM2QeSFrUxDtTpE9lz4lwT/5XHaW970P30vzI+KpNz+9t2cFcidh0vlPFWBAGLGh8qssyaeLWFebJWWJESkxGIcvpVmFl9wAiPls4L9xqmJPnCeeHsIeBuJ5F4F4sxaPYoThG8C7ok4p76LEaw3aZpcQo0FnmtAq9VDmpkukWRrXVoPuqQAfH1RwCLk/bRJH9R0w7f5/qFxhBpaCUWITWQ+AkiCs1bWRC1zDsFD0ySgi6Eu9fPn52w0KHVB+1yB8iM3atTKzEStF2fbXSW4ZfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JWBWF2ueEVt5O12KUXksSZY8Lncslrt5+d+mBiL9bdI=;
+ b=Y8kA6Bv+lfFYS0p0hW9ndSUsOmV4uo0l+s9LitKF+XQkeoL3S7zZdKsONGR6ivrIOskkgr4OMILGOlwjStrSFBQE5At77aq4euPhNaFNkaMUTPgLKEy+pPsUKvbXee3XfhNYkUOMHOWzpctaDHbJPhOgeeHhnDcdR/+UnX7faQPxlt35N/EILb0gHldM7UaHMu1af8MiKVKKiIpmeI/XyKLQ1wKgI3/7KmywQOoJNsa2T2DCrNSN2ZiThhH8N9GG34gMnOv6MA+x36AME5CyVjxduNwa/AgKg21Y2qBzpJAuim3lhzDniY+My3J8PNTyRZ3sGcgD2YK8aaMUoW3jIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JWBWF2ueEVt5O12KUXksSZY8Lncslrt5+d+mBiL9bdI=;
+ b=GXrhLVn0WCyy1XSiBlPSyrI+F+ZI0YFmzojP30D0x4CYzqgktK1gKlVo8/aLw1B3tbrW1NUs+17N/GTCjpkQiBSbdNfktIwATaH8jJpyyJnWZjNBJrR7Q3eOwPW/9VYJSQio+LtZuyODQWFXsO2KbYmQP3AjgZNs8R5aS5wKr4Y=
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
+ by CYYPR10MB7649.namprd10.prod.outlook.com (2603:10b6:930:c7::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Mon, 19 Jan
+ 2026 11:06:27 +0000
+Received: from BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
+ ([fe80::552b:16d2:af:c582%6]) with mapi id 15.20.9520.005; Mon, 19 Jan 2026
+ 11:06:27 +0000
+Date: Mon, 19 Jan 2026 11:06:29 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] selftests/mm: remove virtual_address_range test
+Message-ID: <79d2636a-bb15-4c7f-a633-c4bf408a2bc8@lucifer.local>
+References: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
+ <3d2e85ed-f072-4fca-8c22-461b001495c1@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d2e85ed-f072-4fca-8c22-461b001495c1@kernel.org>
+X-ClientProxiedBy: LO0P123CA0003.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:354::11) To BL4PR10MB8229.namprd10.prod.outlook.com
+ (2603:10b6:208:4e6::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/8] selftests/mm: introduce helper to read every page
- in range
-To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>
-References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
- <20260107164842.3289559-6-kevin.brodsky@arm.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
-In-Reply-To: <20260107164842.3289559-6-kevin.brodsky@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|CYYPR10MB7649:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bb28910-60e1-4df6-d10d-08de574acad3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?3epN4EzQ+DmloE+ZVmS6+Pwg1/c0LYM6MktocO9gRzdP8eBrPXouqrdyF5Fg?=
+ =?us-ascii?Q?eNLwKdCJi3T1kLiTfWWz+N6tWptKcEcchoKbdeHIQIaZLwUBCfgo++naLRdS?=
+ =?us-ascii?Q?J24ID9t8NYr23Ee7rXCdMiWfyn28q+jn+bR3Q3f7x5mvnhoQtXhithrXy+kh?=
+ =?us-ascii?Q?lvxT1+V2nBGv/wxCE2GSX9iKhVq1ye71GzwlCZtaeyYV6oLeNREGNpOCz23v?=
+ =?us-ascii?Q?RAdXezxlUDMR66eUX9IkH0dMRYOX8j62XS6+uDsi7jYitcCrQ3hzOXoxlCgo?=
+ =?us-ascii?Q?tjbhH4lUhLzQ9W7RlzdUbGnJwnKwZqb78zEPrhhSaW9Ge+jEQkYFxkuMooE0?=
+ =?us-ascii?Q?liGPQ0JfcGSdxhwqgARMFwuQrwDuEwNAbeAFyWfTU6wjvOcRh/Qtn7zP8Ke6?=
+ =?us-ascii?Q?izMz9Jlp0lbpWKzUYbTbqk4Hdnxx4gG2G9nKsGh3VM18ISlWtlgabamSDkzt?=
+ =?us-ascii?Q?/+xDD6yTPk0aDsnCxf2CnvNEEZnV/+sjphttAlDnTeuq44QeVwC+7piru/yr?=
+ =?us-ascii?Q?0dq8IkTaOGBqr/qE0EmnhPO61YWqavFX+HtNtoRcImIzKghI2H7W/rrFxIy6?=
+ =?us-ascii?Q?7XK50hf9iTLl3c6DO+FP0pQPZjmNr1/Q+UsJiEqOOsyB6NZSlSWXytk35jsE?=
+ =?us-ascii?Q?1ZUlnTVmkUFDndFF3WzrZpzlJSVC0xaoiWKUJUshNa1WuWXCVsmrJD/DvWU1?=
+ =?us-ascii?Q?D8y9aew4j535PjEJb5pQJg5zU/yuwOPmM5i719sXxfXE8SI1G/3DbzHMBd+Y?=
+ =?us-ascii?Q?667EY5E6/CMFCmX5wmsi6aTFxjutJa61ymQZKwPO42isZMyUor5OLR91oHOu?=
+ =?us-ascii?Q?KJVpTsB6OU9vDCXPRY+9Tj04bresiPCJ72NGmy0d5tl+OEs3KCM7O6m90GEh?=
+ =?us-ascii?Q?nbLlYkzWmOZ/iLInUz3gnmhpv05xfmQ6u3jgkyZbGY4VpatEnLm+1+G4bRYO?=
+ =?us-ascii?Q?nyVPS+zEkRQCv9QYny0djViXw68V0u3JGZT8flYcvEvp+dirG0QYcOPTbrKm?=
+ =?us-ascii?Q?D3K9pSSTdA2Ck5m9bK2colGl1aIkOi+Foxt8J3/mJy2vqZcp9koKk2yvX28i?=
+ =?us-ascii?Q?zQpVt4gjG2tK/nO5JGAHdMFC9rU9mmebi64+ZYUf45rw/esF70lcwSBknSx8?=
+ =?us-ascii?Q?XZ/c7il+So6bqRI8PO3mDUMKdLhHpjNcR1ZcNTOdVfuZe1SR6l4J+Co7p7s5?=
+ =?us-ascii?Q?zg06jvzwMFA5xUy5yvpFTrJnkgi/OmeZaMAJnihQW33dB1rt6s8TOzHqvuvk?=
+ =?us-ascii?Q?PgnoP8JXT/IjEkLgluntFhfBpHei8up9kkvc8+qDwzaMDuKIVYR/qB1n8R+B?=
+ =?us-ascii?Q?tCEoFqU9NWAxds0JQ8BU9PDSPHSWWMubFbr87EF7uYz8FeaQdXqEWqBlGj1G?=
+ =?us-ascii?Q?M6A3N9JR3+1OLtTOnKKg3OaIgvirqpiPOBo/hljA09Jjo57JBSDOYuh0C48w?=
+ =?us-ascii?Q?P+POxE9Gw7D2T8Fopoiy8U4VFgnGgw8ThisvS1NmqAUcwwEzLCkppoqNX+0p?=
+ =?us-ascii?Q?eugrczPSdf1p9Xrsy+rC/PN0cc/T7prRCERTlbvGgczPA8vrSa0oj8IPeQvi?=
+ =?us-ascii?Q?1be4zZ6RUNRypS8kMSs=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Jd/AhKJHh3JNZLtjWP1pqtQ1ffjhQOgrIVStIf6PynZyCdvO4Z2ipk6aRkHi?=
+ =?us-ascii?Q?0oNQPHdkudu5WAZLiDrvJIcAtaULeMJe4CRlzZ0zRilmRLB0Zw8OzhfALyYl?=
+ =?us-ascii?Q?o5aC6EDVnp025odGnAt2GDrC+qwlRYZa3G2FQjFAgbV/st4A/SP5Ds/KwlMU?=
+ =?us-ascii?Q?KBYvvC4UPA43WnPBMSx7JNv8CJ5iNc8LZ361dN53dY8g3DJBe0aXWiNaWjIC?=
+ =?us-ascii?Q?8ll3wC1FiNHu0auo+i/mmJonyArRWkSoaqai8tyxJL/xhRvJb1ku7QZelmY8?=
+ =?us-ascii?Q?FmiPpXFgbcBUIjdLc/540pciicCfuWWyji6P3sfkF3pfhQFYg8ArRnIo8nGr?=
+ =?us-ascii?Q?FtPoA0N5VDFKQJx0S9V7H7v9oWZV5AVThpqquAc+53zHml/rLzeZOxvRMbBT?=
+ =?us-ascii?Q?OGxhOuE6KNQerkk9xlFRvBf1uveRYdWk7+gX7tPsVbIwOoCSwafsL5iaRKLK?=
+ =?us-ascii?Q?Hb0uv3720ySma/I3eE+41iPyUAl5PVbQVl8tdY7d2jYayN05bJKxa0VhT1C3?=
+ =?us-ascii?Q?w4ZR4d7SVLm1DzMryWKyKtMht/hCXHjYZdGNw1jgxAYld6NO0k/Z2Njm9CPg?=
+ =?us-ascii?Q?08UbYizr/Zma6J2kzr7uPVsYTx4OaQbs3A45y+9JOkt5det6qM4lTDDun0A3?=
+ =?us-ascii?Q?zpxMtEKC1tO0t7x6cjQUceCHEUQAniVe+GhzieA5gxQN9EtYkuXnJzKAArL7?=
+ =?us-ascii?Q?ubPk5qToev8mrKVPLPEZWn6VSapgrJ14G41MBan77xedR+CU/R53VJXwteTC?=
+ =?us-ascii?Q?h0aHqqLOFfOnO2Ry62UEnM/RBJ1MKcFwI3qvRybve1nnhhOakpDRZywsZ7t+?=
+ =?us-ascii?Q?DADv9be4WMV2DrLTO1N5Jcb8qEDAc1VSvURTdlWAvy8j6eWhY/RF2bmWIOvs?=
+ =?us-ascii?Q?Uz8tfbRfS383367nj9h9Xzk/uTJIF6HoDiO/qRJfxKkkOp9gZo7qvfgkC3KP?=
+ =?us-ascii?Q?TvfdgV5jR29KjKAOtWJC0877JweL9xGgocuaNbICFzH2I3/vber2VgO6Eh5k?=
+ =?us-ascii?Q?UiMcLJNmmmCUea7gqrnxC6sW0T3tZzr4eSSjm9GRBvLanl103Vqyk0bAvPU3?=
+ =?us-ascii?Q?69aCdBy8v+vRFVNfhjFPnUrcpvFaFDoy/DIUTifw7GU8mTL7HvW+AnHDhVWg?=
+ =?us-ascii?Q?ATgy9GgJXai4w5IOH/RaJo4YOY4UpRxve6SDrklfA7xZrOsMKLBtV3g+xUCE?=
+ =?us-ascii?Q?TcikjAg+OphYGhNYqckQdVNifRi396+eLVQXAswq7Ng8NI2/kXnsTcjh1dl5?=
+ =?us-ascii?Q?+Mt0C7PxyPyErmxnhUeoJR3DCgbTJiKa8hKKVjqaSmsFK47XXczRLd+BO2JS?=
+ =?us-ascii?Q?MO2deFbGG76S6EtAlKhS23Lvs/hadUTxMVUcDaoHlceHA1Bi+jBQzBppmjDe?=
+ =?us-ascii?Q?5r2bewx4WcGlqo3sC3zUPdpnP8R9jKJEcwDin+sj0focLy34aXcf/9Y6s5Zc?=
+ =?us-ascii?Q?ndZl9DjhK22c0eYAM0FcEZfC34MBEsNTIA2WrgwDhW70UBmL0mXlSxk1WuSm?=
+ =?us-ascii?Q?H440dNuxHX228r9Mza+U7NMtBg15O+sRXtxNXe8jBxyaRywufMKEftnCUZvQ?=
+ =?us-ascii?Q?Eb4bqOk/6vlVM8o7UCI3CzElnA4noE0DRVeiKpfT4zmorx9+pKNfvFaEpiwy?=
+ =?us-ascii?Q?qjWxj69xq2xkaolOWamRvhgFT9QPCZlyKfBmxOamG3ZLyxyhEs5qwhzeojx0?=
+ =?us-ascii?Q?jv1Z7iWZM+mLRJCQR/p5+rb6RzTs/8gwdBTEb4xco9CvfM8zUnmiwGlEGmTb?=
+ =?us-ascii?Q?E3CTCMF6TertoCj5eZFxY143ZUiv1WM=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	SaEHQTRfTx8RIblEpG76WHuAMkhUVC/EP8N+fHJqX08xj7cMecGQNYx9My8HoMTfXJWqfVr7aGjtg84lN8hOrzQjtxxSARFu2pzCzBgTPZpneWjHaDKsR71TYEUD/Zj9WLSsHOgnFIHpPcNMO5I3XT+AAiscrRmEkTYtgoRHRa0nSrgV+3EzC4jrbUPUBiwQjvX54nudZ8OgakGAUPTHDZQdRaSoMRXru53DaPm2ZJVI8vNp7FadYUoFC0z/iFYI7AcNBiwhE9WTR/FkdTxuSCigLgw+9C5jpIEYd0/NL+/5/XVa3/YJPG44pczCvkFQxXTf+Oej1Yw42B+DpdiybXudvNzbPEetkzAUPQrGwlEgPhgAulohmqDLCbwuat0qSoIbQB06d0aqhrNRJqYJpEAy9qJge+N6ghwNTE4Bf7P0Ct/KD4q0PcSxFkDrDwhBWkYUv2tQ9jJFIBoADgOR0KSIGusp/NsgdupiLHeZnwPfospE7mZ2M1E1/eNnwLWJ4uzH9i3NBSmgqqY/LIBkQd8ojyLBdBCxoEBiPg3AsHySyqxosVQZbrQDWlMjFbOnQzZdOFpSevwdAhu0gARlFHb9PyzC3zW4ClZ3S5m+6c4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bb28910-60e1-4df6-d10d-08de574acad3
+X-MS-Exchange-CrossTenant-AuthSource: BL4PR10MB8229.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 11:06:27.5909
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8T3pwV1K0BeXSpsEEbDtlM8TIkyhOv0rYXBivP2LmZxIx+9lnbX2SikOinAzIBkUT0OUErZdMHz+JWwPuHfPMN/oeuHG3b+aNhBTIpYQTQc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR10MB7649
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-19_02,2026-01-19_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 adultscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
+ definitions=main-2601190091
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE5MDA5MiBTYWx0ZWRfX3DliQHEq0d/a
+ DyrIHhfBXgDcc8HiEsYPoqqoDDgySLdlI0xEpmom5wZXAKdXiXWHi9PYMFjnEzzcS+ecxmm+ajW
+ +QuGmkHGQXdjEtNkdhuhikZesBlXD4RB9vS050HYzVmVF3I0qvM+7SA1AuGjY7MlMMMg37PS5Ie
+ 8cAXJAGPITVAXHlwSv9pN7zVKx8EAK9ad6PimUG2K7A1bk+z2XKg0lqE7UdEOOrVoxjkYa9qyTW
+ TsOqkK02RF8YwzUSpAgUVLblR38z/8F7HkeZaAk2ALC9fHbi47WJgcCCTEZ34FjE6OdrClguQa1
+ NihblX2yS0Z9NoyWbTOZ7Lndzzuq4++C17mux+3qMeIukBnXCWJcmnbM1/ESMOlFe3y25mKE1eX
+ rBOslev2K2B+CuMcArS47IlLfegtcmPPi5H7zeG8ue+zlz7fNukmIJdaj0yebdkJPyf2e19SgGf
+ xIHAlGofpOueSW11vCw==
+X-Authority-Analysis: v=2.4 cv=de6NHHXe c=1 sm=1 tr=0 ts=696e1036 b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=7XmmSyV8Pj3IE5G_uLYA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: _fHB951UYcSekKH--4M9Ku05zmQwNRAZ
+X-Proofpoint-GUID: _fHB951UYcSekKH--4M9Ku05zmQwNRAZ
 
-On 1/7/26 17:48, Kevin Brodsky wrote:
-> FORCE_READ(*addr) ensures that the compiler will emit a load from
-> addr. Several tests need to trigger such a load for every page in
-> the range [addr, addr + len), ensuring that every page is faulted
-> in, if it wasn't already.
-> 
-> Introduce a new helper force_read_pages_in_range() that does exactly
-> that and replace existing loops with a call to it. Some of those
-> loops have a different step size, but reading from every page is
-> appropriate in all cases.
-> 
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> ---
->   tools/testing/selftests/mm/hugetlb-madvise.c     |  9 +--------
->   tools/testing/selftests/mm/pfnmap.c              | 16 ++++++----------
->   .../testing/selftests/mm/split_huge_page_test.c  |  6 +-----
->   tools/testing/selftests/mm/vm_util.h             |  6 ++++++
->   4 files changed, 14 insertions(+), 23 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-> index 05d9d2805ae4..1f82568ae262 100644
-> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
-> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-> @@ -47,14 +47,7 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
->   
->   void read_fault_pages(void *addr, unsigned long nr_pages)
->   {
-> -	unsigned long i;
-> -
-> -	for (i = 0; i < nr_pages; i++) {
-> -		unsigned long *addr2 =
-> -			((unsigned long *)(addr + (i * huge_page_size)));
-> -		/* Prevent the compiler from optimizing out the entire loop: */
-> -		FORCE_READ(*addr2);
-> -	}
-> +	force_read_pages_in_range(addr, nr_pages * huge_page_size);
->   }
->   
->   int main(int argc, char **argv)
-> diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
-> index f546dfb10cae..35b0e3ed54cd 100644
-> --- a/tools/testing/selftests/mm/pfnmap.c
-> +++ b/tools/testing/selftests/mm/pfnmap.c
-> @@ -33,20 +33,17 @@ static void signal_handler(int sig)
->   	siglongjmp(sigjmp_buf_env, -EFAULT);
->   }
->   
-> -static int test_read_access(char *addr, size_t size, size_t pagesize)
-> +static int test_read_access(char *addr, size_t size)
->   {
-> -	size_t offs;
->   	int ret;
->   
->   	if (signal(SIGSEGV, signal_handler) == SIG_ERR)
->   		return -EINVAL;
->   
->   	ret = sigsetjmp(sigjmp_buf_env, 1);
-> -	if (!ret) {
-> -		for (offs = 0; offs < size; offs += pagesize)
-> -			/* Force a read that the compiler cannot optimize out. */
-> -			*((volatile char *)(addr + offs));
-> -	}
-> +	if (!ret)
-> +		force_read_pages_in_range(addr, size);
-> +
->   	if (signal(SIGSEGV, SIG_DFL) == SIG_ERR)
->   		return -EINVAL;
->   
-> @@ -138,7 +135,7 @@ FIXTURE_SETUP(pfnmap)
->   		SKIP(return, "Invalid file: '%s'. Not pfnmap'ed\n", file);
->   
->   	/* ... and want to be able to read from them. */
-> -	if (test_read_access(self->addr1, self->size1, self->pagesize))
-> +	if (test_read_access(self->addr1, self->size1))
->   		SKIP(return, "Cannot read-access mmap'ed '%s'\n", file);
->   
->   	self->size2 = 0;
-> @@ -243,8 +240,7 @@ TEST_F(pfnmap, fork)
->   	ASSERT_GE(pid, 0);
->   
->   	if (!pid) {
-> -		EXPECT_EQ(test_read_access(self->addr1, self->size1,
-> -					   self->pagesize), 0);
-> +		EXPECT_EQ(test_read_access(self->addr1, self->size1), 0);
->   		exit(0);
->   	}
->   
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 40799f3f0213..65a89ceca4a5 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -652,11 +652,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
->   	}
->   	madvise(*addr, fd_size, MADV_HUGEPAGE);
->   
-> -	for (size_t i = 0; i < fd_size; i++) {
-> -		char *addr2 = *addr + i;
-> -
-> -		FORCE_READ(*addr2);
-> -	}
-> +	force_read_pages_in_range(*addr, fd_size);
->   
->   	if (!check_huge_file(*addr, fd_size / pmd_pagesize, pmd_pagesize)) {
->   		ksft_print_msg("No large pagecache folio generated, please provide a filesystem supporting large folio\n");
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 6ad32b1830f1..74bdf96161d7 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -54,6 +54,12 @@ static inline unsigned int pshift(void)
->   	return __page_shift;
->   }
->   
-> +static inline void force_read_pages_in_range(char *addr, size_t len)
-> +{
-> +	for (size_t i = 0; i < len; i += psize())
-> +		FORCE_READ(addr[i]);
-> +}
-> +
+On Mon, Jan 19, 2026 at 11:39:51AM +0100, David Hildenbrand (Red Hat) wrote:
+> On
+>
+> $ uname -r
+> 6.18.4-200.fc43.x86_64
+>
+> I am getting
+>
+> $ ./va_high_addr_switch
+> mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d7000 - OK
+> mmap(addr_switch_hint - pagesize, (2 * pagesize)): 0x7fe7de6d6000 - OK
+> mmap(addr_switch_hint, pagesize): 0x7fe7de6d7000 - OK
+> mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
+> mmap(NULL): 0x7fe7de6d5000 - OK
+> mmap(low_addr): 0x40000000 - OK
+> mmap(high_addr): 0x7fe7de6d5000 - OK
+> mmap(high_addr) again: 0x7fe7de6d3000 - OK
+> mmap(high_addr, MAP_FIXED): 0xffffffffffffffff - FAILED
+> mmap(-1): 0x7fe7de6d1000 - OK
+> mmap(-1) again: 0x7fe7de6cf000 - OK
+> mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d0000 - OK
+> mmap(addr_switch_hint - pagesize, 2 * pagesize): 0x7fe7de6cf000 - OK
+> mmap(addr_switch_hint - pagesize/2 , 2 * pagesize): 0x7fe7de6cd000 - OK
+> mmap(addr_switch_hint, pagesize): 0x7fe7de6cc000 - OK
+> mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
+>
+>
+> Are these the same issues you see?
 
-Of course, we could also just pass the pagesize
+No, that's entirely separate bug it seems :)
 
-static inline void force_read_pages_in_range(char *addr, size_t len,
-	size_t pagesize)
-{
-	for (size_t i = 0; i < len; i += pagesize)
-		FORCE_READ(addr[i]);
-}
+Seems to work locally for me on 6.18.3, and also in VM with tip mm-unstable,
+strange.
 
+The issue here is with virtual_address_space.c which seems to just to be
+generally broken, I couldn't even bisect to a working one, and I really did
+try.
 
-Or alternatively even better:
+Actually hang on, isn't va_high_addr_space already then testing what
+virtual_address_space should be testing anyway if it were sensible??
 
-static inline void force_read_pages(char *addr, unsigned int nr_pages,
-	size_t pagesize)
-{
-	for (size_t i = 0; i < nr_pages; i++)
-		FORCE_READ(addr[i * pagesize]);
-}
+That suggests then that just removing virtual_address_space without
+replacement (since this already exists) is the right way (...!)
 
-Then there is no change at all and we avoid the repeated psize() naturally.
-
-Thoughts?
-
--- 
-Cheers
-
-David
+Thanks, Lorenzo
 
