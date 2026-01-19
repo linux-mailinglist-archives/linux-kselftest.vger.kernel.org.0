@@ -1,136 +1,127 @@
-Return-Path: <linux-kselftest+bounces-49336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0B99D3A186
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 09:25:50 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADFBFD3A1AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 09:33:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 10E3E30A598C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 08:21:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2B6D630057E0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 08:33:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC04433C53B;
-	Mon, 19 Jan 2026 08:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFBCA33F394;
+	Mon, 19 Jan 2026 08:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ft0PIjKb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRNFvmSK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242FE26B764
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 08:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768810859; cv=pass; b=ZH1VWo1mLYXY6Io+oHTrxl6HozNH+RuZtAzBY4oY4+LwX+tPOCp07DkSLhsmI0Vk6AKDnqe0mwpb5sMg9v3Nk8j/VPVkZu/FUB00oBvtVktgTM7jAHhYl6EPh0gsaqScnUz4VqNF6BysULc1JJKQQEUH1e2EFSahu9JEDDTWAQg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768810859; c=relaxed/simple;
-	bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A217338582
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 08:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768811615; cv=none; b=sPHrvuEeL/Rm8W6zhUqceWbcSMrE6VnctQBkjbDm5oW1/WEP1uVmd1RN63OsnRAgxBFTQhoOgh93L7pGCUb/YC5VVqXnnIeGQ+aj+PADPmXoWdrjis/cBbNdgJ1nJKbF6qi7WWL0G+Q1xzP0SQsyNkb/9XGGEj+f08qZHU+WLn0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768811615; c=relaxed/simple;
+	bh=EuBTo90+0xISmGE1iNCeM36DlYb7oTzHhMLT3OQBIPE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kPxImDvnjnHpoc13W69b+CnFp0hwt6GdYxBguU6+hQVIQeaocEioJboskpK+SK204YrOz7JP027O8MBdrqqp90gfRJ/cWiTABc3FV38/hge3H5oGRudqfqmdg9+1STfBGQh8DR32K7JsZduPmYIeJqQi4qO6GRGZKt0M4LXnRqA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ft0PIjKb; arc=pass smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ac370cf8c0so313161eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 00:20:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768810857; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TBo5W4hwC/K4fCsv7vioS9LLjWPCy/MNLlx/RqmrLwIrOxpfoH9Lxxyd3e+xfioiKf
-         NPYLybqiny3WMvZnNG8JIUqnN1R6ez6F2tH4jnrkHtjTpBp9/T5faEVOzXNBrnzLNnay
-         RxjiWeEdBxJ+U9lU2/uniz6NhYaYDRZe0Ajax7TQa6DlOnbMHaAMq2wtUoJyrPLl7+P1
-         nl8pe0sd8QF22onOHdCfZYFzsmhZ+jpc7xL3exCbayXjGanXiaHqZ4OHf19Uncq22gwo
-         /oV9VzMUmQreS1TWoJgHd7jIo4M9ax+J+PDVB3nTXFkZip6Dzdh2H/yE5ZgNdW9tKELH
-         pP6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
-        fh=imlQoLex0KIznkha8G925T7D171sz8R8YrQETbWjpdg=;
-        b=USKfDV3k5n8Meqja83u8D+7MB+hMguU/HSGMZwyhBfig3TNLO1WlPSv3psmR8WhQbo
-         q7xfszVjb/tcP7ZL5pQzrvSJP+Ub6vMM3HrpznuvFRIB211q/KsqwRS8xgeKf4poh5OP
-         9j1nAWK/MxlceF8K/TL99zVBL4xMvkzlfMpZLV9UOdqO6m/4Zqu/92cljylDWbj/YLZg
-         9DxKet4pYkvJGzH859gxNrN1mfAQW6FBEdcSTwf+gY4aUbOEHF91yDzf7PuJbYnDC+3k
-         /Q4JAvblzyOBaZmHa3Q3QvrX8wn6zYn8DGK2AbnP29E8LgdIFhz96233nQM73gnRU5at
-         8VZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768810857; x=1769415657; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
-        b=Ft0PIjKbJX1PovTrwAIWhkE8E56u94Se6jQozD969V9wk82aOvhq5h+ZcVSeTMmATX
-         mtxqtlTFYTZLhVg9uiS/ICrDvCK4b/NGdVMxs85zbLC/n0fPy26Fh/Kfk/iSIh5uL1DV
-         48IcWffrlS8/Dik8s8PLz6/ZP3TgCycMoSuJqdKgmHjthZncrc3bamE6Q+X6bYUj89p6
-         B+dfRHmIZzwI40TaQz/WO+RXFxrDXPMC5QTixmfDAaInIpU7A7BhIZ1uPEQVju/tqtcL
-         fo469XZw4gHdSW6he/vTaY/I4MzHwmuID0IRt+Ju+E3SuKnq2CYemqR5zwN0i1vR1zeD
-         /JQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768810857; x=1769415657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
-        b=mpN4irCwdxLmtvacRaZDnmTDXUlL3chIpbSDhjM7cIc/xSymTlMlXZTPPu4svjtgOD
-         kuFoTLlPaqAdNB7lJ31qI8NCD65Kdy82YHxpNhC40uI7HPMjdOGqTnrS+aqUtSnURg+z
-         lXiLSIvAYe2H2c6OdJMAA2KiwdyxckIg1YBhE4cr39zgOBwUs7YKyTEg8ZcjM6JmK4hZ
-         EMssnL4O/MtHyUKZYJF4IP+2d5mxCdrgjgEMKYsa96AAF8pFExjWJw/PnFpCfr7pBMTN
-         grD1o4wPymopmwqbdTM3bXdTF7P1YjqzCJRQqhX0NRslU6hZGtP84AdwTgpagygqXj2y
-         mL8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWaJuWnId87iugdgUzwf19VvZw5EEy1RbgFKIr1ggSdfCiFChu7a/CB9II3I2odwVpLl4XgBkJAJEGaoFdIya8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxE+WcIFJCLSleUnEhl/6e+IbnKoeTYj90LzVK8KF268wRaDF/Q
-	lwGy3d7kTccJgaaaK3i7Hyuce3Vt81uMvvdlGfrFRoWLNsdzUOMIyBJLZCGddB2/+SETR77T3Wz
-	sAvPwQJ/Md8BXUDz5A1NiXvT8Q4pcar0=
-X-Gm-Gg: AY/fxX5kzvuSpSiZQgNUu1ZUgsHMGmIXUKXRIyFxgrHgCwUdrAak+GMxhtCSheThqBx
-	KiTizxXJ5iOsZ4YNSzRWFLDibqkrqHWBgPjo2v0CNznKhz6OJ+uIzeUgmF21oTs7DZxN7LYdTq+
-	p/Wa1Xox9g4tyc0vg7nPceadHc4sYRWxOaKm9ErpqbTcaa/JzcBocHdPKaYpSTD9nbcXkz/AfcK
-	j3uei6KEmJgaetaCUZa7q84ElHwvZvTW+mSoHeTCZNzRf1NkkbaDGVGij8RiH6bVYZKicyOyPDg
-	NbBGtF0MS3OTIbIGTypktyUh3foMPJbJSN+a9elvD/ebUFVSgH4XKE+SXwCf4kxbGgNKh7apQtl
-	OrQt3tj/WilxI
-X-Received: by 2002:a05:7300:5712:b0:2ae:5dd5:c178 with SMTP id
- 5a478bee46e88-2b6b3ef8367mr4917736eec.2.1768810857205; Mon, 19 Jan 2026
- 00:20:57 -0800 (PST)
+	 To:Cc:Content-Type; b=N2WxZhQI6rwFcBkaycPZs/esaxNFIQtPHL7KV8EZINf71dJKh5bFxA6ZAHG/NPF+rekzqboy9eI0nqJO67fvNTNmBydeuPrWG524mxFJJMtTv+sgin7x4B0zUlWmFf20X4Q8HMXTPUbZ51+OxVLB2qsk5jG2afPSRRGunDFtx/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SRNFvmSK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55298C2BCB1
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 08:33:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768811615;
+	bh=EuBTo90+0xISmGE1iNCeM36DlYb7oTzHhMLT3OQBIPE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SRNFvmSKtc1/gW2SNtZW30SG39DZstyWleIGLwc3+e6Cv9azYLqCXmb0J/NGIhIbj
+	 /wTmF4SDgNtHeyr2FQhinA3m/glZe57tHi14mTpCtWsPnYeUarbcRgIxavUISrDsiF
+	 w/580IPMEgXFFwc0v8Fshggp27kbxKyhsxTXUNOCrH6QfHnsQbjYXNbt24nOPycd4F
+	 vpnBXLnsXbBHOdAUahCpdjVRk1O+DOg03LaLQwKk8DkYT6QUgVbvubxkAb4QaizyoV
+	 dDRBaZga/AKjAy63AKSFj542BZn6t8VmFnC/kOeQo5/ATIHt3qyii6u4zyfSqo04fy
+	 OrmfHLBtQ4J0A==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-59b710d46ceso4155005e87.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 00:33:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWZuGiQ6hF66dzMWQI8wsyz8OK6gly63bZvwSuwhIARC0KXt7xFlChze2LovL6Bzh4g5I032uzDL96sB7QD0kI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4t/hoJWYZcRf25JTzie186VfE67HGVT6HYTN4vk/D4dJzsDIX
+	0gSw29Jlw2I9p8cCAkw8ME934ni2RHEE6045MbAkKvzJg5xBu5RoxWrAKXl0QP+Og5cna3IKyqG
+	7Ikqo4CA4+bnR1+Xes1kwfanBTwyjl4bmvJuLxL6c9w==
+X-Received: by 2002:a05:6512:10d6:b0:59d:4a12:5f9 with SMTP id
+ 2adb3069b0e04-59d4a1206famr260681e87.3.1768811613889; Mon, 19 Jan 2026
+ 00:33:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
-In-Reply-To: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 19 Jan 2026 09:20:42 +0100
-X-Gm-Features: AZwV_QhMB7zF8Mr9kifw_DFz2eE2ID4lBxi_wpfWg_BlkA7yDGSUKzHqRGH0rl4
-Message-ID: <CANiq72mP-42jWuMJyUsdmFuxyLAuyKzGtg01k6JBFK7c9G6=8g@mail.gmail.com>
-Subject: Re: [PATCH] rust: kunit: replace `kernel::c_str!` with C-Strings
-To: Tamir Duberstein <tamird@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20260116081036.352286-1-tzungbi@kernel.org> <CAMRc=MdOCvEb81k0whM9dGCE8Hp=tdxZTUuiFeiL3+WsEei9EQ@mail.gmail.com>
+ <aWuFBqIfJpDL9g-J@tzungbi-laptop>
+In-Reply-To: <aWuFBqIfJpDL9g-J@tzungbi-laptop>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Mon, 19 Jan 2026 09:33:21 +0100
+X-Gmail-Original-Message-ID: <CAMRc=McrFa42mNWmZtD1HKKKZ+USUKpQAAME50wbfxPM7L72gA@mail.gmail.com>
+X-Gm-Features: AZwV_Qj-H4GoQtvkwFseN5jYlKSdPvBPHrbR8AGUp3PpNz29IUPVXyzfscvZ_KA
+Message-ID: <CAMRc=McrFa42mNWmZtD1HKKKZ+USUKpQAAME50wbfxPM7L72gA@mail.gmail.com>
+Subject: Re: [PATCH 00/23] gpiolib: Adopt revocable mechanism for UAF prevention
+To: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Benson Leung <bleung@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Linus Walleij <linusw@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Dan Williams <dan.j.williams@intel.com>, Jason Gunthorpe <jgg@nvidia.com>, linux-gpio@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 22, 2025 at 1:28=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
-> wrote:
+On Sat, Jan 17, 2026 at 1:48=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.org> =
+wrote:
 >
-> From: Tamir Duberstein <tamird@gmail.com>
+> On Fri, Jan 16, 2026 at 11:35:00AM +0100, Bartosz Golaszewski wrote:
+> > On Fri, Jan 16, 2026 at 9:11=E2=80=AFAM Tzung-Bi Shih <tzungbi@kernel.o=
+rg> wrote:
+> > >
+> > > This series transitions the UAF prevention logic within the GPIO core
+> > > (gpiolib) to use the 'revocable' mechanism.
+> > >
+> > > The existing code aims to prevent UAF issues when the underlying GPIO
+> > > chip is removed.  This series replaces that custom logic with the
+> > > generic 'revocable' API, which is designed to handle such lifecycle
+> > > dependencies.  There should be no change in behavior.
+> > >
+> > > This series depends on the 'revocable' API, introduced in [1].  Some
+> > > build bots may report errors due to undefined symbols related to
+> > > 'revocable' until the dependency is merged.
+> > >
+> >
+> > Hi Tzung-Bi!
+> >
+> > Thank you for doing this and considering my suggestions from LPC. I
+> > haven't looked at the code yet but I quickly tested the series with my
+> > regular test-suites. The good news is: nothing is broken, every test
+> > works fine. The bad news is: there seems to be a significant impact on
+> > performance. With the user-space test-suite from libgpiod (for core C
+> > library - gpiod-test) I'm seeing a consistent 40% impact on
+> > performance. That's not really acceptable. :( I will try to bisect the
+> > series later and see which part exactly breaks it.
+> >
+> > I can also help you with user-space testing with libgpiod, if you need
+> > it? Some documentation is available here:
+> > https://libgpiod.readthedocs.io/en/latest/testing.html
 >
-> C-String literals were added in Rust 1.77. Replace instances of
-> `kernel::c_str!` with C-String literals where possible.
+> How to get the performance data?
 >
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-> Reviewed-by: Benno Lossin <lossin@kernel.org>
-> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
+> I tried on libgpiod-2.2.2.tar.xz:
+> - ./configure --enable-tools --enable-tests
+> - make
+> - ./tests/gpiod-test
+>
+> There is only TAP output.  Also I don't see the difference between:
+> `./tests/gpiod-test` vs. `./tests/gpiod-test -m perf`.
 
-Applied to `rust-next` -- thanks everyone!
+Yeah, no, there's no dedicated performance measurement in GLib tests,
+I just timed the test-suite and it runs 40% slower with this series.
 
-Cheers,
-Miguel
+Bartosz
 
