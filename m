@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-49342-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56FCED3A53F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:39:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EE0DD3A5AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1BC70303F34C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 10:39:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id CE3413008E0C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 10:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECB3A30B50C;
-	Mon, 19 Jan 2026 10:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1908357A25;
+	Mon, 19 Jan 2026 10:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FPCyN0dl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mb3l4B93"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B762DB79F;
-	Mon, 19 Jan 2026 10:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0BE33B96B;
+	Mon, 19 Jan 2026 10:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768819196; cv=none; b=UHoUefYKXXnrPqjw/REMhd+T1ZYXIkdXCQIheX36iQ4Gjkpw29PLZJwMKUduKzUlhDoVy1qTxGHYkIf5AaHZtjJcFWuejNWOW675sRh3SspFKrGYo3mnkme+9b/Ho9db4YE4ulB+fHe35NS04b/xkof7D1Q3tV+jdZ72Uzjt8OE=
+	t=1768819820; cv=none; b=j+/GumuVs5Qc41hpku6JSDGCubP1wwUAhaEHGJ3kF8+rHrIvY9dHaVlZAPrBKyzFeG8ioYQFEeb6wMOSbFnlweb2T5OB7qNJPQHGJjkgUY7/FwQP/WeHhUMD2rY+W5m6FNIbIXS4UqXC3fdfAtwKG3XnUZfQSFpPCp3C4oq/L9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768819196; c=relaxed/simple;
-	bh=bI669qC6s3Cud/xoDjw02dNzaCGh567RaObYNbGa/sQ=;
+	s=arc-20240116; t=1768819820; c=relaxed/simple;
+	bh=ZxzOJ4oQEra0siX2nuGmp1Odh2MhJ5xZ8jMUn/Ah4gk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ky+ujMKGER2NffFk0olzOY9fdg6BGp3TryrrRIZf3q49WOYXC5ncAix972Af8hZ6aVaodyGJXanzLeM+q3TAh3R4UCLpK1FEyW8Ei1jzi3WUj8Rzkb+dYXytWDZLdYKQTgD5Vo6oOt+0txeOuZRLZHvuC1InVKsmhGGVFiazxYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FPCyN0dl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC18C116C6;
-	Mon, 19 Jan 2026 10:39:53 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=nGS9hTQcGKoNnTtw89T6FPjzw3w9NX4Pe9t1YMM7wvr/nieqVB+NMGRvz1gy4DQkz5sCwgCtQpbmGqMX5QVC8RKaDujNIwLoRAQI98Vjq3kCXkrBH6dx7KYT8xjayYski+QQFYx+YH/qvszNYNIGu6XjzbXI+PIQS3lOldZxVfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mb3l4B93; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFE8BC116C6;
+	Mon, 19 Jan 2026 10:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768819196;
-	bh=bI669qC6s3Cud/xoDjw02dNzaCGh567RaObYNbGa/sQ=;
+	s=k20201202; t=1768819820;
+	bh=ZxzOJ4oQEra0siX2nuGmp1Odh2MhJ5xZ8jMUn/Ah4gk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FPCyN0dlTBHW970efzSsD2UQe7KrHSpW6NAJpINTNJrYaJTzUn/5gCkw+19AL+7gB
-	 Z9kymMeNPY28bUgU07Cs42jNclJtLZylJc9NlXslm/2Zu1VBLs3QuiqHJYceKVIWeD
-	 bWEn4hBjaleGOXeFl8a5dlfg+GuKHh3Ge4AdsnzZDZfgpPsagpUg3iqjPKiX5tJXMf
-	 Ha/HSGddWdJZygGC1zEwhMajLZFILWbb3TVJcH2+EgkL+mFu4PAhPiAiFXjhQ8KxQS
-	 G2mmX8MlSaCX7WWy5Elb261of8ZXNUZ6DxmlbwO0K4hFMcG4ndhLB9ASZbVk+Pd/1y
-	 IBlgkwikGUyJA==
-Message-ID: <3d2e85ed-f072-4fca-8c22-461b001495c1@kernel.org>
-Date: Mon, 19 Jan 2026 11:39:51 +0100
+	b=Mb3l4B93W7KHvJqwCHsHAebr5jOOyiZlGqBl9zbbC4g/ii3pn0ZDDm7Ohwcy8iKkR
+	 gTGS3vWHE2icNR7vhXXMBH55mWFZVY2oYmaHSuBpUMugiX3mSQSOYZ3UDMyUfhDXi2
+	 SFAbC6/OrsSAglWp32PITL/43LEBiO/H+MFhd2je0bCAYTtb9J3mCcHsaCFFp+bWH1
+	 0KTTuF873zuO5A/mK7hDCJz5KtfnB5x9JPeePjkce7Yi8WkMCJx3vea8n9udJ4+3V1
+	 SpsMmoCCpJmsyYXoy0+F4Mnjj2vXMgbo6rSvG1RVCt3cHsMsPUi48hhxYMlqX0Sps/
+	 dywkRtRlSS3Bg==
+Message-ID: <e2d76567-44f3-4372-9490-5cae91619125@kernel.org>
+Date: Mon, 19 Jan 2026 11:50:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,15 +48,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: remove virtual_address_range test
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH v2 4/8] selftests/mm: fix usage of FORCE_READ() in cow
+ tests
+To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
+ <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+ <20260107164842.3289559-5-kevin.brodsky@arm.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -102,82 +103,29 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
+In-Reply-To: <20260107164842.3289559-5-kevin.brodsky@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/16/26 14:20, Lorenzo Stoakes wrote:
-> This self test is asserting internal implementation details and is highly
-> vulnerable to internal kernel changes as a result.
+On 1/7/26 17:48, Kevin Brodsky wrote:
+> Commit 5bbc2b785e63 ("selftests/mm: fix FORCE_READ to read input
+> value correctly") modified FORCE_READ() to take a value instead of a
+> pointer. It also changed most of the call sites accordingly, but
+> missed many of them in cow.c. In those cases, we ended up with the
+> pointer itself being read, not the memory it points to.
 > 
-> It is currently failing locally from at least v6.17, and it seems that it
-> may have been failing for longer in many configurations/hardware as it
-> skips if e.g. CONFIG_ANON_VMA_NAME is not specified.
-> 
-> With these skips and the fact that run_vmtests.sh won't run the tests in
-> certain configurations it is likely we have simply missed this test being
-> broken in CI for a long while.
-> 
-> I have tried multiple versions of these tests and am unable to find a
-> working bisect as previous versions of the test fail also.
-> 
-> The tests are essentially mmap()'ing a series of mappings with no hint and
-> asserting what the get_unmapped_area*() functions will come up with, with
-> seemingly few checks for what other mappings may already be in place.
-> 
-> It then appears to be mmap()'ing with a hint, and making a series of
-> similar assertions about the internal implementation details of the hinting
-> logic.
-> 
-> Commit 0ef3783d7558 ("selftests/mm: add support to test 4PB VA on PPC64"),
-> commit 3bd6137220bb ("selftests/mm: virtual_address_range: avoid reading
-> from VM_IO mappings"), and especially commit a005145b9c96 ("selftests/mm:
-> virtual_address_range: mmap() without PROT_WRITE") are good examples of the
-> whack-a-mole nature of maintaining this test.
-> 
-> The last commit there being particularly pertinent as it was accounting for
-> an internal implementation detail change that really should have no bearing
-> on self-tests, that is commit e93d2521b27f ("x86/vdso: Split virtual clock
-> pages into dedicated mapping").
-> 
-> The purpose of the mm self-tests are to assert attributes about the API
-> exposed to users, and to ensure that expectations are met.
-> 
-> This test is emphatically not doing this, rather making a series of
-> assumptions about internal implementation details and asserting them.
-> 
-> It therefore, sadly, seems that the best course is to remove this test
-> altogether.
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> No failure occurred as a result, so it looks like the tests work
+> just fine without faulting in. However, the huge_zeropage tests
+> explicitly check that pages are populated, so those became skipped.
 
-On
+Right, that's nasty! Thanks!
 
-$ uname -r
-6.18.4-200.fc43.x86_64
+For all cases, we could probably just fail if the memory is not 
+populated after FORCE_READ().
 
-I am getting
+Would you have time to prepare a patch for that?
 
-$ ./va_high_addr_switch
-mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d7000 - OK
-mmap(addr_switch_hint - pagesize, (2 * pagesize)): 0x7fe7de6d6000 - OK
-mmap(addr_switch_hint, pagesize): 0x7fe7de6d7000 - OK
-mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
-mmap(NULL): 0x7fe7de6d5000 - OK
-mmap(low_addr): 0x40000000 - OK
-mmap(high_addr): 0x7fe7de6d5000 - OK
-mmap(high_addr) again: 0x7fe7de6d3000 - OK
-mmap(high_addr, MAP_FIXED): 0xffffffffffffffff - FAILED
-mmap(-1): 0x7fe7de6d1000 - OK
-mmap(-1) again: 0x7fe7de6cf000 - OK
-mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d0000 - OK
-mmap(addr_switch_hint - pagesize, 2 * pagesize): 0x7fe7de6cf000 - OK
-mmap(addr_switch_hint - pagesize/2 , 2 * pagesize): 0x7fe7de6cd000 - OK
-mmap(addr_switch_hint, pagesize): 0x7fe7de6cc000 - OK
-mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
-
-
-Are these the same issues you see?
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
 
 -- 
 Cheers
