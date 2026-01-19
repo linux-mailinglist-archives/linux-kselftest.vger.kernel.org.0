@@ -1,148 +1,136 @@
-Return-Path: <linux-kselftest+bounces-49335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEC8DD3A111
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 09:13:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C0B99D3A186
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 09:25:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 01B3D3052216
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 08:13:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10E3E30A598C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 08:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590A033B95B;
-	Mon, 19 Jan 2026 08:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC04433C53B;
+	Mon, 19 Jan 2026 08:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="POlJiMfh";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/ELWoi3/";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="POlJiMfh";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/ELWoi3/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ft0PIjKb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA9D33B6E3
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 08:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768810397; cv=none; b=IFx9hzttsbnq9Cg5PnTY87mBefuUWTrQmIl0H7zfh+Cv8fiyo877VEmQCEc+0qbCpMyU0GWP0Jo5EgzFyLIxcw7xsEagn2Mdy3V4gA5Z3YIEgrz368uR3vtwXWjDwJZRUKQecO4c6Df3qWmRp8JH8G/NKMSJVmOnXVavv/EyCAk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768810397; c=relaxed/simple;
-	bh=dzR7IlHYGiqPhdMdXkSmlLc0iaUDKl6iDUNVKCB/31Q=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eJR9t1JMWYiI+35cNDNLcc3aHyilXsTDAb7WPmoTzWivYBJqFxoYG64b1j73R1MBdABc3l3sHX+EcpdI2iguN/gM3Uo+XZ5DoniChxQDeBLOYBCdSIYjAIt+eF1Y9/0M0AxtI/q9aK4IE0/ZuqSAtPmRhbGyZmbBcYwRU+zdCwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=POlJiMfh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/ELWoi3/; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=POlJiMfh; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/ELWoi3/; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 52E4F5BCFD;
-	Mon, 19 Jan 2026 08:13:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1768810393; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GS+lnzNn2RNyrWZ3zG80/zBHHSqAJv3kKq5ycL8kFYA=;
-	b=POlJiMfhrHOJmIqSfFc0E06EPiur5CRRi1kpN0mOz01T/5PZpSjrmZJigprL8vW19D5CkU
-	fxeyBA60fJEana5xtbUIIoL0ZkMGx1oArQH5AccxkY6FMnzA6acaW1VvdhDWaNLo1itk28
-	7W3non1+KHFQBxQlzlq+9/T+KjXo3Uk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1768810393;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GS+lnzNn2RNyrWZ3zG80/zBHHSqAJv3kKq5ycL8kFYA=;
-	b=/ELWoi3/cS2Tvw7eohEgoDTYhKHJbRMgBSaerFLmzE0ZNVOaHyBw1iqGqZgTkLpRbTcDI0
-	UsB0n/Uym+Jv2GDw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1768810393; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GS+lnzNn2RNyrWZ3zG80/zBHHSqAJv3kKq5ycL8kFYA=;
-	b=POlJiMfhrHOJmIqSfFc0E06EPiur5CRRi1kpN0mOz01T/5PZpSjrmZJigprL8vW19D5CkU
-	fxeyBA60fJEana5xtbUIIoL0ZkMGx1oArQH5AccxkY6FMnzA6acaW1VvdhDWaNLo1itk28
-	7W3non1+KHFQBxQlzlq+9/T+KjXo3Uk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1768810393;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GS+lnzNn2RNyrWZ3zG80/zBHHSqAJv3kKq5ycL8kFYA=;
-	b=/ELWoi3/cS2Tvw7eohEgoDTYhKHJbRMgBSaerFLmzE0ZNVOaHyBw1iqGqZgTkLpRbTcDI0
-	UsB0n/Uym+Jv2GDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 16CD13EA63;
-	Mon, 19 Jan 2026 08:13:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id dQwcBJnnbWloBwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Mon, 19 Jan 2026 08:13:13 +0000
-Date: Mon, 19 Jan 2026 09:13:12 +0100
-Message-ID: <87pl7681gn.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: LeeYongjun <jun85566@gmail.com>
-Cc: broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	shuah@kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: alsa: Remove unused variable in utimer-test
-In-Reply-To: <20260118065510.29644-1-jun85566@gmail.com>
-References: <20260118065510.29644-1-jun85566@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.1 Mule/6.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242FE26B764
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 08:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768810859; cv=pass; b=ZH1VWo1mLYXY6Io+oHTrxl6HozNH+RuZtAzBY4oY4+LwX+tPOCp07DkSLhsmI0Vk6AKDnqe0mwpb5sMg9v3Nk8j/VPVkZu/FUB00oBvtVktgTM7jAHhYl6EPh0gsaqScnUz4VqNF6BysULc1JJKQQEUH1e2EFSahu9JEDDTWAQg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768810859; c=relaxed/simple;
+	bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kPxImDvnjnHpoc13W69b+CnFp0hwt6GdYxBguU6+hQVIQeaocEioJboskpK+SK204YrOz7JP027O8MBdrqqp90gfRJ/cWiTABc3FV38/hge3H5oGRudqfqmdg9+1STfBGQh8DR32K7JsZduPmYIeJqQi4qO6GRGZKt0M4LXnRqA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ft0PIjKb; arc=pass smtp.client-ip=74.125.82.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ac370cf8c0so313161eec.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 00:20:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768810857; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TBo5W4hwC/K4fCsv7vioS9LLjWPCy/MNLlx/RqmrLwIrOxpfoH9Lxxyd3e+xfioiKf
+         NPYLybqiny3WMvZnNG8JIUqnN1R6ez6F2tH4jnrkHtjTpBp9/T5faEVOzXNBrnzLNnay
+         RxjiWeEdBxJ+U9lU2/uniz6NhYaYDRZe0Ajax7TQa6DlOnbMHaAMq2wtUoJyrPLl7+P1
+         nl8pe0sd8QF22onOHdCfZYFzsmhZ+jpc7xL3exCbayXjGanXiaHqZ4OHf19Uncq22gwo
+         /oV9VzMUmQreS1TWoJgHd7jIo4M9ax+J+PDVB3nTXFkZip6Dzdh2H/yE5ZgNdW9tKELH
+         pP6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
+        fh=imlQoLex0KIznkha8G925T7D171sz8R8YrQETbWjpdg=;
+        b=USKfDV3k5n8Meqja83u8D+7MB+hMguU/HSGMZwyhBfig3TNLO1WlPSv3psmR8WhQbo
+         q7xfszVjb/tcP7ZL5pQzrvSJP+Ub6vMM3HrpznuvFRIB211q/KsqwRS8xgeKf4poh5OP
+         9j1nAWK/MxlceF8K/TL99zVBL4xMvkzlfMpZLV9UOdqO6m/4Zqu/92cljylDWbj/YLZg
+         9DxKet4pYkvJGzH859gxNrN1mfAQW6FBEdcSTwf+gY4aUbOEHF91yDzf7PuJbYnDC+3k
+         /Q4JAvblzyOBaZmHa3Q3QvrX8wn6zYn8DGK2AbnP29E8LgdIFhz96233nQM73gnRU5at
+         8VZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768810857; x=1769415657; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
+        b=Ft0PIjKbJX1PovTrwAIWhkE8E56u94Se6jQozD969V9wk82aOvhq5h+ZcVSeTMmATX
+         mtxqtlTFYTZLhVg9uiS/ICrDvCK4b/NGdVMxs85zbLC/n0fPy26Fh/Kfk/iSIh5uL1DV
+         48IcWffrlS8/Dik8s8PLz6/ZP3TgCycMoSuJqdKgmHjthZncrc3bamE6Q+X6bYUj89p6
+         B+dfRHmIZzwI40TaQz/WO+RXFxrDXPMC5QTixmfDAaInIpU7A7BhIZ1uPEQVju/tqtcL
+         fo469XZw4gHdSW6he/vTaY/I4MzHwmuID0IRt+Ju+E3SuKnq2CYemqR5zwN0i1vR1zeD
+         /JQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768810857; x=1769415657;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5BvaM2zTZp6LRXT2gqEqhSNTny0R7bUn7MjFDG5LA8A=;
+        b=mpN4irCwdxLmtvacRaZDnmTDXUlL3chIpbSDhjM7cIc/xSymTlMlXZTPPu4svjtgOD
+         kuFoTLlPaqAdNB7lJ31qI8NCD65Kdy82YHxpNhC40uI7HPMjdOGqTnrS+aqUtSnURg+z
+         lXiLSIvAYe2H2c6OdJMAA2KiwdyxckIg1YBhE4cr39zgOBwUs7YKyTEg8ZcjM6JmK4hZ
+         EMssnL4O/MtHyUKZYJF4IP+2d5mxCdrgjgEMKYsa96AAF8pFExjWJw/PnFpCfr7pBMTN
+         grD1o4wPymopmwqbdTM3bXdTF7P1YjqzCJRQqhX0NRslU6hZGtP84AdwTgpagygqXj2y
+         mL8g==
+X-Forwarded-Encrypted: i=1; AJvYcCWaJuWnId87iugdgUzwf19VvZw5EEy1RbgFKIr1ggSdfCiFChu7a/CB9II3I2odwVpLl4XgBkJAJEGaoFdIya8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE+WcIFJCLSleUnEhl/6e+IbnKoeTYj90LzVK8KF268wRaDF/Q
+	lwGy3d7kTccJgaaaK3i7Hyuce3Vt81uMvvdlGfrFRoWLNsdzUOMIyBJLZCGddB2/+SETR77T3Wz
+	sAvPwQJ/Md8BXUDz5A1NiXvT8Q4pcar0=
+X-Gm-Gg: AY/fxX5kzvuSpSiZQgNUu1ZUgsHMGmIXUKXRIyFxgrHgCwUdrAak+GMxhtCSheThqBx
+	KiTizxXJ5iOsZ4YNSzRWFLDibqkrqHWBgPjo2v0CNznKhz6OJ+uIzeUgmF21oTs7DZxN7LYdTq+
+	p/Wa1Xox9g4tyc0vg7nPceadHc4sYRWxOaKm9ErpqbTcaa/JzcBocHdPKaYpSTD9nbcXkz/AfcK
+	j3uei6KEmJgaetaCUZa7q84ElHwvZvTW+mSoHeTCZNzRf1NkkbaDGVGij8RiH6bVYZKicyOyPDg
+	NbBGtF0MS3OTIbIGTypktyUh3foMPJbJSN+a9elvD/ebUFVSgH4XKE+SXwCf4kxbGgNKh7apQtl
+	OrQt3tj/WilxI
+X-Received: by 2002:a05:7300:5712:b0:2ae:5dd5:c178 with SMTP id
+ 5a478bee46e88-2b6b3ef8367mr4917736eec.2.1768810857205; Mon, 19 Jan 2026
+ 00:20:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -3.30
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Level: 
-X-Spam-Flag: NO
+MIME-Version: 1.0
+References: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
+In-Reply-To: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 19 Jan 2026 09:20:42 +0100
+X-Gm-Features: AZwV_QhMB7zF8Mr9kifw_DFz2eE2ID4lBxi_wpfWg_BlkA7yDGSUKzHqRGH0rl4
+Message-ID: <CANiq72mP-42jWuMJyUsdmFuxyLAuyKzGtg01k6JBFK7c9G6=8g@mail.gmail.com>
+Subject: Re: [PATCH] rust: kunit: replace `kernel::c_str!` with C-Strings
+To: Tamir Duberstein <tamird@kernel.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 18 Jan 2026 07:55:10 +0100,
-LeeYongjun wrote:
-> 
-> The variable 'i' in wrong_timers_test() is declared but never used.
-> This was detected by Cppcheck static analysis.
-> 
-> tools/testing/selftests/alsa/utimer-test.c:144:9: style: Unused variable: i [unusedVariable]
-> 
-> Remove it to clean up the code and silence the warning.
-> 
-> Signed-off-by: LeeYongjun <jun85566@gmail.com>
+On Mon, Dec 22, 2025 at 1:28=E2=80=AFPM Tamir Duberstein <tamird@kernel.org=
+> wrote:
+>
+> From: Tamir Duberstein <tamird@gmail.com>
+>
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible.
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 
-Thanks, applied now.
+Applied to `rust-next` -- thanks everyone!
 
-
-Takashi
+Cheers,
+Miguel
 
