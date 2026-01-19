@@ -1,122 +1,121 @@
-Return-Path: <linux-kselftest+bounces-49329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCB75D39F69
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 08:11:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7122D39F6E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 08:11:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 19A3B30141F8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 07:10:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05479303D6A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 07:10:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF0829B76F;
-	Mon, 19 Jan 2026 07:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B192DB780;
+	Mon, 19 Jan 2026 07:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3AwHdM9S"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V7xfl25C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3802D9EC8
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 07:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E5B2D9EC8
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 07:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768806605; cv=pass; b=XFF5TCdFVsvbLzLrfwQ1GG3HnkFLNr7qfwNotAaU1PYzpM7HHyacy0czhXZieB6En9BlIVgo/nMgFLAnhZ7/ihmA5a51kd0+2R3/T/waIQMUdEwC7xogGunZu/0Att/UoPaKRx1ebLUJu2UYgM6ZZQ3Ry/UMReGE9cOUiWYxlc8=
+	t=1768806617; cv=pass; b=jmZROed0JMQXasTX/Bc6XaM44xWnngpCH04TrUPkex64Mi8yX2kLBwEeWsnnVtbg9FBJx44xzoJarYCkY59xMU4m8OpiAolvCByvM1ksEIQBJIP8PEhTR4vmMMz6bRzF3/RltTI29EPnin2L+KQpJYOg8hxYOUFBTNfnWzxl6vE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768806605; c=relaxed/simple;
-	bh=YJwOWfVQh6yINS7Lz5VgxA74qayNw8Y1qBWGFgOYt6s=;
+	s=arc-20240116; t=1768806617; c=relaxed/simple;
+	bh=/YmGnO7rf/Na+WcpsioZ/yrjoIT2bpaNws0lmMq4ezI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a3ivqsxT7jclEtXguCBjJIy/0eTdbih92AKLNvIR83ZI9kfCxWcpAnSvyqTOL9irWg1sRBubziyXs2LqNmGJAjla2v3RoDIzE0URj9fVtLJA9WbMux3ivxiDRCvRu7NZT/Fomokuq8CFLmjR6Q5tAcj1WNBN8b/hPsQpoObo9BM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3AwHdM9S; arc=pass smtp.client-ip=209.85.128.47
+	 To:Cc:Content-Type; b=Sb3TipsYC+vOX9Ppqi4UgtUgHte7LKHRYYX2vbLIzJM0gP01oosNuDnYr8OeyRNOWE8+WG7lPioE8EpuNnfVO+AAKLp2leI6dV6m2Kh8gOQ/8TWwoye5mxzBE+9qnRWzlc6R2hwIas93BP+bWU2ZUHozgJc3JzlMAQP9tz6fw5A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V7xfl25C; arc=pass smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so44973905e9.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 18 Jan 2026 23:10:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768806601; cv=none;
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so44976055e9.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 18 Jan 2026 23:10:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768806613; cv=none;
         d=google.com; s=arc-20240605;
-        b=gvV5fRiWz4x9pdcAGptO4lGjxjVF7JcQiVZVZ85ZEHhlK1wn5z/+4zxZYhzf+afClD
-         b0Up8urVyeyqshwpRUYI0zsP1qk5Z9OBcTbKb5CYUCAIYmZkPoAfg4D70/wmjXW/Xcpn
-         wI8cbHFT+pXjJq4npIpUfwMLsosImTOfCFo7SV5vMohEiDZgyxHl9p2YzMdPqjs6I0uE
-         Pm1fg70u2pG36mIeaTZNO9ejxt1pCOic7FiiqXX2E0IJRbqesv20KDOvYd9ORPiNRsJk
-         aed/PITEK5NBtZi5r6dCfua5jUga9TVzMLjVUPFw8/jsk4W1PAeFItnHK2l4j/w1X+S8
-         KKRg==
+        b=RyZl5XINImQ/L5qpMS146YeAD9p/oGrb/VxIOSjCzFsdd34LjQKzgbThE5/Ap/RUtY
+         Gdz+hUysPMiKFrKPUowrhRtbAnM/ruJ54Y8GdPa8A0M7ZeoaBn+cjgt+UvbRXqwbSQ8j
+         SjOZidgHaJPR2L8OfOEnWT2IfPsVVvkD8G/sebnoxJvHnMTfZfAJvaWyzX84YtJg7j3e
+         aKC2jgS1+OAe7LskDdpkQVc4e/dTExxJYWou34APgLjvGzXQmFdGT/GivizvVnKUOlNh
+         tjZ02p7n11Hmeofiuz0dj1BbQcTEslGpLbPaDVGEg99ZRM1cGp/w6DDguMii0vwG4mBG
+         fy8Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=iFTd4aSly82RgEwowK2RHq9aNVUAosb6nM34vajjf00=;
-        fh=NoWt+1YRKlyt83nWNo4cO0LoC3VIbBAi4H6FiYcb78c=;
-        b=k+6b6nNeMAkHx1FK/I2tNeKgZStiBUhM+q5+1dMWxUJrS66a3I0CK209YIw9DiNEz2
-         /DYpHDri1TFgRLxtQS6CpzZ9zL59gml8q0QIiXAUFJ++o1mDlfZ/WZzW/Kdq9wa+TOhT
-         p2Cx4R27w/kPa4SoydqC21oS2AkSXtYP+kD0A88uarV4lXZwrqE0JpiBnXEHWMBjI3Zc
-         7gQ8QBkw9+84owhBLnXF8VnSk+0iu7ZZbo8JuwUIehPc46KiPDxe5Y/RVrbcKzDCvhlb
-         XdGsk87oorltoZ+hKbHQqph8sXpGfaXx/QgQAp/X7a4C+BKYUR8+vgpSkXe7YeLA9GcS
-         qYew==;
+        bh=4XUBLJ/8dkfq4Jyx5tGudy5UZdqF3pY1KAGq4m7Eoqc=;
+        fh=qT10MwoeMCvRDLLe/3Omgvq9Pn9s6JsgWpI2pYeGKnU=;
+        b=BD7jiQMRS+TiXB5pqHe12Os4ywvEz7LZIQ5AMX78TO3ZPsfkscQMU6ybyd7Tp67pl4
+         6Lb2ryzFvqr8AHHG6w4FPNIZJvAoWvXofmcxatLcB43Hz3P4pwhqInHWAELsd3tyK8E5
+         zusxjzpXgVOLRk7SCU/Ohs1ii0OB9aHcD3vSybxj4Nm6cw+WOniY69iM7BVXokD6TLDn
+         IK5N90fk3JfllK7S4+RMOzx4ogfyR+KT7TOhXOAkImwXf5HMAnsVCcpN2bqU4KCILbKX
+         P+zzKdKeNMp1DHDxIAygCpDV4Ub+SrEHqw+a5L5MiF9/RH3opMBp8/7RN4fAhPllvGBk
+         XQ7Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768806601; x=1769411401; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1768806613; x=1769411413; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iFTd4aSly82RgEwowK2RHq9aNVUAosb6nM34vajjf00=;
-        b=3AwHdM9SQBPWk24WbtxVxJDBxvgSBTYeb5ab6fKXayV2EfTBnsBkQkNET8m3okqMkN
-         xIBKLSk9zkCDpHgl+HKmW0kRVtM6p3UMIruwJrHTBVWgshLaa62L0vff6Lv4YYCIEMDw
-         vo+JFIkv8MIVexMnvYdYmWkhu/Bj0PK7v16MTd0C2a0ZKFI29eq2Jf+LTZl+87giVbDQ
-         IvOvrOgYzBdzKUIysgwbWflqi6Vju3zu5fE8DCHgBXTbA2No6jrpZc8hA3Fm/QWaToUH
-         IyXyz8ghHnfS6x9Vxmgp8SzJVtVtcL13RXpZfzQfzXJrGCh8ciVuzVLEaIlGoa62D7Mv
-         iZWA==
+        bh=4XUBLJ/8dkfq4Jyx5tGudy5UZdqF3pY1KAGq4m7Eoqc=;
+        b=V7xfl25Cg42dLNBqod9h1UuhnTpccqvFeolNhNtkOcpG5iuu5hdfe7H9cgCjJqSe8G
+         C2QaZZ97AYBrXA9o05wyZ4jXFYuHCTAZ7acXx7aSZBThHednfXKuZJtcJKCOmPL02Wgj
+         h57jC9alq2k9GphR0Y4vI4pk/OGnh/KfAyUZWxhxAClEsTd8xSsGTg72F3ssyTQBZrVo
+         7GrBkCSTy5hFwVZmXe5ZHE833vGrTkpmc94D4IapicTVnaxryCQlzQRTz7MX78H18mKR
+         U6VsHXTpu0j36SgHWKTPaX78dHyAIOTKizV1tN6VYG7zsD/f98S3Cy/qKwHp5PcXAwaM
+         Q88Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768806601; x=1769411401;
+        d=1e100.net; s=20230601; t=1768806613; x=1769411413;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iFTd4aSly82RgEwowK2RHq9aNVUAosb6nM34vajjf00=;
-        b=BWc5b/0qIVYf04IS3cbR4uQxCh6C/2jP8Hpl+cyeJ7ln2kMnZ3Sg7foKJrm0enrR/d
-         VtveF1fVD3KiFtI5nmqmklRhZI7XFYCuJlLaInSmZJ7cm/9Nk8PLrevqzUco2LjXUPOK
-         K2lSVvuKHlVvohGItWGrTDX/m2otVymW9mEY4BHBK1PSqpYLPle/WNLqFilue/u0u1v5
-         DiNTq8kyfGjxKTxCsYJfRNIMZnH6uCgaZ1fBpaLgCanV21W2IspIYoMQFTMRA/rnQGDh
-         lz5GezquCXIFxwIJu/qkwmhZp6KyLsWSbl71uvM9XPNhXG3fIaUbkUIKa1DNTnS/62DP
-         Ee9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUe0o7MI8nnaGxO523OTISHj+lJ3hD7llNRV+QV5jITxtngK2aD/CjOU0x+1WN/LPvTiMuwuC+Y31PMvOX7TBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymwRjfP9pH+1V61W3ubug88yyglqsETrGnEOVx2JlnWNWE+hYN
-	j1wte6FOXemHqPzKjssz118geleXWC4UfKXqlm13MpkwUq6M/jPxvsYp9NPmPLXzfCPcIigTVHh
-	YdUH+pCAXsk2BRFm95+09MkcsDbTRcd/BZBPdt3s5
-X-Gm-Gg: AY/fxX58e32Fg2xbb1pTw/p80G38VSw9Ic+mt7ZZY4tnbYWuzDkmNpvEsKNoC/yrL6B
-	cSWxq72CctZhCTkoDZ8C0Hfa8bkp7srV1IccBIxDzt3LHXHdfo4mehIdCuhZAo3sVUyfmC3D7L3
-	OZ2UTiioN4xg7JpLJUEciLoYH+Ffxry2dTaAnugEhxzcGRO0RxVX4gcQ3oE+QOxCAS9J2YDE6+5
-	TffMwe2yVVEoTEcXsuX8Gr6EUerx+SJ2P4skIYhJ9EGEXLIhOhv2fyAuXoj5gScMJTTRw==
-X-Received: by 2002:a05:600c:628c:b0:47d:403e:9cd5 with SMTP id
- 5b1f17b1804b1-4801e30b6ffmr105306995e9.11.1768806600416; Sun, 18 Jan 2026
- 23:10:00 -0800 (PST)
+        bh=4XUBLJ/8dkfq4Jyx5tGudy5UZdqF3pY1KAGq4m7Eoqc=;
+        b=hIz5QRCHvfivMLs2wOG6qSFr9zCyAekIDaaySHuFOLwx8hSW+hsUdcGE8jrykA0Pa3
+         snNGoJSDA1tydWDRdO2EwLieFyINuWUaObYElMivtdIHBLiSSAku5nn9XhKo4nmRGeNg
+         oYtJ7u5uxMFdeIpyOaYFcB13oEKqBN4WFnwYBIBG1n2AQb6wLxJofVHgrDQTzH3gC2Vu
+         kLhMlkyDP75RdRah7ARF+ST5IyZzgJACpGp40y0YKk5V/G2MT4wj7R53/PLgPx02qT1Q
+         AUcvnQGCpS4rM/7lK7Yz1B1W0HYI5FPvENFNZOll67d02Igm17ZpAw0hQ20ykYWrPG5y
+         taBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCIbqBlcTtZ2fd8QMMbVK1Rq+LVEgxi9WKPffcfnM0+Ug/JS1Ovzl15sAhvEIUW3AQydueqhll4YAQC4QFCxo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7ODj7svJUQoFcIP2cZjDy3w9hM5ZqZ8fXMSCT2tzdY1Lt7kMN
+	6bhl6iZo9YsnhVV6wO5suMfoQMxpNbRHEvnxQOBxik0yL7XkFRxUnZ2pkokeUVK5MhOYThMMECX
+	hGbNAUXGbckgv3/ntYbCIXzpNpbmRCXOemluQXVnB
+X-Gm-Gg: AY/fxX4CHfjUJAIlcxY+GjqOShT0GkiBY7j501K7JZYOAf/JSawY/U+O1K1BKmGBj8O
+	gCxUuzFbseXtpKq63wHT3B1pcAg/EMdhXJ/caw9QuK29TLi3PZJSN3I/63h8+MF3TKpqDIj6RP5
+	qyacWRPGIQexaFDynMvz4vbL22fyfv8D6/FAwyUWM6ioefmziXfeadSDP8DCNwM1O8I38mRArKj
+	7xt1QH9+pkR55s9oRetSS9ptoSWrx8TOLW/MYycoWAl1mxk9L+XZF+EHFhlaL1qBFANRw==
+X-Received: by 2002:a05:6000:250c:b0:42f:b707:56dd with SMTP id
+ ffacd0b85a97d-43569bbb0c4mr13052366f8f.33.1768806613048; Sun, 18 Jan 2026
+ 23:10:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260112170919.1888584-1-gary@kernel.org> <20260112170919.1888584-3-gary@kernel.org>
-In-Reply-To: <20260112170919.1888584-3-gary@kernel.org>
+References: <20260112170919.1888584-1-gary@kernel.org> <20260112170919.1888584-9-gary@kernel.org>
+In-Reply-To: <20260112170919.1888584-9-gary@kernel.org>
 From: David Gow <davidgow@google.com>
-Date: Mon, 19 Jan 2026 15:09:47 +0800
-X-Gm-Features: AZwV_Qgf9RpPPaXzLi3y89CtdVCbOwbBBQEnweE0QN8rZgQIzFtAYxv4u2rXIHM
-Message-ID: <CABVgOS=f2CdEyrMbQiPc5Jehc0GCzPdv1a790VDFcJ7CtZzYfg@mail.gmail.com>
-Subject: Re: [PATCH v3 02/12] rust: macros: use `quote!` from vendored crate
+Date: Mon, 19 Jan 2026 15:10:01 +0800
+X-Gm-Features: AZwV_QgWLaAQn2xn1c-eq25u-hYUJQ_jCFHm8UeefZZMfqiCIWTXh1QxlO15W-A
+Message-ID: <CABVgOSk3WcSPOQp4fKqgzdFKC_Eh9ENOtie7HLzExmQa+yYvcw@mail.gmail.com>
+Subject: Re: [PATCH v3 08/12] rust: macros: convert `#[kunit_tests]` macro to
+ use `syn`
 To: Gary Guo <gary@garyguo.net>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
 	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
 	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
 	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Rae Moar <raemoar63@gmail.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
-	Tamir Duberstein <tamird@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rae Moar <raemoar63@gmail.com>, Tamir Duberstein <tamird@gmail.com>, 
+	Igor Korotin <igor.korotin.linux@gmail.com>, 
 	=?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-modules@vger.kernel.org
+	rust-for-linux@vger.kernel.org, 
+	Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000254f2a0648b86124"
+	boundary="000000000000e46a660648b861b4"
 
---000000000000254f2a0648b86124
+--000000000000e46a660648b861b4
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -124,509 +123,413 @@ On Tue, 13 Jan 2026 at 01:11, Gary Guo <gary@kernel.org> wrote:
 >
 > From: Gary Guo <gary@garyguo.net>
 >
-> With `quote` crate now vendored in the kernel, we can remove our custom
-> `quote!` macro implementation and just rely on that crate instead.
+> Make use of `syn` to parse the module structurally and thus improve the
+> robustness of parsing.
 >
-> The `quote` crate uses types from the `proc-macro2` library so we also
-> update to use that, and perform conversion in the top-level lib.rs.
->
-> Clippy complains about unnecessary `.to_string()` as `proc-macro2`
-> provides additional `PartialEq` impl, so they are removed.
+> String interpolation is avoided by generating tokens directly using
+> `quote!`.
 >
 > Reviewed-by: Tamir Duberstein <tamird@gmail.com>
-> Reviewed-by: Benno Lossin <lossin@kernel.org>
 > Signed-off-by: Gary Guo <gary@garyguo.net>
 > ---
 
-Acked-by: David Gow <davidgow@google.com> # for kunit
+Sorry this took so long to review: it's taken a while for me to wrap
+my head around `syn`.
+
+I'm pretty happy with this overall, though, and think I understand it
+well enough now.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
-
--- David
-
->  rust/macros/concat_idents.rs |   2 +-
->  rust/macros/export.rs        |   4 +-
->  rust/macros/fmt.rs           |   4 +-
->  rust/macros/helpers.rs       |   4 +-
->  rust/macros/kunit.rs         |   5 +-
->  rust/macros/lib.rs           |  21 ++--
->  rust/macros/module.rs        |   6 +-
->  rust/macros/paste.rs         |   2 +-
->  rust/macros/quote.rs         | 182 -----------------------------------
->  rust/macros/vtable.rs        |   7 +-
->  10 files changed, 32 insertions(+), 205 deletions(-)
->  delete mode 100644 rust/macros/quote.rs
+>  rust/macros/kunit.rs | 274 +++++++++++++++++++------------------------
+>  rust/macros/lib.rs   |   6 +-
+>  2 files changed, 123 insertions(+), 157 deletions(-)
 >
-> diff --git a/rust/macros/concat_idents.rs b/rust/macros/concat_idents.rs
-> index 7e4b450f3a507..12cb231c3d715 100644
-> --- a/rust/macros/concat_idents.rs
-> +++ b/rust/macros/concat_idents.rs
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use proc_macro::{token_stream, Ident, TokenStream, TokenTree};
-> +use proc_macro2::{token_stream, Ident, TokenStream, TokenTree};
->
->  use crate::helpers::expect_punct;
->
-> diff --git a/rust/macros/export.rs b/rust/macros/export.rs
-> index a08f6337d5c8d..92d9b30971929 100644
-> --- a/rust/macros/export.rs
-> +++ b/rust/macros/export.rs
-> @@ -1,7 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> +use proc_macro2::TokenStream;
-> +use quote::quote;
-> +
->  use crate::helpers::function_name;
-> -use proc_macro::TokenStream;
->
->  /// Please see [`crate::export`] for documentation.
->  pub(crate) fn export(_attr: TokenStream, ts: TokenStream) -> TokenStream=
- {
-> diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
-> index 2f4b9f6e22110..19f709262552b 100644
-> --- a/rust/macros/fmt.rs
-> +++ b/rust/macros/fmt.rs
-> @@ -1,8 +1,10 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use proc_macro::{Ident, TokenStream, TokenTree};
->  use std::collections::BTreeSet;
->
-> +use proc_macro2::{Ident, TokenStream, TokenTree};
-> +use quote::quote_spanned;
-> +
->  /// Please see [`crate::fmt`] for documentation.
->  pub(crate) fn fmt(input: TokenStream) -> TokenStream {
->      let mut input =3D input.into_iter();
-> diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
-> index 365d7eb499c08..13fafaba12261 100644
-> --- a/rust/macros/helpers.rs
-> +++ b/rust/macros/helpers.rs
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use proc_macro::{token_stream, Group, Ident, TokenStream, TokenTree};
-> +use proc_macro2::{token_stream, Group, Ident, TokenStream, TokenTree};
->
->  pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<Strin=
-g> {
->      if let Some(TokenTree::Ident(ident)) =3D it.next() {
-> @@ -86,7 +86,7 @@ pub(crate) fn function_name(input: TokenStream) -> Opti=
-on<Ident> {
->      let mut input =3D input.into_iter();
->      while let Some(token) =3D input.next() {
->          match token {
-> -            TokenTree::Ident(i) if i.to_string() =3D=3D "fn" =3D> {
-> +            TokenTree::Ident(i) if i =3D=3D "fn" =3D> {
->                  if let Some(TokenTree::Ident(i)) =3D input.next() {
->                      return Some(i);
->                  }
 > diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-> index b395bb0536959..5cd6aa5eef07d 100644
+> index 5cd6aa5eef07d..afbc708cbdc50 100644
 > --- a/rust/macros/kunit.rs
 > +++ b/rust/macros/kunit.rs
-> @@ -4,10 +4,11 @@
+> @@ -4,81 +4,50 @@
 >  //!
 >  //! Copyright (c) 2023 Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.co=
 m>
 >
-> -use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
->  use std::collections::HashMap;
->  use std::fmt::Write;
->
-> +use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
-> +
->  pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenSt=
+> -use std::collections::HashMap;
+> -use std::fmt::Write;
+> -
+> -use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
+> -
+> -pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenSt=
 ream {
->      let attr =3D attr.to_string();
+> -    let attr =3D attr.to_string();
+> -
+> -    if attr.is_empty() {
+> -        panic!("Missing test name in `#[kunit_tests(test_name)]` macro")
+> -    }
+
+I'm assuming it's okay for us to get rid of this as we get an
+"unexpected end of input" error instead.
+
+
+> -
+> -    if attr.len() > 255 {
+> -        panic!("The test suite name `{attr}` exceeds the maximum length =
+of 255 bytes")
+> +use std::ffi::CString;
+> +
+> +use proc_macro2::TokenStream;
+> +use quote::{
+> +    format_ident,
+> +    quote,
+> +    ToTokens, //
+> +};
+> +use syn::{
+> +    parse_quote,
+> +    Error,
+> +    Ident,
+> +    Item,
+> +    ItemMod,
+> +    LitCStr,
+> +    Result, //
+> +};
+> +
+> +pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Res=
+ult<TokenStream> {
+> +    if test_suite.to_string().len() > 255 {
+> +        return Err(Error::new_spanned(
+> +            test_suite,
+> +            "test suite names cannot exceed the maximum length of 255 by=
+tes",
+> +        ));
+>      }
 >
-> @@ -59,7 +60,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenS=
-tream) -> TokenStream {
->                  }
->                  _ =3D> (),
->              },
-> -            TokenTree::Ident(i) if i.to_string() =3D=3D "fn" && attribut=
-es.contains_key("test") =3D> {
-> +            TokenTree::Ident(i) if i =3D=3D "fn" && attributes.contains_=
+> -    let mut tokens: Vec<_> =3D ts.into_iter().collect();
+> -
+> -    // Scan for the `mod` keyword.
+> -    tokens
+> -        .iter()
+> -        .find_map(|token| match token {
+> -            TokenTree::Ident(ident) =3D> match ident.to_string().as_str(=
+) {
+> -                "mod" =3D> Some(true),
+> -                _ =3D> None,
+> -            },
+> -            _ =3D> None,
+> -        })
+> -        .expect("`#[kunit_tests(test_name)]` attribute should only be ap=
+plied to modules");
+> -
+> -    // Retrieve the main body. The main body should be the last token tr=
+ee.
+> -    let body =3D match tokens.pop() {
+> -        Some(TokenTree::Group(group)) if group.delimiter() =3D=3D Delimi=
+ter::Brace =3D> group,
+> -        _ =3D> panic!("Cannot locate main body of module"),
+> +    // We cannot handle modules that defer to another file (e.g. `mod fo=
+o;`).
+> +    let Some((module_brace, module_items)) =3D module.content.take() els=
+e {
+> +        Err(Error::new_spanned(
+> +            module,
+> +            "`#[kunit_tests(test_name)]` attribute should only be applie=
+d to inline modules",
+> +        ))?
+>      };
+>
+> -    // Get the functions set as tests. Search for `[test]` -> `fn`.
+> -    let mut body_it =3D body.stream().into_iter();
+> -    let mut tests =3D Vec::new();
+> -    let mut attributes: HashMap<String, TokenStream> =3D HashMap::new();
+> -    while let Some(token) =3D body_it.next() {
+> -        match token {
+> -            TokenTree::Punct(ref p) if p.as_char() =3D=3D '#' =3D> match=
+ body_it.next() {
+> -                Some(TokenTree::Group(g)) if g.delimiter() =3D=3D Delimi=
+ter::Bracket =3D> {
+> -                    if let Some(TokenTree::Ident(name)) =3D g.stream().i=
+nto_iter().next() {
+> -                        // Collect attributes because we need to find wh=
+ich are tests. We also
+> -                        // need to copy `cfg` attributes so tests can be=
+ conditionally enabled.
+> -                        attributes
+> -                            .entry(name.to_string())
+> -                            .or_default()
+> -                            .extend([token, TokenTree::Group(g)]);
+> -                    }
+> -                    continue;
+> -                }
+> -                _ =3D> (),
+> -            },
+> -            TokenTree::Ident(i) if i =3D=3D "fn" && attributes.contains_=
 key("test") =3D> {
->                  if let Some(TokenTree::Ident(test_name)) =3D body_it.nex=
+> -                if let Some(TokenTree::Ident(test_name)) =3D body_it.nex=
 t() {
->                      tests.push((test_name, attributes.remove("cfg").unwr=
+> -                    tests.push((test_name, attributes.remove("cfg").unwr=
 ap_or_default()))
+> -                }
+> -            }
+> -
+> -            _ =3D> (),
+> -        }
+> -        attributes.clear();
+> -    }
+> +    // Make the entire module gated behind `CONFIG_KUNIT`.
+> +    module
+> +        .attrs
+> +        .insert(0, parse_quote!(#[cfg(CONFIG_KUNIT=3D"y")]));
+>
+> -    // Add `#[cfg(CONFIG_KUNIT=3D"y")]` before the module declaration.
+> -    let config_kunit =3D "#[cfg(CONFIG_KUNIT=3D\"y\")]".to_owned().parse=
+().unwrap();
+> -    tokens.insert(
+> -        0,
+> -        TokenTree::Group(Group::new(Delimiter::None, config_kunit)),
+> -    );
+> +    let mut processed_items =3D Vec::new();
+> +    let mut test_cases =3D Vec::new();
+>
+>      // Generate the test KUnit test suite and a test case for each `#[te=
+st]`.
+> +    //
+>      // The code generated for the following test module:
+>      //
+>      // ```
+> @@ -110,98 +79,93 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: Tok=
+enStream) -> TokenStream {
+>      //
+>      // ::kernel::kunit_unsafe_test_suite!(kunit_test_suit_name, TEST_CAS=
+ES);
+>      // ```
+> -    let mut kunit_macros =3D "".to_owned();
+> -    let mut test_cases =3D "".to_owned();
+> -    let mut assert_macros =3D "".to_owned();
+> -    let path =3D crate::helpers::file();
+> -    let num_tests =3D tests.len();
+> -    for (test, cfg_attr) in tests {
+> -        let kunit_wrapper_fn_name =3D format!("kunit_rust_wrapper_{test}=
+");
+> -        // Append any `cfg` attributes the user might have written on th=
+eir tests so we don't
+> -        // attempt to call them when they are `cfg`'d out. An extra `use=
+` is used here to reduce
+> -        // the length of the assert message.
+> -        let kunit_wrapper =3D format!(
+> -            r#"unsafe extern "C" fn {kunit_wrapper_fn_name}(_test: *mut =
+::kernel::bindings::kunit)
+> -            {{
+> -                (*_test).status =3D ::kernel::bindings::kunit_status_KUN=
+IT_SKIPPED;
+> -                {cfg_attr} {{
+> -                    (*_test).status =3D ::kernel::bindings::kunit_status=
+_KUNIT_SUCCESS;
+> -                    use ::kernel::kunit::is_test_result_ok;
+> -                    assert!(is_test_result_ok({test}()));
+> +    //
+> +    // Non-function items (e.g. imports) are preserved.
+> +    for item in module_items {
+> +        let Item::Fn(mut f) =3D item else {
+> +            processed_items.push(item);
+> +            continue;
+> +        };
+> +
+> +        // TODO: Replace below with `extract_if` when MSRV is bumped abo=
+ve 1.85.
+> +        let before_len =3D f.attrs.len();
+> +        f.attrs.retain(|attr| !attr.path().is_ident("test"));
+> +        if f.attrs.len() =3D=3D before_len {
+> +            processed_items.push(Item::Fn(f));
+> +            continue;
+> +        }
+> +
+> +        let test =3D f.sig.ident.clone();
+> +
+> +        // Retrieve `#[cfg]` applied on the function which needs to be p=
+resent on derived items too.
+> +        let cfg_attrs: Vec<_> =3D f
+> +            .attrs
+> +            .iter()
+> +            .filter(|attr| attr.path().is_ident("cfg"))
+> +            .cloned()
+> +            .collect();
+> +
+> +        // Before the test, override usual `assert!` and `assert_eq!` ma=
+cros with ones that call
+> +        // KUnit instead.
+> +        let test_str =3D test.to_string();
+> +        let path =3D crate::helpers::file();
+> +        processed_items.push(parse_quote! {
+> +            #[allow(unused)]
+> +            macro_rules! assert {
+> +                ($cond:expr $(,)?) =3D> {{
+> +                    kernel::kunit_assert!(#test_str, #path, 0, $cond);
+> +                }}
+> +            }
+> +        });
+> +        processed_items.push(parse_quote! {
+> +            #[allow(unused)]
+> +            macro_rules! assert_eq {
+> +                ($left:expr, $right:expr $(,)?) =3D> {{
+> +                    kernel::kunit_assert_eq!(#test_str, #path, 0, $left,=
+ $right);
+>                  }}
+> -            }}"#,
+> +            }
+> +        });
+> +
+> +        // Add back the test item.
+> +        processed_items.push(Item::Fn(f));
+> +
+> +        let kunit_wrapper_fn_name =3D format_ident!("kunit_rust_wrapper_=
+{test}");
+> +        let test_cstr =3D LitCStr::new(
+> +            &CString::new(test_str.as_str()).expect("identifier cannot c=
+ontain NUL"),
+> +            test.span(),
+>          );
+> -        writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
+> -        writeln!(
+> -            test_cases,
+> -            "    ::kernel::kunit::kunit_case(::kernel::c_str!(\"{test}\"=
+), {kunit_wrapper_fn_name}),"
+> -        )
+> -        .unwrap();
+> -        writeln!(
+> -            assert_macros,
+> -            r#"
+> -/// Overrides the usual [`assert!`] macro with one that calls KUnit inst=
+ead.
+> -#[allow(unused)]
+> -macro_rules! assert {{
+> -    ($cond:expr $(,)?) =3D> {{{{
+> -        kernel::kunit_assert!("{test}", "{path}", 0, $cond);
+> -    }}}}
+> -}}
+> -
+> -/// Overrides the usual [`assert_eq!`] macro with one that calls KUnit i=
+nstead.
+> -#[allow(unused)]
+> -macro_rules! assert_eq {{
+> -    ($left:expr, $right:expr $(,)?) =3D> {{{{
+> -        kernel::kunit_assert_eq!("{test}", "{path}", 0, $left, $right);
+> -    }}}}
+> -}}
+> -        "#
+> -        )
+> -        .unwrap();
+> -    }
+> +        processed_items.push(parse_quote! {
+> +            unsafe extern "C" fn #kunit_wrapper_fn_name(_test: *mut ::ke=
+rnel::bindings::kunit) {
+> +                (*_test).status =3D ::kernel::bindings::kunit_status_KUN=
+IT_SKIPPED;
+>
+> -    writeln!(kunit_macros).unwrap();
+> -    writeln!(
+> -        kunit_macros,
+> -        "static mut TEST_CASES: [::kernel::bindings::kunit_case; {}] =3D=
+ [\n{test_cases}    ::kernel::kunit::kunit_case_null(),\n];",
+> -        num_tests + 1
+> -    )
+> -    .unwrap();
+> -
+> -    writeln!(
+> -        kunit_macros,
+> -        "::kernel::kunit_unsafe_test_suite!({attr}, TEST_CASES);"
+> -    )
+> -    .unwrap();
+> -
+> -    // Remove the `#[test]` macros.
+> -    // We do this at a token level, in order to preserve span informatio=
+n.
+> -    let mut new_body =3D vec![];
+> -    let mut body_it =3D body.stream().into_iter();
+> -
+> -    while let Some(token) =3D body_it.next() {
+> -        match token {
+> -            TokenTree::Punct(ref c) if c.as_char() =3D=3D '#' =3D> match=
+ body_it.next() {
+> -                Some(TokenTree::Group(group)) if group.to_string() =3D=
+=3D "[test]" =3D> (),
+> -                Some(next) =3D> {
+> -                    new_body.extend([token, next]);
+> -                }
+> -                _ =3D> {
+> -                    new_body.push(token);
+> +                // Append any `cfg` attributes the user might have writt=
+en on their tests so we
+> +                // don't attempt to call them when they are `cfg`'d out.=
+ An extra `use` is used
+> +                // here to reduce the length of the assert message.
+> +                #(#cfg_attrs)*
+> +                {
+> +                    (*_test).status =3D ::kernel::bindings::kunit_status=
+_KUNIT_SUCCESS;
+> +                    use ::kernel::kunit::is_test_result_ok;
+> +                    assert!(is_test_result_ok(#test()));
 >                  }
+> -            },
+> -            _ =3D> {
+> -                new_body.push(token);
+>              }
+> -        }
+> -    }
+> +        });
+>
+> -    let mut final_body =3D TokenStream::new();
+> -    final_body.extend::<TokenStream>(assert_macros.parse().unwrap());
+> -    final_body.extend(new_body);
+> -    final_body.extend::<TokenStream>(kunit_macros.parse().unwrap());
+> -
+> -    tokens.push(TokenTree::Group(Group::new(Delimiter::Brace, final_body=
+)));
+> +        test_cases.push(quote!(
+> +            ::kernel::kunit::kunit_case(#test_cstr, #kunit_wrapper_fn_na=
+me)
+> +        ));
+> +    }
+>
+> -    tokens.into_iter().collect()
+> +    let num_tests_plus_1 =3D test_cases.len() + 1;
+> +    processed_items.push(parse_quote! {
+> +        static mut TEST_CASES: [::kernel::bindings::kunit_case; #num_tes=
+ts_plus_1] =3D [
+> +            #(#test_cases,)*
+> +            ::kernel::kunit::kunit_case_null(),
+> +        ];
+> +    });
+> +    processed_items.push(parse_quote! {
+> +        ::kernel::kunit_unsafe_test_suite!(#test_suite, TEST_CASES);
+> +    });
+> +
+> +    module.content =3D Some((module_brace, processed_items));
+> +    Ok(module.to_token_stream())
+>  }
 > diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-> index b38002151871a..945982c21f703 100644
+> index 12467bfc703a8..75ac60abe6ffa 100644
 > --- a/rust/macros/lib.rs
 > +++ b/rust/macros/lib.rs
-> @@ -11,8 +11,6 @@
->  // to avoid depending on the full `proc_macro_span` on Rust >=3D 1.88.0.
->  #![cfg_attr(not(CONFIG_RUSTC_HAS_SPAN_FILE), feature(proc_macro_span))]
->
-> -#[macro_use]
-> -mod quote;
->  mod concat_idents;
->  mod export;
->  mod fmt;
-> @@ -132,7 +130,7 @@
->  ///     the kernel module.
->  #[proc_macro]
->  pub fn module(ts: TokenStream) -> TokenStream {
-> -    module::module(ts)
-> +    module::module(ts.into()).into()
->  }
->
->  /// Declares or implements a vtable trait.
-> @@ -207,7 +205,7 @@ pub fn module(ts: TokenStream) -> TokenStream {
->  /// [`kernel::error::VTABLE_DEFAULT_ERROR`]: ../kernel/error/constant.VT=
-ABLE_DEFAULT_ERROR.html
->  #[proc_macro_attribute]
->  pub fn vtable(attr: TokenStream, ts: TokenStream) -> TokenStream {
-> -    vtable::vtable(attr, ts)
-> +    vtable::vtable(attr.into(), ts.into()).into()
->  }
->
->  /// Export a function so that C code can call it via a header file.
-> @@ -230,7 +228,7 @@ pub fn vtable(attr: TokenStream, ts: TokenStream) -> =
-TokenStream {
->  /// automatically exported with `EXPORT_SYMBOL_GPL`.
->  #[proc_macro_attribute]
->  pub fn export(attr: TokenStream, ts: TokenStream) -> TokenStream {
-> -    export::export(attr, ts)
-> +    export::export(attr.into(), ts.into()).into()
->  }
->
->  /// Like [`core::format_args!`], but automatically wraps arguments in [`=
-kernel::fmt::Adapter`].
-> @@ -248,7 +246,7 @@ pub fn export(attr: TokenStream, ts: TokenStream) -> =
-TokenStream {
->  /// [`pr_info!`]: ../kernel/macro.pr_info.html
->  #[proc_macro]
->  pub fn fmt(input: TokenStream) -> TokenStream {
-> -    fmt::fmt(input)
-> +    fmt::fmt(input.into()).into()
->  }
->
->  /// Concatenate two identifiers.
-> @@ -306,7 +304,7 @@ pub fn fmt(input: TokenStream) -> TokenStream {
+> @@ -481,6 +481,8 @@ pub fn paste(input: TokenStream) -> TokenStream {
+>  /// }
 >  /// ```
->  #[proc_macro]
->  pub fn concat_idents(ts: TokenStream) -> TokenStream {
-> -    concat_idents::concat_idents(ts)
-> +    concat_idents::concat_idents(ts.into()).into()
->  }
->
->  /// Paste identifiers together.
-> @@ -444,9 +442,12 @@ pub fn concat_idents(ts: TokenStream) -> TokenStream=
+>  #[proc_macro_attribute]
+> -pub fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+> -    kunit::kunit_tests(attr.into(), ts.into()).into()
+> +pub fn kunit_tests(attr: TokenStream, input: TokenStream) -> TokenStream=
  {
->  /// [`paste`]: https://docs.rs/paste/
->  #[proc_macro]
->  pub fn paste(input: TokenStream) -> TokenStream {
-> -    let mut tokens =3D input.into_iter().collect();
-> +    let mut tokens =3D proc_macro2::TokenStream::from(input).into_iter()=
-.collect();
->      paste::expand(&mut tokens);
-> -    tokens.into_iter().collect()
-> +    tokens
-> +        .into_iter()
-> +        .collect::<proc_macro2::TokenStream>()
+> +    kunit::kunit_tests(parse_macro_input!(attr), parse_macro_input!(inpu=
+t))
+> +        .unwrap_or_else(|e| e.into_compile_error())
 > +        .into()
 >  }
->
->  /// Registers a KUnit test suite and its test cases using a user-space l=
-ike syntax.
-> @@ -473,5 +474,5 @@ pub fn paste(input: TokenStream) -> TokenStream {
->  /// ```
->  #[proc_macro_attribute]
->  pub fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
-> -    kunit::kunit_tests(attr, ts)
-> +    kunit::kunit_tests(attr.into(), ts.into()).into()
->  }
-> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-> index 80cb9b16f5aaf..b855a2b586e18 100644
-> --- a/rust/macros/module.rs
-> +++ b/rust/macros/module.rs
-> @@ -1,9 +1,11 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use crate::helpers::*;
-> -use proc_macro::{token_stream, Delimiter, Literal, TokenStream, TokenTre=
-e};
->  use std::fmt::Write;
->
-> +use proc_macro2::{token_stream, Delimiter, Literal, TokenStream, TokenTr=
-ee};
-> +
-> +use crate::helpers::*;
-> +
->  fn expect_string_array(it: &mut token_stream::IntoIter) -> Vec<String> {
->      let group =3D expect_group(it);
->      assert_eq!(group.delimiter(), Delimiter::Bracket);
-> diff --git a/rust/macros/paste.rs b/rust/macros/paste.rs
-> index cce712d19855b..2181e312a7d32 100644
-> --- a/rust/macros/paste.rs
-> +++ b/rust/macros/paste.rs
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use proc_macro::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
-> +use proc_macro2::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
->
->  fn concat_helper(tokens: &[TokenTree]) -> Vec<(String, Span)> {
->      let mut tokens =3D tokens.iter();
-> diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
-> deleted file mode 100644
-> index ddfc21577539c..0000000000000
-> --- a/rust/macros/quote.rs
-> +++ /dev/null
-> @@ -1,182 +0,0 @@
-> -// SPDX-License-Identifier: Apache-2.0 OR MIT
-> -
-> -use proc_macro::{TokenStream, TokenTree};
-> -
-> -pub(crate) trait ToTokens {
-> -    fn to_tokens(&self, tokens: &mut TokenStream);
-> -}
-> -
-> -impl<T: ToTokens> ToTokens for Option<T> {
-> -    fn to_tokens(&self, tokens: &mut TokenStream) {
-> -        if let Some(v) =3D self {
-> -            v.to_tokens(tokens);
-> -        }
-> -    }
-> -}
-> -
-> -impl ToTokens for proc_macro::Group {
-> -    fn to_tokens(&self, tokens: &mut TokenStream) {
-> -        tokens.extend([TokenTree::from(self.clone())]);
-> -    }
-> -}
-> -
-> -impl ToTokens for proc_macro::Ident {
-> -    fn to_tokens(&self, tokens: &mut TokenStream) {
-> -        tokens.extend([TokenTree::from(self.clone())]);
-> -    }
-> -}
-> -
-> -impl ToTokens for TokenTree {
-> -    fn to_tokens(&self, tokens: &mut TokenStream) {
-> -        tokens.extend([self.clone()]);
-> -    }
-> -}
-> -
-> -impl ToTokens for TokenStream {
-> -    fn to_tokens(&self, tokens: &mut TokenStream) {
-> -        tokens.extend(self.clone());
-> -    }
-> -}
-> -
-> -/// Converts tokens into [`proc_macro::TokenStream`] and performs variab=
-le interpolations with
-> -/// the given span.
-> -///
-> -/// This is a similar to the
-> -/// [`quote_spanned!`](https://docs.rs/quote/latest/quote/macro.quote_sp=
-anned.html) macro from the
-> -/// `quote` crate but provides only just enough functionality needed by =
-the current `macros` crate.
-> -macro_rules! quote_spanned {
-> -    ($span:expr =3D> $($tt:tt)*) =3D> {{
-> -        let mut tokens =3D ::proc_macro::TokenStream::new();
-> -        {
-> -            #[allow(unused_variables)]
-> -            let span =3D $span;
-> -            quote_spanned!(@proc tokens span $($tt)*);
-> -        }
-> -        tokens
-> -    }};
-> -    (@proc $v:ident $span:ident) =3D> {};
-> -    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) =3D> {
-> -        $crate::quote::ToTokens::to_tokens(&$id, &mut $v);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) =3D> {
-> -        for token in $id {
-> -            $crate::quote::ToTokens::to_tokens(&token, &mut $v);
-> -        }
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) =3D> {
-> -        #[allow(unused_mut)]
-> -        let mut tokens =3D ::proc_macro::TokenStream::new();
-> -        quote_spanned!(@proc tokens $span $($inner)*);
-> -        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::n=
-ew(
-> -            ::proc_macro::Delimiter::Parenthesis,
-> -            tokens,
-> -        ))]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) =3D> {
-> -        let mut tokens =3D ::proc_macro::TokenStream::new();
-> -        quote_spanned!(@proc tokens $span $($inner)*);
-> -        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::n=
-ew(
-> -            ::proc_macro::Delimiter::Bracket,
-> -            tokens,
-> -        ))]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) =3D> {
-> -        let mut tokens =3D ::proc_macro::TokenStream::new();
-> -        quote_spanned!(@proc tokens $span $($inner)*);
-> -        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::n=
-ew(
-> -            ::proc_macro::Delimiter::Brace,
-> -            tokens,
-> -        ))]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident :: $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::Spacing::Joint, ::proc_macro::Spacing::=
-Alone].map(|spacing| {
-> -            ::proc_macro::TokenTree::Punct(::proc_macro::Punct::new(':',=
- spacing))
-> -        }));
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident : $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident , $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident @ $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident ! $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident ; $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident + $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident =3D $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new('=3D', ::proc_macro::Spacing::Alone=
-),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident # $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident & $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Punct(
-> -            ::proc_macro::Punct::new('&', ::proc_macro::Spacing::Alone),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident _ $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Ident(
-> -            ::proc_macro::Ident::new("_", $span),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) =3D> {
-> -        $v.extend([::proc_macro::TokenTree::Ident(
-> -            ::proc_macro::Ident::new(stringify!($id), $span),
-> -        )]);
-> -        quote_spanned!(@proc $v $span $($tt)*);
-> -    };
-> -}
-> -
-> -/// Converts tokens into [`proc_macro::TokenStream`] and performs variab=
-le interpolations with
-> -/// mixed site span ([`Span::mixed_site()`]).
-> -///
-> -/// This is a similar to the [`quote!`](https://docs.rs/quote/latest/quo=
-te/macro.quote.html) macro
-> -/// from the `quote` crate but provides only just enough functionality n=
-eeded by the current
-> -/// `macros` crate.
-> -///
-> -/// [`Span::mixed_site()`]: https://doc.rust-lang.org/proc_macro/struct.=
-Span.html#method.mixed_site
-> -macro_rules! quote {
-> -    ($($tt:tt)*) =3D> {
-> -        quote_spanned!(::proc_macro::Span::mixed_site() =3D> $($tt)*)
-> -    }
-> -}
-> diff --git a/rust/macros/vtable.rs b/rust/macros/vtable.rs
-> index ee06044fcd4f3..a67d1cc81a2d3 100644
-> --- a/rust/macros/vtable.rs
-> +++ b/rust/macros/vtable.rs
-> @@ -1,9 +1,10 @@
->  // SPDX-License-Identifier: GPL-2.0
->
-> -use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
->  use std::collections::HashSet;
->  use std::fmt::Write;
->
-> +use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
-> +
->  pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream=
- {
->      let mut tokens: Vec<_> =3D ts.into_iter().collect();
->
-> @@ -31,7 +32,7 @@ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStrea=
-m) -> TokenStream {
->      let mut consts =3D HashSet::new();
->      while let Some(token) =3D body_it.next() {
->          match token {
-> -            TokenTree::Ident(ident) if ident.to_string() =3D=3D "fn" =3D=
-> {
-> +            TokenTree::Ident(ident) if ident =3D=3D "fn" =3D> {
->                  let fn_name =3D match body_it.next() {
->                      Some(TokenTree::Ident(ident)) =3D> ident.to_string()=
-,
->                      // Possibly we've encountered a fn pointer type inst=
-ead.
-> @@ -39,7 +40,7 @@ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStrea=
-m) -> TokenStream {
->                  };
->                  functions.push(fn_name);
->              }
-> -            TokenTree::Ident(ident) if ident.to_string() =3D=3D "const" =
-=3D> {
-> +            TokenTree::Ident(ident) if ident =3D=3D "const" =3D> {
->                  let const_name =3D match body_it.next() {
->                      Some(TokenTree::Ident(ident)) =3D> ident.to_string()=
-,
->                      // Possibly we've encountered an inline const block =
-instead.
 > --
 > 2.51.2
 >
 
---000000000000254f2a0648b86124
+--000000000000e46a660648b861b4
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -716,14 +619,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg+cmwJuYkoGn+X55QTk27Ovzh1Iuw
-mleP1zpxpXl/pdcwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
-MTE5MDcxMDAxWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgLlZeuyiHFr+ElD2m/Hy/g/yxRNzU
+f0fDOePSJb3ybf4wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
+MTE5MDcxMDEzWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAIz3kwdmtwbB+HQXKz79zZTPey/kth6i/TYdGMvNZdYf3RqFGrvZ5I+nt+yDFpVsd
-9drHeRYit3eTomh83tC1BP8oU6wwD3T60dN13jxzBiftSxnJMNuW84Dv+ZgnGCc9Q26Y3A0V13uJ
-GrZmalBl/+dswZUpRYMK1NpoGep+8VMhjb42et/l3OQrvQY8m1IVDdOVyXYf3AL8NbUbDUYdy56i
-Da1H4Q7OqUqWF3eiTy/fKiZd0yf4Z6KxwiEIoPU2vS8BmyYfB4kaHJvNdGhFQLE8w97N/UvaBfys
-onviXbTPiG+DEDw/6epfUD4rTBYrJg18U7Y17SmzI2nJlcXTxw==
---000000000000254f2a0648b86124--
+AQEBBQAEggEAU+bHWxlCA5C7Hv9QK0fNbb9cYhjr6Ev33TZTho6Lb6HnjrGniHBF74jZ7WAmhHIU
+V/kHdW3145TcSWzgB0Rmq+1Yd0UEzU1tOyS7HLQFZt4UtZvPjZSwNXHsUHqGMBPFvYoSPWHHxcKl
+w8HRaMb2RxtmS3dBrVfoEvdSQmLR0O3//TPufj2mMkqGUamOrEnGDUnJ/WHSXlfSu/LEG2p/V2Hh
+XLNhxeuwwTvLCu5whUqefEkd80/AA91hkg7sx5NJidXCtRA8nmLNV2WCxoZ8dSGAgPbnh56oX1/d
+cZOrZV8CHdZSDeuiN1+wxg1ksF7Haw6Gu2Oyk24/JhErK/ld9Q==
+--000000000000e46a660648b861b4--
 
