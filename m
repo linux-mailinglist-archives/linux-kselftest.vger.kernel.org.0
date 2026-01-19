@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-49349-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49350-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C43A4D3A675
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:12:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88947D3A686
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 12:16:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EA2163013157
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:11:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E9AC5300FA28
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 11:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C1A3590B5;
-	Mon, 19 Jan 2026 11:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531E22DA77E;
+	Mon, 19 Jan 2026 11:16:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BV32ZWGk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ec02xF3m"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC5F295DAC;
-	Mon, 19 Jan 2026 11:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB852D1916;
+	Mon, 19 Jan 2026 11:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768821104; cv=none; b=oZNQiUzDoYMSptjOVz3imvQ+b3mk4TcpAqwUmrx/jvPwf/ad9Vp8iv1UFiK/r4c/UnZ4FaKWuloIIIGtqmfD0djYbR9PAp/R7tNvxD27Yi++tZU/6AoOt5GEwfwY22wKzHwGa/YEJyEtfiKKSOMuBo9dxEfe0c9s7f/7BMqo5vI=
+	t=1768821389; cv=none; b=SwimAnuIvKP74I4zLl/V77x/aIjVDEbYgSuxwLwmlQJMnAbPGRJVzqvKTDhEp8oJUgMYRDsCqfkiOu6Do3FK/ZMcjqYmQKrgLzdvCYdH+bQxDkusU88umTy9GJHVhP4nQJUjqrE/tiRB2Bub6EYplrG8DN+ZqWdH8FoR4q8pgXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768821104; c=relaxed/simple;
-	bh=BvXjmuODmLa8CZomxpMTEXEbUGtQks5vexPAI+N0ojM=;
+	s=arc-20240116; t=1768821389; c=relaxed/simple;
+	bh=IUVE3GXM6RFdsSQGwKFqMXdBr5285go1ee4oIqD+IQs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lFhdIrYsGNFdEUIkOuRmbgh7XruoNdGB+k9V8RcMiWG0jVUsFTBpdxtuIi3WOQjdIHaVCeCR1JJwoDLB8IVAyUbz+w4AHIkLYdyvj/SLPahpEXcdc06nwgW5a5BB56IL/Fn81NxXjzVQ6JkcUP+JqtkcJ/UPdHe0yepRFhaPTcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BV32ZWGk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730F3C19424;
-	Mon, 19 Jan 2026 11:11:41 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=aHVyCTThhYkND8tc6RcFmrEhThPKVUoaXK3aeobYUlCpGIEePn68YwKeHl20IJOUixW2nljoGRPbbvkx62KmaHuW1yO7K3FgIB3xUdTEp5wdbS/ZgX2J1YCf4wjMd/smmdwCVib2PURt7dInlncR+M1LAf3jP3SpA90MkAJt8K0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ec02xF3m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47576C19424;
+	Mon, 19 Jan 2026 11:16:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768821104;
-	bh=BvXjmuODmLa8CZomxpMTEXEbUGtQks5vexPAI+N0ojM=;
+	s=k20201202; t=1768821388;
+	bh=IUVE3GXM6RFdsSQGwKFqMXdBr5285go1ee4oIqD+IQs=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BV32ZWGkNSR8ocs5gnGe2UT/AUPWOtlf9LQZU8GwLo+iZLChX92HMYn9QFlDIUTWA
-	 TBScNOI5HjFPEFljO0JW6pR0DGZ/SGIsBo0UYaFB6bdsbuMKKhmivQOVjX6oi2fQfs
-	 kdIvhKrwTqqxo0eQFmQXmBdg+Sy8d7RStppqD+Q9+sJIP5QZ7skxT2m2cUzjZszeky
-	 1+jCDGb9YkLh0itbt5Tk/nF1hNubDmBO4m8JnIpXtTDxcFczQzjOOwrfPs+I4tSta+
-	 pOfdGOF1KnFk8ftaOMhTHz6AFsOnJ0qXzIMBfQFdixWbgsHjJ+bcMIwk5WvZy5SRq5
-	 8R/gptSDtHY9g==
-Message-ID: <a6479b82-a68c-49f5-8631-b3f536059352@kernel.org>
-Date: Mon, 19 Jan 2026 12:11:39 +0100
+	b=ec02xF3muwf5NwLMrYHzJqg/3ypIIf23/u3Y2IW1l/6ndAQJgW0lZbX2aS2L0VK6x
+	 Ogk894YZ6RKbCK/mD1aVu/YWHBKnxlnc+GVjFSYOt4w44iX/J2IEkBKi2oxP68pKuv
+	 CJbtP4AF9bf7RHjYc4swjy6n44CpUM/WYU23UeFvXbL8Wc+bNaCiUZjXvmiTdmig3h
+	 f3deb0V7NrTP2iozv4kQJnGxxBVvwP02h4gksMo63Y71ffljQ8dXaBjy49TfuUbjT8
+	 1/cvn5ipx1PPKAFvKIjh4Y1/I9tjxv1ligJ6Jxjrru+w9o4+W9kC4Dj9iv/QXixz5N
+	 HzGQtc92tcj3A==
+Message-ID: <09c214df-c3aa-48e4-9587-c54c667c6ce9@kernel.org>
+Date: Mon, 19 Jan 2026 12:16:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,17 +48,16 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: remove virtual_address_range test
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-References: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
- <3d2e85ed-f072-4fca-8c22-461b001495c1@kernel.org>
- <79d2636a-bb15-4c7f-a633-c4bf408a2bc8@lucifer.local>
+Subject: Re: [PATCH v2 8/8] selftests/mm: report SKIP in pfnmap if a check
+ fails
+To: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
+ <broonie@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>
+References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+ <20260107164842.3289559-9-kevin.brodsky@arm.com>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -104,73 +103,103 @@ Autocrypt: addr=david@kernel.org; keydata=
  cFAM8nBWrEmNU2vvIGJzjJ/NVYYIY0TgOc5bS9wh6jKHL2+chrfDW5neLJjY2x3snF8q7U9G
  EIbBfNHDlOV8SyhEjtX0DyKxQKioTYPOHcW9gdV5fhSz5tEv+ipqt4kIgWqBgzK8ePtDTqRM
  qZq457g1/SXSoSQi4jN+gsneqvlTJdzaEu1bJP0iv6ViVf15+qHuY5iojCz8fa0=
-In-Reply-To: <79d2636a-bb15-4c7f-a633-c4bf408a2bc8@lucifer.local>
+In-Reply-To: <20260107164842.3289559-9-kevin.brodsky@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/19/26 12:06, Lorenzo Stoakes wrote:
-> On Mon, Jan 19, 2026 at 11:39:51AM +0100, David Hildenbrand (Red Hat) wrote:
->> On
->>
->> $ uname -r
->> 6.18.4-200.fc43.x86_64
->>
->> I am getting
->>
->> $ ./va_high_addr_switch
->> mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d7000 - OK
->> mmap(addr_switch_hint - pagesize, (2 * pagesize)): 0x7fe7de6d6000 - OK
->> mmap(addr_switch_hint, pagesize): 0x7fe7de6d7000 - OK
->> mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
->> mmap(NULL): 0x7fe7de6d5000 - OK
->> mmap(low_addr): 0x40000000 - OK
->> mmap(high_addr): 0x7fe7de6d5000 - OK
->> mmap(high_addr) again: 0x7fe7de6d3000 - OK
->> mmap(high_addr, MAP_FIXED): 0xffffffffffffffff - FAILED
->> mmap(-1): 0x7fe7de6d1000 - OK
->> mmap(-1) again: 0x7fe7de6cf000 - OK
->> mmap(addr_switch_hint - pagesize, pagesize): 0x7fe7de6d0000 - OK
->> mmap(addr_switch_hint - pagesize, 2 * pagesize): 0x7fe7de6cf000 - OK
->> mmap(addr_switch_hint - pagesize/2 , 2 * pagesize): 0x7fe7de6cd000 - OK
->> mmap(addr_switch_hint, pagesize): 0x7fe7de6cc000 - OK
->> mmap(addr_switch_hint, 2 * pagesize, MAP_FIXED): 0xffffffffffffffff - FAILED
->>
->>
->> Are these the same issues you see?
+On 1/7/26 17:48, Kevin Brodsky wrote:
+> pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
+> meaning once for every test, and skips the test if any check fails.
 > 
-> No, that's entirely separate bug it seems :)
+> The target file is the same for every test so this is a little
+> overkill. More importantly, this approach means that the whole suite
+> will report PASS even if all the tests are skipped because kernel
+> configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
+> being mapped, for instance.
 > 
-
-Oh, lol, I ran the wrong test.
-
-Yes, on Fedora config I just get
-
-  $ ./virtual_address_range
-TAP version 13
-1..1
-ok 1 # SKIP prctl(PR_SET_VMA_ANON_NAME) not supported
-# 1 skipped test(s) detected. Consider enabling relevant config options 
-to improve coverage.
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
-
-
-> Seems to work locally for me on 6.18.3, and also in VM with tip mm-unstable,
-> strange.
-
-Maybe a hardware thing (notebook not supporting 5 level page tables, maybe?)
-
+> Let's ensure that KSFT_SKIP is returned as exit code if any check
+> fails by performing the checks in pfnmap_init(), run once. That
+> function also takes care of finding the offset of the pages to be
+> mapped and saves it in a global. The file is still mapped/unmapped
+> for every test, as some of them modify the mapping.
 > 
-> The issue here is with virtual_address_space.c which seems to just to be
-> generally broken, I couldn't even bisect to a working one, and I really did
-> try.
+> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> ---
+>   tools/testing/selftests/mm/pfnmap.c | 81 ++++++++++++++++++++---------
+>   1 file changed, 55 insertions(+), 26 deletions(-)
 > 
-> Actually hang on, isn't va_high_addr_space already then testing what
-> virtual_address_space should be testing anyway if it were sensible??
-> 
-> That suggests then that just removing virtual_address_space without
-> replacement (since this already exists) is the right way (...!)
+> diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
+> index 35b0e3ed54cd..e41d5464130b 100644
+> --- a/tools/testing/selftests/mm/pfnmap.c
+> +++ b/tools/testing/selftests/mm/pfnmap.c
+> @@ -25,8 +25,11 @@
+>   #include "kselftest_harness.h"
+>   #include "vm_util.h"
+>   
+> +#define DEV_MEM_NPAGES	2
+> +
+>   static sigjmp_buf sigjmp_buf_env;
+>   static char *file = "/dev/mem";
+> +static off_t file_offset;
+>   
+>   static void signal_handler(int sig)
+>   {
+> @@ -88,7 +91,7 @@ static int find_ram_target(off_t *offset,
+>   			break;
+>   
+>   		/* We need two pages. */
+> -		if (end > start + 2 * pagesize) {
+> +		if (end > start + DEV_MEM_NPAGES * pagesize) {
+>   			fclose(file);
+>   			*offset = start;
+>   			return 0;
+> @@ -97,9 +100,49 @@ static int find_ram_target(off_t *offset,
+>   	return -ENOENT;
+>   }
+>   
+> +static void pfnmap_init(void)
+> +{
+> +	size_t pagesize = getpagesize();
+> +	size_t size = DEV_MEM_NPAGES * pagesize;
+> +	int fd;
+> +	void *addr;
+> +
+> +	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
+> +		int err = find_ram_target(&file_offset, pagesize);
+> +
+> +		if (err)
+> +			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
+> +				       strerror(-err));
+> +	} else {
+> +		file_offset = 0;
+> +	}
+> +
+> +	/*
+> +	 * Make sure we can open and map the file, and perform some basic
+> +	 * checks; skip the whole suite if anything goes wrong.
+> +	 * A fresh mapping is then created for every test case by
+> +	 * FIXTURE_SETUP(pfnmap).
+> +	 */
+> +	fd = open(file, O_RDONLY);
+> +	if (fd < 0)
+> +		ksft_exit_skip("Cannot open '%s': %s\n", file, strerror(errno));
+> +
+> +	addr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, file_offset);
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_skip("Cannot mmap '%s': %s\n", file, strerror(errno));
+> +
+> +	if (!check_vmflag_pfnmap(addr))
+> +		ksft_exit_skip("Invalid file: '%s'. Not pfnmap'ed\n", file);
+> +
+> +	if (test_read_access(addr, size))
+> +		ksft_exit_skip("Cannot read-access mmap'ed '%s'\n", file);
+> +
+> +	munmap(addr, size);
 
-I cannot really judge, I would have to decipher the details of the tests ...
+Why not keep the fd open then and supply that to all tests without the 
+need for them to open/close?
+
+Then, also the file cannot change etc.
 
 -- 
 Cheers
