@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-49369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0B58D3ABEE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 15:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD424D3ABF3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 15:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2676930049CD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 14:25:52 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 706D830211A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Jan 2026 14:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D9C387570;
-	Mon, 19 Jan 2026 14:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D0A3644D0;
+	Mon, 19 Jan 2026 14:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uHxDawZl"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vLTnVnw4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F6837BE75
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 14:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FC7389475
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 14:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768832648; cv=none; b=qhdxXNOCpb+FuPAk3fa58aRPT2r+C8u7M5XRkyPkn6J06PruCVrfY5sEN3UdTDhn3fFV4V4MJtrqmWowPSrAA4j2W0yXeXTC+wqoKCnSj6lG8aakHgVYfRGF/WKdvYPfQ6gnavI9E/Zq2raNBfmqcAl0RFD9AKC7ZLZU7IoXHUI=
+	t=1768832657; cv=none; b=qBzggoXKrbp4L0zJ8yYW40K2TvfDMtna+WuyTTky4hgo5E0YR4/mQytKJb2//bkrdabefkgz3x1xeG3Agk6IaJRjAGv/Hh1hjTw/BEEI/59pzxUaLX+iqFyqpXzgZ1DqUYI78T08dbTRLjschDKbYdMOt9KaYcFoHfix6D9X40k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768832648; c=relaxed/simple;
-	bh=oayvu13mdV7aSgVp1rBKytLvqsfxdo+vvFuy6pb+7uY=;
+	s=arc-20240116; t=1768832657; c=relaxed/simple;
+	bh=n9sZEwW8aRs9KO1WTVOCaIs4K7fiu1d+TWNIVzf1MeI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a88JdSb7HV1M6I3RS40pQhavj7NzsT5Z5mGkmt82gOp2EwyBBC8zIG2PT1J4I2wr1GR1WFjQfQxJOfPPjCZ1WvbTrKQWl4P7H55NvHeU4kiNmEuBdZU5lXG89LG3XqnJ7W638jQcIBQ8heZbQ2T3qNC1cSQhiZSSYGWFF59Q+Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uHxDawZl; arc=none smtp.client-ip=91.218.175.170
+	 MIME-Version; b=liNz1sFqywSvkdVrtnibcW+x8e1jpK2Pc+tLGDb9T8bJF1Puf5ecE2a+gXTWYm7q4KNtBY3+EO2MOu2nG3aPnvnuzhiHDijL9bCxxupGQbirl7h24reGpyIZz6MOVWJQ1MI8S2EmROsjtQ7QTgPlXfXHNble03eOb+USH0mOzLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vLTnVnw4; arc=none smtp.client-ip=91.218.175.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768832644;
+	t=1768832653;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=4Eq1NLSrw3mzgr+D9bwwnsXLMtRZs1wD5aWZcftrom8=;
-	b=uHxDawZl5wKLRvTYnFa2iHf4BpkQMRh6QHtbyUksBI6UNsHnxGh16L+tTDM5PWyTbdTJU4
-	xIJN9QYJIiaOCBbwJUG/wsaBnovufi5hb+3BSg65PcAjv14yjxGHglWJljUJmEikLtpJFD
-	/N6NnMMvvHbKoVfzY8sK0YqtWlvphng=
+	bh=GtM8pK4JNsrvpwbWfCZ7E1yYuWQlGOAHpNcvj0+XSbY=;
+	b=vLTnVnw4hZZv3DMC0cGRCLjxlbxdMh+uIR7+Yqw+yHfZH2+kt6u5tJvWCkObYu2hysHOAZ
+	lIITiOxtYG6WyWqLNZ1J8+01O8kMGXTwj1UISpyZy4F0Ng0Ru9yh7hPZ4M6MtC9m0JiEUq
+	t7qabj0fl50qqiyco7KvEyhfMDbKDes=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -59,9 +59,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 2/3] bpf: Avoid deadlock using trylock when popping LRU free nodes
-Date: Mon, 19 Jan 2026 22:21:19 +0800
-Message-ID: <20260119142120.28170-3-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Allow -ENOMEM on LRU map updates
+Date: Mon, 19 Jan 2026 22:21:20 +0800
+Message-ID: <20260119142120.28170-4-leon.hwang@linux.dev>
 In-Reply-To: <20260119142120.28170-1-leon.hwang@linux.dev>
 References: <20260119142120.28170-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -73,86 +73,29 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Switch the free-node pop paths to raw_spin_trylock*() to avoid blocking
-on contended LRU locks.
-
-If the global or per-CPU LRU lock is unavailable, refuse to refill the
-local free list and return NULL instead. This allows callers to back
-off safely rather than blocking or re-entering the same lock context.
-
-This change avoids lockdep warnings and potential deadlocks caused by
-re-entrant LRU lock acquisition from NMI context, as shown below:
-
-[  418.260323] bpf_testmod: oh no, recursing into test_1, recursion_misses 1
-[  424.982207] ================================
-[  424.982216] WARNING: inconsistent lock state
-[  424.982223] inconsistent {INITIAL USE} -> {IN-NMI} usage.
-[  424.982314]  *** DEADLOCK ***
-[...]
+LRU hash map updates may legitimately return -ENOMEM. Relax the percpu
+stats selftest to accept that error for LRU map types so it matches the
+map's expected behavior.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/bpf_lru_list.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/map_tests/map_percpu_stats.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
-index c091f3232cc5..03d37f72731a 100644
---- a/kernel/bpf/bpf_lru_list.c
-+++ b/kernel/bpf/bpf_lru_list.c
-@@ -312,14 +312,15 @@ static void bpf_lru_list_push_free(struct bpf_lru_list *l,
- 	raw_spin_unlock_irqrestore(&l->lock, flags);
- }
+diff --git a/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c b/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c
+index 1c7c04288eff..d510a9c54978 100644
+--- a/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c
++++ b/tools/testing/selftests/bpf/map_tests/map_percpu_stats.c
+@@ -188,7 +188,8 @@ static void *patch_map_thread(void *arg)
+ 						   40, retry_for_nomem_fn);
+ 		else
+ 			ret = bpf_map_update_elem(opts->map_fd, &i, val_ptr, 0);
+-		CHECK(ret < 0, "bpf_map_update_elem", "key=%d error: %s\n", i, strerror(errno));
++		CHECK(ret < 0 && (!is_lru(opts->map_type) || ret != -ENOMEM),
++		      "bpf_map_update_elem", "key=%d error: %s\n", i, strerror(errno));
  
--static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
-+static bool bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
- 					   struct bpf_lru_locallist *loc_l)
- {
- 	struct bpf_lru_list *l = &lru->common_lru.lru_list;
- 	struct bpf_lru_node *node, *tmp_node;
- 	unsigned int nfree = 0;
- 
--	raw_spin_lock(&l->lock);
-+	if (!raw_spin_trylock(&l->lock))
-+		return false;
- 
- 	__local_list_flush(l, loc_l);
- 
-@@ -339,6 +340,8 @@ static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
- 				      BPF_LRU_LOCAL_LIST_T_FREE);
- 
- 	raw_spin_unlock(&l->lock);
-+
-+	return true;
- }
- 
- /*
-@@ -418,7 +421,8 @@ static struct bpf_lru_node *bpf_percpu_lru_pop_free(struct bpf_lru *lru,
- 
- 	l = per_cpu_ptr(lru->percpu_lru, cpu);
- 
--	raw_spin_lock_irqsave(&l->lock, flags);
-+	if (!raw_spin_trylock_irqsave(&l->lock, flags))
-+		return NULL;
- 
- 	__bpf_lru_list_rotate(lru, l);
- 
-@@ -451,13 +455,12 @@ static struct bpf_lru_node *bpf_common_lru_pop_free(struct bpf_lru *lru,
- 
- 	loc_l = per_cpu_ptr(clru->local_list, cpu);
- 
--	raw_spin_lock_irqsave(&loc_l->lock, flags);
-+	if (!raw_spin_trylock_irqsave(&loc_l->lock, flags))
-+		return NULL;
- 
- 	node = __local_list_pop_free(loc_l);
--	if (!node) {
--		bpf_lru_list_pop_free_to_local(lru, loc_l);
-+	if (!node && bpf_lru_list_pop_free_to_local(lru, loc_l))
- 		node = __local_list_pop_free(loc_l);
--	}
- 
- 	if (node)
- 		__local_list_add_pending(lru, loc_l, cpu, node, hash);
+ 		if (opts->map_type == BPF_MAP_TYPE_HASH_OF_MAPS)
+ 			close(val);
 -- 
 2.52.0
 
