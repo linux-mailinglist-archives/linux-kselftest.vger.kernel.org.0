@@ -1,112 +1,120 @@
-Return-Path: <linux-kselftest+bounces-49483-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49484-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72CECD3C4C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 11:13:55 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6A16D3C4B3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 11:11:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 927F4702EFF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 09:47:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 146A0565468
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 09:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B89883D4107;
-	Tue, 20 Jan 2026 09:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X0H6qtHG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3400A3D669B;
+	Tue, 20 Jan 2026 09:46:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924443D3013
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F47D3E9588;
+	Tue, 20 Jan 2026 09:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768902249; cv=none; b=WgBDWONBgtKDbOKoRg31tKn/2AwluG6k6A9A2yO+6QqU1GFujm9Z9DwpuCineZhY++dq4i4IVpxH6ow0tQJOReBSFSbFIg5r9cj3HkgGbHGH6R/QGNttE3IYKPjU9Cs8iKi/h+N1ClAVew6qIaBqbkob88+tcVNKxye26qtxZQo=
+	t=1768902392; cv=none; b=B9RyHYXv37lIvldFEL31TxIxGvXonn36Dlfy7oNt9tc3ajpkOEaggso2Pe83zJiDFO4OhwLBXhD5jUTli7Eh4krVy5msYmnX0fynyo1uj3HU2VeE8XlO8IcNy2HZXFd1+W3N5/u3bHTngWTboGvK0w0n9DAwV2n2MBcQcoiMz4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768902249; c=relaxed/simple;
-	bh=MzhJ4TJTIhCH0zKb2utua0m4Nln1DRnFCX4uFZXOJbg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=leOHGZpixLz+qJz4HtC9GFvRtw9bWX2EuUneKHOU//lS3Pvt2a7ZuGlFUvuPLKf4G+esrRBrUKzW4lodsMqNIGnk+K6/vJhOatLGBMLBk07QDM8LhGlBk/5sgxzsnCZeJBmt4aUSKXuGC+RTXHZzKPagg9Wcu417O79acGE/Hyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X0H6qtHG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314A9C4AF09
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768902249;
-	bh=MzhJ4TJTIhCH0zKb2utua0m4Nln1DRnFCX4uFZXOJbg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=X0H6qtHG5kl+uhJX2vgPoRxxE7zM6IhzVnuWMShXWAs5LUYX4DB3bdacCNmWy/k4o
-	 kWmU4zyoACoV+Fr4ox+7ngtUwZSHAgCh5Oird3Zp6q0sX6Olv7a/hUKUb9uVyrz3Ut
-	 HDcIW5MSyu8/EFZvo87fjegUxI7Qr4rRuuBlpgJQ/SHEB4peBATv6ybMUGPJLiFVsb
-	 AOoZlJCtRUe82p7tZTsh0BIQlHqkg0NyrVq3KvzWe0qv9WqfXgmr/4oCcQBvdkGHxV
-	 dn18n3+Tpsufm9+XOg+SSQzWNHI1EKFEgNSDcyItb1PiX+tmUxTyoY20XyPLRsuTem
-	 rJuMxs/7ofCWQ==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59b67388c9cso6360265e87.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 01:44:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWzFXsoc45hzk2QTlTr2RXfUgIiydSoqTUV1Zxo9eZs5/Zm9z4YiBXfSKl+MgY4Df7birZ3t/f09bCIq80pI6M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtrlxJgdE7iQ0dpp1fJrnJOktLy2+HNii99YsvLUpkyW8AnUkR
-	1CCy2H47pl/7/x12FrH5TLGAoOAiWS9A/uAEikI2q/+anEMITt+QlY+FqrVgB/eryqLb5CNpcVw
-	Vlx68ceaA/vT1kiqfIsX9L7Dfi5Ly9CFr7YGmib0nXg==
-X-Received: by 2002:ac2:4f14:0:b0:59b:7c78:a9c3 with SMTP id
- 2adb3069b0e04-59baeebad7amr3951306e87.1.1768902247880; Tue, 20 Jan 2026
- 01:44:07 -0800 (PST)
+	s=arc-20240116; t=1768902392; c=relaxed/simple;
+	bh=s186feiGqLJdCOT95+dzTzDvIWpSmFlsuahAR4E9xWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SruIP4wDZZKj/Re4CqNKouYFk8DjJ/6PnJpMVtPMSoT++w5Wg1PdRl/uAQld6zxrJKQAkIqtLN6oowa7907S+3wpKVbd8P0LJMuTNPhu+ChJbh9pS9JyhnSOmhaJcJp/GD74QElWvsiy1siAY4HZDSJT/vZgJMyQrUBnt04HCzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37A801476;
+	Tue, 20 Jan 2026 01:46:22 -0800 (PST)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04FE43F740;
+	Tue, 20 Jan 2026 01:46:23 -0800 (PST)
+Date: Tue, 20 Jan 2026 09:46:17 +0000
+From: Mark Rutland <mark.rutland@arm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	catalin.marinas@arm.com, broonie@kernel.org, oliver.upton@linux.dev,
+	miko.lenczewski@arm.com, kevin.brodsky@arm.com, ardb@kernel.org,
+	suzuki.poulose@arm.com, lpieralisi@kernel.org,
+	yangyicong@hisilicon.com, scott@os.amperecomputing.com,
+	joey.gouly@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com,
+	shuah@kernel.org, arnd@arndb.de,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 RESEND 9/9] arm64: armv8_deprecated: apply FEAT_LSUI
+ for swpX emulation.
+Message-ID: <aW9O6R7v-ybhrm66@J2N7QTR9R3>
+References: <20251214112248.901769-1-yeoreum.yun@arm.com>
+ <20251214112248.901769-10-yeoreum.yun@arm.com>
+ <86ms3knl6s.wl-maz@kernel.org>
+ <aT/bNLQyKcrAZ6Fb@e129823.arm.com>
+ <aW5O714hfl7DCl04@willie-the-truck>
+ <aW6w6+B21NbUuszA@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260116081036.352286-1-tzungbi@kernel.org> <20260116081036.352286-2-tzungbi@kernel.org>
- <20260116141356.GI961588@nvidia.com> <CAMRc=MfNHuTYsZJ+_RqPN1TtLOHsenv2neD5wvhA18NH6m7XjA@mail.gmail.com>
- <aW8E1i6L7-fhORFA@google.com>
-In-Reply-To: <aW8E1i6L7-fhORFA@google.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Tue, 20 Jan 2026 10:43:55 +0100
-X-Gmail-Original-Message-ID: <CAMRc=McNVLS3qs=ZSY8T=rNGwTd8amvFbz+mOcDZeiAV6Mw-UQ@mail.gmail.com>
-X-Gm-Features: AZwV_QiCH_VHQCMm9eBe-2VB2mhwH6n8pi7RaQwW3k2VN6H-wpGYT844-9rfWL8
-Message-ID: <CAMRc=McNVLS3qs=ZSY8T=rNGwTd8amvFbz+mOcDZeiAV6Mw-UQ@mail.gmail.com>
-Subject: Re: [PATCH 01/23] gpiolib: Correct wrong kfree() usage for `kobj->name`
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Benson Leung <bleung@chromium.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org, 
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	Dan Williams <dan.j.williams@intel.com>, linux-gpio@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aW6w6+B21NbUuszA@e129823.arm.com>
 
-On Tue, Jan 20, 2026 at 5:30=E2=80=AFAM Tzung-Bi Shih <tzungbi@kernel.org> =
-wrote:
->
-> Generally, I think we can try to move device_initialize() earlier in the
-> function.  On error handling paths, just put_device() for it.  In the
-> .release() callback, free the resource iff it has initialized.
->
-> > In theory yes but you wouldn't be the first one to attempt to improve
-> > it. This code is very brittle when it comes to GPIO chips that need to
-> > be initialized very early into the boot process. I'm talking old
-> > drivers in arch which call this function without even an associated
-> > parent struct device. When I'm looking at it now, it does seem
-> > possible to call device_initialize() early but whether that will work
-> > correctly for all existing users is a bigger question.
->
-> FWIW: found a very early stage calling path when I was investigating
-> `gpiolib_initialized`: start_kernel() -> init_IRQ() -> dove_init_irq() ->
-> orion_gpio_init() -> gpiochip_add_data() -> gpiochip_add_data_with_key().
->
-> Prior to aab5c6f20023 ("gpio: set device type for GPIO chips"),
-> device_initialize() is also called in gpiochip_add_data_with_key().  It
-> seems to me it's possible to move it back to gpiochip_add_data_with_key()
-> as 03/23 does, and move it earlier in the function.
+On Mon, Jan 19, 2026 at 10:32:11PM +0000, Yeoreum Yun wrote:
+> > On Mon, Dec 15, 2025 at 09:56:04AM +0000, Yeoreum Yun wrote:
+> > > > On Sun, 14 Dec 2025 11:22:48 +0000,
+> > > > Yeoreum Yun <yeoreum.yun@arm.com> wrote:
+> > > > >
+> > > > > Apply the FEAT_LSUI instruction to emulate the deprecated swpX
+> > > > > instruction, so that toggling of the PSTATE.PAN bit can be removed when
+> > > > > LSUI-related instructions are used.
+> > > > >
+> > > > > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > > >
+> > > > It really begs the question: what are the odds of ever seeing a CPU
+> > > > that implements both LSUI and AArch32?
+> > > >
+> > > > This seems extremely unlikely to me.
+> > >
+> > > Well, I'm not sure how many CPU will have
+> > > both ID_AA64PFR0_EL1.EL0 bit as 0b0010 and FEAT_LSUI
+> > > (except FVP currently) -- at least the CPU what I saw,
+> > > most of them set ID_AA64PFR0_EL1.EL0 as 0b0010.
+> >
+> > Just to make sure I understand you, you're saying that you have seen
+> > a real CPU that implements both 32-bit EL0 *and* FEAT_LSUI?
+> >
+> > > If you this seems useless, I don't have any strong comments
+> > > whether drop patches related to deprecated swp instruction parts
+> > > (patch 8-9 only) or not.
+> > > (But, I hope to pass this decision to maintaining perspective...)
+> >
+> > I think it depends on whether or not the hardware exists. Marc thinks
+> > that it's extremely unlikely whereas you appear to have seen some (but
+> > please confirm).
+> 
+> What I meant was not a 32-bit CPU with LSUI, but a CPU that supports
+> 32-bit EL0 compatibility (i.e. ID_AA64PFR0_EL1.EL0 = 0b0010).
+> My point was that if CPUs implementing LSUI do appear, most of them will likely
+> continue to support the existing 32-bit EL0 compatibility that
+> the majority of current CPUs already have.
 
-Sounds good, let's try it next cycle!
+That doesn't really answer Will's question. Will asked:
 
-Tzung-Bi: please make it a change separate from the wider Revocable
-series for GPIO.
+  Just to make sure I understand you, you're saying that you have seen a
+  real CPU that implements both 32-bit EL0 *and* FEAT_LSUI?
 
-Bart
+IIUC you have NOT seen any specific real CPU that supports this, and you
+have been testing on an FVP AEM model (which can be configured to
+support this combination of features). Can you please confirm?
+
+I don't beleive it's likely that we'll see hardware that supports
+both FEAT_LSUI and AArch32 (at EL0).
+
+Mark.
 
