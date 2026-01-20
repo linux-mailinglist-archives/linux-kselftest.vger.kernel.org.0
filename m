@@ -1,150 +1,210 @@
-Return-Path: <linux-kselftest+bounces-49438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74911D3BE6A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 05:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB788D3BECF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 06:29:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0770A4EAAB1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 04:30:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A4C0C4ED501
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 05:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2832A346FA7;
-	Tue, 20 Jan 2026 04:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBSIMFob"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F70A363C6F;
+	Tue, 20 Jan 2026 05:29:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160DE1F12E0;
-	Tue, 20 Jan 2026 04:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB30363C5C;
+	Tue, 20 Jan 2026 05:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768883424; cv=none; b=mCSxjuDP6vNZ/Qaxy500MSjebrSNDT8Lzb1JyVy2I7/Iq06r3pa66KF6kSbhcQvxkQH0Z3J7CeHs20P3Z0mtMMJq2Ze+wfiby/r8ksVqr3mmLkf+v1gOCytfAksaUKMw5pP7sU5W+MqfZwjnZ1lKHwikEuyczVQJi9y7zlozrIY=
+	t=1768886953; cv=none; b=Cq79h+OGHPzJWseansFVkVdBaTqW3UuqWkYKci99+PkuqOoBdo9a43RkTpR7vrl2X9nJRSI5wMiDYk3kCXuDdK5G3ohlpoZ5gavLdRT8o7N1/WAVLYWEYGRzjw8tfvWanvafGdQWBXaB9Ovsb9qZ6+aG0yucSrCTSEsv+mEN/SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768883424; c=relaxed/simple;
-	bh=HrTGxOIzAWOsG442JYWnxT5VLuB38BiL2DLjt2iHGC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PAyXWI5UuYpLq5sV0XirRSj3iLJg+Wes0Ew3QQLVO7BqoVyIAQ/XjUN07667HVy7cSpEWocO5yidc7/bKFpoqUZY09OOSKXqNBmHu6zS2bwjelZICrHAjPzzgNoCNTNrPeNtapFohSkA8H1uTNk+ykuzhOvIXQ1+iG7w0W1/JV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBSIMFob; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B01AC16AAE;
-	Tue, 20 Jan 2026 04:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768883419;
-	bh=HrTGxOIzAWOsG442JYWnxT5VLuB38BiL2DLjt2iHGC0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oBSIMFobJeA77Y+l8QTN3AbJFijrNmnr5lDh4TawZ3CvFV60KRDyx1E8s1jVb5Vrf
-	 ALL4yL6k8FxoklE4h4n6j+zrIBCtaxyxuFw/Xw6t6l5Vr2mEQx+1MpnD9GJwhdFqsk
-	 ra4zHUzFyrZiTkxxlHIOTdfCMuAWNqi9z9DMAVwdC9aR6Yqxwqo5lZutGiCVeiY/lP
-	 uRIbuRbe06cDopPqiuufc5BBqsEt5pSRA+SeTi4l/yhfzF56lI8pgOMpUv69wyyYve
-	 /MU6wR9BgMc/jO7UYPTV3BU+bBHoZ51afst/oumh+1zVZfLKvwnQhuHBkz+xMwIY8E
-	 Zuclt0UzSo7SQ==
-Date: Tue, 20 Jan 2026 04:30:14 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Linus Walleij <linusw@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>, linux-gpio@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 01/23] gpiolib: Correct wrong kfree() usage for
- `kobj->name`
-Message-ID: <aW8E1i6L7-fhORFA@google.com>
-References: <20260116081036.352286-1-tzungbi@kernel.org>
- <20260116081036.352286-2-tzungbi@kernel.org>
- <20260116141356.GI961588@nvidia.com>
- <CAMRc=MfNHuTYsZJ+_RqPN1TtLOHsenv2neD5wvhA18NH6m7XjA@mail.gmail.com>
+	s=arc-20240116; t=1768886953; c=relaxed/simple;
+	bh=TFFU23+kDkS9yikSJRwebcIMEWrCvR/JOlYMN8TbIvg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OqNbqmSlgnDY22gvbzGbF/xOkmy9GfHMWSUPTfz1cyy5Wg8Mv421iQeYadFprG+UzR/8ZGKK9G1mcQ1ZXaTMymX7T04KrovcDdAesHVJGSgMQp7UN3oGh1dUOfe9DTo8wCg78brt5/GIk+RZmP68MyF9hxSnDTtLcPVohbrpavY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D259E1476;
+	Mon, 19 Jan 2026 21:29:00 -0800 (PST)
+Received: from [10.164.18.63] (MacBook-Pro.blr.arm.com [10.164.18.63])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B1ADA3F740;
+	Mon, 19 Jan 2026 21:29:03 -0800 (PST)
+Message-ID: <f5f92d9d-d65c-444b-8357-17cca7ec176c@arm.com>
+Date: Tue, 20 Jan 2026 10:59:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MfNHuTYsZJ+_RqPN1TtLOHsenv2neD5wvhA18NH6m7XjA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: remove virtual_address_range test
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+ aneesh.kumar@kernel.org, Anshuman Khandual <anshuman.khandual@arm.com>
+References: <20260116132053.857887-1-lorenzo.stoakes@oracle.com>
+ <5957ae48-87b8-4981-a6f7-8113141e7b6b@arm.com>
+ <f44fdda0-80da-49a6-a9dd-75b9a46e1f76@lucifer.local>
+ <e71ffffc-8623-48d6-88b7-4684af4534aa@arm.com>
+ <f7ed83bf-3554-4bfb-8d77-30ed4785a4a8@lucifer.local>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <f7ed83bf-3554-4bfb-8d77-30ed4785a4a8@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 16, 2026 at 03:38:37PM +0100, Bartosz Golaszewski wrote:
-> On Fri, Jan 16, 2026 at 3:14 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > On Fri, Jan 16, 2026 at 08:10:14AM +0000, Tzung-Bi Shih wrote:
-> > > `kobj->name` should be freed by kfree_const()[1][2].  Correct it.
-> > >
-> > > [1] https://elixir.bootlin.com/linux/v6.18/source/lib/kasprintf.c#L41
-> > > [2] https://elixir.bootlin.com/linux/v6.18/source/lib/kobject.c#L695
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: c351bb64cbe6 ("gpiolib: free device name on error path to fix kmemleak")
-> > > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> > > ---
-> > >  drivers/gpio/gpiolib.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> > > index 5eb918da7ea2..ba9323432e3a 100644
-> > > --- a/drivers/gpio/gpiolib.c
-> > > +++ b/drivers/gpio/gpiolib.c
-> > > @@ -1263,7 +1263,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
-> > >  err_free_descs:
-> > >       kfree(gdev->descs);
-> > >  err_free_dev_name:
-> > > -     kfree(dev_name(&gdev->dev));
-> > > +     kfree_const(dev_name(&gdev->dev));
-> > >  err_free_ida:
-> > >       ida_free(&gpio_ida, gdev->id);
-> > >  err_free_gdev:
-> >         kfree(gdev);
-> >
-> > I don't think users should be open coding this, put_device() frees the
-> > dev_name properly. The issue here is that the code doesn't call
-> > device_initialize() before doing dev_set_name() and then tries to
-> > fiddle a weird teardown sequence when it eventually does get initialized:
-> >
-> > err_remove_from_list:
-> >         if (gdev->dev.release) {
-> >                 /* release() has been registered by gpiochip_setup_dev() */
-> >                 gpio_device_put(gdev);
-> >                 goto err_print_message;
-> >         }
-> >
-> > If gpiochip_add_data_with_key() is split into two functions, one that
-> > does kzalloc(), some initialization and then ends with
-> > device_initialize(), then a second function that calls the first and
-> > does the rest of the initialization and error unwinds with
-> > put_device() it will work a lot better.
 
-That's basically what the aggressive patch 03/23 tries to do without
-separating the first half to an indepedent function.
+On 19/01/26 2:29 pm, Lorenzo Stoakes wrote:
+> On Mon, Jan 19, 2026 at 11:51:47AM +0530, Dev Jain wrote:
+>>> Well no, you're asserting gap lengths repeatedly, you are making assertions
+>>> about get_unmapped_area() behaviour that are totally inappropriate in a
+>>> self-test.
+>> Apologies - so I discussed with Aneesh and Anshuman (CCed) and it turns out that the objective
+>> of the test was to test the switch boundary. Upon exhaustion of the lower VA space, kernel
+>> must not start giving out VMAs in the higher VA space, if the hint address is not given. The
+>> original commit is 4e5ce33ceb32 ("selftests/vm: add a test for virtual address range mapping").
+> This doesn't change anything, this is still testing get_unmapped_area() which by
+> definition is what is returning this.
+>
+> Also exhausting VA space is an inherently silly thing for a test to do, you're
+> making assumptions about existing VMA layout which is absolutely an
+> implementation detail and may even be influence by libc...
+>
+>> I cannot find this API requirement on the man page (because no one bothered to update it),
+>> but it is mentioned in Documentation/arch/arm64/memory.rst:
+>>
+>> "To maintain compatibility with software that relies on the ARMv8.0 VA space maximum size
+>> of 48-bits, the kernel will, by default, return virtual addresses to userspace from
+>> a 48-bit range.
+>>
+>> Software can "opt-in" to receiving VAs from a 52-bit space by specifying an mmap hint
+>> parameter that is larger than 48-bit."
+>>
+>> So this is a thing that needs to be tested on arm64, and on ppc64 (for which the test
+>> was originally added). Not sure about x86.
+> Well 'needs' is strong here...
+>
+> It would be far more efficient to implement this as a kunit test and wouldn't
+> require a extremely slow test that makes assumptions about VMA layout.
+>
+>> About internal impl details, how is this test any different from merge.c, cow.c,
+>> etc - which consistently test/depend on whether the VMA splits/merges?
+> This is not a hugely civil/productive way of responding here to be honest, it's
+> what-about-ery and implying something that isn't very kind...
+>
+> But since I am a reasonable if grumpy maintainer, let me indulge you a second
+> here.
+>
+> I thought I'd been clear BUT for avoidance of doubt, I want to remove this test
+> because of the COMBINATION of:
+>
+> 1. It is completely broken and has been broken for some time and nobody noticed.
+> 2. It is asserting kernel implementation details.
+> 3. It is poorly implemented and breaks often.
+> 4. It takes a very long time to run even on fast machines and is a timeout risk.
+>
+> So even if you had a point, it wouldn't argue against removal.
+>
+> But you do not - both VMA merge and CoW impact API. Re: merging certain
+> user-facing functions, most notably mremap(), have API requirements that the
+> user must not cross VMA boundaries. It is therefore ENTIRELY a user-facing and
+> kernel/user API thing that has to be tested from this perspective.
+>
+> CoW is equally a documented and expected behaviour and also affects merging.
+>
+> Anyway.
+>
+> Practically speaking I think there are two ways forward here (not mutually
+> exclusive):
+>
+> 1. Implement something in kunit or similar that explicitly tests
+>    get_unmapped_area().
+>
+> 2. Add a _new_ selftest, named something sensible like mmap_hint.c or something,
+>    that runs only on relevant arches, and does NOT try to do crazy stuff like
+>    mapping the entire VA space, but instead simply tries some trial unhinted
+>    mappings some hints in 48-bit space, and some hints in 52-bit space and
+>    asserts things are as expected.
 
-Generally, I think we can try to move device_initialize() earlier in the
-function.  On error handling paths, just put_device() for it.  In the
-.release() callback, free the resource iff it has initialized.
+I'll reply to everything here otherwise I'll have to repeat myself at different places.
 
-> In theory yes but you wouldn't be the first one to attempt to improve
-> it. This code is very brittle when it comes to GPIO chips that need to
-> be initialized very early into the boot process. I'm talking old
-> drivers in arch which call this function without even an associated
-> parent struct device. When I'm looking at it now, it does seem
-> possible to call device_initialize() early but whether that will work
-> correctly for all existing users is a bigger question.
+"Also exhausting VA space is an inherently silly thing for a test to do, you're
+making assumptions about existing VMA layout which is absolutely an
+implementation detail and may even be influence by libc..."
 
-FWIW: found a very early stage calling path when I was investigating
-`gpiolib_initialized`: start_kernel() -> init_IRQ() -> dove_init_irq() ->
-orion_gpio_init() -> gpiochip_add_data() -> gpiochip_add_data_with_key().
+The original version only uses mmap() and checks whether we got a high address mmap
+success when we shouldn't have. There are no assumptions being made here about
+VA layout. No matter the VA layout, the test will succeed because the kernel
+must enforce the distinction between low and high addresses (but see point 3 below).
 
-Prior to aab5c6f20023 ("gpio: set device type for GPIO chips"),
-device_initialize() is also called in gpiochip_add_data_with_key().  It
-seems to me it's possible to move it back to gpiochip_add_data_with_key()
-as 03/23 does, and move it earlier in the function.
+
+"It is therefore ENTIRELY a user-facing and kernel/user API thing that has to be tested from this perspective."
+
+So in merge.c, the statements ASSERT_NE(ptrx, MAP_FAILED) surely assert the
+user-visible API - that mremap must not fail. But there are statements which
+also assert where a VMA starts and where it ends, testing VMA merging -
+I was concerned about these. It is not the goal of userspace to minimize the
+number of VMAs while making a syscall - that is a kernel optimization. My point being,
+I suspect that the mm selftests *already* test internal details a lot, and I believe
+that they *need* to! Running selftests is the most convenient way of testing the mm subsystem.
+Hence this should not be a ground for removal of test.
+
+Talking about the recent commits, they can be reverted. So, the ground for
+removal should be that the ratio of the time taken by the test (exhausting VA
+space), to the coverage of the test (for arm64, it is testing backward compatibility of 48-bit VA
+on 52-bit VA, which one can argue is easy to spot if it ever breaks, and easy to fix)
+is too large and does not justify a selftest. I tend to agree here.
+
+"Add a _new_ selftest, named something sensible like mmap_hint.c or something ..."
+
+va_high_addr_switch.c tests stuff around the switch boundary. But it does not
+exhaust VA space. We *must* exhaust VA space if we are to check that the kernel,
+in a situation of "emergency" (i.e exhausted lower VA space), starts giving out
+high addresses, when it shouldn't. Again, one may argue that trying to test
+this out is not worth it.
+
+I personally opine that besides testing the back compat of 48 bit VA on 52 bit VA,
+we are testing something more important here: exhausting the VA space tests whether
+the kernel can truly distinguish b/w virtual and physical memory - we stress the virtual
+memory subsystem without touching physical memory, something which the kernel should be able
+to handle. But again, any such test has the potential for a timeout. I wonder if there is a
+faster way of filling up VA space.
+
+To summarize, I will agree with you that currently
+
+1. The test is in a broken state
+2. The test is taking too much time to test something trivial
+3. It is a maintenance hazard. It turns out that the original version used
+   MAP_CHUNK_SIZE of 16GB, but then it was changed to 1GB because (this is the bit
+   where the dependency on VA layout comes) on some systems even a single 16GB mmap
+   may fail. So now we are stuck in making a tradeoff between the size of a single
+   mmap versus the time taken by the test
+
+So the better option seems to just remove the test.
+
+A separate question: Do you think that the functionality advertised by validate_complete_va_space,
+to check the gaps between VMAs, deserves a test in kunit / tools/testing/vma, or somewhere else? 
+
+
+
+>
+> If you do point 2, please please use a. use the kselftest_harness.h to write the
+> tests in a nice way (see e.g. guard-regions.c for an example of how it's used)
+> and b. use the procmap helpers in vm_util.h to check on VMA ranges, you can see
+> how they're used in... the merge.c tests you so deride :)
+>
+> If you or others do both/either I promise to dedicate review resource to the
+> series(es). That fair enough?
+>
+> Thanks, Lorenzo
 
