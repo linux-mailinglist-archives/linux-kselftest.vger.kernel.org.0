@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-49455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B677ED3C1DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 09:24:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF1ED3C198
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 09:16:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9BF615A2C73
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 08:10:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D0087465930
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 08:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542533E8C61;
-	Tue, 20 Jan 2026 08:00:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F362A3D6467;
+	Tue, 20 Jan 2026 08:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nEdwJW87"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K09yvG0q"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3482E3D7D8F;
-	Tue, 20 Jan 2026 08:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6C03D4123;
+	Tue, 20 Jan 2026 08:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768896047; cv=none; b=KyYP8RRrnefESJa7vmYblHaLLKXKzpuZbSQP5m4e96h9EXMg7mpNK3zUqmR4twXBtXwGiIpgBTV+CB2yP8ZbAV+IIJLbUqXnHimB8O8FstM4RoEDO6FOmi5WTMLySyLFKCNdiYgixZZuYVcZTjNWl3L2qSomyFlT5Lt1OjpRlFA=
+	t=1768896038; cv=none; b=IdXGkrXx8CYP+llB7zNty4douQ9xwi3zAk7B7xn4dDjPpwbUqKhj4LRpeynwQVWGxIBPKBKBA7cCoLCV5Hkiu4SqHCgAk2qsFW+SJtgzM34fXWPwZDkKH6kno8TF21flBkmlZN0+yx3i4Dzcqi3BL2LGhXMGsTEgumEs+lSvod4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768896047; c=relaxed/simple;
-	bh=o1JTCfXHpCnSwp9BgXcxfhsrA+JQY7YGZLt5B8bVDNY=;
+	s=arc-20240116; t=1768896038; c=relaxed/simple;
+	bh=/Ftyiy8beLcuEmA+NNHx+TJ0v/H++SJA9uKu5Tp8RnM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NqCaFjOXHagN5+imya1mo/FnqDJyv1xOYgxOVUD3vowAfDlCeGjsNpNPSMEBUaqdIp5NLgKfS8nV/xM0UoxNob5bbTs1FnKbrN5SYG+KEC+DukV+CP2iOGP4tLd/fM8fdAidunuh7qvMIpNK6VtILuC4YUJ0jb8x4IqTp/HmdWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nEdwJW87; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=mv8et/9eXKdZ/DdOMtRKQoX1Q4z3o5kRawrR96yoZIgnbW3NzxJSrYKmwao8WtDQ0WN4AarV94FMyDz/OaHxdF0M5e4Z+9JH3gvJaX+g2sdtebyOBYSpiGYTNq7Hn4+Jdn0JNO1zqmvla26IOkDScgR9VHezv42gjheKMZEx+ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K09yvG0q; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K5dHvq774045;
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60K33HGH3805133;
 	Tue, 20 Jan 2026 08:00:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=T6Ez3auc9ue
-	xU0ztDJfjojD1To7INeoURgJTkVoDe80=; b=nEdwJW87Dn3at7qarIsoXj7GFG5
-	bAoI6cCap4uSNhqKs7zXNOFhJJJ8QsW/S+4aBSrCC1Bmsfp0JNAxn81nCIrNheZu
-	nXNngI7wRDLpS7Nb+SeJBDP6gXq3kWIQFVKObQ6o5Tc0hu+h7Yx/4nmQAlKpsakI
-	sDWpMlZq/2+QwWtf1+qG8MAWuq2kAP4C0kK761UhrnO0gKqQsdrlsbaaowfcsHK8
-	dErqMNqncuwuPYoI6wc0xW5Cj6gCgagxqq12C5hDt4PmKe7WzZdvOubD2uHmnn3Q
-	m/H3XzStRJBZYHZbkVPcv7W/nmKH4xD1pcDfHRKJwvj9qdsJX7sbgI5UXYw==
+	:mime-version:references:subject:to; s=qcppdkim1; bh=pDMJCmD9Zpv
+	kPYOZ6njWDGA4LH/ecF0N3cBYZN4AYKk=; b=K09yvG0qM1dzne/bdT8P2OIPVOB
+	CXIkAb3EsvfVo2BoOu0U3H91yuPlhzSOiNLAOA1cbo6HJGsh94kUCtJqtJ9NNxMG
+	2827iNBp1DapsYYAz3WoRXw5eB3l1oZ8ack5Xzpj22FNrMXbNNZ7WD7kfradhVTl
+	StV6rJgwZbENjEa9R2DNbApiUgXAE0TKBVEC74ORyG5j0F80k/rPoiArIaUnKq/b
+	7rrKMeWr3ORuo5HRSTyIIbAGCyvVfESnMsp84PI/TsVFUh1yp5OEZmDNqLNq8L9s
+	RmV1f35lND47TGMOdDTGbN3hykyHDjqNvC5iqDkKMCFPYs8mzNSjHYYwRsQ==
 Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bsj9ab742-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bt1f88s3n-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 20 Jan 2026 08:00:20 +0000 (GMT)
 Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 60K80Gjm007953;
+	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 60K80G0Y007954;
 	Tue, 20 Jan 2026 08:00:16 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4br3gm8q5w-1
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4br3gm8q5x-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 20 Jan 2026 08:00:16 +0000
 Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60K80GTG007912;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 60K80GHL007913;
 	Tue, 20 Jan 2026 08:00:16 GMT
 Received: from hu-devc-blr-u24-a.qualcomm.com (hu-anuppate-blr.qualcomm.com [10.131.36.165])
-	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 60K80GWo007895
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 60K80Gbg007891
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 20 Jan 2026 08:00:16 +0000
 Received: by hu-devc-blr-u24-a.qualcomm.com (Postfix, from userid 486687)
-	id A6E5A2357F; Tue, 20 Jan 2026 13:30:14 +0530 (+0530)
+	id AA3EC23592; Tue, 20 Jan 2026 13:30:14 +0530 (+0530)
 From: Anup Patel <anup.patel@oss.qualcomm.com>
 To: Paolo Bonzini <pbonzini@redhat.com>, Atish Patra <atish.patra@linux.dev>
 Cc: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
@@ -73,9 +73,9 @@ Cc: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Anup Patel <anup.patel@oss.qualcomm.com>
-Subject: [PATCH 06/27] RISC-V: KVM: Move timer state defines closer to struct in UAPI header
-Date: Tue, 20 Jan 2026 13:29:52 +0530
-Message-ID: <20260120080013.2153519-7-anup.patel@oss.qualcomm.com>
+Subject: [PATCH 07/27] RISC-V: KVM: Add hideleg to struct kvm_vcpu_config
+Date: Tue, 20 Jan 2026 13:29:53 +0530
+Message-ID: <20260120080013.2153519-8-anup.patel@oss.qualcomm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
 References: <20260120080013.2153519-1-anup.patel@oss.qualcomm.com>
@@ -90,64 +90,81 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0tnOb3vpKejYEJZVmkCAg62gljMbCZS9
-X-Authority-Analysis: v=2.4 cv=N40k1m9B c=1 sm=1 tr=0 ts=696f3614 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA2NSBTYWx0ZWRfX3kduHAKPXtvG
+ 7p2sOTaHRj3GJW9ecsbWZHRq20oNUWhh1IDNPF++3zp72LFNaDuJ08PjF9/i4KpEZvSkWJBabaw
+ +Vgm87+iDn/Szs66NZv/H0DFUHYMNDzltDWU3IYdbnX2N85BjAQ7I0OuBTkrIMujnqxqRSEAmYw
+ 9O5NAtOqIfYslcC1HovQWnSiav88mt2KnkKWETK2DCY+K8IBpGl4i1B7Y0kgG+ukd4cWjL0K46f
+ s+9gSlWoczj4InxigLmGPZ/ItlBcU9gIMRQlpXdSwGE4qDNxnLgYT8Rg4qEbi3U5a2c7cyDpTwV
+ CzmRr/QNH5sKIOpbkfB4aZWm6Ug+xm94dW6QQMLCjLnLihSnAjl33OqzzyMpsuCE/iv7ZXTJE01
+ GZ3hITsYS2AofgvBXQvEtawt15ncSEevDhWB3teqpQ5h9pbY/Mr2n8Guzl+cx3QDtqkB0nBqO+P
+ ADfbT5aX7JcYOoGN9RQ==
+X-Proofpoint-GUID: fG9suajc4nEYCOMVR5vN3xQr-hcXmv4u
+X-Proofpoint-ORIG-GUID: fG9suajc4nEYCOMVR5vN3xQr-hcXmv4u
+X-Authority-Analysis: v=2.4 cv=LdQxKzfi c=1 sm=1 tr=0 ts=696f3614 cx=c_pps
  a=Ou0eQOY4+eZoSc0qltEV5Q==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
  a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8
- a=dDnfVlE4-D7SnBb_pXQA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIwMDA2NSBTYWx0ZWRfX/J9pMM/gsq/B
- wCUL6IzDRdd1Yr4Gwu6A6JkrrxcgqHXqTObcHp7e3M0kpUT7wzUq+/k8/jryWL7HhbNrWS2dJJK
- i9k2M+HGfob/DqRMZykVi4oxzNSsiZeG34lM7cwWtALrWeZ4/wubddZgFCRf+L4lqzzgVs98QJl
- NoHpazyRSePkKXfqgucn8n4sKzb2LVouRxcrxjcGuLeZh7gZEmattaLaf0vSiTInHYxx6/p3OYg
- 3VhHlWDAaq8zYF7yXixiqpQ8eSkXQ4Xi7iiqu/PYjL9GjWlRz9Z7ItodMaKkUD+ahbMJGO66En5
- lT8KVlzq5wfesxK08gLNaVjaV64CKCpvpo2F8eBtUm8+uAydP7RY1n9ChzNnOettJNQ6jOJW0nK
- cWjd9LiMxR4G5NYkT6idGu3M1i1ummo5eUW3EBIVr3faV1TeNlz84MbBR80aQXEh/n0/eoesuOn
- HHbeHsS5FL4r9L7Vnrw==
-X-Proofpoint-GUID: 0tnOb3vpKejYEJZVmkCAg62gljMbCZS9
+ a=edTdxSBCztBB68lQcJQA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-20_02,2026-01-19_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0 adultscore=0
- spamscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601200065
+ phishscore=0 bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601200065
 
-The KVM_RISCV_TIMER_STATE_xyz defines specify possible values of the
-"state" member in struct kvm_riscv_timer so move these defines closer
-to struct kvm_riscv_timer in uapi/asm/kvm.h.
+The hideleg CSR state when VCPU is running in guest VS/VU-mode will
+be different from when it is running in guest HS-mode. To achieve
+this, add hideleg to struct kvm_vcpu_config and re-program hideleg
+CSR upon every kvm_arch_vcpu_load().
 
 Signed-off-by: Anup Patel <anup.patel@oss.qualcomm.com>
 ---
- arch/riscv/include/uapi/asm/kvm.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/riscv/include/asm/kvm_host.h | 1 +
+ arch/riscv/kvm/vcpu.c             | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 6a89c1d00a72..504e73305343 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -110,6 +110,10 @@ struct kvm_riscv_timer {
- 	__u64 state;
+diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+index 24585304c02b..f3a41a1be678 100644
+--- a/arch/riscv/include/asm/kvm_host.h
++++ b/arch/riscv/include/asm/kvm_host.h
+@@ -171,6 +171,7 @@ struct kvm_vcpu_config {
+ 	u64 henvcfg;
+ 	u64 hstateen0;
+ 	unsigned long hedeleg;
++	unsigned long hideleg;
  };
  
-+/* Possible states for kvm_riscv_timer */
-+#define KVM_RISCV_TIMER_STATE_OFF	0
-+#define KVM_RISCV_TIMER_STATE_ON	1
-+
- /*
-  * ISA extension IDs specific to KVM. This is not the same as the host ISA
-  * extension IDs as that is internal to the host and should not be exposed
-@@ -238,10 +242,6 @@ struct kvm_riscv_sbi_fwft {
- 	struct kvm_riscv_sbi_fwft_feature pointer_masking;
- };
+ struct kvm_vcpu_smstateen_csr {
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index a55a95da54d0..494e0517ca4e 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -134,6 +134,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 	vcpu->arch.ran_atleast_once = false;
  
--/* Possible states for kvm_riscv_timer */
--#define KVM_RISCV_TIMER_STATE_OFF	0
--#define KVM_RISCV_TIMER_STATE_ON	1
--
- /* If you need to interpret the index values, here is the key: */
- #define KVM_REG_RISCV_TYPE_MASK		0x00000000FF000000
- #define KVM_REG_RISCV_TYPE_SHIFT	24
+ 	vcpu->arch.cfg.hedeleg = KVM_HEDELEG_DEFAULT;
++	vcpu->arch.cfg.hideleg = KVM_HIDELEG_DEFAULT;
+ 	vcpu->arch.mmu_page_cache.gfp_zero = __GFP_ZERO;
+ 	bitmap_zero(vcpu->arch.isa, RISCV_ISA_EXT_MAX);
+ 
+@@ -591,6 +592,7 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 		nacl_csr_write(nsh, CSR_VSCAUSE, csr->vscause);
+ 		nacl_csr_write(nsh, CSR_VSTVAL, csr->vstval);
+ 		nacl_csr_write(nsh, CSR_HEDELEG, cfg->hedeleg);
++		nacl_csr_write(nsh, CSR_HIDELEG, cfg->hideleg);
+ 		nacl_csr_write(nsh, CSR_HVIP, csr->hvip);
+ 		nacl_csr_write(nsh, CSR_VSATP, csr->vsatp);
+ 		nacl_csr_write(nsh, CSR_HENVCFG, cfg->henvcfg);
+@@ -610,6 +612,7 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 		csr_write(CSR_VSCAUSE, csr->vscause);
+ 		csr_write(CSR_VSTVAL, csr->vstval);
+ 		csr_write(CSR_HEDELEG, cfg->hedeleg);
++		csr_write(CSR_HIDELEG, cfg->hideleg);
+ 		csr_write(CSR_HVIP, csr->hvip);
+ 		csr_write(CSR_VSATP, csr->vsatp);
+ 		csr_write(CSR_HENVCFG, cfg->henvcfg);
 -- 
 2.43.0
 
