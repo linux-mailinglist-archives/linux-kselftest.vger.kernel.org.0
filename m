@@ -1,148 +1,197 @@
-Return-Path: <linux-kselftest+bounces-49542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SMibAwzMb2mgMQAAu9opvQ
-	(envelope-from <linux-kselftest+bounces-49542-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 19:40:12 +0100
+	id EH47E/nOb2mgMQAAu9opvQ
+	(envelope-from <linux-kselftest+bounces-49547-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 19:52:41 +0100
 X-Original-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FD66499C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 19:40:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B88D149D29
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 19:52:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8572586D161
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:46:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED9EE96C51B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 18:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F24D43CEC3;
-	Tue, 20 Jan 2026 17:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FB44611D3;
+	Tue, 20 Jan 2026 18:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aNhRKUeB"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V1twhqfN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6556542EED6;
-	Tue, 20 Jan 2026 17:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768931186; cv=none; b=lr4jgOpXsoKEjn0eWmH1D2kl/wD9ztJ0ODho9AmvVbGwlsZR+odGtrnIc3x/sBpuhTMvANstPxE1lc/z9sVBpf3tBC51BTblhC8zrKRIji+tqyhlTHUsk7GNTQKgeMgCc4A3Pv7svDv11xZfV+81afgW3+5337z9Vn0wdqYfsUs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768931186; c=relaxed/simple;
-	bh=TBRtgmjrWAjuHKUcUNVVb7dFeVlm8K/wDFyukeuO4yA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ckp7cHQevhPD9X+A0FiHWr6DvEHD+fsxWpi+rfPzDMK+2yy0zdSn+Meonhsf+H6jyK1CXJGoCQCKrZqXZMzV68+CV/d94/uiLz+b131Fbl9FBWIh2h+0HNnlIYsO9zXsXiDebWe6Oqent4qaMqIhwUwrQsmHc9FKDxvI2yh8YlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aNhRKUeB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C96C19425;
-	Tue, 20 Jan 2026 17:46:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768931185;
-	bh=TBRtgmjrWAjuHKUcUNVVb7dFeVlm8K/wDFyukeuO4yA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aNhRKUeBDn7HI+Rf4DnqVFcGEjTt+0wEI6/IYeAJiUCBHmIWokXFrZn66wnsDkvH3
-	 vfYVkodq5FbsVrJ0N8kngkIzwi820ZViMbFcmgdPlWGCmuNsnIjU4Uz9QMSV3T8/9V
-	 s1V2Ap5zlzr41jcOI39ugYO52ab0iWLECdqHdeXLAbbSQbwQBP9STm6fSJauGBK1Lf
-	 LS3ZJ8EEwYSD8oJ+6OIIyrNA3KsQ2xqBoWOirw1+32T7EFXzfv9X0i7qBoGeQD6w1v
-	 Q1mjvhDfWv1z92xh7JgnHoLxjSrIGM7vsnQuFgcbg1+Osn4AR28QiDXkIPdYf3LybR
-	 xV4p94jQcpeGA==
-Date: Tue, 20 Jan 2026 17:46:20 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miaohe Lin <linmiaohe@huawei.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, david@kernel.org,
-	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com,
-	nao.horiguchi@gmail.com, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] selftests/mm: add memory failure anonymous page
- test
-Message-ID: <737310eb-05e5-4234-af67-9118b3f395ab@sirena.org.uk>
-References: <20260120123239.909882-1-linmiaohe@huawei.com>
- <20260120123239.909882-2-linmiaohe@huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A52345BD5C
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 18:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768933332; cv=pass; b=poz5TTUJjdt54qgYCtvBR5Esrv8JpvOakKmnSwInUERj/tWDfaR1Fz+w2n/2sAkfx/SVDAdAJCpQkt4+fwTtnqjqxC9bEUjbB9vqnB1/o5hFT5Dxy0lKOUQ/UE1AOw+p3+P/euAeB6hF68J70mYUcWYo1+c1qr/nX9di4h5dzvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768933332; c=relaxed/simple;
+	bh=ZagQrHQFuN6e2A4tbUmN0iCJ+Oxzcz6Xqi1hSuy4FGA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C0CAjju2FKop3ljE5HEhnYulk2TK43kkv2g0pZ308ZHhbW8kI7ZRq+eqKnYfeqll67OGVZeMTDwIrPU7gQSvzGcRSA8fYo4brFBQinZTkajlQz13SbxXSs0sQErwST5p2izw/XgDavIfVSNYqM3PULSQsxw6YGkR7+bmgRtZ/Xc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V1twhqfN; arc=pass smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8c52c67f64cso597485585a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 10:22:10 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768933329; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DDt+Qzd92LCr5gDnGlaTKwLPEVmlg7rbnVi//faf+Rzp/sMwW2TxT699ZJroPa2C5z
+         uG+aqdt+PxVCQKKMhobPUzsD7hRyOYaj62e8WUSWkM6UMC3yQjdDoZhnK/HjUywQaDog
+         IZZtPsCGErW4AJiscZJPhmA52f5XyR+Xy1XRjj2IlYs7O90RO2//P0lLc2H26Gq1PI7i
+         np5cI0eftFEDBBf8rFuQIvJDVH+x4HLa1og/KcEtcxVvIg6Mvgu2sLmp+mS3wM+h+xFM
+         K/0wP2ufrWHNnde9EoV97F6xd5Srr/2oZF6pKsM/omYv6HbPnxkXRbMiZOzWcwWOvdzR
+         o9IQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZagQrHQFuN6e2A4tbUmN0iCJ+Oxzcz6Xqi1hSuy4FGA=;
+        fh=emFuAfbv8Am8NRI1cOWAam9y0EEyxYLYIDdmhubu2Vg=;
+        b=e4YivlpcAyBVEOJSArTDYqcICDKBAf9GQ1GwI1eibULkOlyByOlsboMTSkV86nidtx
+         icJGReHIE+RFvlkfmHm+4O7k9nq3S9o8huv+3o1bH7UAgp67VIywmEwOKHyBif04MP5f
+         wyTpdqOw3mVKGpr7UZDK8UYdWxU1gV8/PK/CFlW9ZOZuKxoMUfT3VwrjCrHOytm5VVuy
+         szgPaRZeqQgH0kvp0d/wNOFnrTKuQtbOgFJ6wQEJFZjHrX4aMbPWLGKQieD8DyHkePpA
+         BuBVKj6R7OMmevGYLJt1OGqX0wEBuzErTtgw3Fl0PT0AHBTlRdBrzNUmN/zgpkX0ht3v
+         1Vzg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768933329; x=1769538129; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZagQrHQFuN6e2A4tbUmN0iCJ+Oxzcz6Xqi1hSuy4FGA=;
+        b=V1twhqfNQgxIqAL86UhV6eZ5ewl1/+v1oclnw3QqGrQ+4Efb5K5rcNuQwnoPMEk/iM
+         MedsZuiGr2botbP8R9adTT78c99XtNZ0e1rcB3fkasa3i8QT+wtFnUypT9PqHmc8Qi1f
+         0z555qgfXkq+ft1tx7Ki/WOaJAyQZrqM+Af6/YSYb6fImgkhnSnQPw5dnlYmRDkYunlI
+         py5Sj9CvGbgStbZrcTxi/AUJIXJjqoBjCh6//Qls/ZJG9KBuFNTA7+IMHa/W9ksBidi0
+         HstoMirl5zMXIwoUKPrDf1arq8oeiNJeXr8KuSIvIlfhKahPRUAPph1w7tsS1pyTcjKm
+         b8tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768933329; x=1769538129;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZagQrHQFuN6e2A4tbUmN0iCJ+Oxzcz6Xqi1hSuy4FGA=;
+        b=qHWqONvajgj2k1CQWUeIZlJUXR+fc42BwnKVJLFwZb7e3BH38iheDCy11kj4q1Gnzx
+         ykUfkIEvnZKxqs8HQDX0mA5y6zyKoYV58FAk3kX7/5QQTMUAqyu6MA64DcJv9fCTfel2
+         3lAiUtOipwE0+rl0cda5m05Iijy2LOVtmqbYRD4zqlgAEI737kzD5O+Ej/qoEpzPgm06
+         ywJmkT8MxZnOPSJVLhsb0vTuyuab7Gyq3I39nDDvPy43/IlTstFprjnfHIGbh+b6x0NJ
+         UpXaK1ahEyy9s2Uwx2SFM/s/XNyDfqHaR8h8r8B6f67p9nHxNYP1rmI5ep6UMd+wy2y9
+         M/fw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3YZRJW4ZSbffzPtgea5cGg5vU0iEP/YSV9ZLCmgA2ug9yLyalRsn1DX6MbPMprTbcNQrmaGi4JvLssgg6b4M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxagvy0qYgsQRAoLf0MwUO9aAnbTqtlTARqCJP5QqKswAJEivc
+	zXAjASAV/dhmShzZ+bOsVV+FsUwupFocUUu+ilCADQ/cjojsGhzcy2VOHg0hhh/tD8TPz5asHC4
+	hGJMju2T+lT5Ola/UiJrIbtlatcUclw1N3vDSsQsk
+X-Gm-Gg: AY/fxX5WWw771hUwFSAr81+MszYDD/qSp+aQuQLPtdlUyQSuTyfeQRrgPSmsRZue9Yz
+	9MOJVN9Rtl/0V/TYGdKbL8omD1WdtSZq4B9pi3rdGfy7+ebWK2eVKq2KVNRKoq+Ex+Xn6yhfOlx
+	AnZeKCcd3Qud8QhTqveJHKNF9rMXWMpiWBKDVhZMyCtdK/ZlvKNO+YnoweYmwQyYNR43U3DpXak
+	Zqt9izWnfyyoz1Bo9VA9xAc/pj/6huqUSSAraEdhLaXjhxBgez1Wix1Q3L0EmahOLy23PMx
+X-Received: by 2002:a05:620a:2947:b0:897:56e7:6aa3 with SMTP id
+ af79cd13be357-8c6a676db0amr2122139685a.56.1768933328887; Tue, 20 Jan 2026
+ 10:22:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ObFgKhUWYWaLUrs4"
-Content-Disposition: inline
-In-Reply-To: <20260120123239.909882-2-linmiaohe@huawei.com>
-X-Cookie: Leveraging always beats prototyping.
-X-Spamd-Result: default: False [-2.56 / 15.00];
-	SIGNED_PGP(-2.00)[];
+References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260119185852.11168-11-chia-yu.chang@nokia-bell-labs.com>
+ <CANn89i+NEyZ+1R1pouUcroarCfNrQEN01azsEhOuZoeR0Y3mhA@mail.gmail.com> <PAXPR07MB7984E2D22D4337CA97EBB9CBA389A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+In-Reply-To: <PAXPR07MB7984E2D22D4337CA97EBB9CBA389A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 20 Jan 2026 19:21:57 +0100
+X-Gm-Features: AZwV_QhBrdPdlMbRCuth_kzLC6UfgC6v0TcEzAFsayFTN8n9oL2sLEky-qL_slw
+Message-ID: <CANn89iK5jhfO7B1yZK11bEs4DyF3Wjfr6DUgOt-JMDzEAs+94A@mail.gmail.com>
+Subject: Re: [PATCH v9 net-next 10/15] tcp: accecn: unset ECT if receive or
+ send ACE=0 in AccECN negotiaion
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+Cc: "pabeni@redhat.com" <pabeni@redhat.com>, "parav@nvidia.com" <parav@nvidia.com>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org" <dsahern@kernel.org>, 
+	"kuniyu@google.com" <kuniyu@google.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>, 
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>, 
+	"stephen@networkplumber.org" <stephen@networkplumber.org>, 
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>, 
+	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>, 
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>, 
+	"ncardwell@google.com" <ncardwell@google.com>, 
+	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
+	"g.white@cablelabs.com" <g.white@cablelabs.com>, 
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>, 
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>, cheshire <cheshire@apple.com>, 
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, Vidhi Goel <vidhi_goel@apple.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-49542-lists,linux-kselftest=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_CC(0.00)[linux-foundation.org,kernel.org,oracle.com,suse.cz,google.com,suse.com,gmail.com,kvack.org,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-49547-lists,linux-kselftest=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[33];
+	FREEMAIL_CC(0.00)[redhat.com,nvidia.com,vger.kernel.org,lwn.net,kernel.org,google.com,gmail.com,mojatatu.com,networkplumber.org,resnulli.us,davemloft.net,lunn.ch,fiberby.net,nokia-bell-labs.com,cablelabs.com,ericsson.com,apple.com,gmx.at,comcast.com];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[google.com,reject];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-kselftest@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-kselftest];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[edumazet@google.com,linux-kselftest@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[google.com:+];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	TAGGED_RCPT(0.00)[linux-kselftest,netdev];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,sirena.org.uk:mid]
-X-Rspamd-Queue-Id: 6FD66499C0
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,nokia-bell-labs.com:email]
+X-Rspamd-Queue-Id: B88D149D29
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Tue, Jan 20, 2026 at 7:11=E2=80=AFPM Chia-Yu Chang (Nokia)
+<chia-yu.chang@nokia-bell-labs.com> wrote:
+>
+>
+> Hi Eric,
+>
+> Thanks for the feedback.
+> Do you mean sk_listener here is read-only despite there is no const here?
 
---ObFgKhUWYWaLUrs4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It is not const because we probably need to increment reference counts on i=
+t.
 
-On Tue, Jan 20, 2026 at 08:32:37PM +0800, Miaohe Lin wrote:
+But if you have 1000 SYN_RECV, they might share the same listener
+socket, and we do not lock the listener socket,
+this would not scale very well on servers with 10,000,000 tcp sockets :)
 
-> +# Try to load hwpoison_inject if not present.
-> +HWPOISON_DIR=/sys/kernel/debug/hwpoison/
-> +if [ ! -d "$HWPOISON_DIR" ]; then
-> +	if ! modprobe -q -R hwpoison_inject; then
-> +		echo "Module hwpoison_inject not found, skipping..."
-> +	else
-> +		modprobe hwpoison_inject > /dev/null 2>&1
-> +		LOADED_MOD=1
-> +	fi
-> +fi
+So using any listener-fields to store 'per-syn-recv' information is racy.
 
-You should also add HWPOISION_INJECT and likely also MEMORY_FAILURE
-(which it depends on) to the config fragment in
+>
+> Then, could you help to suggest the way please?
+> Beacuse for AccECN, here we need to set fail flag after retransmitting SY=
+N/ACK > 1 time.
 
-   tools/testing/selftests/mm/config
+Why not use state in req itself ? (Or tcp_rsk())
 
-so people and tools know the config options are needed to get all the
-tests running.
-
---ObFgKhUWYWaLUrs4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlvv2sACgkQJNaLcl1U
-h9AeOgf/TpiwY5cSu8LPqhvpbJnimocDBJ2K+sADzVszT6mIF7B4Un4ISFwMtoN5
-1LFLpWadwOpWZm+fAu6aj9z6pm4gXV/h3wvKE4rhgvCmLopMxaYZs/ZPyppookNb
-wwh9UsnigPV07m6pqg5BFpwzdNj2QqOKJP+HWCNjCwvOw5FgDMhOFUhdnzCswd1B
-Yn0kHmRW4RGceobzLmMN2CoYk4zs4gk97NjX2dNAUUwtSTLftMVQswUX0CnEaUoS
-wRPA//UIgzYgIl0yTmaSwRMlCeGlE8wZz8cDX96cEOXBLH5dTPZUzs9KXgwGX8E6
-rEt6r2ADfzxEDWkdX92JQvkkjIBlRw==
-=wRVM
------END PGP SIGNATURE-----
-
---ObFgKhUWYWaLUrs4--
+> And this was done within tcp_make_synack(), but now move to every place w=
+here could retransmit SYN/ACK.
+>
+> Thanks.
+> Chia-Yu
 
