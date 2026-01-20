@@ -1,139 +1,135 @@
-Return-Path: <linux-kselftest+bounces-49475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E39D3C367
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 10:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 88B23D3C3FD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 10:45:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6C593666ADC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 09:15:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 43F3D6C0576
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 09:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822183C1976;
-	Tue, 20 Jan 2026 09:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D643C1FF1;
+	Tue, 20 Jan 2026 09:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fI/5sZdE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SFtTGZHF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AE43BC4C4
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768900536; cv=none; b=Kiy8cGbNJKCVHi3ZeWWA15RZANgEC4kXsKTst07bSvKfo1YJD2JZPEoicMe1VMxcaj9rRGTgDv23vUtQLBusoTpDfP9uZAgoYXqXI/C1/xTc7D0vAUySBHF0cOAKnoAAdVpwDpGxP7YCLB7D47Ry7/+9pL1TplhybrMKvaBNEGY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768900536; c=relaxed/simple;
-	bh=D6LBuB5PX8Kd4CZf1+FbaPqPfV0TTpjHteNVbX70GmY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JfGa7kn0koi+NN/uTdZysLURgZZXS+IEchUUoMkE06RgruxkMjLK/ToLet6wmT2O2stQN7R6869ktl6LaxZfdFmHOm9vxvGvCJIGsij2sFSa2eEPdk5StxVGPEoUwT5XqER+QgTYFMBNOx2pMG+E8mQdC1tHmtVoWJCgwhSkINE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fI/5sZdE; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-81e821c3d4eso4248927b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 01:15:34 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B703C00A8
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 09:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768901265; cv=pass; b=hSosswhaOex7szisWoGYdwljQY1zYnUnEKSUZUWSxHST3/oCq76oacH9ez1bC4IvemkICYmpV/FT+CwQlPkt0AKll0RL0YaHw+dP1TKtVt87bM7EbRXh7Y8ZManYa6p0Jfz0bPpJMjyK2Fvv9CSuywZESCvRIaZS3M0uMmibkF4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768901265; c=relaxed/simple;
+	bh=VFm+9wwtgk8aq4k8dQkzu3uNUhmEdxvmn8yiOGHPluU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hKHcrbV5gOWpYsl3sIF/zDnGb98vAnuw4sc7cJXzeEBMy5PY7ATzsE/f1BLUZGtRTZhSjCOdCGfpsyUN99R3G2MpU774ceFVSODScBBZ/WaViLChc8Iy5Un3vwjmm07jhg4G/Fzf0zad9g2IaOAsIf23AkFQeWmOML9b8UtA97o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SFtTGZHF; arc=pass smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-501506f448bso29287401cf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 01:27:43 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768901262; cv=none;
+        d=google.com; s=arc-20240605;
+        b=cWXakJ6plxFQvzsgQLIkefsc4RZ7si8PD/FU3P6k646uAdne3N0SA5PIvQCSkdRNRQ
+         zGX7ksr/7bDLWCRrZFioZcgI9c9fDRpKcNdKPS9TbqH8paUUpqdg4eaOZyFGItpefi94
+         xYDCdUS7I47+QZ9O+Li3WAtj5I1mixZGC4nMxTG33iRt33Z5bNm+E/maTfo8mjnbHUaB
+         rh+13b9YIRqpem/2/QBnKG2T8b66DVq7XRgUpzaT2vCgINDYOcK5BDRYn5Svx76WyXdp
+         cFW+xvFRsNfCSxE1OOXADcQzWVtWBuF/QBflWW2Sx1ngHe2v4FZfRDYQQxRk4Yyx7qFh
+         hBhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=VFm+9wwtgk8aq4k8dQkzu3uNUhmEdxvmn8yiOGHPluU=;
+        fh=bOaTO8gnBSNp7ygj4QHu04TzWwwT6XT4GNBI3oUlT8g=;
+        b=Y9X48id7+iFUttgRKM3Gsck4mLCYHb+07Teimyb3CabiaMpTB5xs8qj/BpdX7YqI/N
+         AaBYNV710+0cftt29bsX3Kp9RgMPHjN8AGY9iKl5+PJwmIJSCkAxzp1BfibekiUXPklG
+         jQJ+LttDNDPlcer3rqJGO3H8t58N3eSemLmkXqr8Q43xfeuE0mHhQ3CZyaeE5m0So2r2
+         r+mvRD2qnDbHfi6Kaa9j4NmMGFab2wptHGPhEnZqGHEYL1evhVH8gkQ+PKwISgbpcHy9
+         tNHeqfjmyXBrl725NG1joVkHxc+fDcwc7tyb9Hm1HtOeGlfk7ORj/tWL/EutNf4LWPHI
+         q+mg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768900534; x=1769505334; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2ny+PQpdgO6hHDxqMIrR6HHnMRszhUy601KxoCXluSw=;
-        b=fI/5sZdE+bXpcpSX/1mNDk0K265XTKp4HBLXWN6NF4n5B6FBW9gHRb7icwkmE15ZAB
-         M84DGVAIki5pvGCT0qp+cs4CmuYa45zbQyEDUt51MpiTBbIO8aH0karDt+Ly9B5w837h
-         llKOo8p7+4keH9Sxim1ApWr09CGb6wuiJv9C1Pf3akmuBQE1CrTncJm3yBEpO3oi0ssm
-         I7TuByu/oT46Da6S+pF/xojjaKz/+1eAZJJExuMKesKFWUFUQCX1AMdrrUftaKuRgU48
-         84Hpu9fwd1ZJhECu3VsFW4K1tod3QWZygRsypPgXy/F8gzD8bQqD1rCh+OngGyOyFdhH
-         oVUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768900534; x=1769505334;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1768901262; x=1769506062; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2ny+PQpdgO6hHDxqMIrR6HHnMRszhUy601KxoCXluSw=;
-        b=eQv+8yX7hIuguAFW+MUPusfjF4bmpgXYsdqJDmleIxCbiOFOuVdcd5WvHwulBpISca
-         7wDBwI/dTgLazHV5zVR5e6Z99UT8A5/xEs9rcDQSFtdNyFCsmhjF+rNF3cYKXtQ6m2u1
-         hyVP/g/1ZV4WT8lrQQgsmbzRV5pRIhsiNobLjkkw4hO1ustLaEwOZOcJePuPGew3nQ8w
-         p8gZskaojE6JVt/ycOT6bIj4vZfKPCbo+pfyHnBKDKDb1lHmXMiIkekZhgPaF2wIVctb
-         qBd77grae6i9qgXb4qfc8ZHj2oTkFk8WjH5csFYK+vtfU2H3fDX8iFxC5Tvd78lQuvpv
-         opaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVEu24IxSWtzZ5oROHQMAOEodt7p3IWP1gMsev2vfIniPOLzUVa+6yHO0h76lbHBkIV5Kxg5Jd1V/xJ0xtVA4Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZgRwLXEPCHUHZTOPzQS9F2Istt4vaMYQ+hJjIvVH2VhB5jomt
-	FSehuBAse27kCods2Q9nUwvOCcoA8qnNUAlxzyGkPcmR/KNPlE/FZkY=
-X-Gm-Gg: AY/fxX6QuKXnYKFegwyhC63z0rZiE18VvlAoFx6hbUC0fjJzD0EurWp9XA7KJUTpKKU
-	+jPI1DYS0jZBxH6kC3xaz9RFrGC3AGCy1D3JlATjfwp3j1vdPAXdoiT2vdeolSnCaJzOnsYnuLz
-	T5XXnEknUIMYGK4+KeKW1k/MoSYmo5hXLuPNRdmSj1x/N6oIE+y03L9XIbxBigkjoRKnCA67erN
-	XMO6ctXM9sLCHnJ1AXQat2YmpddAMOggFs8x4fQ1Wpg34ZSJmREujaNqqatsN7MAWIAErm/seNF
-	u9Wqrs5hNByWQ/BhjFiCDZuI2T7nvztsw/Cn3ToQViRJYvY9tx2NIdcTdSqlKVShO8V0F3tMCOG
-	i7sY5rOfqC/X1UD14vECyOlHAFvdcArP59AbO994ZmmcLnythaeRiNGYpb0pI7dC9eU4ctw==
-X-Received: by 2002:a05:6a00:3d0a:b0:81c:632f:2ff0 with SMTP id d2e1a72fcca58-81fa01b9053mr11906026b3a.22.1768900534315;
-        Tue, 20 Jan 2026 01:15:34 -0800 (PST)
-Received: from DESKTOP-BKIPFGN ([2403:27c0:c03:258::a])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa1278056sm11571169b3a.34.2026.01.20.01.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 01:15:33 -0800 (PST)
-From: Kery Qi <qikeyu2017@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	shuah@kernel.org
-Cc: martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	yatsenko@meta.com,
-	bentiss@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kery Qi <qikeyu2017@gmail.com>
-Subject: [PATCH bpf] selftests/bpf: wq: fix skel leak in serial_test_wq()
-Date: Tue, 20 Jan 2026 17:12:02 +0800
-Message-ID: <20260120091201.1718-2-qikeyu2017@gmail.com>
-X-Mailer: git-send-email 2.50.1.windows.1
+        bh=VFm+9wwtgk8aq4k8dQkzu3uNUhmEdxvmn8yiOGHPluU=;
+        b=SFtTGZHF9NsJIabBnvYroZCzVEpdC2Hb+eE2ztAAX+AP/pxQ2GQn7gUzykX3xJE1T9
+         Ic3+0XhwYEuVO/+V7CTqq8bK8EbVBGm14wXQZAdOhxbgZZMUMf9Znai9ninsnRo+wuBU
+         tu+6U1tkqdA6QIiB0ZZEWgrBSf0CwqLCg11DMnxlCHHx1KnfwFltcwLKdvLS81XGy3Ib
+         L/g09oZlVwkvnAM5lZhMgbe4I3ro46YYjP41sN8IevjoS/Ikjp6uK/5GoMwOTCddfmBZ
+         od9r0TIDu2IfiN9us/4iZw1g2e/ZpWXGGBJWpcln/Gof4PS9uLDQvaUkilSORvAE5IYo
+         jpkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768901262; x=1769506062;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VFm+9wwtgk8aq4k8dQkzu3uNUhmEdxvmn8yiOGHPluU=;
+        b=DSDO3Bnj9crb8uwmpLl/FAPWN1a3mXLDwDHPgN/TD73f8xtx6DZvQYo5UuJ4uPjaLg
+         qL13yKvt8cgleuN8nLYRPvZwmOBUB1laMyMlwjfP4l0ooN8NN3o0p5ehYmQgGMU3AlIL
+         EEkM38quKT4Lk+qtApDnrg33MuW3eIVGpoxmS03oum7i2TcZp7AbBkBqmbXORm/ZVAEZ
+         yoG3HZjpMF1V+QJteMh2RDMtr9imNjeFFEkTJUIqTwWBtQzL0maBZT5f9/w8AYOw+qTR
+         66dnIG55jHH9FsY0IwdcUWoG/W1NUt/ctlvQgfcb68js+3X6ClSpS4hEKSqwEhBZUE85
+         OPQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUIsTy8KT9eC6vKcN8oH7GcxQ/XWYf2SMJnwE2lvqxR0HbxyyJseyC/U4s0SN0iRobcoU41g7BuZuXy2Aeld/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWihhSrRCZi8KvxnF3hwDfjnmbL25FBwLLL3KtCi7Jxgwv+LnF
+	Ct90pMo2aVEU6+H8Tib7tBC3y9uZUDqA5Ov0C3xrLnSN8PSyFib4IGIaWtRyIsyxgrm9LdizNZq
+	aIw9s7SqZDqFobVaqmF4LHlzGokgDT7fT5HHXVCzj
+X-Gm-Gg: AY/fxX41fQADqIZv1c9y533KUcT1NnnxsLcVVqT8ZzwdbEGxqxTmsEbDZUEvQjei06y
+	uTlN1JU3nqqFPE+HyQblicVDn4DmIs7zqgLDuSsQ5DD8HKjSMN8wFGyvp4zJrYTs5ez6slPpd4K
+	+erGgxACR4iGGdPZkMEr0FeinyWMQfKWLGJMu3jqPgkgkfipcDra4uDqDGbrsgNsu8hPhx5DIOo
+	OXRg7JG0zWsbIGXD7tC+S7Tn10szOZ6UpXCkZ0QjUHRszFACVcn0cmhVLtZO+1pfd4CtFc=
+X-Received: by 2002:a05:622a:180e:b0:501:47d3:217a with SMTP id
+ d75a77b69052e-502d829a969mr10411241cf.25.1768901262067; Tue, 20 Jan 2026
+ 01:27:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260119185852.11168-1-chia-yu.chang@nokia-bell-labs.com> <20260119185852.11168-2-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260119185852.11168-2-chia-yu.chang@nokia-bell-labs.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 20 Jan 2026 10:27:30 +0100
+X-Gm-Features: AZwV_Qh2C6qterbUps9ipHoZiFx2JUtmLIyzTtH8Kko470SyemAziOwyIlRmsJc
+Message-ID: <CANn89i+44At=GtWMjksjjMmARZONeVAAiDgqAP2jXWSK3BxJLQ@mail.gmail.com>
+Subject: Re: [PATCH v9 net-next 01/15] tcp: try to avoid safer when ACKs are thinned
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
+	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
+	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
+	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When wq__attach() fails, serial_test_wq() returns early without calling
-wq__destroy(), leaking the skeleton resources allocated by
-wq__open_and_load().
+On Mon, Jan 19, 2026 at 7:59=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com>=
+ wrote:
+>
+> From: Ilpo J=C3=A4rvinen <ij@kernel.org>
+>
+> Add newly acked pkts EWMA. When ACK thinning occurs, select
+> between safer and unsafe cep delta in AccECN processing based
+> on it. If the packets ACKed per ACK tends to be large, don't
+> conservatively assume ACE field overflow.
+>
+> This patch uses the existing 2-byte holes in the rx group for new
+> u16 variables withtout creating more holes. Below are the pahole
+> outcomes before and after this patch:
 
-Fix this by jumping to a common clean_up label that calls wq__destroy()
-on all exit paths after successful open_and_load.
-
-Fixes: 8290dba51910 ("selftests/bpf: wq: add bpf_wq_start() checks")
-Signed-off-by: Kery Qi <qikeyu2017@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/wq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
-index 1dcdeda84853..b32e22876492 100644
---- a/tools/testing/selftests/bpf/prog_tests/wq.c
-+++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-@@ -17,11 +17,11 @@ void serial_test_wq(void)
- 
- 	wq_skel = wq__open_and_load();
- 	if (!ASSERT_OK_PTR(wq_skel, "wq_skel_load"))
--		return;
-+		goto clean_up;
- 
- 	err = wq__attach(wq_skel);
- 	if (!ASSERT_OK(err, "wq_attach"))
--		goto clean_up
-+		goto clean_up;
- 
- 	prog_fd = bpf_program__fd(wq_skel->progs.test_syscall_array_sleepable);
- 	err = bpf_prog_test_run_opts(prog_fd, &topts);
--- 
-2.34.1
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
