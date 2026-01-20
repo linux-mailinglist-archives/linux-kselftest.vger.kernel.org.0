@@ -1,314 +1,243 @@
-Return-Path: <linux-kselftest+bounces-49519-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uC7FNZG+b2kOMQAAu9opvQ
-	(envelope-from <linux-kselftest+bounces-49519-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 18:42:41 +0100
+	id mLLqKQ23b2nHMAAAu9opvQ
+	(envelope-from <linux-kselftest+bounces-49520-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 18:10:37 +0100
 X-Original-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45F3F48C12
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 18:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A70D4850D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 18:10:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B89499AC925
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 15:18:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 501A35E3954
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 15:36:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DAFD44BCAD;
-	Tue, 20 Jan 2026 15:01:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D332FD69F;
+	Tue, 20 Jan 2026 15:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="fC5ypsaZ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ww3RiTlQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f68.google.com (mail-ej1-f68.google.com [209.85.218.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C13544A701
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 15:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AC52EBDD9
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 15:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768921289; cv=none; b=d/RktjfJs15c/cPgq31r5b3GHoMomT+URqGEd5lwS6YoYMONvrbIh/CbjWDuecF1XJbUbpf6DSBjz5MCKI/DQ1KobTHh8Lfj8hG2GmTT41+HHcczdKivEhLb6Y/ulDwB3/A9Z97cLAo5mx9L8oNu45Q9NRWxSW/UrkX/SbKVsms=
+	t=1768922319; cv=none; b=Bbl3ObefWqqdnpR3yyz6GNpobbOAEHOAi9kpF7FhE8WFB7rgT8+/NoL0r1sEkPabRc043ls+HYo7lIRfIEpTbvBL1MJsTnrWeKbgD3Ut8HFfc+BrNGGawvLdd+wKwI4uIoe33L/YXoEypROhEkb7tEaqX255aD6eYuGgAXwDtuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768921289; c=relaxed/simple;
-	bh=e3KIXA5K1BSTDXaN5S3F7j8PM7hZNZ2/owWnE24bZ/o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FYphNa/unEwQBhU4jZhUDgV1HFr6H1U9hsZbNpsfH55KZUzHDHGxY7PtxeA7ljxsQZwrnehTsfGrTn4leoqHK0WZH/Dh9qosrV9GDz0Ws25876tUTpnhfox2zhbRezBfwwJPHuS7RweckbdRlfLkJrhIsH5OKqToG7Dqe8wWW6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=fC5ypsaZ; arc=none smtp.client-ip=209.85.218.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ej1-f68.google.com with SMTP id a640c23a62f3a-b8715a4d9fdso755901766b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 07:01:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1768921285; x=1769526085; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jYI0gLBKIqxhNhOB7IM8ExaSr/699rjlW1w6qxp7P1A=;
-        b=fC5ypsaZsDFQsZ88mcEV6PqE0f66AfimA3K/Yo7OMqf4+47DIxBicb7hiZcm7dKhu1
-         u0cp2SevSHnrlBejhvTBWWsaQexcocCQuO/DIpJR5JTHolXIH1V7xnl3if2zrMmqLVKn
-         cfQRPEwdnH55vhoJuoRSdHgG2xxCuWLEQ9uSS+p64ICoPX/lrMRVSqShg5pcYQLSmg1p
-         B+wcH47AXHTRrD7EI79vjwnK8jc+dx33QmA01cOu3Tn/uveJoCq7oLWCxamXlti/E0u2
-         TMj/Hb6si8v9TAVVSfijHmZC2AMOHH6rnKa4lmKPaAMRRx+PRxfZ6nyD1dvPYT1SPFbJ
-         5fNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768921285; x=1769526085;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jYI0gLBKIqxhNhOB7IM8ExaSr/699rjlW1w6qxp7P1A=;
-        b=vRxUzCKx+SjJlvPEjTjF5tw9ccpEHs8qbJSEhtci+mvNcANtY7IecFz/2Aar5dWUNK
-         jNkFQdHCte0U4DckT9YxtfUHUbwXcEHYiKi4T9yJ3OI5j6xehqWZFNLfAr2FLxHoYVEU
-         Yp7ocU2PG2SX0I8O+rdEw79K96ZlndCLfGXL/JRx4BSCUjRYwpJNRzSRrE2KdVo2gvGi
-         zKcbKcgFA+8mINOqxTKi/A2oieq2kXa8iNBezmQoVZAaoYi18+xFWlgLhPHyLe3Erdxi
-         046grRpBwjupcv76lKqK9gArg+yxhMeRV7xT0pk1msb9KLKyQuiG6nVqmtJJCUEpYd6D
-         AJPA==
-X-Forwarded-Encrypted: i=1; AJvYcCX03LZsDfCTDh6MDASUX5vmQoTBj0Y0mQIrZE9DPlzszOBQ4QXqi7BDW2L2P1ZySOABp6ETO1t+owbRrmZ5j6U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWedKFhB6U0169IWDVk20/K4vkrpkBEkg1lTv2ocjm8mTIXtWZ
-	wubcCgC9tbKmh7Tk2vphMcVLQBAvm9VB1EUqYBpgvemeHprUyERATQ3bBT/pXoolneA=
-X-Gm-Gg: AZuq6aKgOjuDrSRgHaqFFJWin/vy4HIJo1fujJekWCY1CK2bepn8J331i9ha7vjUkx+
-	oNkPsImfNa8EyYl81pq6aP9ZjR1jl7Kc0Mc1UM4+PD+adnK89s5X8q4rtMhF78E2MLetJleEFPL
-	FsOoRrcbEtcfEDvmO6tYg5vfbwC344Oi/1TJeGxoAZMfLIMkBzGadHcVWYgYTWtzLeQg8+ZJXbH
-	9Abl0mzZdxP+Z41Q0SrKiRRblY6R25VOzRxy5PHqTPBmrKWLiKH0iG/lTS6Np1pWZrLcM+ch6cM
-	GE2rJwZa93NWP6/7b/7W9C6t9wFbvM2/en3oIH9V8dgu/ckEx+sI/A0XWXi+j1PZROHCFS6akr9
-	/JQpH4z8gQX/s699pg8ycy1l25hpbsY61xRxmKNPqym/y1g1pRiXYOvo+9maKOgu6N5P3VxmZHX
-	GkNBk=
-X-Received: by 2002:a17:907:e106:b0:b87:f6fc:aea9 with SMTP id a640c23a62f3a-b87f6fcaf6amr234043466b.9.1768921283931;
-        Tue, 20 Jan 2026 07:01:23 -0800 (PST)
-Received: from cloudflare.com ([2a09:bac5:5063:2969::420:45])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b87959c96f4sm1419134966b.40.2026.01.20.07.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 07:01:23 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org,  John Fastabend <john.fastabend@gmail.com>,  "David
- S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
-  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  Simon Horman <horms@kernel.org>,  Neal Cardwell <ncardwell@google.com>,
-  Kuniyuki Iwashima <kuniyu@google.com>,  David Ahern <dsahern@kernel.org>,
-  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>,  Martin
- KaFai Lau <martin.lau@linux.dev>,  Eduard Zingerman <eddyz87@gmail.com>,
-  Song Liu <song@kernel.org>,  Yonghong Song <yonghong.song@linux.dev>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
- Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  Michal Luczaj <mhal@rbox.co>,  Cong Wang
- <cong.wang@bytedance.com>,  netdev@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v7 1/3] bpf, sockmap: Fix incorrect copied_seq
- calculation
-In-Reply-To: <20260113025121.197535-2-jiayuan.chen@linux.dev> (Jiayuan Chen's
-	message of "Tue, 13 Jan 2026 10:50:49 +0800")
-References: <20260113025121.197535-1-jiayuan.chen@linux.dev>
-	<20260113025121.197535-2-jiayuan.chen@linux.dev>
-Date: Tue, 20 Jan 2026 16:01:21 +0100
-Message-ID: <875x8wuy4e.fsf@cloudflare.com>
+	s=arc-20240116; t=1768922319; c=relaxed/simple;
+	bh=Fs/XoHgca5cqZLI1uwAfyhEca42Vnpc0eyMm/sgc1Qk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j0HFg5c4vzRvpUlrSKNV+YMeL9nmPmUWgYZHRkUCNg796Znc4+54en4wLnAwEkd/F7Jn28hvHKdRE4WfUMwwNhyYkFQtWHPJz80LOlLzO2BAegtt8H1LdueZ7pF5jJzmv3uojbSh0hfewsCqQXVBKlVhvflV0HDDyY4iswMZjfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ww3RiTlQ; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768922308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OyQTg1OCRLfYkgozQtEIjB+jGIPP2J9ck5TqS/RphtU=;
+	b=Ww3RiTlQ04eaUaMQn0MIMsIlfAhS9REqLm0bAPmOhPKce4vKKwz9srpWpeu8fym+5wEC5J
+	vYF4orBtX9z4J35c2SYLuedokX3ihsifgo12VAn60QO2Z98aX5Sd9xP6/vfsN5X+hYgc7z
+	Rc/IYf12XqSCnLCOCaWH0VvRNmmYLzM=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v6 0/9] bpf: Extend BPF syscall with common attributes support
+Date: Tue, 20 Jan 2026 23:15:07 +0800
+Message-ID: <20260120151516.39607-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spamd-Result: default: False [-6.96 / 15.00];
-	WHITELIST_DMARC(-7.00)[cloudflare.com:D:+];
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spamd-Result: default: False [1.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[28];
-	DKIM_TRACE(0.00)[cloudflare.com:+];
-	DMARC_POLICY_ALLOW(0.00)[cloudflare.com,reject];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com,davemloft.net,google.com,kernel.org,redhat.com,iogearbox.net,linux.dev,fomichev.me,rbox.co,bytedance.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	FREEMAIL_CC(0.00)[kernel.org,iogearbox.net,gmail.com,linux.dev,fomichev.me,google.com,amazon.com,redhat.com,meta.com,cestc.cn,vger.kernel.org,fb.com];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-49520-lists,linux-kselftest=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-49519-lists,linux-kselftest=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jakub@cloudflare.com,linux-kselftest@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[leon.hwang@linux.dev,linux-kselftest@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[linux.dev,none];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	TAGGED_RCPT(0.00)[linux-kselftest];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,cloudflare.com:email,cloudflare.com:dkim,cloudflare.com:mid]
-X-Rspamd-Queue-Id: 45F3F48C12
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:mid,linux.dev:dkim,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
+X-Rspamd-Queue-Id: 1A70D4850D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Jan 13, 2026 at 10:50 AM +08, Jiayuan Chen wrote:
-> A socket using sockmap has its own independent receive queue: ingress_msg.
-> This queue may contain data from its own protocol stack or from other
-> sockets.
->
-> The issue is that when reading from ingress_msg, we update tp->copied_seq
-> by default. However, if the data is not from its own protocol stack,
-> tcp->rcv_nxt is not increased. Later, if we convert this socket to a
-> native socket, reading from this socket may fail because copied_seq might
-> be significantly larger than rcv_nxt.
->
-> This fix also addresses the syzkaller-reported bug referenced in the
-> Closes tag.
->
-> This patch marks the skmsg objects in ingress_msg. When reading, we update
-> copied_seq only if the data is from its own protocol stack.
->
->                                                      FD1:read()
->                                                      --  FD1->copied_seq++
->                                                          |  [read data]
->                                                          |
->                                 [enqueue data]           v
->                   [sockmap]     -> ingress to self ->  ingress_msg queue
-> FD1 native stack  ------>                                 ^
-> -- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
->                                        |                  |
->                                        |             ingress to FD1
->                                        v                  ^
->                                       ...                 |  [sockmap]
->                                                      FD2 native stack
->
-> Closes: https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
-> Fixes: 04919bed948dc ("tcp: Introduce tcp_read_skb()")
-> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  include/linux/skmsg.h |  2 ++
->  net/core/skmsg.c      | 28 +++++++++++++++++++++++++---
->  net/ipv4/tcp_bpf.c    |  5 +++--
->  3 files changed, 30 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-> index 49847888c287..dfdc158ab88c 100644
-> --- a/include/linux/skmsg.h
-> +++ b/include/linux/skmsg.h
-> @@ -141,6 +141,8 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
->  			     struct sk_msg *msg, u32 bytes);
->  int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  		   int len, int flags);
-> +int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> +		     int len, int flags, int *copied_from_self);
->  bool sk_msg_is_readable(struct sock *sk);
->  
->  static inline void sk_msg_check_to_free(struct sk_msg *msg, u32 i, u32 bytes)
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2ac7731e1e0a..ca22ecdbf192 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -409,22 +409,26 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
->  }
->  EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
->  
-> -/* Receive sk_msg from psock->ingress_msg to @msg. */
-> -int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> -		   int len, int flags)
-> +int __sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> +		     int len, int flags, int *copied_from_self)
->  {
->  	struct iov_iter *iter = &msg->msg_iter;
->  	int peek = flags & MSG_PEEK;
->  	struct sk_msg *msg_rx;
->  	int i, copied = 0;
-> +	bool from_self;
->  
->  	msg_rx = sk_psock_peek_msg(psock);
-> +	if (copied_from_self)
-> +		*copied_from_self = 0;
-> +
->  	while (copied != len) {
->  		struct scatterlist *sge;
->  
->  		if (unlikely(!msg_rx))
->  			break;
->  
-> +		from_self = msg_rx->sk == sk;
->  		i = msg_rx->sg.start;
->  		do {
->  			struct page *page;
-> @@ -443,6 +447,9 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  			}
->  
->  			copied += copy;
-> +			if (from_self && copied_from_self)
-> +				*copied_from_self += copy;
-> +
->  			if (likely(!peek)) {
->  				sge->offset += copy;
->  				sge->length -= copy;
-> @@ -487,6 +494,14 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->  out:
->  	return copied;
->  }
-> +EXPORT_SYMBOL_GPL(__sk_msg_recvmsg);
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Nit: Sorry, I haven't caught that before. tcp_bpf is a built-in. We
-don't need to export this internal helper to modules.
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands.
 
-> +
-> +/* Receive sk_msg from psock->ingress_msg to @msg. */
-> +int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
-> +		   int len, int flags)
-> +{
-> +	return __sk_msg_recvmsg(sk, psock, msg, len, flags, NULL);
-> +}
->  EXPORT_SYMBOL_GPL(sk_msg_recvmsg);
->  
->  bool sk_msg_is_readable(struct sock *sk)
-> @@ -616,6 +631,12 @@ static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb
->  	if (unlikely(!msg))
->  		return -EAGAIN;
->  	skb_set_owner_r(skb, sk);
-> +
-> +	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
-> +	 * data originates from the socket's own protocol stack. No need to
-> +	 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
-> +	 */
-> +	msg->sk = sk;
->  	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
->  	if (err < 0)
->  		kfree(msg);
-> @@ -909,6 +930,7 @@ int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
->  	sk_msg_compute_data_pointers(msg);
->  	msg->sk = sk;
->  	ret = bpf_prog_run_pin_on_cpu(prog, msg);
-> +	msg->sk = NULL;
->  	ret = sk_psock_map_verd(ret, msg->sk_redir);
->  	psock->apply_bytes = msg->apply_bytes;
->  	if (ret == __SK_REDIRECT) {
-> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-> index a268e1595b22..5c698fd7fbf8 100644
-> --- a/net/ipv4/tcp_bpf.c
-> +++ b/net/ipv4/tcp_bpf.c
-> @@ -226,6 +226,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	int peek = flags & MSG_PEEK;
->  	struct sk_psock *psock;
->  	struct tcp_sock *tcp;
-> +	int copied_from_self = 0;
->  	int copied = 0;
->  	u32 seq;
->  
-> @@ -262,7 +263,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  	}
->  
->  msg_bytes_ready:
-> -	copied = sk_msg_recvmsg(sk, psock, msg, len, flags);
-> +	copied = __sk_msg_recvmsg(sk, psock, msg, len, flags, &copied_from_self);
->  	/* The typical case for EFAULT is the socket was gracefully
->  	 * shutdown with a FIN pkt. So check here the other case is
->  	 * some error on copy_page_to_iter which would be unexpected.
-> @@ -277,7 +278,7 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
->  			goto out;
->  		}
->  	}
-> -	seq += copied;
-> +	seq += copied_from_self;
->  	if (!copied) {
->  		long timeo;
->  		int data;
+The initial set of common attributes includes:
+
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': The size of log reported by kernel.
+
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
+
+Changes:
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (9):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Refactor reporting btf_log_true_size for btf_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add common attr support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |  19 +-
+ include/linux/bpf_verifier.h                  |  17 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  32 +---
+ kernel/bpf/log.c                              | 103 +++++++++++
+ kernel/bpf/syscall.c                          | 122 ++++++++++---
+ kernel/bpf/verifier.c                         |  19 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  48 ++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
+ 15 files changed, 517 insertions(+), 61 deletions(-)
+
+--
+2.52.0
+
 
