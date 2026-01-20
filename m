@@ -1,187 +1,186 @@
-Return-Path: <linux-kselftest+bounces-49512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cKoZF1Svb2lBGgAAu9opvQ
-	(envelope-from <linux-kselftest+bounces-49512-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:37:40 +0100
+	id eMNnFjS0b2nHMAAAu9opvQ
+	(envelope-from <linux-kselftest+bounces-49514-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:58:28 +0100
 X-Original-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C25947BB7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:37:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E779848266
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:58:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DD17E5CBE3B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 13:42:46 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D138942F6C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 14:19:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333A642DFE0;
-	Tue, 20 Jan 2026 13:39:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECE9143E4BD;
+	Tue, 20 Jan 2026 14:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rk8i5ZQN"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="o65XwdB9";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DQr8iziB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587923F0742
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 13:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB61A43CEF2;
+	Tue, 20 Jan 2026 14:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768916391; cv=none; b=E5NyGpXwo0iXn80V9aTXBhVVaWOz5wjFeHuKTrq3bCqKGeM6L528DOoB59eDi3uBI9/C+huBDG1kfcNGz7Q2avfEW4ebCiMmNI/GEavCUrMp0nBPwDtH5KIx+QV8a+rtHrNYL0aitV2xYM0aRurj3uAJB+EIEt3DogJYoYcMZSg=
+	t=1768918243; cv=none; b=TwZdg5gcWZ7dmZvb9PQNzX2vcouiifr4vCavuky4rhG/E4tk7KcZWvV4LFnKYt1Vxfanw2D0zzg4p2SgXdAhELI3PpK1r3PVpXXII1edgG+SlXPFe0CcA7PmW0gkTmvC8A1z/c8jzrrTBFqKjzvx3GIA4dxV26T4EwPi+W3XO7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768916391; c=relaxed/simple;
-	bh=pbO8eNAYDGYW5sX787ND9xeTQ8SshIYR4qMQ+fZMQ60=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RpuzThj7Q6ybsw0Ol+mKiPEebq2ZdkfTDPlPjo2I8HgXcoQ9ebK9vUBMph1ssslaOcKqKSu2gaHLMBC1yQn02hyUy3LTI5uEMq6lMlkoo3aWvIPisZL6aSGfOY0xBeAv8NbO6JKDEA8Nlzp4kR2IFI5twVBBdIPhHidx+f610mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rk8i5ZQN; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-81f5381d168so4835440b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 05:39:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768916386; x=1769521186; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dsGr9dkGYMgZzi70MY6htwKKf+SUzE4Qn2hRD6kPTBw=;
-        b=Rk8i5ZQNrtuVAcil/0lI5fJ6CJTtLsf2WRnIGSHPzhFwjUW9ciDwjRDvZuV55VuOYQ
-         r4yBBRbkPWs0lANygYtCTHVnbT9fB/NG1+JfREoJUMl7dyAYj2idG0tP0mCT7NAHaIsX
-         vndtwih30SIvIwV61xo+hlQyfxRHgj3onXeNI9ijvbp+us0+3BtQ5nZ+tUq/SctXaKEp
-         CRr/dJ95S2TPwJNpm3gBQPqqHgV+t3gEkO/I/70xhU4YgAwgj1YHbcAeTsIDKBlcdwep
-         TEs4f6f5S3whxXrnDpgYDpV4XG2yq28vgTRpX11Xk0rJqC11x1hhrEK0nveym3T7lfr8
-         ocog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768916386; x=1769521186;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dsGr9dkGYMgZzi70MY6htwKKf+SUzE4Qn2hRD6kPTBw=;
-        b=u6teP8Fsri1yg8rSX90vwkcgHyefJD8En7TPunf963mPx7H22nmFBDie6f7bm9/EEV
-         70FOORh8mJdR6yvQmRIMqmiophg+hjeWd++rEpNtqmd7CNIlgSkVJ2iaLEmWp4uM+u/N
-         B02qnFFDWIF9qay/bgrR7AKej5NTunwQuNQDKiSZprc9fJ1D1udzNRituXoMwCZ2NAEI
-         27g5UAyQA5ER7tbJkxXC0xmtHmLSONEAXfWcQYOvgZbx7wJ3E0csONa4wElhdqENF3T0
-         2MhSmHym6aZRInjT/UAwwsznKHbLxtsigO1aURwle/qpqyozghEByhMJrPQumGRotg/j
-         9vhA==
-X-Forwarded-Encrypted: i=1; AJvYcCVEE+0dHBQD+57XHmzSOqcbqJ5GD6EBpNArZ1gYq7e7cvttwbFeIUW1haskcFDXOePREkRUGTJkBKZsXjlF4hk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmAQlbsc4PBqjACTNV4FwMgQPseCMpb2AlcWDQG8L0DDIndDIF
-	MvzJFt0zMEGBm5mrq57Ekb1pKKThBEOoiagO9VtbxLzTkNmFyQw59LIR
-X-Gm-Gg: AZuq6aLxT1XGrl/GnFWqUuWKmqFs/EN9dJZ6oysSdF+KluIrVeWLL1LyWfe9lZBdAuQ
-	U5bc++cxguMj9e/ZrSTeOSd6ntPKbc8PzzdmQEaTYv/th/YB4PKQQ0aK9gWXrqnfjlkzMq+mvie
-	GDkN8zlezgjAm4ia5PUKhc9e8ANmHGEsYREx6+cWYAHcFM1kKZoEiStXCehKtEwMexsPI/e1R+G
-	3P/Jn9zIafTbtudvHasRFHhdMw0EXpueFL9Y4Z82x9B+XnUgsS5qtkC6Mspr4gRJXHWfX6wGY5i
-	YItg2yIS1Fk+GjVAfjO5KupJ5fZj3tU1N0AJ8g8KmC3qwTfLglO/h8XlCeAExOJOqVXXF3PuDEn
-	HWd5nhrQpJMKDpFqp/1eHtdTJPjUVOAlCn05dqUxRPx9r6NilS5/EtEC8/coKn6QFwRSJEjD2fB
-	0=
-X-Received: by 2002:a05:6a00:1a89:b0:81f:b1d4:b486 with SMTP id d2e1a72fcca58-81fe87b2883mr1615438b3a.8.1768916385606;
-        Tue, 20 Jan 2026 05:39:45 -0800 (PST)
-Received: from ap.. ([182.213.254.91])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa1094e23sm12322373b3a.4.2026.01.20.05.39.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jan 2026 05:39:44 -0800 (PST)
-From: Taehee Yoo <ap420073@gmail.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: ap420073@gmail.com
-Subject: [PATCH net v2] selftests: net: amt: wait longer for connection before sending packets
-Date: Tue, 20 Jan 2026 13:39:30 +0000
-Message-ID: <20260120133930.863845-1-ap420073@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1768918243; c=relaxed/simple;
+	bh=gEyQT5Kcy9TJYGJ474UFnWhLZFO3ndb9iMUj0fZR+P0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Xlt2yczCWbi91g8iT29njGEPyo2FNqNPFSFKNrhC/pKOkfiruxxw7/llfwrznt7K8MFrBOv39vvjE1QOoCKOs5RkU8QuTtZrhXa8LaB98uBrYTwtk4B1XpbBWpySERhV/ic5WZpr6Ua3R9pfaZ3i30pJYs2Of6HrYuD1UIF6PFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=o65XwdB9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DQr8iziB; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768918240;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aaabGWtTucbZ8WjnJZ8jyHDns+gX0JvT/KU/uRiSp04=;
+	b=o65XwdB9ZsuKO6X8SlMdGBWHV1er2KvM1zGyZ933WAAci29EnYDG1WDWVuH2jNRH32Re9T
+	KU74HSp6R5wpyg1u4QNPRA360B9F54yXRotiEf1W3r4yzwU3CwNbKeqmMXMp7K1f4cA9nJ
+	ov4BZJnvK7MDcS3MHbeXfOrxU4eCVtcbEl0Olz2lb18frkcnpYrMO2SJBSIRJYy0Y6YWAM
+	b0obIzZN7nNA5d/rZU51OlzogHwEBhLFTujSrJtpPjxDsoG2W+mfwNd/hAnJYot6m+LHZP
+	q43a/2ZcMgfVIvWeqP5T1YzGh4MvoTDOWOUwL4FsrOSgv/10CAOUAE6Rd1E2Mw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768918240;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aaabGWtTucbZ8WjnJZ8jyHDns+gX0JvT/KU/uRiSp04=;
+	b=DQr8iziBzPVx6w6Qd1ifMB+zNRKVJIcikpI/fhVtclnM2b47YnrFGAlzPBgRY/hbavkmlV
+	94DIdcN9Fc7i0vAg==
+Date: Tue, 20 Jan 2026 15:10:32 +0100
+Subject: [PATCH net-next v2 2/4] selftests/landlock: Move some UAPI header
+ inclusions after libc ones
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20260120-uapi-sockaddr-v2-2-63c319111cf6@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+In-Reply-To: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+To: Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>, 
+ Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+ Florian Weimer <fweimer@redhat.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768918237; l=1356;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=gEyQT5Kcy9TJYGJ474UFnWhLZFO3ndb9iMUj0fZR+P0=;
+ b=vsXslEDMsuoiJY6VjPUQt3pMJ6PFOs4k30AXxu/bclwWz3MLbiSvMXmg37uv3pUcdncGpAGpm
+ KLXGLl8k+XFDkstK9st5ouee/sbd/CM4+SAhGjnjJrFeZfhsM418+zy
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 X-Spamd-Result: default: False [-0.46 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com];
-	TAGGED_FROM(0.00)[bounces-49512-lists,linux-kselftest=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-49514-lists,linux-kselftest=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[google.com,redhat.com,davemloft.net,kernel.org,digikod.net,iogearbox.net,gmail.com,fomichev.me,linux.dev];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_TWELVE(0.00)[41];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_NEQ_ENVFROM(0.00)[ap420073@gmail.com,linux-kselftest@vger.kernel.org];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DMARC_POLICY_ALLOW(0.00)[linutronix.de,none];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-kselftest@vger.kernel.org];
+	DKIM_TRACE(0.00)[linutronix.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	TAGGED_RCPT(0.00)[linux-kselftest];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 0C25947BB7
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,linutronix.de:email,linutronix.de:dkim,linutronix.de:mid]
+X-Rspamd-Queue-Id: E779848266
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Both send_mcast4() and send_mcast6() use sleep 2 to wait for the tunnel
-connection between the gateway and the relay, and for the listener
-socket to be created in the LISTENER namespace.
+Interleaving inclusions of UAPI headers and libc headers is problematic.
+Both sets of headers define conflicting symbols. To enable their
+coexistence a compatibility-mechanism is in place.
 
-However, tests sometimes fail because packets are sent before the
-connection is fully established.
+An upcoming change will define 'struct sockaddr' from linux/socket.h.
+However sys/socket.h from libc does not yet handle this case and a
+symbol conflict will arise.
 
-Increase the waiting time to make the tests more reliable, and use
-wait_local_port_listen() to explicitly wait for the listener socket.
+Move the inclusion of all UAPI headers after the inclusion of the glibc
+ones, so the compatibility mechanism from the UAPI headers is used.
 
-Fixes: c08e8baea78e ("selftests: add amt interface selftest script")
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
+ tools/testing/selftests/landlock/audit.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-v2:
- - Add wait_local_port_listen() to both send_mcast4() and send_mcast6()
-
- tools/testing/selftests/net/amt.sh | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/amt.sh b/tools/testing/selftests/net/amt.sh
-index 3ef209cacb8e..663744305e52 100755
---- a/tools/testing/selftests/net/amt.sh
-+++ b/tools/testing/selftests/net/amt.sh
-@@ -73,6 +73,8 @@
- #       +------------------------+
- #==============================================================================
+diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
+index 44eb433e9666..c12b16c690dc 100644
+--- a/tools/testing/selftests/landlock/audit.h
++++ b/tools/testing/selftests/landlock/audit.h
+@@ -7,9 +7,6 @@
  
-+source lib.sh
+ #define _GNU_SOURCE
+ #include <errno.h>
+-#include <linux/audit.h>
+-#include <linux/limits.h>
+-#include <linux/netlink.h>
+ #include <regex.h>
+ #include <stdbool.h>
+ #include <stdint.h>
+@@ -20,6 +17,10 @@
+ #include <sys/time.h>
+ #include <unistd.h>
+ 
++#include <linux/audit.h>
++#include <linux/limits.h>
++#include <linux/netlink.h>
 +
- readonly LISTENER=$(mktemp -u listener-XXXXXXXX)
- readonly GATEWAY=$(mktemp -u gateway-XXXXXXXX)
- readonly RELAY=$(mktemp -u relay-XXXXXXXX)
-@@ -246,14 +248,15 @@ test_ipv6_forward()
+ #include "kselftest.h"
  
- send_mcast4()
- {
--	sleep 2
-+	sleep 5
-+	wait_local_port_listen ${LISTENER} 4000 udp
- 	ip netns exec "${SOURCE}" bash -c \
- 		'printf "%s %128s" 172.17.0.2 | nc -w 1 -u 239.0.0.1 4000' &
- }
- 
- send_mcast6()
- {
--	sleep 2
-+	wait_local_port_listen ${LISTENER} 6000 udp
- 	ip netns exec "${SOURCE}" bash -c \
- 		'printf "%s %128s" 2001:db8:3::2 | nc -w 1 -u ff0e::5:6 6000' &
- }
+ #ifndef ARRAY_SIZE
+
 -- 
-2.43.0
+2.52.0
 
 
