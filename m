@@ -1,145 +1,156 @@
-Return-Path: <linux-kselftest+bounces-49428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCF29D3BCE3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 02:32:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D289D3BD1F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 02:50:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 68A7630341C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 01:32:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 984B13023D06
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 01:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D754B14F112;
-	Tue, 20 Jan 2026 01:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C73BE24DCEB;
+	Tue, 20 Jan 2026 01:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="caylSLYJ";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tQzKPjYp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WdgV4ooa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E98176FB1
-	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 01:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768872747; cv=pass; b=vBa0Mqv7UIbI9IDx/BZE4hOQEGnkSWNljcuG3eKk4BGGMl+sBkwB7XDVNUXOkDmZc5SZiSf4PMUGPT3cux0lj01Hh/mCVZeyOpWiwGa4COat6dKizKoj5JHz695XJQIlVWueDvfRbQE7ot3p3R35ZG5zNptM7LcAy3hSQiCWjGY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768872747; c=relaxed/simple;
-	bh=HS+rs2sRhBDDAMedphcl8vavi4OEyMHPXceb2z5fJW0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ug4Ae7Ea44d0orxWggAGiFml1BsZousJp7STs0NZQUXKXeGZIlnmUAer3iRyHAzWMu5OXnsPfiqzD9B35H923/Li0fNB3pugBnsHQAlxDUf5kZEjonT3e3nvjAxsxiZMhrCDcwv/VNU6cAKIvH+elJ6zY0YBqP3yb9JGQEEs+ow=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=caylSLYJ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tQzKPjYp; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768872745;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C1D1DE4CE
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 01:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768873819; cv=none; b=NvclkzfKs4u3JrBQ1M6A6IOdYCAL+fJHxT9SILlGuhCdrPWePUruCxPDRdjOjfBVpQYgv7C6i6kO4FdUUCIO6gLJiDs2ldaNn3ZW6xCccRgEheKLZEJcGYolx92khtkOsTbJvp7opMxVkKMu/V1h5IftK6NdA7Bg5aH2VcNSVdo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768873819; c=relaxed/simple;
+	bh=8fA+p/DEXJdaqbnOjZ3SqbgCV79ygUWjN600gP4WjAA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lb3sOnYRLzWVRtIULmGvLJh5tadI6/M/Q9SMDZfE08CiOOfI7x39APkOh9PhrcdAfrLyUtyx4xmoaGWKxYJwCNb5j67fxtvwvuWKqDCiGinwBR8drz3KKn92gan+UPK/3uZBEidxu8dcpdjuHy2GWTpFSM0S15cyYNEHvIAnAKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WdgV4ooa; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <123a63a2-5679-4bd0-9e16-dc5c7dbe3325@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768873805;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OsxU+JtWzgcHQNbkx+AZGIiB9jQi2bSbySQh+gDEg7c=;
-	b=caylSLYJMjZOyQTUq+Ul+xC7s9qtseVsztSIRJOVAekSkZJ791Xb5FfUSjPHO+3A6bYbba
-	c45kuJrjn5bgz7iUWY4HkKDuqqut8ETrPcYautfLXyf/z+MT4tKgUfO5SgpNmsIgdamE6T
-	0/FLeOY+LsvuG1nqyIojsybT5oqxUhA=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-554-OFfn5kitN6Ov_xqhzUCkgQ-1; Mon, 19 Jan 2026 20:32:23 -0500
-X-MC-Unique: OFfn5kitN6Ov_xqhzUCkgQ-1
-X-Mimecast-MFC-AGG-ID: OFfn5kitN6Ov_xqhzUCkgQ_1768872743
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-b876b03afc5so1110376966b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Jan 2026 17:32:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768872743; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TB/cSiqVBW2JQWcbs8wHefb7Ie689eKGJ5V68NaHn0lDa1zuP1IOZ8xeflW2sDI3Dl
-         BNkAG2YejuFTnB6c15wYE0Dp1PZSkXIr+LB5M981H+pEY6UySBeiBjeesD2Qouk17PjZ
-         4iRLgE8kT8kX6Wkr1SixOTP1DnrC95YlXyIkXTkHGb/dttgbIJq/GQ5aGrb2Z5peWj6A
-         VGE08cM1Tv4kjYAXle63g3/RYR/ltWTPtdKg8OMb74CboFhA0bIF/Vlk/6KE5ySlMiBN
-         xba+9sEb/4d91OPFZfhl0t9qFq0pbVB+yE4brSqkFH6IJY0FXsQcRoSaRh/tzjYgeqdi
-         3WQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=OsxU+JtWzgcHQNbkx+AZGIiB9jQi2bSbySQh+gDEg7c=;
-        fh=lkhiAi7ScY444NUDDlV9jUSSDPPoKoK+9l8i0BftVbg=;
-        b=WFxvXTJQeOxKwEn8ANUzx6ItN/5qROjdBX2SspZuAWVuJJuQ6nFAhIn5qU33YVSkK+
-         H3UO66TvQfVYKRDjkuneJa7YcliRj0rafpcjgZ3lrRwis+nzvzKzsLtFGEWzOX6GoyLR
-         9j6TAJSLAO8h/RuoFAns31i/ucXqbAomW2axiostmpP3o4/pt3wmfRTSI1saVrQS4qW2
-         UbyWZN8ia9S3vCbhuPXhequCVu3NcsytZuGkVFQyunnvawHpkyhW/GNs919lzhhKRH50
-         EMLOpWJyAToy0dLKm/KMa9KczF/oqdqpC5NBHVD1j2StkZXDyjuzP0i6jnNyaCZjk+iQ
-         iEiQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768872743; x=1769477543; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OsxU+JtWzgcHQNbkx+AZGIiB9jQi2bSbySQh+gDEg7c=;
-        b=tQzKPjYpsR9+36nkENpsNQmsZc82cmKfJ/z8Q1i6uKH2koSfnIBbtZ0YyZixt4Rpoq
-         siS1UGiNMvwSjWNTxZ7ThTdNRDo3vZYfk66r4M11qKR6grhEheL086lGyMePMgLFG8Lk
-         JAIUhMf/CbkHgWdwOTfSYkdNjDTdrx5UdIu2e7peP/C4nuvSEWh5J/dFs29UBN18IHv7
-         qUWtHlyAspuf8rBUpfschLay7qJ73cIQCec8KGoalExRb/uhZEkwdz6JNsdrzliEBT7o
-         hXLwfA6LsA4gUoIE0HFy/R/a7WGa9u8o0JZ9HkLnt8scfQ+S40Gh0TZSh18GDrKVIW8M
-         Y4jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768872743; x=1769477543;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OsxU+JtWzgcHQNbkx+AZGIiB9jQi2bSbySQh+gDEg7c=;
-        b=Im/NP/A4/d3Xjq5gRUq6XKXXlhNIQkqQf5/LDNMcK8i5iUIeyDOUdrIIwpfTERYjqX
-         HnMsMfOB4VrRLeqnbru2e9O8zX6LKazVh/+AKimwcfMUlpZ2ynsgPLiLb9/In5Q8zy29
-         CIM/1c7N6QcG99nWdZvEt1RykPlwv0m8kSj8Xw5qFhIzjEs8Rm2EVToZH4sQ0r6OBXVR
-         uklc0qWZGlg8xsVPqYqYzp3RIhINuDLst6cbROtii4nJKBlSiopEc9jm3KEsq5SYllP1
-         T6xFGM8wcyCoPa6Cr0rTSc6F5bXe3uH/BmOGsYXnKJccbDCMazaynvQHreJSZNamMM1R
-         feWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWz0a1IvFg/WBVNpcr51xqXmahJ+r3hJBeZljKPB1qvU9iEFsXb1XcBEuWyetgUB7HV1QrM7U7CNjUebaf/+uQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQ9sI8gFm7bK6lsvk+bRQ957d2/imQpY+adXFOtDCrz11mkGhd
-	GKdBdtu9QLHtGwnVTR9atIbKu5amzDtI0vo+H1KItd7wEn018Hude160dCk1dOgNb1JMWPCKs2/
-	bqKz0Z0FIZXVHx/lLjnbRzIXzsa/2BYCF7NOEV1FQxgrDcDI5Bht5Jcr1ah1Bjdv5TledfI/PoK
-	Vt8Sub7w4SAOWW0ImlTh1tIuwGkqqPZetdUXyd2julKIAq
-X-Gm-Gg: AY/fxX4XR+F/59uNPW8JwTgFVqdo144UOmH802spZ62ou8gFzNXlS1ilauHscrg6VTO
-	AsswPNOc7459RbsPM9ZcMO11ucxtP947j9CbLzhCpV9werIlidScL961uJG+L9SYebgYs68v4XV
-	B8QJIqel8JqdbGHdcslAEDKfM+121y7bX3XLjpHNg1UebUsjICfya0fyDpVL1je8SOp2k=
-X-Received: by 2002:a17:906:fe09:b0:b86:f558:ecad with SMTP id a640c23a62f3a-b8800236e57mr18222866b.7.1768872742768;
-        Mon, 19 Jan 2026 17:32:22 -0800 (PST)
-X-Received: by 2002:a17:906:fe09:b0:b86:f558:ecad with SMTP id
- a640c23a62f3a-b8800236e57mr18221166b.7.1768872742431; Mon, 19 Jan 2026
- 17:32:22 -0800 (PST)
+	bh=kBN9dYNpcV59lPN9f96cLskaAgq0uhPL5VTZQxR1SyE=;
+	b=WdgV4ooaqq4OMNi62m02mgCFSdC3pqkc6NzjlD3vaX90F/03zANPBLs90tNrDGUFL5TPHY
+	EdbcsckMgG0zlwekEgXTqd4PzSlzuAwHbH14GzYQwdGWK+nj1RN9yxPyguN04EUdwCSPzN
+	sXMKM3aZzhgTHh4R4Ktmm1xTyIfddEc=
+Date: Tue, 20 Jan 2026 09:49:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1768800198.git.xudu@redhat.com> <58c5767a8a82352fb784d8d51ec844055b6d7ff2.1768800198.git.xudu@redhat.com>
- <20260119090916.1fe303a4@kernel.org>
-In-Reply-To: <20260119090916.1fe303a4@kernel.org>
-From: Xu Du <xudu@redhat.com>
-Date: Tue, 20 Jan 2026 09:32:10 +0800
-X-Gm-Features: AZwV_Qhnz65hOYE219XnOZAeK22v2xydMZgt7mHbCC49P7QqnmBYSPK55kXyaOU
-Message-ID: <CAA92Kx=BFz4FnMRUQYYtWnBjwHEKExVuviA8bWMcfBi6=Tonww@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 3/7] selftest: tun: Refactor tun_delete to use tuntap_helpers
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next 2/3] bpf: Avoid deadlock using trylock when
+ popping LRU free nodes
+Content-Language: en-US
+To: Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+References: <20260119142120.28170-1-leon.hwang@linux.dev>
+ <20260119142120.28170-3-leon.hwang@linux.dev>
+ <d4b8843b-c5dc-4468-996a-bacc2db63f11@iogearbox.net>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <d4b8843b-c5dc-4468-996a-bacc2db63f11@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
- Thanks for the guidance. I will work on resolving this issue.
-
--- 
 
 
-Regards,
+On 20/1/26 03:47, Daniel Borkmann wrote:
+> On 1/19/26 3:21 PM, Leon Hwang wrote:
+>> Switch the free-node pop paths to raw_spin_trylock*() to avoid blocking
+>> on contended LRU locks.
+>>
+>> If the global or per-CPU LRU lock is unavailable, refuse to refill the
+>> local free list and return NULL instead. This allows callers to back
+>> off safely rather than blocking or re-entering the same lock context.
+>>
+>> This change avoids lockdep warnings and potential deadlocks caused by
+>> re-entrant LRU lock acquisition from NMI context, as shown below:
+>>
+>> [  418.260323] bpf_testmod: oh no, recursing into test_1,
+>> recursion_misses 1
+>> [  424.982207] ================================
+>> [  424.982216] WARNING: inconsistent lock state
+>> [  424.982223] inconsistent {INITIAL USE} -> {IN-NMI} usage.
+>> [  424.982314]  *** DEADLOCK ***
+>> [...]
+>>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>   kernel/bpf/bpf_lru_list.c | 17 ++++++++++-------
+>>   1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> Documentation/bpf/map_lru_hash_update.dot needs update?
+> 
 
-Xu
+Yes, it needs update.
 
+>> diff --git a/kernel/bpf/bpf_lru_list.c b/kernel/bpf/bpf_lru_list.c
+>> index c091f3232cc5..03d37f72731a 100644
+>> --- a/kernel/bpf/bpf_lru_list.c
+>> +++ b/kernel/bpf/bpf_lru_list.c
+>> @@ -312,14 +312,15 @@ static void bpf_lru_list_push_free(struct
+>> bpf_lru_list *l,
+>>       raw_spin_unlock_irqrestore(&l->lock, flags);
+>>   }
+>>   -static void bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
+>> +static bool bpf_lru_list_pop_free_to_local(struct bpf_lru *lru,
+>>                          struct bpf_lru_locallist *loc_l)
+>>   {
+>>       struct bpf_lru_list *l = &lru->common_lru.lru_list;
+>>       struct bpf_lru_node *node, *tmp_node;
+>>       unsigned int nfree = 0;
+>>   -    raw_spin_lock(&l->lock);
+>> +    if (!raw_spin_trylock(&l->lock))
+>> +        return false;
+>>   
+> 
+> Could you provide some more analysis, and the effect this has on real-world
+> programs? Presumably they'll unexpectedly encounter a lot more frequent
+> -ENOMEM as an error on bpf_map_update_elem even though memory might be
+> available just that locks are contended?
+> 
+> Also, have you considered rqspinlock as a potential candidate to discover
+> deadlocks?
 
---
+Thanks for the questions.
 
-Xu Du
+While I haven’t encountered this issue in production systems myself, the
+deadlock has been observed repeatedly in practice, including the cases
+shown in the cover letter. It can also be reproduced reliably when
+running the LRU tests locally, so this is a real and recurring problem.
 
-Quality Engineer, RHEL Network QE
+I agree that returning -ENOMEM when locks are contended is not ideal.
+Using -EBUSY would better reflect the situation where memory is
+available but forward progress is temporarily blocked by lock
+contention. I can update the patch accordingly.
 
-Raycom, Beijing, China
+Regarding rqspinlock: as mentioned in the cover letter, Menglong
+previously explored using rqspinlock to address these deadlocks but was
+unable to arrive at a complete solution. After further off-list
+discussion, we agreed that using trylock is a more practical approach
+here. In most observed cases, the lock contention leading to deadlock
+occurs in bpf_common_lru_pop_free(), and trylock allows callers to back
+off safely rather than risking re-entrancy and deadlock.
+
+Thanks,
+Leon
 
 
