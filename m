@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-49529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-49536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QCpsBiOob2ndEgAAu9opvQ
-	(envelope-from <linux-kselftest+bounces-49529-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:06:59 +0100
+	id KF8MJnmqb2lUEwAAu9opvQ
+	(envelope-from <linux-kselftest+bounces-49536-lists+linux-kselftest=lfdr.de@vger.kernel.org>)
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:16:57 +0100
 X-Original-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC3F547138
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A084473C5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 17:16:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ED4A76AD5CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 15:45:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 94BE87E9320
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Jan 2026 15:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBBC747278A;
-	Tue, 20 Jan 2026 15:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3562F47F2CA;
+	Tue, 20 Jan 2026 15:27:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VDuMbnAI"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LFq6r1ZQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10782466B55;
-	Tue, 20 Jan 2026 15:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D2647ECFE
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Jan 2026 15:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768922767; cv=none; b=dWasg00sBbIlViXW/2OCN18PBTES6BdiH2pTHfoZQIQ5gOrRnOO05YvpEF5NRGoOXKAw1BYQUniDohe5HITOnbjU3Sw6AO4coqXDINs90CYvX6lLf3eKy90KpG/oIASDxeozPMGYGyyTO7Qmj0EAlyguPIGzdZtgXWcavVCWHMM=
+	t=1768922827; cv=none; b=e30QJrYl2ZWDSgSQKXEXs2X/m4+9qJOghSocy/dpmGhK0wFTom1OPO/D5F/6rkayYe4ZkMmqwlBFj7pRZ8yPT+Y1LECQfyREfG0RlO+uuXakjTyCwX92gkeq8PJIpsNjYCedYN+gga2DjtAZf/j7UEO61W7ZHwg+5ZHnmjnsnbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768922767; c=relaxed/simple;
-	bh=VdT+qfzrEMk9+yt37S7v4EN0NFQasyDvpE4a1Fswi2Y=;
+	s=arc-20240116; t=1768922827; c=relaxed/simple;
+	bh=lRMaXBCmuroYEA8EMWnl7dKsDl+uPc5spkCIVT8MdKg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y5xL3DNb9oO1bfI0OLG3PwuJ8+QxF4Ev8nn+vdSjjImVHjzYLgGPXxnLl3HYHyCcQVWw+iFrsN3eviz6db3DezS9KEIyTem7IITgCS8kvFl/nTH7VFrzSfC/z5LHFNc7pqfISnmgf2z+pIniL5jf+9ii7BC/c5raTMHz5YBXgN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VDuMbnAI; arc=none smtp.client-ip=91.218.175.171
+	 MIME-Version; b=uRHVIFDQJCbOmbbkm6G+UVeIstKvcOVZOIvnvJAszRDrYP0s07e5Uol9HxRBqlRjCQk11I8Gbijb/EnWkzBFj65g7S1pWUGwFtrRl8/WnY7RMipVzc8QxJ+5Z7aIyue8CfMSdxZ9XOzQ3uT03OQnRzdxaOJlwevQC/o4UyUikvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LFq6r1ZQ; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1768922761;
+	t=1768922823;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=kRTfHCwrpnuV0VymQxiwG5FoFnK+9yQFhsoaAGJJJH8=;
-	b=VDuMbnAISim49rGxk7/apW0PDYg5f/M6k+W6PMvuINM406rCG0/7xuFWJngcmkc1ksWghG
-	2pgzlLaXC9uWswy8YUAvf7uXNYET6fugMqm3lPkuJEbS1gqeY2cpJ6b6s014D8gO6y1P8x
-	8aa7at/i6jv1uPRaqJGWggmaXUHy808=
+	bh=bTUbEhqHJLhG8hIlAVdEqIlik/ffHI3gpe+iOi5xJpk=;
+	b=LFq6r1ZQX66pefaleSH3Y/eT1qmCkVCKTn+COSo83dpKBhiguEddye3jubTaULiKFtvua5
+	WfxS1R58hn8mp3NpN+qHuPYV1efQZc3W8SlGx/VYN5MuRt0Ied2+dkUo3cZZwErmObHs1W
+	DiZaDxHugZ57g8eQ1/DA4Mz9hwbxLP0=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -79,9 +79,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-api@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [RESEND PATCH bpf-next v6 2/9] libbpf: Add support for extended bpf syscall
-Date: Tue, 20 Jan 2026 23:24:16 +0800
-Message-ID: <20260120152424.40766-3-leon.hwang@linux.dev>
+Subject: [RESEND PATCH bpf-next v6 9/9] selftests/bpf: Add tests to verify map create failure log
+Date: Tue, 20 Jan 2026 23:24:23 +0800
+Message-ID: <20260120152424.40766-10-leon.hwang@linux.dev>
 In-Reply-To: <20260120152424.40766-1-leon.hwang@linux.dev>
 References: <20260120152424.40766-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -107,7 +107,7 @@ X-Spamd-Result: default: False [1.04 / 15.00];
 	FREEMAIL_CC(0.00)[kernel.org,iogearbox.net,gmail.com,linux.dev,fomichev.me,google.com,amazon.com,redhat.com,meta.com,cestc.cn,vger.kernel.org,fb.com];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[3];
-	TAGGED_FROM(0.00)[bounces-49529-lists,linux-kselftest=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-49536-lists,linux-kselftest=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[linux.dev:+];
@@ -121,115 +121,194 @@ X-Spamd-Result: default: False [1.04 / 15.00];
 	TO_DN_SOME(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,linux.dev:email,linux.dev:dkim,linux.dev:mid]
-X-Rspamd-Queue-Id: AC3F547138
+X-Rspamd-Queue-Id: 4A084473C5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-To support the extended BPF syscall introduced in the previous commit,
-introduce the following internal APIs:
-
-* 'sys_bpf_ext()'
-* 'sys_bpf_ext_fd()'
-  They wrap the raw 'syscall()' interface to support passing extended
-  attributes.
-* 'probe_sys_bpf_ext()'
-  Check whether current kernel supports the BPF syscall common attributes.
+Add tests to verify that the kernel reports the expected error messages
+when map creation fails.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/lib/bpf/bpf.c             | 32 ++++++++++++++++++++++++++++++++
- tools/lib/bpf/features.c        |  8 ++++++++
- tools/lib/bpf/libbpf_internal.h |  3 +++
- 3 files changed, 43 insertions(+)
+ .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
+ 1 file changed, 168 insertions(+)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 21b57a629916..ed9c6eaeb656 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -69,6 +69,38 @@ static inline __u64 ptr_to_u64(const void *ptr)
- 	return (__u64) (unsigned long) ptr;
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
+index 14a31109dd0e..89e6daf2fcfd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
+@@ -212,3 +212,171 @@ void test_map_init(void)
+ 	if (test__start_subtest("pcpu_lru_map_init"))
+ 		test_pcpu_lru_map_init();
  }
- 
-+static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
-+			      unsigned int size,
-+			      struct bpf_common_attr *attr_common,
-+			      unsigned int size_common)
-+{
-+	cmd = attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_COMMON_ATTRS);
-+	return syscall(__NR_bpf, cmd, attr, size, attr_common, size_common);
-+}
 +
-+static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *attr,
-+				 unsigned int size,
-+				 struct bpf_common_attr *attr_common,
-+				 unsigned int size_common)
++#define BPF_LOG_FIXED	8
++
++static void test_map_create(enum bpf_map_type map_type, const char *map_name,
++			    struct bpf_map_create_opts *opts, const char *exp_msg)
 +{
++	const int key_size = 4, value_size = 4, max_entries = 1;
++	char log_buf[128];
 +	int fd;
++	LIBBPF_OPTS(bpf_log_opts, log_opts);
 +
-+	fd = sys_bpf_ext(cmd, attr, size, attr_common, size_common);
-+	return ensure_good_fd(fd);
++	log_buf[0] = '\0';
++	log_opts.log_buf = log_buf;
++	log_opts.log_size = sizeof(log_buf);
++	log_opts.log_level = BPF_LOG_FIXED;
++	opts->log_opts = &log_opts;
++	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, opts);
++	if (!ASSERT_LT(fd, 0, "bpf_map_create")) {
++		close(fd);
++		return;
++	}
++
++	ASSERT_STREQ(log_buf, exp_msg, "log_buf");
++	ASSERT_EQ(log_opts.log_true_size, strlen(exp_msg) + 1, "log_true_size");
 +}
 +
-+int probe_sys_bpf_ext(void)
++static void test_map_create_array(struct bpf_map_create_opts *opts, const char *exp_msg)
 +{
-+	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
-+	union bpf_attr attr;
-+
-+	memset(&attr, 0, attr_sz);
-+	/* This syscall() will return error always. */
-+	(void) syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr, attr_sz, NULL,
-+		       sizeof(struct bpf_common_attr));
-+	return errno == EFAULT;
++	test_map_create(BPF_MAP_TYPE_ARRAY, "test_map_create", opts, exp_msg);
 +}
 +
- static inline int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
- 			  unsigned int size)
- {
-diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-index b842b83e2480..e0d646a9e233 100644
---- a/tools/lib/bpf/features.c
-+++ b/tools/lib/bpf/features.c
-@@ -506,6 +506,11 @@ static int probe_kern_arg_ctx_tag(int token_fd)
- 	return probe_fd(prog_fd);
- }
- 
-+static int probe_bpf_syscall_common_attrs(int token_fd)
++static void test_invalid_vmlinux_value_type_id_struct_ops(void)
 +{
-+	return probe_sys_bpf_ext();
++	const char *msg = "btf_vmlinux_value_type_id can only be used with struct_ops maps.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .btf_vmlinux_value_type_id = 1,
++	);
++
++	test_map_create_array(&opts, msg);
 +}
 +
- typedef int (*feature_probe_fn)(int /* token_fd */);
- 
- static struct kern_feature_cache feature_cache;
-@@ -581,6 +586,9 @@ static struct kern_feature_desc {
- 	[FEAT_BTF_QMARK_DATASEC] = {
- 		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
- 	},
-+	[FEAT_BPF_SYSCALL_COMMON_ATTRS] = {
-+		"BPF syscall common attributes support", probe_bpf_syscall_common_attrs,
-+	},
- };
- 
- bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index fc59b21b51b5..aa16be869c4f 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -392,6 +392,8 @@ enum kern_feature_id {
- 	FEAT_ARG_CTX_TAG,
- 	/* Kernel supports '?' at the front of datasec names */
- 	FEAT_BTF_QMARK_DATASEC,
-+	/* Kernel supports BPF syscall common attributes */
-+	FEAT_BPF_SYSCALL_COMMON_ATTRS,
- 	__FEAT_CNT,
- };
- 
-@@ -757,4 +759,5 @@ int probe_fd(int fd);
- #define SHA256_DWORD_SIZE SHA256_DIGEST_LENGTH / sizeof(__u64)
- 
- void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_LENGTH]);
-+int probe_sys_bpf_ext(void);
- #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
++static void test_invalid_vmlinux_value_type_id_kv_type_id(void)
++{
++	const char *msg = "btf_vmlinux_value_type_id is mutually exclusive with btf_key_type_id and btf_value_type_id.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .btf_vmlinux_value_type_id = 1,
++		    .btf_key_type_id = 1,
++	);
++
++	test_map_create(BPF_MAP_TYPE_STRUCT_OPS, "test_map_create", &opts, msg);
++}
++
++static void test_invalid_value_type_id(void)
++{
++	const char *msg = "Invalid btf_value_type_id.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .btf_key_type_id = 1,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++static void test_invalid_map_extra(void)
++{
++	const char *msg = "Invalid map_extra.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_extra = 1,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++static void test_invalid_numa_node(void)
++{
++	const char *msg = "Invalid numa_node.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_flags = BPF_F_NUMA_NODE,
++		    .numa_node = 0xFF,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++static void test_invalid_map_type(void)
++{
++	const char *msg = "Invalid map_type.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts);
++
++	test_map_create(__MAX_BPF_MAP_TYPE, "test_map_create", &opts, msg);
++}
++
++static void test_invalid_token_fd(void)
++{
++	const char *msg = "Invalid map_token_fd.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .map_flags = BPF_F_TOKEN_FD,
++		    .token_fd = 0xFF,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++static void test_invalid_map_name(void)
++{
++	const char *msg = "Invalid map_name.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts);
++
++	test_map_create(BPF_MAP_TYPE_ARRAY, "test-!@#", &opts, msg);
++}
++
++static void test_invalid_btf_fd(void)
++{
++	const char *msg = "Invalid btf_fd.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .btf_fd = -1,
++		    .btf_key_type_id = 1,
++		    .btf_value_type_id = 1,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++static void test_excl_prog_hash_size_1(void)
++{
++	const char *msg = "Invalid excl_prog_hash_size.\n";
++	const char *hash = "DEADCODE";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .excl_prog_hash = hash,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++static void test_excl_prog_hash_size_2(void)
++{
++	const char *msg = "Invalid excl_prog_hash_size.\n";
++	LIBBPF_OPTS(bpf_map_create_opts, opts,
++		    .excl_prog_hash_size = 1,
++	);
++
++	test_map_create_array(&opts, msg);
++}
++
++void test_map_create_failure(void)
++{
++	if (test__start_subtest("invalid_vmlinux_value_type_id_struct_ops"))
++		test_invalid_vmlinux_value_type_id_struct_ops();
++	if (test__start_subtest("invalid_vmlinux_value_type_id_kv_type_id"))
++		test_invalid_vmlinux_value_type_id_kv_type_id();
++	if (test__start_subtest("invalid_value_type_id"))
++		test_invalid_value_type_id();
++	if (test__start_subtest("invalid_map_extra"))
++		test_invalid_map_extra();
++	if (test__start_subtest("invalid_numa_node"))
++		test_invalid_numa_node();
++	if (test__start_subtest("invalid_map_type"))
++		test_invalid_map_type();
++	if (test__start_subtest("invalid_token_fd"))
++		test_invalid_token_fd();
++	if (test__start_subtest("invalid_map_name"))
++		test_invalid_map_name();
++	if (test__start_subtest("invalid_btf_fd"))
++		test_invalid_btf_fd();
++	if (test__start_subtest("invalid_excl_prog_hash_size_1"))
++		test_excl_prog_hash_size_1();
++	if (test__start_subtest("invalid_excl_prog_hash_size_2"))
++		test_excl_prog_hash_size_2();
++}
 -- 
 2.52.0
 
